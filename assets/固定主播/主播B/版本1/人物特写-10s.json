@@ -1,0 +1,24 @@
+{
+  "model": "grok-imagine-video-1.5",
+  "request_id": "4ebc5ffd-2524-91b6-bb75-61ca2c0eb004",
+  "duration_s": 10,
+  "aspect_ratio": "9:16",
+  "resolution": "720p",
+  "source_image": "C:\\Users\\22346\\Desktop\\自媒体视频生成\\assets\\固定主播\\主播B\\版本1\\基础人物.png",
+  "output": "C:\\Users\\22346\\Desktop\\自媒体视频生成\\assets\\固定主播\\主播B\\版本1\\人物特写-10s.mp4",
+  "bytes": 5424161,
+  "prompt": "Slow close-up of the same young woman. The shot begins on this exact head-and-shoulders studio portrait and the camera dollies straight in until her face fills most of the vertical frame, still centered and looking into the lens, with her shoulders sliding toward the bottom edge. She blinks once and her closed lips keep a small warm smile. Cream blazer, pale blue top, long black hair, and the plain gray studio background stay consistent. Photoreal, one continuous take, no text.",
+  "content_type": "video/mp4",
+  "status_keys": [
+    "model",
+    "progress",
+    "status",
+    "usage",
+    "video"
+  ],
+  "video_keys": [
+    "duration",
+    "respect_moderation",
+    "url"
+  ]
+}

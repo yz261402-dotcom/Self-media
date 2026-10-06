@@ -1,0 +1,59 @@
+# ===== 密钥与本地配置（绝不提交）=====
+.env
+*.env
+.env.*
+!.env.example
+secrets.local.*
+*.bak-*
+production/backend/.env.bak-*
+production/backend/runtime/
+
+# ===== 运行时产物 =====
+runtime/
+tunnel_pub/
+*.log
+*.out
+server.err
+status.txt
+visible.json
+
+# ===== Python =====
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+.pytest_cache/
+*.egg-info/
+
+# ===== Node =====
+node_modules/
+dist/
+.vite/
+
+# ===== 过程产物（不属于项目本体）=====
+experiments/
+docs/
+.playwright-mcp/
+.workbuddy/
+.workbuddy-ai/
+.superpowers/
+.claude/
+
+# ===== specs 内的过程目录，保留 0001 正式文档 =====
+specs/历史版本/
+specs/汇报/
+specs/答辩/
+specs/阅读器/
+specs/research/
+specs/selection/
+specs/架构图/
+specs/配置/
+
+# ===== 测试运行产生的临时目录与临时库 =====
+tmp_*
+.tmp_*
+
+# ===== 根目录调试截图 =====
+btn-*.png
+debug-*.png
+restored-*.png

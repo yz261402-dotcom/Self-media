@@ -1,0 +1,871 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="light">
+<link rel="icon" href="data:,">
+<meta name="source-sha256" content="dd6b7e8726e194290911e139684a3a0fae9ba4187a9501b9a018d2e2a41db538">
+<title>DeepAgents 编排、Skill、MCP 和记忆设计 · AI 自媒体文档</title>
+<style>:root {
+  color-scheme: light;
+  --paper: #ffffff;
+  --surface: #f7f7f8;
+  --ink: #202126;
+  --muted: #666970;
+  --line: #dedfe3;
+  --blue: #002fa7;
+  --reader-font-size: 17px;
+  --header-height: 76px;
+  font-family: "Helvetica Neue", Helvetica, Arial, "PingFang SC", "Microsoft YaHei", sans-serif;
+  font-synthesis: none;
+}
+
+* { box-sizing: border-box; }
+.sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; border: 0; }
+.source-notice { margin-top: 22px; padding: 12px 14px; border-left: 3px solid var(--blue); background: var(--surface); color: var(--muted); font-size: 13px; }
+html { scroll-padding-top: 104px; }
+body { margin: 0; min-width: 320px; color: var(--ink); background: var(--surface); font-size: 14px; line-height: 1.6; }
+body.menu-open { overflow: hidden; }
+a { color: var(--blue); text-underline-offset: 3px; }
+button, input { font: inherit; }
+button { color: inherit; cursor: pointer; }
+button, input[type="search"] { border: 1px solid var(--line); border-radius: 3px; background: var(--paper); }
+button { min-height: 36px; padding: 6px 11px; line-height: 1.4; }
+button:hover { border-color: var(--blue); color: var(--blue); }
+button:disabled { opacity: .42; cursor: default; }
+button:disabled:hover { color: inherit; border-color: var(--line); }
+:focus-visible { outline: 2px solid var(--blue); outline-offset: 3px; }
+[hidden] { display: none !important; }
+::selection { background: #dbe4ff; color: #151c32; }
+
+.skip-link { position: fixed; z-index: 100; top: -70px; left: 16px; padding: 10px 18px; background: var(--blue); color: white; }
+.skip-link:focus { top: 10px; }
+.topbar { position: sticky; z-index: 30; top: 0; min-height: var(--header-height); display: flex; align-items: center; gap: 24px; padding: 15px 32px; border-bottom: 1px solid var(--line); background: var(--paper); }
+.brand { min-width: 0; color: var(--ink); font-size: 17px; font-weight: 700; line-height: 1.35; letter-spacing: -.02em; text-decoration: none; }
+.brand small, .brand span { display: block; margin-top: 4px; font-size: 11px; font-weight: 400; letter-spacing: .08em; color: var(--muted); }
+.toolbar { display: flex; align-items: center; gap: 6px; margin-left: auto; flex-shrink: 0; }
+.toolbar .font-smaller, .toolbar .font-reset, .toolbar .font-larger { min-width: 36px; padding: 5px 8px; font-variant-numeric: tabular-nums; }
+.toolbar .print-button { margin-left: 8px; }
+.mobile-menu { display: none; }
+.layout { display: grid; grid-template-columns: 244px minmax(0, 1fr) 208px; max-width: 1536px; margin: 0 auto; align-items: start; background: var(--paper); }
+.sidebar { position: sticky; top: var(--header-height); height: calc(100dvh - var(--header-height)); overflow-y: auto; overscroll-behavior: contain; padding: 32px 20px 36px 24px; border-right: 1px solid var(--line); scrollbar-width: thin; background: var(--surface); }
+.nav-group + .nav-group { margin-top: 32px; padding-top: 26px; border-top: 1px solid var(--line); }
+.group-title { margin: 0 10px 12px; color: var(--muted); font-size: 11px; font-weight: 600; letter-spacing: .11em; }
+.doc-nav { display: flex; flex-direction: column; gap: 4px; }
+.doc-nav a { display: block; padding: 9px 10px; border-left: 2px solid transparent; color: #55575d; font-size: 13px; line-height: 1.65; text-decoration: none; overflow-wrap: anywhere; }
+.doc-nav a:hover { color: var(--blue); background: #eeeeef; }
+.doc-nav a[aria-current="page"] { border-left-color: var(--blue); background: #eaf0ff; color: var(--blue); font-weight: 600; }
+.doc-nav .doc-number { display: inline-block; min-width: 25px; color: var(--muted); font-variant-numeric: tabular-nums; }
+
+#main { min-width: 0; padding: 46px clamp(28px, 3.7vw, 60px) 56px; }
+.document-header { margin-bottom: 29px; }
+.eyebrow { margin: 0 0 18px; color: var(--blue); font-size: 12px; font-weight: 600; letter-spacing: .08em; }
+.document-header h1 { margin: 0 0 21px; font-size: clamp(30px, 2.8vw, 42px); font-weight: 700; letter-spacing: -.045em; line-height: 1.3; overflow-wrap: anywhere; }
+.doc-meta { display: flex; flex-wrap: wrap; align-items: baseline; gap: 6px 18px; color: var(--muted); font-size: 12px; }
+.doc-meta a { color: var(--muted); }
+.doc-meta a:hover { color: var(--blue); }
+.reader-tools { margin: 0 0 36px; padding: 16px 0; border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); }
+#search-form { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; }
+#search-input { flex: 1 1 160px; min-width: 100px; width: 0; height: 36px; padding: 6px 10px; color: var(--ink); }
+#search-input::placeholder { color: #777a82; }
+#search-next, #search-clear { flex: 0 0 auto; font-size: 12px; }
+#search-status { flex: 1 0 100%; color: var(--muted); font-size: 11px; line-height: 1.5; }
+#search-status:empty { display: none; }
+
+#document-body { font-size: var(--reader-font-size); line-height: 1.9; overflow-wrap: anywhere; }
+#document-body > :first-child { margin-top: 0; }
+#document-body h2, #document-body h3, #document-body h4, #document-body h5, #document-body h6 { scroll-margin-top: 106px; font-weight: 650; line-height: 1.45; color: #15171c; }
+#document-body h2 { margin: 2.8em 0 1.05em; padding-top: 1.25em; border-top: 1px solid var(--line); font-size: 1.5em; letter-spacing: -.035em; }
+#document-body h3 { margin: 2em 0 .85em; font-size: 1.18em; letter-spacing: -.025em; }
+#document-body h4 { margin: 1.65em 0 .7em; font-size: 1.03em; }
+#document-body h5, #document-body h6 { margin: 1.4em 0 .6em; font-size: 1em; }
+#document-body p { margin: .9em 0; }
+#document-body ul, #document-body ol { margin: 1em 0; padding-left: 1.55em; }
+#document-body li { margin: .38em 0; padding-left: .15em; }
+#document-body li > p { margin: .4em 0; }
+#document-body li > ul, #document-body li > ol { margin: .35em 0 .6em; }
+#document-body strong { color: #14161b; font-weight: 650; }
+#document-body hr { margin: 2.1em 0; border: 0; border-top: 1px solid var(--line); }
+#document-body blockquote { margin: 1.5em 0; padding: .25em 1.15em; border-left: 3px solid var(--blue); background: var(--surface); color: #4c4f57; }
+#document-body blockquote p { margin: .55em 0; }
+#document-body a { overflow-wrap: anywhere; }
+#document-body a:hover { text-decoration-thickness: 2px; }
+#document-body img { max-width: 100%; height: auto; }
+#document-body code { padding: .12em .32em; border: 1px solid #e7e7ea; border-radius: 3px; background: var(--surface); font-family: Consolas, "SFMono-Regular", "Liberation Mono", monospace; font-size: .82em; overflow-wrap: anywhere; }
+#document-body pre { position: relative; margin: 1.5em 0; padding: 44px 0 0; max-width: 100%; overflow: hidden; border: 1px solid var(--line); border-radius: 4px; background: var(--surface); line-height: 1.7; }
+#document-body pre > code { display: block; max-width: 100%; overflow-x: auto; padding: 0 19px 18px; border: 0; border-radius: 0; font-size: .79em; line-height: 1.75; white-space: pre; overflow-wrap: normal; tab-size: 2; }
+.copy-code { position: absolute; top: 7px; right: 8px; min-height: 28px; padding: 4px 9px; color: var(--muted); font-size: 11px; background: var(--paper); }
+.table-scroll { max-width: 100%; margin: 1.5em 0; overflow-x: auto; border: 1px solid var(--line); border-radius: 3px; scrollbar-width: thin; }
+#document-body table { width: 100%; min-width: 100%; border-collapse: collapse; font-size: .82em; line-height: 1.7; }
+#document-body th, #document-body td { min-width: 105px; padding: 12px 14px; border-right: 1px solid var(--line); border-bottom: 1px solid var(--line); text-align: left; vertical-align: top; }
+#document-body th { background: var(--surface); font-weight: 600; color: #30333a; }
+#document-body tr > :last-child { border-right: 0; }
+#document-body tbody tr:last-child td { border-bottom: 0; }
+#document-body tbody tr:hover { background: #fafafb; }
+#document-body th:first-child, #document-body td:first-child { min-width: 95px; }
+#document-body input[type="checkbox"] { width: 14px; height: 14px; margin: 0 7px 0 0; vertical-align: middle; accent-color: var(--blue); }
+#document-body details { margin: 1.15em 0; padding: 12px 16px; border: 1px solid var(--line); border-radius: 3px; }
+#document-body summary { color: var(--muted); font-size: .85em; cursor: pointer; }
+#document-body details[open] summary { margin-bottom: 12px; }
+.architecture { margin: 1.8em 0; }
+.diagram-viewport { max-width: 100%; overflow-x: auto; border: 1px solid var(--line); scrollbar-width: thin; }
+.diagram-viewport > svg { display: block; min-width: 720px; width: 100%; height: auto; background: var(--paper); }
+.architecture > svg { display: block; width: 100%; height: auto; max-width: 100%; border: 1px solid var(--line); background: var(--paper); }
+.architecture figcaption { margin-top: 8px; color: var(--muted); font-size: .75em; }
+.architecture details { font-size: .85em; }
+mark.reader-match { padding: 1px 0; background: #dbe4ff; color: inherit; border-radius: 2px; scroll-margin-top: 120px; }
+mark.reader-match.is-current { background: var(--blue); color: white; box-shadow: 0 0 0 2px var(--blue); }
+.search-block-current { outline: 1px solid #b2c5f9; outline-offset: 6px; }
+
+.toc-panel { position: sticky; top: var(--header-height); max-height: calc(100dvh - var(--header-height)); overflow-y: auto; padding: 38px 20px 30px 19px; border-left: 1px solid var(--line); scrollbar-width: thin; }
+.toc-panel > h2, #toc > h2, .toc-title { margin: 0 0 15px; color: var(--muted); font-size: 11px; font-weight: 600; letter-spacing: .08em; }
+#toc ul, #toc ol { list-style: none; margin: 0; padding: 0; }
+#toc a { display: block; margin: 2px 0; padding: 5px 0 5px 12px; border-left: 2px solid transparent; color: #6c6f78; font-size: 12px; line-height: 1.65; text-decoration: none; overflow-wrap: anywhere; }
+#toc a:hover { color: var(--blue); }
+#toc a[aria-current="location"], #toc a.is-active { color: var(--blue); border-left-color: var(--blue); }
+#toc a[data-level="3"], #toc .toc-h3 a, #toc a.toc-h3, #toc li.level-3 a { padding-left: 24px; font-size: 11px; }
+.document-pager { display: flex; justify-content: space-between; gap: 20px; margin-top: 60px; padding-top: 24px; border-top: 1px solid var(--line); }
+.document-pager a { flex: 1; min-width: 0; text-decoration: none; font-size: 14px; font-weight: 600; overflow-wrap: anywhere; }
+.document-pager a:last-child { text-align: right; }
+.document-pager a:only-child { text-align: left; }
+.document-pager small, .document-pager span { display: block; margin-bottom: 4px; font-size: 11px; font-weight: 400; color: var(--muted); }
+.page-footer { max-width: 1536px; margin: auto; padding: 22px 32px; border-top: 1px solid var(--line); color: var(--muted); font-size: 11px; background: var(--surface); }
+.back-top { position: fixed; right: 24px; bottom: 24px; z-index: 20; min-height: 40px; border-color: var(--line); background: var(--paper); font-size: 12px; }
+.sidebar-scrim { display: none; }
+
+@media (min-width: 1600px) {
+  .layout { border-left: 1px solid var(--line); border-right: 1px solid var(--line); }
+  .topbar { padding-left: max(32px, calc((100vw - 1472px) / 2)); padding-right: max(32px, calc((100vw - 1472px) / 2)); }
+}
+@media (max-width: 1190px) {
+  .layout { grid-template-columns: 225px minmax(0, 1fr); }
+  .toc-panel { display: none; }
+  #main { padding-left: 42px; padding-right: 42px; }
+}
+@media (max-width: 800px) {
+  :root { --header-height: 68px; }
+  .topbar { gap: 12px; padding: 13px 18px; }
+  .brand { font-size: 15px; }
+  .brand small, .brand span { font-size: 9px; }
+  .mobile-menu { display: inline-flex; align-items: center; justify-content: center; flex-shrink: 0; min-height: 34px; padding: 6px 9px; font-size: 12px; }
+  .layout { display: block; }
+  .sidebar { position: fixed; z-index: 50; left: 0; top: var(--header-height); bottom: 0; width: min(300px, calc(100vw - 44px)); height: calc(100dvh - var(--header-height)); padding: 24px 18px; transform: translateX(-101%); visibility: hidden; transition: transform .18s ease, visibility .18s; border-right: 1px solid var(--line); }
+  .menu-open .sidebar { transform: translateX(0); visibility: visible; }
+  .sidebar-scrim:not([hidden]) { display: block; position: fixed; z-index: 40; inset: var(--header-height) 0 0; background: rgb(18 21 30 / 28%); }
+  .toolbar { gap: 3px; }
+  .toolbar .font-smaller, .toolbar .font-reset, .toolbar .font-larger { min-width: 29px; min-height: 32px; padding: 4px 5px; font-size: 12px; }
+  .toolbar .print-button { display: none; }
+  #main { padding: 33px 28px 40px; }
+  .document-header h1 { font-size: 32px; }
+  .eyebrow { margin-bottom: 13px; }
+  #document-body { line-height: 1.9; }
+  #document-body h2 { margin-top: 2.3em; font-size: 1.4em; }
+  .page-footer { padding: 18px 28px; }
+  .back-top { right: 16px; bottom: 16px; }
+}
+@media (max-width: 460px) {
+  .topbar { gap: 8px; padding-left: 12px; padding-right: 12px; }
+  .brand { font-size: 13px; letter-spacing: -.035em; }
+  .brand small, .brand span { max-width: 125px; overflow: hidden; white-space: nowrap; text-overflow: ellipsis; }
+  .mobile-menu { padding: 5px 7px; font-size: 11px; }
+  #main { padding: 29px 20px 36px; }
+  .document-header h1 { font-size: 28px; }
+  .doc-meta { gap: 4px 12px; font-size: 11px; }
+  .reader-tools { margin-bottom: 28px; }
+  #search-input { flex-basis: 110px; font-size: 12px; }
+  #search-next, #search-clear { padding-left: 8px; padding-right: 8px; }
+  #document-body { font-size: calc(var(--reader-font-size) - 1px); }
+  #document-body pre > code { padding-left: 13px; padding-right: 13px; }
+  #document-body th, #document-body td { padding: 10px 12px; }
+  .document-pager { gap: 18px; margin-top: 40px; }
+  .document-pager a { font-size: 12px; }
+  .page-footer { padding-left: 20px; padding-right: 20px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { scroll-behavior: auto !important; transition: none !important; }
+}
+@media print {
+  @page { margin: 18mm 16mm; }
+  :root { --reader-font-size: 10.5pt !important; }
+  body { min-width: 0; background: white; color: black; }
+  .topbar, .sidebar, .toc-panel, .reader-tools, .document-pager, .back-top, .sidebar-scrim, .skip-link, .copy-code { display: none !important; }
+  .layout { display: block; max-width: none; border: 0; }
+  #main { padding: 0; }
+  .document-header h1 { font-size: 24pt; }
+  .document-header { margin-bottom: 24pt; }
+  .doc-meta { font-size: 8pt; }
+  #document-body { font-size: 10.5pt; line-height: 1.65; }
+  #document-body h2, #document-body h3, #document-body h4 { break-after: avoid; }
+  #document-body h2 { margin-top: 20pt; padding-top: 12pt; font-size: 15pt; }
+  #document-body a { color: inherit; text-decoration: underline; }
+  #document-body pre { padding: 9pt; overflow: visible; background: #f7f7f8; }
+  #document-body pre > code { padding: 0; overflow: visible; white-space: pre-wrap; overflow-wrap: anywhere; font-size: 8pt; }
+  .table-scroll { overflow: visible; border-radius: 0; }
+  #document-body table { table-layout: fixed; font-size: 7.5pt; }
+  #document-body th, #document-body td, #document-body th:first-child, #document-body td:first-child { min-width: 0; padding: 5pt; overflow-wrap: anywhere; }
+  #document-body thead { display: table-header-group; }
+  #document-body tr, .architecture { break-inside: avoid; }
+  #document-body details:not([open]) { display: none; }
+  .architecture > svg { max-height: 230mm; }
+  mark.reader-match, mark.reader-match.is-current { color: inherit; background: transparent; box-shadow: none; }
+  .search-block-current { outline: none; }
+  .page-footer { margin-top: 24pt; padding: 10pt 0 0; font-size: 8pt; background: white; }
+}
+</style>
+</head>
+<body>
+<a class="skip-link" href="#main">跳到正文</a>
+<header class="topbar">
+  <button type="button" class="mobile-menu" aria-controls="doc-sidebar" aria-expanded="false">文档目录</button>
+  <a class="brand" href="00-%E6%96%87%E6%A1%A3%E5%AF%BC%E8%88%AA.html">AI 自媒体<span>开发文档与调研</span></a>
+  <div class="toolbar" aria-label="阅读设置">
+    <button type="button" class="font-smaller" aria-label="缩小正文字号" title="缩小字号">A−</button>
+    <button type="button" class="font-reset" aria-label="恢复默认正文字号" title="恢复字号">默认</button>
+    <button type="button" class="font-larger" aria-label="放大正文字号" title="放大字号">A+</button>
+    <button type="button" class="print-button">打印</button>
+  </div>
+</header>
+<div class="layout">
+  <aside id="doc-sidebar" class="sidebar" aria-label="全部文档"><section class="nav-group"><h2 class="group-title">开发文档</h2><nav class="doc-nav" aria-label="开发文档"><a data-document href="00-%E6%96%87%E6%A1%A3%E5%AF%BC%E8%88%AA.html">00 文档导航</a><a data-document href="01-%E4%BA%A7%E5%93%81%E9%9C%80%E6%B1%82%E6%96%87%E6%A1%A3.html">01 产品需求文档</a><a data-document href="02-%E6%8A%80%E6%9C%AF%E9%80%89%E5%9E%8B%E5%AF%B9%E6%AF%94.html">02 技术选型对比</a><a data-document href="03-%E6%80%BB%E4%BD%93%E6%8A%80%E6%9C%AF%E6%96%B9%E6%A1%88.html">03 总体技术方案</a><a data-document href="04-%E6%8E%A5%E5%8F%A3%E5%A5%91%E7%BA%A6%E4%B8%8E%E6%95%B0%E6%8D%AE%E5%AD%97%E5%85%B8.html">04 接口契约与数据字典</a><a data-document href="05-%E5%BC%80%E5%8F%91%E5%AE%9E%E6%96%BD%E8%AE%A1%E5%88%92.html">05 开发实施计划</a><a data-document href="06-%E9%AA%8C%E6%94%B6%E6%A0%87%E5%87%86%E4%B8%8E%E6%B5%8B%E8%AF%95%E6%96%B9%E6%A1%88.html">06 验收标准与测试方案</a><a data-document href="07-%E6%8A%80%E6%9C%AF%E9%80%89%E5%9E%8B%E4%B8%8E%E5%AE%9E%E6%B5%8B%E6%B5%81%E7%A8%8B.html">07 技术选型与实测流程</a><a data-document href="08-%E7%AB%AF%E5%88%B0%E7%AB%AF%E6%8A%80%E6%9C%AF%E6%B5%81%E7%A8%8B%E4%B8%8E%E6%A8%A1%E5%9E%8B%E9%80%89%E5%9E%8B%E5%9C%B0%E5%9B%BE.html">08 端到端技术流程与模型选型地图</a><a data-document href="09-%E6%A8%A1%E5%9E%8B%E9%80%89%E5%9E%8B%E5%86%B3%E7%AD%96%E4%B8%8E%E6%8E%A5%E5%85%A5%E6%96%B9%E6%A1%88.html">09 模型选型决策与接入方案</a><a data-document href="10-Agent%E7%BC%96%E6%8E%92%E9%80%89%E5%9E%8B%E4%B8%8E%E6%95%B4%E4%BD%93%E6%9E%B6%E6%9E%84.html" aria-current="page">10 Agent编排选型与整体架构</a></nav></section><section class="nav-group"><h2 class="group-title">本轮选型试验</h2><nav class="doc-nav" aria-label="本轮选型试验"><a data-document href="../selection/01-%E6%95%B0%E5%AD%97%E4%BA%BA%E5%8F%A3%E6%92%AD/01-%E9%80%89%E5%9E%8B%E8%AF%95%E9%AA%8C%E6%96%B9%E6%A1%88.html">01 选型试验方案</a><a data-document href="../selection/01-%E6%95%B0%E5%AD%97%E4%BA%BA%E5%8F%A3%E6%92%AD/02-%E9%A6%96%E8%BD%AE%E5%AE%9E%E6%B5%8B%E7%BB%93%E6%9E%9C.html">02 首轮实测结果</a><a data-document href="../selection/01-%E6%95%B0%E5%AD%97%E4%BA%BA%E5%8F%A3%E6%92%AD/03-MuseTalk%E4%BA%91%E7%AB%AF%E9%83%A8%E7%BD%B2%E4%B8%8E%E8%AF%95%E9%AA%8C%E6%96%B9%E6%A1%88.html">03 MuseTalk云端部署与试验方案</a><a data-document href="../selection/01-%E6%95%B0%E5%AD%97%E4%BA%BA%E5%8F%A3%E6%92%AD/04-MuseTalk%E9%83%A8%E7%BD%B2%E4%B8%8E%E9%A6%96%E6%B5%8B%E7%BB%93%E6%9E%9C.html">04 MuseTalk部署与首测结果</a><a data-document href="../selection/01-%E6%95%B0%E5%AD%97%E4%BA%BA%E5%8F%A3%E6%92%AD/05-OmniHuman%E5%BC%80%E9%80%9A%E5%90%8E%E5%AE%9E%E6%B5%8B%E7%BB%93%E6%9E%9C.html">05 OmniHuman开通后实测结果</a><a data-document href="../selection/01-%E6%95%B0%E5%AD%97%E4%BA%BA%E5%8F%A3%E6%92%AD/06-%E4%BA%BA%E7%89%A9B%E8%A1%A8%E6%83%85%E5%8A%A8%E4%BD%9C%E6%94%B9%E5%96%84%E5%AE%9E%E6%B5%8B.html">06 人物B表情动作改善实测</a><a data-document href="../selection/01-%E6%95%B0%E5%AD%97%E4%BA%BA%E5%8F%A3%E6%92%AD/MuseTalk%E5%AE%98%E6%96%B9%E8%83%BD%E5%8A%9B%E6%A0%B8%E9%AA%8C.html">MuseTalk官方能力核验</a><a data-document href="../selection/01-%E6%95%B0%E5%AD%97%E4%BA%BA%E5%8F%A3%E6%92%AD/%E6%B5%8B%E8%AF%95%E7%B4%A0%E6%9D%90%E6%8E%A5%E5%8F%A3%E6%A0%B8%E9%AA%8C.html">测试素材接口核验</a><a data-document href="../selection/01-%E6%95%B0%E5%AD%97%E4%BA%BA%E5%8F%A3%E6%92%AD/%E7%81%AB%E5%B1%B1%E5%80%99%E9%80%89%E6%A0%B8%E9%AA%8C.html">火山候选核验</a><a data-document href="../selection/01-%E6%95%B0%E5%AD%97%E4%BA%BA%E5%8F%A3%E6%92%AD/%E9%98%BF%E9%87%8C%E5%80%99%E9%80%89%E6%A0%B8%E9%AA%8C.html">阿里候选核验</a></nav></section><section class="nav-group"><h2 class="group-title">已选模型接入核验</h2><nav class="doc-nav" aria-label="已选模型接入核验"><a data-document href="../selection/02-%E5%B7%B2%E9%80%89%E6%A8%A1%E5%9E%8B/%E5%AE%98%E6%96%B9%E6%96%87%E6%9C%AC%E4%B8%8E%E8%AF%AD%E9%9F%B3%E6%8E%A5%E5%8F%A3%E6%A0%B8%E9%AA%8C.html">官方文本与语音接口核验</a></nav></section><section class="nav-group"><h2 class="group-title">人物与音色候选</h2><nav class="doc-nav" aria-label="人物与音色候选"><a data-document href="../selection/03-%E4%BA%BA%E7%89%A9%E4%B8%8E%E9%9F%B3%E8%89%B2/01-%E9%A6%96%E8%BD%AE%E5%80%99%E9%80%89%E4%B8%8E%E9%80%89%E6%8B%A9%E8%AF%B4%E6%98%8E.html">01 首轮候选与选择说明</a><a data-document href="../selection/03-%E4%BA%BA%E7%89%A9%E4%B8%8E%E9%9F%B3%E8%89%B2/02-%E4%BA%BA%E7%89%A9B%E4%B8%8E%E9%9F%B3%E8%89%B23%E5%AE%9A%E7%89%88%E8%AE%B0%E5%BD%95.html">02 人物B与音色3定版记录</a></nav></section><section class="nav-group"><h2 class="group-title">调研资料</h2><nav class="doc-nav" aria-label="调研资料"><a data-document href="../research/01-%E4%BA%A7%E5%93%81%E5%BD%A2%E6%80%81%E4%B8%8E%E6%8A%96%E9%9F%B3%E7%94%9F%E6%80%81.html">01 产品形态与抖音生态</a><a data-document href="../research/02-%E4%BA%BA%E7%89%A9%E4%B8%80%E8%87%B4%E6%80%A7%E7%94%9F%E6%88%90.html">02 人物一致性生成</a><a data-document href="../research/03-%E6%95%B0%E5%AD%97%E4%BA%BA%E5%8F%A3%E6%92%AD%E9%80%89%E5%9E%8B.html">03 数字人口播选型</a><a data-document href="../research/04-TTS%E9%9F%B3%E8%89%B2%E4%B8%8E%E5%86%85%E5%AE%B9%E7%94%9F%E6%88%90%E8%B4%A8%E6%A3%80.html">04 TTS音色与内容生成质检</a><a data-document href="../research/05-%E8%A7%86%E9%A2%91%E5%90%8E%E5%A4%84%E7%90%86%E5%8F%91%E5%B8%83%E4%B8%8E%E5%90%88%E8%A7%84.html">05 视频后处理发布与合规</a><a data-document href="../research/06-%E5%86%B3%E7%AD%96%E6%B1%87%E6%80%BB.html">06 决策汇总</a></nav></section>
+    <p class="sidebar-note">11 份开发文档<br>10 份本轮选型试验<br>1 份已选模型接入核验<br>2 份人物与音色候选<br>6 份调研资料</p>
+  </aside>
+  <main id="main" tabindex="-1">
+    <header class="document-header">
+      <p class="eyebrow">开发文档 / 10</p>
+      <h1>DeepAgents 编排、Skill、MCP 和记忆设计</h1>
+      <div class="doc-meta"><span>v2.4 · 评审版</span><span>10 个章节</span><a href="10-Agent%E7%BC%96%E6%8E%92%E9%80%89%E5%9E%8B%E4%B8%8E%E6%95%B4%E4%BD%93%E6%9E%B6%E6%9E%84.md">Markdown 原文</a></div>
+      
+    </header>
+    <div class="reader-tools">
+      <form id="search-form" role="search">
+        <label class="sr-only" for="search-input">搜索本文</label>
+        <input id="search-input" type="search" placeholder="搜索本文，按 Enter 跳转" autocomplete="off">
+        <button id="search-next" type="submit">下一处</button>
+        <button id="search-clear" type="button">清除</button>
+        <span id="search-status" role="status" aria-live="polite"></span>
+      </form>
+    </div>
+    <article id="document-body">
+<p>版本：v2.4；日期：2026-09-23（提示词直接写稿、四类子智能体、代码后期）。<strong>DeepAgents 主框架由用户选定；production/ 已有工程代码，本轮已同步四角色/工具白名单、7 个 Skill 和内部后期入口，真实媒体能力与全链路仍待验收。</strong> 本文只展开 <a href="03-%E6%80%BB%E4%BD%93%E6%8A%80%E6%9C%AF%E6%96%B9%E6%A1%88.html">03 总体技术方案</a> 中的智能体协作与基础能力，不再列第二套整体架构。</p>
+<p><a href="../%E6%9E%B6%E6%9E%84%E5%9B%BE/DeepAgents%E5%A4%9A%E6%99%BA%E8%83%BD%E4%BD%93%E6%9E%B6%E6%9E%84.html">打开当前多智能体架构图</a> · <a href="08-%E7%AB%AF%E5%88%B0%E7%AB%AF%E6%8A%80%E6%9C%AF%E6%B5%81%E7%A8%8B%E4%B8%8E%E6%A8%A1%E5%9E%8B%E9%80%89%E5%9E%8B%E5%9C%B0%E5%9B%BE.html">输入输出速查</a></p>
+<p>首版七个入口围绕同一个 Work（作品）组织。人物与稿件经审核选择后，MiniMax TTS 通过质检并由用户试听确认，再进入第 4 页视频合成：OmniHuman 使用固定人物图＋最终音频＋可编辑身体/表情描述直接生成口播，M2 使用动作底片＋相同音频对口型。TTS 是两路共同前置；质量审核、用户选择和费用授权分开。Grok 退出当前 MVP，后三个后续入口展示真实开发状态。</p>
+<h2 id="1-框架在代码里如何体现">1. 框架在代码里如何体现</h2>
+<p>拟以 Python <code>deepagents.create_deep_agent</code> 创建总控，通过 <code>subagents</code> 仅定义策划文案、质量审核、数字人导演、声音导演四类角色。后期由业务服务直接调度代码，不注册 editor 或其他同义后期角色。各角色显式配置职责、允许工具、Skill 与模型；不要将总控的全部权限继承给每个角色。</p>
+<p>总控和专业角色先使用 DeepSeek 官方文本模型作为决策模型，经兼容的 LangChain 模型适配器接入；精确型号见 09。工具调用格式、多轮 tool result、错误恢复、结构化产物和并行委派必须在真实账号验证，不用普通聊天成功替代。</p>
+<p>不开放通用浏览器、任意 HTTP 抓取或 shell 来绕过已删除工具；模型 API、受控云媒体上传/下载不属于内容搜索，继续按 Provider 白名单使用。</p>
+<p>DeepAgents 基于 LangChain / LangGraph，底层 checkpoint、中断和 Store 能力用于执行恢复。业务层校验工作项、产物和质量结论；Agent 负责形成决策，确定性服务负责执行约束。包版本在隔离安装与兼容试验后锁定，不把示例 API 当作已锁定生产接口。</p>
+<h2 id="2-角色配置与最小权限">2. 角色配置与最小权限</h2>
+<div aria-label="可横向滚动的表格" class="table-scroll" tabindex="0"><table>
+<thead>
+<tr>
+<th>ID</th>
+<th>专业角色</th>
+<th>允许能力</th>
+<th>正式写入边界</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>supervisor</code></td>
+<td>总控</td>
+<td>委派、查进度、读取报告、提出返工/交付请求</td>
+<td>经业务校验登记计划和汇总；不能改审核结论</td>
+</tr>
+<tr>
+<td><code>content</code></td>
+<td>策划文案</td>
+<td>用户提示词、关键词、风格、时长与可选自供材料直接生成三稿，按审核意见改稿</td>
+<td>自己的草稿空间；提交稿件新版本；不搜索或抓取网页</td>
+</tr>
+<tr>
+<td><code>quality</code></td>
+<td>质量审核</td>
+<td>查内部内容历史、读用户材料及产物、调用检测器、登记问题与审核结论</td>
+<td>受版本和规则校验的审核服务；不能改被审原件</td>
+</tr>
+<tr>
+<td><code>avatar</code></td>
+<td>数字人导演</td>
+<td>读角色/衣景/动作库、创建候选/变体；音频确认后提交 OmniHuman 图音驱动，或 M2 底片/口型</td>
+<td>派生资产登记；不能代选身份、覆盖人物或擅自增加二次口型修补</td>
+</tr>
+<tr>
+<td><code>audio</code></td>
+<td>声音导演</td>
+<td>读取所选音色、编译情绪/重音/术语、MiniMax TTS 合成与检测；复核视频声音保持</td>
+<td>音频、朗读映射、报告新版本；不能擅自改变已选声音或以其他音轨代替确认 TTS</td>
+</tr>
+</tbody>
+</table></div>
+<p>业务层从已审文件中读取资产，工具接口不接受任意文件系统路径或任意 shell。Provider 密钥留在服务端，MCP 身份认证与厂商密钥分开；外部资料作为待核内容，不得改变系统规则或工具权限。</p>
+<h2 id="3-并行委派和结果汇合">3. 并行委派和结果汇合</h2>
+<p>总控将同一期任务分为显式工作项。每项有输入版本、依赖、角色、预算、Skill 版本和输出类型。可用框架的子任务委派及运行时并发能力执行独立项；是否真正并行以开始/结束事件重叠为证据，不能只看提示词里写了“并行”。</p>
+<ul>
+<li>策划依据用户提示词直接写稿，可与人物准备并行；稿件生成后由质量角色做内部历史查重，不以网络资料采集为前置。</li>
+<li>三稿分别审核、用户选稿后，声音、人物/动作准备分叉；字幕和输出样式直接读取页面配置；质量审核可分别检查已完成的产物。</li>
+<li>声音合成、人物衣景/表演要求准备可并行；TTS 经过质检和用户确认后冻结真实时长，才允许提交任一路线的口播生成。</li>
+<li>字幕基于已确认 TTS 对齐，可与 OmniHuman 图音驱动或 M2 口型推理并行。OmniHuman 不依赖 LivePortrait/MuseTalk；M2 底片需覆盖真实时长。业务服务触发字幕代码作业；两路后期代码均等待合格原片/字幕，并核对输出音轨与确认音频保持。</li>
+<li>每个角色使用独立工作目录或命名空间；通过受控产物清单交接，不共同改同一个脚本或音频文件。</li>
+</ul>
+<p>业务依赖表决定可执行范围。总控提出的提前执行请求应被工具拒绝；单 GPU 资源锁控制重型作业，Agent 并发上限与 GPU 并发上限分别配置。汇合只接受相同稿件/表演计划的有效版本，结果顺序不影响选择。</p>
+<p>Work 保存当前采用的资产及全部候选历史；SelectionRequest/SelectionDecision 绑定版本和摘要，用户响应前用 waiting_selection。ReviewDecision 只决定质量是否合格，Agent 不能拿质量通过代替用户采用，也不能自动点击收费路线。基础配置由服务端管理，框架不接收明文密钥。</p>
+<h2 id="4-分段表演说明与结构化交接">4. 分段表演说明与结构化交接</h2>
+<p><code>PerformancePlan</code> 是策划、声音、数字人与后期代码的共同输入。意图层描述每段文本、情绪、重音、停顿和动作；执行层记录供应商实际支持的参数、动作素材引用和真实时间。两路都从已确认 MiniMax TTS 写真实分段时间；长片按句切分该统一音轨并保留映射。</p>
+<p>声音导演和数字人导演可并行返回修改建议，但不同时覆写已冻结计划。业务服务以期望版本合并，冲突交给总控协调后生成新版本。改稿或 MiniMax 声音/节奏变化使对应音频、两路口播和字幕失效。仅衣景/动作变化可复用未变且获准 TTS，但必须重查新原片的声音保持、身份与同步。</p>
+<p>交接使用 <code>AgentWorkItem</code>、<code>AgentResult</code>、<code>QualityDecision</code>、<code>MemoryCandidate</code> 等契约，字段唯一来源为 <a href="04-%E6%8E%A5%E5%8F%A3%E5%A5%91%E7%BA%A6%E4%B8%8E%E6%95%B0%E6%8D%AE%E5%AD%97%E5%85%B8.html">04 接口契约</a>。响应应含产物 ID、版本/摘要、证据和实际用量；仅返回“已完成”不能算完成。模型输出先验证，失败保留原文并在预算内修正。</p>
+<h2 id="5-首期-7-个业务-skill">5. 首期 7 个业务 Skill</h2>
+<p>Skill 规定角色怎样完成任务；后期是固定代码流程，不加载 Skill。当前保留 S01～S06 和 S08，删除 S07「字幕与剪辑」，不重排历史编号。以下为产品运行技能的目标清单，不是 Codex 开发技能。</p>
+<h3 id="51-清单负责角色与交付物">5.1 清单、负责角色与交付物</h3>
+<div aria-label="可横向滚动的表格" class="table-scroll" tabindex="0"><table>
+<thead>
+<tr>
+<th>编号／Skill</th>
+<th>主要使用者</th>
+<th>输入 → 工作 → 输出</th>
+<th>必须拦住的问题</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>S01 选题与新意</td>
+<td>策划文案</td>
+<td>用户提示词、受众、风格 → 直接提出不同问题/案例角度 → 三种候选切入点</td>
+<td>仅换标题；编造热度和收益；自行联网搜索</td>
+</tr>
+<tr>
+<td>S02 口播写作</td>
+<td>策划文案；声音/数字人读取产物</td>
+<td>提示词、三种角度、时长与可选用户材料 → 写开头、解释、例子与收尾 → 三稿、标题/简介/标签、表演意图和待核断言</td>
+<td>论文腔、标题正文不一致、虚构来源、表达标记污染正文</td>
+</tr>
+<tr>
+<td>S03 事实与重复审核</td>
+<td>质量审核</td>
+<td>三稿、内部历史、用户材料/已审知识 → 查重复、错字、逻辑、易懂性、吸引力及事实依据 → 逐稿报告</td>
+<td>用模型自审冒充事实证明；无依据的时效或关键断言直接通过；查重不可用仍放行</td>
+</tr>
+<tr>
+<td>S04 固定人物与衣景</td>
+<td>数字人导演；质量审核检查</td>
+<td>关键词/自由描述或固定身份、衣景要求 → 创建候选或参考编辑 → 人物变体与来源链</td>
+<td>换装换成另一个人；未经批准覆盖基础人物</td>
+</tr>
+<tr>
+<td>S05 动作表情匹配</td>
+<td>数字人导演；质量审核检查</td>
+<td>人物、表演描述、最终 TTS、路线 → 按能力/预算组织 OmniHuman 或 M2 → 口播原片</td>
+<td>未确认音频就生成；承诺任意动作；静默换路线；身体/嘴部/段间异常</td>
+</tr>
+<tr>
+<td>S06 固定声音与情绪</td>
+<td>声音导演；质量审核检查</td>
+<td>已选稿、MiniMax 音色、表演意图 → 编译表达并合成 → 待用户确认音频、朗读映射与真实时间</td>
+<td>擅自换声；错读漏读；重新配音掩盖原片声音不符</td>
+</tr>
+<tr>
+<td>S08 分阶段媒体质量验收</td>
+<td>质量审核；代码读取报告</td>
+<td>人物/音频/原片/成片及检测证据 → 定位问题并复核 → 阶段报告与返工目标</td>
+<td>只看日志判通过；缺检测证据；把待复核当通过</td>
+</tr>
+</tbody>
+</table></div>
+<p>S01/S02 无联网步骤。历史检索由 S03 调内部工具完成，查重反馈可交给策划改稿。事实核验仅使用用户材料、已有已审知识或人工证据；外部最新价格、版本、数据等没有依据时转待复核，补充材料或移除断言后重审，不编造引用。质量角色不得另开搜索旁路。</p>
+<p>S02 的 PerformancePlan 只是意图，不预造精确字幕时间；S06 的音频经审核及用户确认后，S05 生成口播，字幕代码按同一音轨对齐。S08 的质检职责保留，字幕/剪辑执行职责不再由 Skill 承担。所有阈值统一引用 06。</p>
+<h3 id="52-目标目录与迁移">5.2 目标目录与迁移</h3>
+<pre><code class="language-text">production/skills/
+  选题与新意/SKILL.md
+  口播写作/SKILL.md
+  事实与重复审核/SKILL.md
+  固定人物与衣景/SKILL.md
+  动作表情匹配/SKILL.md
+  固定声音与情绪/SKILL.md
+  分阶段媒体质量验收/SKILL.md
+</code></pre>
+<p>production/skills/ 已按此清单收缩为 7 项，字幕剪辑目录及其加载引用已移除，运行规范版本更新为 0.2.0；角色与工具注册同步调整。既有历史任务保留原版本，新编排遇到旧角色工作图先阻断迁移，不默认为新版本通过。</p>
+<p>每份 Skill 包含触发、输入、工作步骤、允许工具、输出契约、拒收/返工条件、正反例和版本。框架的 skills 发现与继承行为按实际版本验证，运行记录绑定摘要；权限、预算和硬门禁由代码执行。</p>
+<h2 id="6-首期-4-组-mcp-能力2-个服务">6. 首期 4 组 MCP 能力、2 个服务</h2>
+<h3 id="61-业务能力清单">6.1 业务能力清单</h3>
+<p>移除联网搜索/抓取工具；后期、字幕和打包函数仅供内部 Worker/业务服务调用，不再暴露给 Agent。保留历史 M01～M04 编号，删除 M05，不能以更名方式保留后期工具。</p>
+<div aria-label="可横向滚动的表格" class="table-scroll" tabindex="0"><table>
+<thead>
+<tr>
+<th>编号／能力组</th>
+<th>主要工具举例</th>
+<th>使用角色</th>
+<th>输出</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>M01 历史内容查重</td>
+<td><code>search_content_history</code></td>
+<td>仅质量审核</td>
+<td>内部历史稿件、主题/观点/片段命中和相似度证据；不获取外网资料</td>
+</tr>
+<tr>
+<td>M02 角色与记忆</td>
+<td><code>get_presenter_profile</code>、<code>list_approved_assets</code>、<code>search_memory</code>、<code>propose_memory</code></td>
+<td>各角色按作用域使用</td>
+<td>人物/声音档案、已审资产、相关经验或待审候选</td>
+</tr>
+<tr>
+<td>M03 媒体生产</td>
+<td><code>submit_image_generation</code>、<code>submit_image_edit</code>、<code>submit_tts</code>、<code>submit_avatar_video</code>；M2 的 <code>submit_motion</code>、<code>submit_lipsync</code></td>
+<td>数字人导演、声音导演</td>
+<td>生成作业及产物引用；人物、最终音轨、底片/原片与分段来源链</td>
+</tr>
+<tr>
+<td>M04 质量检测</td>
+<td><code>inspect_image</code>、<code>inspect_audio</code>、<code>inspect_video</code>、<code>submit_quality_report</code></td>
+<td>质量审核；生成角色按职责预检</td>
+<td>测量值、问题时间码和审核报告；不生成字幕或渲染成片</td>
+</tr>
+</tbody>
+</table></div>
+<p>MCP 工具中删除 <code>search_sources</code>、<code>fetch_source</code>、<code>draft_edit_plan</code>、<code>align_subtitles</code>、<code>render_video</code>、<code>build_publish_package</code>。后期相关内部 Python 函数和技术能力保留，只取消 Agent 工具入口；后续平台发布单独设计 Adapter，不在当前 MCP 增加预留发布工具。</p>
+<p><code>submit_quality_report</code> 必须引用真实证据，业务服务复算硬门禁；缺事实/媒体依据进入待复核。<code>propose_memory</code> 只产生候选，不能覆盖固定人物或把模型推测记为事实。媒体生成仍有 <code>get_media_job</code>、<code>get_media_result</code>、<code>cancel_media_job</code>，按角色和作业归属授权；取消只按 Provider 实际能力执行，不能伪报退款。结果传引用和摘要，大媒体留在资产库。</p>
+<h3 id="62-两个服务与内部代码的分工">6.2 两个服务与内部代码的分工</h3>
+<div aria-label="可横向滚动的表格" class="table-scroll" tabindex="0"><table>
+<thead>
+<tr>
+<th>服务（目标名称）</th>
+<th>放什么</th>
+<th>边界</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>项目管理 MCP <code>studio-core</code></td>
+<td>M01 内部历史；M02 角色/记忆；M04 的审核报告登记</td>
+<td>不联网搜索，不运行后期，不暴露打包/发布工具</td>
+</tr>
+<tr>
+<td>媒体任务 MCP <code>studio-media</code></td>
+<td>M03 图片/TTS/口播生成；M04 媒体检测及生成作业状态</td>
+<td>不暴露字幕对齐、渲染、清晰度处理或打包命令</td>
+</tr>
+<tr>
+<td>内部 Postprocess Worker（非 MCP）</td>
+<td>字幕 ASR/对齐、时间线合成、清晰度处理、字幕渲染、封面与编码</td>
+<td>业务事件直接调度；无 Agent 身份、无 Skill、无自然语言工具决策</td>
+</tr>
+</tbody>
+</table></div>
+<p>两个 MCP 共用业务作业和资产账本，按具体工具和角色授权。媒体 MCP 可调现有云 GPU Worker，不要求直接公网暴露 GPU。Provider 密钥留在受控服务环境。内部后期 Worker 与 MCP 可共享媒体函数库，但调用入口、执行身份和授权分别核验。</p>
+<h3 id="63-代码后期如何执行">6.3 代码后期如何执行</h3>
+<ul>
+<li><strong>字幕触发：</strong> 最终 TTS 已审核且用户确认后，业务服务创建字幕作业，读取正文、朗读映射和音轨摘要。ASR/强制对齐实现尚待选型，允许代码调用模型；模型不自行规划流程，也不成为新 Agent。</li>
+<li><strong>合成触发：</strong> 原片审核通过、字幕审核就绪及版本一致后，Worker 读取用户页面选项/预设，编译受 schema 校验的时间线；FFmpeg 执行分段拼接、首尾处理、音量/帧率/尺寸规范化，libass 渲染字幕，Pillow 等生成封面。</li>
+<li><strong>清晰度处理：</strong> 默认参数化缩放、去噪和适度锐化；不承诺恢复缺失细节，不凭输出 1080P 判清晰度合格。若接超分模型，需另行测试并锁定版本与参数，当前没有已选超分模型。</li>
+<li><strong>终审与交付：</strong> FFprobe/解码检查生成技术证据，质量角色检查实际成片。业务服务收到有效通过报告后自动打包与开放下载；打包代码复核全套门禁，无须请求任何 Agent 调 MCP。</li>
+<li><strong>失败恢复：</strong> 每阶段持久化输入摘要、代码/配置版本、租约、状态和产物。缺依赖不开始、未知作业先核对、旧版本迟到不覆盖、仅字幕样式改变只重渲染。严重黑帧/错位先拒收，不能盲目删帧或换声音掩盖问题。</li>
+</ul>
+<p>后期执行记录使用 04 的 <code>StageExecution</code>，<code>executor_kind=worker</code>、<code>worker_kind=postprocess</code>；Agent 执行才填写 <code>agent_role</code>。后期结果写媒体/阶段记录，不伪装 <code>AgentResult</code>。代码流程由内部事件和作业状态推进，总控只读进度/报告，不接回字幕和剪辑步骤。</p>
+<h3 id="64-建设与迁移顺序">6.4 建设与迁移顺序</h3>
+<ol>
+<li>对照已有实现，先回归角色/权限：只注册四个子 Agent；删除内容联网工具、editor、S07、M05 及后期 MCP 入口，未知旧角色/工具拒绝新任务。历史记录保留，不重写历史成功结论。</li>
+<li>验证提示词直接三稿 → 质量内部查重/表达审核 → 用户选择；重点测试缺依据时待复核，不把全局禁网误做成禁用 DeepSeek/MiniMax 等合法模型 API。</li>
+<li>保留两路数字人和固定 TTS 门禁；人物、音频、动作和原片按 S04/S05/S06/S08 验证，不以删除后期 Agent 改变口播模型职责。</li>
+<li>接内部字幕/渲染/清晰度代码、最终审核和自动打包；验证媒体实际输出、可恢复性、依赖失效和下载，不以无 LLM 调用日志代替成片验收。</li>
+<li>继续验证持久记忆审核与隔离、约 60 秒交付、每天 5 条、合格成本；平台能力后续独立实现。</li>
+</ol>
+<p>本节细化 05 的 T00～T12，不新增阶段编号；验收统一引用 06。本轮不调用付费模型、不删除历史实验；现有 production/ 仅完成角色/工具边界和内部 Worker 的最小接管，真实 ASR、渲染、清晰度与合格打包仍待实现。</p>
+<h3 id="65-omnihuman-的工具边界">6.5 OmniHuman 的工具边界</h3>
+<p><code>submit_avatar_video</code> 读取固定人物图、已审已确认 MiniMax TTS 和可编辑身体/表情描述，映射到 OmniHuman 1.5。输入版本、用户选择和预算有效才提交。无需 LivePortrait 或额外 MuseTalk，不能静默添加修补；M2 仍单独使用 LivePortrait→MuseTalk。</p>
+<p>历史接口约束为音频少于 60 秒，建议不超过 15 秒，正式调用核对当期限制；长片按同一最终音轨句界切分并保存统一映射。身体运动、人物 B、嘴型和长片质量仍待验。历史 9.48 秒短片的音轨保持证据不能替代新任务审核，具体模型事实见 09。</p>
+<h2 id="7-记忆的存储和生命周期">7. 记忆的存储和生命周期</h2>
+<div aria-label="可横向滚动的表格" class="table-scroll" tabindex="0"><table>
+<thead>
+<tr>
+<th>类别</th>
+<th>保存什么</th>
+<th>拟采用的机制</th>
+<th>谁能修改</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>任务状态</td>
+<td>当前对话、计划、委派、等待与检查点</td>
+<td>持久 checkpointer＋业务任务表</td>
+<td>当前执行，经版本/租约校验</td>
+</tr>
+<tr>
+<td>固定人设与声音</td>
+<td>角色身份、共用 MiniMax voice_id/风格、已确认音频和批准资产版本</td>
+<td>不可变资产库＋版本化配置</td>
+<td>用户定版流程；Agent 只读</td>
+</tr>
+<tr>
+<td>内容历史</td>
+<td>稿件、主题、观点、例子、来源、发布信息</td>
+<td>业务数据库＋全文/向量检索</td>
+<td>内容登记服务，保留旧版本</td>
+</tr>
+<tr>
+<td>长期经验</td>
+<td>术语读法、审稿修正、偏好、真实效果和适用条件</td>
+<td>持久 Store＋经审核记忆记录</td>
+<td>子 Agent 提候选，审核后由业务服务提交</td>
+</tr>
+</tbody>
+</table></div>
+<p>DeepAgents 的 <code>StateBackend</code> 可作为任务工作空间；<code>CompositeBackend</code> 将指定长期路径路由到 <code>StoreBackend</code>。实际 Store 必须落到持久后端。官方示例中的 <code>InMemoryStore</code>、<code>MemorySaver</code> 不能作为跨进程恢复证明。</p>
+<p>建议首轮评估 PostgreSQL 承担业务记录与持久运行存储，按接口区分 checkpoint、Store 和业务表；pgvector 只解决向量索引，不等于记忆治理。模型/维度变化需重建或版本化索引，不能混合检索后当同一分数。</p>
+<p>每条经验包含来源、所属账号/角色、发生时间、适用范围、版本与复核/失效条件。任务暂存和长期内容隔离，检索仅返回相关少量记录；不存在已取得的播放数据时明确为空。并发候选使用独立 ID，合并依靠事务/期望版本，冲突不以最后写入覆盖处理。</p>
+<h2 id="8-可恢复性与质量执行">8. 可恢复性与质量执行</h2>
+<ul>
+<li>checkpointer 保存运行状态，业务库保存作业事实，媒体库保存文件；恢复先核对三者。</li>
+<li>子 Agent 中断可交由框架人工恢复机制处理，但恢复可能重新进入工具/节点，外部副作用仍要幂等和核对。</li>
+<li>质量决定绑定资产、稿件、计划与规则版本。结果 <code>review</code> 或 <code>not_run</code> 不能当 <code>pass</code>，总控不具备覆盖硬失败的接口。</li>
+<li>人工改稿后创建新版本并传播失效；并行旧任务迟到的产物保留证据，不登记为当前有效输出。</li>
+<li>OmniHuman 按用户确认 1 元/生成秒估算：60 秒 60 元、5 条/日 300 元、30 天 9000 元，仅视频费；账单/取整未验，TTS、失败返工和存储另计。报价不是调用授权，选择和适用预算有效后提交；失败不能自动换模型或加 MuseTalk 修补。</li>
+<li>单条/每日预算共享原子预留。重写次数、Agent 调用步数、并发数和媒体返工分别设限，避免子 Agent 自主循环造成不可控开销。</li>
+<li>GPU 队列保存提交状态和远端 ID；未知结果进入核对，实例中断不触发盲目重交。取消后仍核对已受理任务的账单。</li>
+</ul>
+<h2 id="9-首轮框架试验应证明什么">9. 首轮框架试验应证明什么</h2>
+<p>本版迁移先验证四类子 Agent 和工具白名单，联网搜索/抓取及后期工具调用必须被拒绝；后期无 LLM 委派仍能按事件执行。再使用可控模拟模型和工具验证：七入口状态、用户选择/审批分离、刷新后待选恢复、付费路线选择、角色分派、独立任务重叠执行、依赖汇合、结构错误拒收、质量失败退回、返工次数和预算边界、跨进程恢复、提交成功回执丢失不重交、记忆并发冲突、改稿后的下游失效。</p>
+<p>再在有预算的前提下验证真实 DeepSeek 的 tool calling、多轮上下文、中文结构输出与子 Agent 协作，然后接真实 Provider。模拟测试、模型兼容、视频质量、运营效果分别验收，不能互相替代。正式测试编号与测法见 <a href="06-%E9%AA%8C%E6%94%B6%E6%A0%87%E5%87%86%E4%B8%8E%E6%B5%8B%E8%AF%95%E6%96%B9%E6%A1%88.html">06 验收方案</a>。</p>
+<h3 id="91-skillmcp-和记忆如何评估">9.1 Skill、MCP 和记忆如何评估</h3>
+<p>评估方法、公式、样本与门槛统一见 <a href="06-%E9%AA%8C%E6%94%B6%E6%A0%87%E5%87%86%E4%B8%8E%E6%B5%8B%E8%AF%95%E6%96%B9%E6%A1%88.html#42-%E6%8C%87%E6%A0%87%E6%80%BB%E8%A1%A8">06指标总表</a>，不由每个Skill另设通过分。</p>
+<ul>
+<li>S01/S02/S03：内容事实、查重、新意、开头与口语；S04/S05：身份、动作、口型与自然度；S06：发音、音色与情绪；内部代码：字幕/编码/响度；S08：各阶段媒体质量及漏放/误拒/待复核。具体指标都在同一张总表中。</li>
+<li>所有Agent与Skill：首次结构、工具决策、角色任务成功、返工上限和真实并行。Skill A/B固定主模型、工具和输入，比较质量、成功率及 tokens/费用，不只看最终输出是否存在。</li>
+<li>四组能力和两个 MCP 服务：权限、副作用去重、未知受理恢复或安全阻断、结果完整性；实际生成质量仍按媒体指标另验。</li>
+<li>记忆层：有效记忆 Recall@5、无答案错误召回、作用域/时效、候选审核写入与冲突保护。持久检查点另以真实重启恢复验证。</li>
+<li>系统交付：20 次合格率、日产 5 条、端到端时延、合格成本与真实发布状态。模拟成绩与真实成绩分开报告。</li>
+</ul>
+<p>新增阈值是待冻结的建议，不是已经测得的成绩。评估报告同时列硬门槛、感知质量、工程恢复和成本，缺证据不能靠平均分放行。</p>
+<h2 id="10-官方文档与版本边界">10. 官方文档与版本边界</h2>
+<p>既有方案曾通过 Context7 核对下列官方文档能力；本轮沿用已有依据，未重新联网核验。这是文档依据，不是本项目执行证据。部分文档并行例子使用动态子 Agent 或解释器，不能直接证明本项目 Python＋DeepSeek 组合已支持相同行为。安装后以实际签名和受控实验锁版本。</p>
+<ul>
+<li><a href="https://docs.langchain.com/oss/python/deepagents/subagents" rel="noopener noreferrer" target="_blank">DeepAgents 子 Agent</a>：角色、模型、工具及上下文隔离。</li>
+<li><a href="https://docs.langchain.com/oss/python/deepagents/dynamic-subagents" rel="noopener noreferrer" target="_blank">动态子 Agent</a>：独立任务委派与并行示例。</li>
+<li><a href="https://docs.langchain.com/oss/python/deepagents/skills" rel="noopener noreferrer" target="_blank">Skills</a>：可复用规范及加载方式。</li>
+<li><a href="https://docs.langchain.com/oss/python/deepagents/tools" rel="noopener noreferrer" target="_blank">工具与 MCP</a>：MCP 工具接入。</li>
+<li><a href="https://docs.langchain.com/oss/python/deepagents/context-engineering" rel="noopener noreferrer" target="_blank">上下文工程</a> 与 <a href="https://docs.langchain.com/oss/python/deepagents/memory" rel="noopener noreferrer" target="_blank">记忆</a>：任务空间和跨任务 Store。</li>
+<li><a href="https://docs.langchain.com/oss/python/deepagents/human-in-the-loop" rel="noopener noreferrer" target="_blank">人工中断</a>：interrupt 与恢复机制。</li>
+</ul>
+</article>
+    <nav class="document-pager" aria-label="相邻文档"><a rel="prev" href="09-%E6%A8%A1%E5%9E%8B%E9%80%89%E5%9E%8B%E5%86%B3%E7%AD%96%E4%B8%8E%E6%8E%A5%E5%85%A5%E6%96%B9%E6%A1%88.html"><span>上一篇</span>09-模型选型决策与接入方案</a><a rel="next" href="../selection/01-%E6%95%B0%E5%AD%97%E4%BA%BA%E5%8F%A3%E6%92%AD/01-%E9%80%89%E5%9E%8B%E8%AF%95%E9%AA%8C%E6%96%B9%E6%A1%88.html"><span>下一篇</span>01-选型试验方案</a></nav>
+    <footer class="page-footer">与同名 Markdown 对应的阅读版 · 可离线阅读与打印</footer>
+  </main>
+  <aside class="toc-panel" aria-label="本文章节"><p class="group-title">本页目录</p><nav id="toc"><a class="toc-h2" href="#1-%E6%A1%86%E6%9E%B6%E5%9C%A8%E4%BB%A3%E7%A0%81%E9%87%8C%E5%A6%82%E4%BD%95%E4%BD%93%E7%8E%B0">1. 框架在代码里如何体现</a><a class="toc-h2" href="#2-%E8%A7%92%E8%89%B2%E9%85%8D%E7%BD%AE%E4%B8%8E%E6%9C%80%E5%B0%8F%E6%9D%83%E9%99%90">2. 角色配置与最小权限</a><a class="toc-h2" href="#3-%E5%B9%B6%E8%A1%8C%E5%A7%94%E6%B4%BE%E5%92%8C%E7%BB%93%E6%9E%9C%E6%B1%87%E5%90%88">3. 并行委派和结果汇合</a><a class="toc-h2" href="#4-%E5%88%86%E6%AE%B5%E8%A1%A8%E6%BC%94%E8%AF%B4%E6%98%8E%E4%B8%8E%E7%BB%93%E6%9E%84%E5%8C%96%E4%BA%A4%E6%8E%A5">4. 分段表演说明与结构化交接</a><a class="toc-h2" href="#5-%E9%A6%96%E6%9C%9F-7-%E4%B8%AA%E4%B8%9A%E5%8A%A1-skill">5. 首期 7 个业务 Skill</a><a class="toc-h3" href="#51-%E6%B8%85%E5%8D%95%E8%B4%9F%E8%B4%A3%E8%A7%92%E8%89%B2%E4%B8%8E%E4%BA%A4%E4%BB%98%E7%89%A9">5.1 清单、负责角色与交付物</a><a class="toc-h3" href="#52-%E7%9B%AE%E6%A0%87%E7%9B%AE%E5%BD%95%E4%B8%8E%E8%BF%81%E7%A7%BB">5.2 目标目录与迁移</a><a class="toc-h2" href="#6-%E9%A6%96%E6%9C%9F-4-%E7%BB%84-mcp-%E8%83%BD%E5%8A%9B2-%E4%B8%AA%E6%9C%8D%E5%8A%A1">6. 首期 4 组 MCP 能力、2 个服务</a><a class="toc-h3" href="#61-%E4%B8%9A%E5%8A%A1%E8%83%BD%E5%8A%9B%E6%B8%85%E5%8D%95">6.1 业务能力清单</a><a class="toc-h3" href="#62-%E4%B8%A4%E4%B8%AA%E6%9C%8D%E5%8A%A1%E4%B8%8E%E5%86%85%E9%83%A8%E4%BB%A3%E7%A0%81%E7%9A%84%E5%88%86%E5%B7%A5">6.2 两个服务与内部代码的分工</a><a class="toc-h3" href="#63-%E4%BB%A3%E7%A0%81%E5%90%8E%E6%9C%9F%E5%A6%82%E4%BD%95%E6%89%A7%E8%A1%8C">6.3 代码后期如何执行</a><a class="toc-h3" href="#64-%E5%BB%BA%E8%AE%BE%E4%B8%8E%E8%BF%81%E7%A7%BB%E9%A1%BA%E5%BA%8F">6.4 建设与迁移顺序</a><a class="toc-h3" href="#65-omnihuman-%E7%9A%84%E5%B7%A5%E5%85%B7%E8%BE%B9%E7%95%8C">6.5 OmniHuman 的工具边界</a><a class="toc-h2" href="#7-%E8%AE%B0%E5%BF%86%E7%9A%84%E5%AD%98%E5%82%A8%E5%92%8C%E7%94%9F%E5%91%BD%E5%91%A8%E6%9C%9F">7. 记忆的存储和生命周期</a><a class="toc-h2" href="#8-%E5%8F%AF%E6%81%A2%E5%A4%8D%E6%80%A7%E4%B8%8E%E8%B4%A8%E9%87%8F%E6%89%A7%E8%A1%8C">8. 可恢复性与质量执行</a><a class="toc-h2" href="#9-%E9%A6%96%E8%BD%AE%E6%A1%86%E6%9E%B6%E8%AF%95%E9%AA%8C%E5%BA%94%E8%AF%81%E6%98%8E%E4%BB%80%E4%B9%88">9. 首轮框架试验应证明什么</a><a class="toc-h3" href="#91-skillmcp-%E5%92%8C%E8%AE%B0%E5%BF%86%E5%A6%82%E4%BD%95%E8%AF%84%E4%BC%B0">9.1 Skill、MCP 和记忆如何评估</a><a class="toc-h2" href="#10-%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3%E4%B8%8E%E7%89%88%E6%9C%AC%E8%BE%B9%E7%95%8C">10. 官方文档与版本边界</a></nav></aside>
+</div>
+<button type="button" class="sidebar-scrim" aria-label="关闭文档目录" hidden></button>
+<button type="button" class="back-top" aria-label="返回顶部">顶部</button>
+<script>(() => {
+  'use strict';
+
+  function initializeReader() {
+    const article = document.getElementById('document-body');
+    if (!article) return;
+    const root = document.documentElement;
+    const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
+    const scrollBehavior = () => reducedMotion.matches ? 'instant' : 'smooth';
+
+    // Local files and privacy settings can deny storage; controls remain usable.
+    const fontKey = 'document-reader-font-size';
+    let fontSize = 17;
+    try {
+      const savedSize = Number(localStorage.getItem(fontKey));
+      if (Number.isFinite(savedSize) && savedSize >= 14 && savedSize <= 22) fontSize = savedSize;
+    } catch (_) { /* Storage is optional. */ }
+    const smaller = document.querySelector('.font-smaller');
+    const reset = document.querySelector('.font-reset');
+    const larger = document.querySelector('.font-larger');
+    function setFontSize(value) {
+      fontSize = Math.max(14, Math.min(22, value));
+      root.style.setProperty('--reader-font-size', `${fontSize}px`);
+      if (smaller) smaller.disabled = fontSize === 14;
+      if (larger) larger.disabled = fontSize === 22;
+      if (reset) reset.title = `恢复默认字号（当前 ${fontSize}px）`;
+      try { localStorage.setItem(fontKey, String(fontSize)); } catch (_) { /* Optional. */ }
+    }
+    setFontSize(fontSize);
+    smaller?.addEventListener('click', () => setFontSize(fontSize - 1));
+    reset?.addEventListener('click', () => setFontSize(17));
+    larger?.addEventListener('click', () => setFontSize(fontSize + 1));
+    document.querySelector('.print-button')?.addEventListener('click', () => window.print());
+
+    const menu = document.querySelector('.mobile-menu');
+    const sidebar = document.getElementById('doc-sidebar');
+    const scrim = document.querySelector('.sidebar-scrim');
+    const mobileWidth = window.matchMedia('(max-width: 800px)');
+    function setMenu(open, returnFocus = false) {
+      const visible = open && mobileWidth.matches;
+      document.body.classList.toggle('menu-open', visible);
+      menu?.setAttribute('aria-expanded', String(visible));
+      if (scrim) scrim.hidden = !visible;
+      if (visible) {
+        sidebar?.querySelector('[aria-current="page"], a, button')?.focus();
+      } else if (returnFocus) menu?.focus();
+    }
+    menu?.addEventListener('click', () => setMenu(!document.body.classList.contains('menu-open')));
+    scrim?.addEventListener('click', () => setMenu(false, true));
+    sidebar?.addEventListener('click', (event) => {
+      if (event.target.closest('a')) setMenu(false);
+    });
+    mobileWidth.addEventListener('change', () => setMenu(false));
+    document.addEventListener('keydown', (event) => {
+      if (!document.body.classList.contains('menu-open')) return;
+      if (event.key === 'Escape') {
+        event.preventDefault();
+        setMenu(false, true);
+      }
+      if (event.key === 'Tab') {
+        const focusable = [menu, ...sidebar.querySelectorAll('a[href], button:not([disabled]), [tabindex="0"]')].filter(Boolean);
+        const first = focusable[0];
+        const last = focusable[focusable.length - 1];
+        if (event.shiftKey && document.activeElement === first) {
+          event.preventDefault();
+          last?.focus();
+        } else if (!event.shiftKey && document.activeElement === last) {
+          event.preventDefault();
+          first?.focus();
+        }
+      }
+    });
+    setMenu(false);
+
+    const searchForm = document.getElementById('search-form');
+    const searchInput = document.getElementById('search-input');
+    const searchNext = document.getElementById('search-next');
+    const searchClear = document.getElementById('search-clear');
+    const searchStatus = document.getElementById('search-status');
+    let searchResults = [];
+    let currentResult = -1;
+    let currentQuery = '';
+    let searchTimer;
+
+    function clearHighlights() {
+      article.querySelectorAll('mark.reader-match').forEach((mark) => {
+        const parent = mark.parentNode;
+        mark.replaceWith(document.createTextNode(mark.textContent));
+        parent.normalize();
+      });
+      article.querySelectorAll('.search-block-current').forEach((block) => block.classList.remove('search-block-current'));
+      searchResults = [];
+      currentResult = -1;
+    }
+
+    function showResult(index, shouldScroll) {
+      searchResults.forEach((result) => {
+        result.block.classList.remove('search-block-current');
+        result.marks.forEach((mark) => mark.classList.remove('is-current'));
+      });
+      currentResult = (index + searchResults.length) % searchResults.length;
+      const result = searchResults[currentResult];
+      result.block.classList.add('search-block-current');
+      result.marks.forEach((mark) => mark.classList.add('is-current'));
+      if (searchStatus) searchStatus.textContent = `第 ${currentResult + 1} / ${searchResults.length} 处匹配 · Enter 下一处`;
+      if (shouldScroll) {
+        let container = result.block.parentElement;
+        while (container && container !== article) {
+          if (container.tagName === 'DETAILS') container.open = true;
+          container = container.parentElement;
+        }
+        result.marks[0].scrollIntoView({ behavior: scrollBehavior(), block: 'center', inline: 'nearest' });
+      }
+    }
+
+    function runSearch(shouldScroll = false) {
+      clearTimeout(searchTimer);
+      clearHighlights();
+      const query = searchInput?.value.trim() || '';
+      currentQuery = query;
+      if (searchClear) searchClear.disabled = !query;
+      if (!query) {
+        if (searchStatus) searchStatus.textContent = '';
+        if (searchNext) searchNext.disabled = true;
+        return;
+      }
+      const queryLower = query.toLocaleLowerCase();
+      const blockResults = new Map();
+      // Walk original text nodes, preserving links, emphasis, tables and code.
+      const walker = document.createTreeWalker(article, NodeFilter.SHOW_TEXT, {
+        acceptNode(node) {
+          if (!node.nodeValue.trim()) return NodeFilter.FILTER_REJECT;
+          if (node.parentElement.closest('script, style, button, svg, mark, [aria-hidden="true"]')) return NodeFilter.FILTER_REJECT;
+          return node.nodeValue.toLocaleLowerCase().includes(queryLower) ? NodeFilter.FILTER_ACCEPT : NodeFilter.FILTER_REJECT;
+        }
+      });
+      const nodes = [];
+      while (walker.nextNode()) nodes.push(walker.currentNode);
+      nodes.forEach((node) => {
+        const original = node.nodeValue;
+        const normalized = original.toLocaleLowerCase();
+        const block = node.parentElement.closest('p, li, td, th, h2, h3, h4, h5, h6, pre, summary, figcaption') || node.parentElement;
+        let result = blockResults.get(block);
+        if (!result) {
+          result = { block, marks: [] };
+          blockResults.set(block, result);
+        }
+        const fragment = document.createDocumentFragment();
+        let position = 0;
+        let matchPosition;
+        while ((matchPosition = normalized.indexOf(queryLower, position)) !== -1) {
+          fragment.append(document.createTextNode(original.slice(position, matchPosition)));
+          const mark = document.createElement('mark');
+          mark.className = 'reader-match';
+          mark.textContent = original.slice(matchPosition, matchPosition + query.length);
+          fragment.append(mark);
+          result.marks.push(mark);
+          position = matchPosition + query.length;
+        }
+        fragment.append(document.createTextNode(original.slice(position)));
+        node.replaceWith(fragment);
+      });
+      searchResults = [...blockResults.values()];
+      if (searchNext) searchNext.disabled = !searchResults.length;
+      if (!searchResults.length) {
+        if (searchStatus) searchStatus.textContent = '未找到匹配内容';
+      } else showResult(0, shouldScroll);
+    }
+
+    searchInput?.addEventListener('input', (event) => {
+      if (event.isComposing) return;
+      clearTimeout(searchTimer);
+      searchTimer = setTimeout(() => runSearch(false), 180);
+    });
+    searchInput?.addEventListener('compositionend', () => {
+      clearTimeout(searchTimer);
+      searchTimer = setTimeout(() => runSearch(false), 180);
+    });
+    searchForm?.addEventListener('submit', (event) => {
+      event.preventDefault();
+      const queryChanged = currentQuery !== searchInput.value.trim();
+      if (queryChanged) runSearch(true);
+      else if (searchResults.length) showResult(currentResult + 1, true);
+    });
+    if (searchNext && searchNext.type !== 'submit') {
+      searchNext.addEventListener('click', () => {
+        if (currentQuery !== searchInput.value.trim()) runSearch(true);
+        else if (searchResults.length) showResult(currentResult + 1, true);
+      });
+    }
+    function resetSearch() {
+      clearTimeout(searchTimer);
+      if (searchInput) searchInput.value = '';
+      currentQuery = '';
+      clearHighlights();
+      if (searchStatus) searchStatus.textContent = '';
+      if (searchNext) searchNext.disabled = true;
+      if (searchClear) searchClear.disabled = true;
+    }
+    searchClear?.addEventListener('click', (event) => {
+      event.preventDefault();
+      resetSearch();
+      searchInput?.focus();
+    });
+    searchInput?.addEventListener('keydown', (event) => {
+      if (event.key === 'Escape' && !event.isComposing) {
+        event.preventDefault();
+        resetSearch();
+      }
+      if (event.key === 'Enter' && event.isComposing) event.preventDefault();
+    });
+    resetSearch();
+
+    async function copyText(text) {
+      try {
+        if (navigator.clipboard?.writeText) {
+          await navigator.clipboard.writeText(text);
+          return true;
+        }
+      } catch (_) { /* File URLs may reject the modern Clipboard API. */ }
+      const previousFocus = document.activeElement;
+      const selection = window.getSelection();
+      const savedRanges = selection ? Array.from({ length: selection.rangeCount }, (_, i) => selection.getRangeAt(i).cloneRange()) : [];
+      const field = document.createElement('textarea');
+      field.value = text;
+      field.readOnly = true;
+      field.style.cssText = 'position:fixed;left:-9999px;top:0;opacity:0;font-size:16px';
+      document.body.append(field);
+      field.select();
+      let copied = false;
+      try { copied = document.execCommand('copy'); } catch (_) { /* Show the failure state. */ }
+      field.remove();
+      if (selection) {
+        selection.removeAllRanges();
+        savedRanges.forEach((range) => selection.addRange(range));
+      }
+      previousFocus?.focus({ preventScroll: true });
+      return copied;
+    }
+
+    article.querySelectorAll('pre').forEach((pre) => {
+      const code = pre.querySelector('code');
+      if (!code || pre.querySelector('.copy-code')) return;
+      const button = document.createElement('button');
+      button.type = 'button';
+      button.className = 'copy-code';
+      button.textContent = '复制代码';
+      button.setAttribute('aria-label', '复制代码');
+      button.setAttribute('aria-live', 'polite');
+      pre.append(button);
+      let labelTimer;
+      button.addEventListener('click', async () => {
+        clearTimeout(labelTimer);
+        const copied = await copyText(code.textContent);
+        button.textContent = copied ? '已复制' : '请选中后复制';
+        labelTimer = setTimeout(() => { button.textContent = '复制代码'; }, 2200);
+      });
+    });
+
+    // Scroll-spy works without observers and avoids changing browser history.
+    const tocLinks = Array.from(document.querySelectorAll('#toc a[href^="#"]'));
+    const sections = tocLinks.map((link) => {
+      let id;
+      try { id = decodeURIComponent(link.getAttribute('href').slice(1)); } catch (_) { return null; }
+      const heading = document.getElementById(id);
+      return heading ? { link, heading } : null;
+    }).filter(Boolean);
+    let activeLink = null;
+    const backTop = document.querySelector('.back-top');
+    let framePending = false;
+    function updateScrollState() {
+      framePending = false;
+      if (backTop) backTop.hidden = window.scrollY < 480;
+      let active = sections[0];
+      const header = document.querySelector('.topbar');
+      const threshold = (header?.getBoundingClientRect().height || 76) + 38;
+      for (const section of sections) {
+        if (section.heading.getBoundingClientRect().top <= threshold) active = section;
+        else break;
+      }
+      if (!active || active.link === activeLink) return;
+      activeLink?.removeAttribute('aria-current');
+      activeLink?.classList.remove('is-active');
+      activeLink = active.link;
+      activeLink.setAttribute('aria-current', 'location');
+      activeLink.classList.add('is-active');
+      const panel = document.querySelector('.toc-panel');
+      if (panel && panel.clientHeight) {
+        const linkRect = activeLink.getBoundingClientRect();
+        const panelRect = panel.getBoundingClientRect();
+        if (linkRect.top < panelRect.top + 25 || linkRect.bottom > panelRect.bottom - 25) {
+          panel.scrollTop += linkRect.top - panelRect.top - panel.clientHeight / 3;
+        }
+      }
+    }
+    function queueScrollUpdate() {
+      if (!framePending) {
+        framePending = true;
+        requestAnimationFrame(updateScrollState);
+      }
+    }
+    window.addEventListener('scroll', queueScrollUpdate, { passive: true });
+    window.addEventListener('resize', queueScrollUpdate, { passive: true });
+    backTop?.addEventListener('click', () => window.scrollTo({ top: 0, behavior: scrollBehavior() }));
+    updateScrollState();
+  }
+
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', initializeReader, { once: true });
+  else initializeReader();
+})();
+</script>
+</body>
+</html>

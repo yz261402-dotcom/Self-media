@@ -1,0 +1,11 @@
+{
+  "algorithm": "sha256",
+  "paths_relative_to": "workspace_root",
+  "files": {
+    "assets/固定主播/主播B/版本1/基础人物.png": "b66feb11d62559a632def9f86e0915645a70fa4dbb38c6a2cd2f7cb50b607b48",
+    "assets/固定主播/主播B/版本1/音色3-温暖闺蜜试听.wav": "a6945eac9e317ea3643151e039f3de1a929277aceb605a2d13dee708f815fc81",
+    "assets/固定主播/主播B/版本1/人物原始提示词.txt": "0b3e664e751fb705f929f7fdf39aada44a8cbe8ec2a0203ca5859ac45beef967",
+    "assets/固定主播/主播B/版本1/角色档案.json": "153fd1e842c1d69cef55629b80dfc2d102a9cd8c91c1718fe10ab4aac8a3fbd7",
+    "experiments/人物与音色选型/AV-001/人物与音色定版.json": "38eed703aa2e42f1655beaa9e7827485da745c67a9dfabadba88ccd425d8430b"
+  }
+}

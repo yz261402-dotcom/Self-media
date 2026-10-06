@@ -1,0 +1,8 @@
+node_modules/
+dist/
+*.log
+.tts-tests.log
+build.log
+dev.log
+vite*.log
+.vite/

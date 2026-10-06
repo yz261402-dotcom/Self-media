@@ -1,0 +1,953 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="light">
+<link rel="icon" href="data:,">
+<meta name="source-sha256" content="3a936814b2187159d1eafe484fffc87bc7d08060efeea33d05af8cdea11fedce">
+<title>核心契约与数据字典 · AI 自媒体文档</title>
+<style>:root {
+  color-scheme: light;
+  --paper: #ffffff;
+  --surface: #f7f7f8;
+  --ink: #202126;
+  --muted: #666970;
+  --line: #dedfe3;
+  --blue: #002fa7;
+  --reader-font-size: 17px;
+  --header-height: 76px;
+  font-family: "Helvetica Neue", Helvetica, Arial, "PingFang SC", "Microsoft YaHei", sans-serif;
+  font-synthesis: none;
+}
+
+* { box-sizing: border-box; }
+.sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; border: 0; }
+.source-notice { margin-top: 22px; padding: 12px 14px; border-left: 3px solid var(--blue); background: var(--surface); color: var(--muted); font-size: 13px; }
+html { scroll-padding-top: 104px; }
+body { margin: 0; min-width: 320px; color: var(--ink); background: var(--surface); font-size: 14px; line-height: 1.6; }
+body.menu-open { overflow: hidden; }
+a { color: var(--blue); text-underline-offset: 3px; }
+button, input { font: inherit; }
+button { color: inherit; cursor: pointer; }
+button, input[type="search"] { border: 1px solid var(--line); border-radius: 3px; background: var(--paper); }
+button { min-height: 36px; padding: 6px 11px; line-height: 1.4; }
+button:hover { border-color: var(--blue); color: var(--blue); }
+button:disabled { opacity: .42; cursor: default; }
+button:disabled:hover { color: inherit; border-color: var(--line); }
+:focus-visible { outline: 2px solid var(--blue); outline-offset: 3px; }
+[hidden] { display: none !important; }
+::selection { background: #dbe4ff; color: #151c32; }
+
+.skip-link { position: fixed; z-index: 100; top: -70px; left: 16px; padding: 10px 18px; background: var(--blue); color: white; }
+.skip-link:focus { top: 10px; }
+.topbar { position: sticky; z-index: 30; top: 0; min-height: var(--header-height); display: flex; align-items: center; gap: 24px; padding: 15px 32px; border-bottom: 1px solid var(--line); background: var(--paper); }
+.brand { min-width: 0; color: var(--ink); font-size: 17px; font-weight: 700; line-height: 1.35; letter-spacing: -.02em; text-decoration: none; }
+.brand small, .brand span { display: block; margin-top: 4px; font-size: 11px; font-weight: 400; letter-spacing: .08em; color: var(--muted); }
+.toolbar { display: flex; align-items: center; gap: 6px; margin-left: auto; flex-shrink: 0; }
+.toolbar .font-smaller, .toolbar .font-reset, .toolbar .font-larger { min-width: 36px; padding: 5px 8px; font-variant-numeric: tabular-nums; }
+.toolbar .print-button { margin-left: 8px; }
+.mobile-menu { display: none; }
+.layout { display: grid; grid-template-columns: 244px minmax(0, 1fr) 208px; max-width: 1536px; margin: 0 auto; align-items: start; background: var(--paper); }
+.sidebar { position: sticky; top: var(--header-height); height: calc(100dvh - var(--header-height)); overflow-y: auto; overscroll-behavior: contain; padding: 32px 20px 36px 24px; border-right: 1px solid var(--line); scrollbar-width: thin; background: var(--surface); }
+.nav-group + .nav-group { margin-top: 32px; padding-top: 26px; border-top: 1px solid var(--line); }
+.group-title { margin: 0 10px 12px; color: var(--muted); font-size: 11px; font-weight: 600; letter-spacing: .11em; }
+.doc-nav { display: flex; flex-direction: column; gap: 4px; }
+.doc-nav a { display: block; padding: 9px 10px; border-left: 2px solid transparent; color: #55575d; font-size: 13px; line-height: 1.65; text-decoration: none; overflow-wrap: anywhere; }
+.doc-nav a:hover { color: var(--blue); background: #eeeeef; }
+.doc-nav a[aria-current="page"] { border-left-color: var(--blue); background: #eaf0ff; color: var(--blue); font-weight: 600; }
+.doc-nav .doc-number { display: inline-block; min-width: 25px; color: var(--muted); font-variant-numeric: tabular-nums; }
+
+#main { min-width: 0; padding: 46px clamp(28px, 3.7vw, 60px) 56px; }
+.document-header { margin-bottom: 29px; }
+.eyebrow { margin: 0 0 18px; color: var(--blue); font-size: 12px; font-weight: 600; letter-spacing: .08em; }
+.document-header h1 { margin: 0 0 21px; font-size: clamp(30px, 2.8vw, 42px); font-weight: 700; letter-spacing: -.045em; line-height: 1.3; overflow-wrap: anywhere; }
+.doc-meta { display: flex; flex-wrap: wrap; align-items: baseline; gap: 6px 18px; color: var(--muted); font-size: 12px; }
+.doc-meta a { color: var(--muted); }
+.doc-meta a:hover { color: var(--blue); }
+.reader-tools { margin: 0 0 36px; padding: 16px 0; border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); }
+#search-form { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; }
+#search-input { flex: 1 1 160px; min-width: 100px; width: 0; height: 36px; padding: 6px 10px; color: var(--ink); }
+#search-input::placeholder { color: #777a82; }
+#search-next, #search-clear { flex: 0 0 auto; font-size: 12px; }
+#search-status { flex: 1 0 100%; color: var(--muted); font-size: 11px; line-height: 1.5; }
+#search-status:empty { display: none; }
+
+#document-body { font-size: var(--reader-font-size); line-height: 1.9; overflow-wrap: anywhere; }
+#document-body > :first-child { margin-top: 0; }
+#document-body h2, #document-body h3, #document-body h4, #document-body h5, #document-body h6 { scroll-margin-top: 106px; font-weight: 650; line-height: 1.45; color: #15171c; }
+#document-body h2 { margin: 2.8em 0 1.05em; padding-top: 1.25em; border-top: 1px solid var(--line); font-size: 1.5em; letter-spacing: -.035em; }
+#document-body h3 { margin: 2em 0 .85em; font-size: 1.18em; letter-spacing: -.025em; }
+#document-body h4 { margin: 1.65em 0 .7em; font-size: 1.03em; }
+#document-body h5, #document-body h6 { margin: 1.4em 0 .6em; font-size: 1em; }
+#document-body p { margin: .9em 0; }
+#document-body ul, #document-body ol { margin: 1em 0; padding-left: 1.55em; }
+#document-body li { margin: .38em 0; padding-left: .15em; }
+#document-body li > p { margin: .4em 0; }
+#document-body li > ul, #document-body li > ol { margin: .35em 0 .6em; }
+#document-body strong { color: #14161b; font-weight: 650; }
+#document-body hr { margin: 2.1em 0; border: 0; border-top: 1px solid var(--line); }
+#document-body blockquote { margin: 1.5em 0; padding: .25em 1.15em; border-left: 3px solid var(--blue); background: var(--surface); color: #4c4f57; }
+#document-body blockquote p { margin: .55em 0; }
+#document-body a { overflow-wrap: anywhere; }
+#document-body a:hover { text-decoration-thickness: 2px; }
+#document-body img { max-width: 100%; height: auto; }
+#document-body code { padding: .12em .32em; border: 1px solid #e7e7ea; border-radius: 3px; background: var(--surface); font-family: Consolas, "SFMono-Regular", "Liberation Mono", monospace; font-size: .82em; overflow-wrap: anywhere; }
+#document-body pre { position: relative; margin: 1.5em 0; padding: 44px 0 0; max-width: 100%; overflow: hidden; border: 1px solid var(--line); border-radius: 4px; background: var(--surface); line-height: 1.7; }
+#document-body pre > code { display: block; max-width: 100%; overflow-x: auto; padding: 0 19px 18px; border: 0; border-radius: 0; font-size: .79em; line-height: 1.75; white-space: pre; overflow-wrap: normal; tab-size: 2; }
+.copy-code { position: absolute; top: 7px; right: 8px; min-height: 28px; padding: 4px 9px; color: var(--muted); font-size: 11px; background: var(--paper); }
+.table-scroll { max-width: 100%; margin: 1.5em 0; overflow-x: auto; border: 1px solid var(--line); border-radius: 3px; scrollbar-width: thin; }
+#document-body table { width: 100%; min-width: 100%; border-collapse: collapse; font-size: .82em; line-height: 1.7; }
+#document-body th, #document-body td { min-width: 105px; padding: 12px 14px; border-right: 1px solid var(--line); border-bottom: 1px solid var(--line); text-align: left; vertical-align: top; }
+#document-body th { background: var(--surface); font-weight: 600; color: #30333a; }
+#document-body tr > :last-child { border-right: 0; }
+#document-body tbody tr:last-child td { border-bottom: 0; }
+#document-body tbody tr:hover { background: #fafafb; }
+#document-body th:first-child, #document-body td:first-child { min-width: 95px; }
+#document-body input[type="checkbox"] { width: 14px; height: 14px; margin: 0 7px 0 0; vertical-align: middle; accent-color: var(--blue); }
+#document-body details { margin: 1.15em 0; padding: 12px 16px; border: 1px solid var(--line); border-radius: 3px; }
+#document-body summary { color: var(--muted); font-size: .85em; cursor: pointer; }
+#document-body details[open] summary { margin-bottom: 12px; }
+.architecture { margin: 1.8em 0; }
+.diagram-viewport { max-width: 100%; overflow-x: auto; border: 1px solid var(--line); scrollbar-width: thin; }
+.diagram-viewport > svg { display: block; min-width: 720px; width: 100%; height: auto; background: var(--paper); }
+.architecture > svg { display: block; width: 100%; height: auto; max-width: 100%; border: 1px solid var(--line); background: var(--paper); }
+.architecture figcaption { margin-top: 8px; color: var(--muted); font-size: .75em; }
+.architecture details { font-size: .85em; }
+mark.reader-match { padding: 1px 0; background: #dbe4ff; color: inherit; border-radius: 2px; scroll-margin-top: 120px; }
+mark.reader-match.is-current { background: var(--blue); color: white; box-shadow: 0 0 0 2px var(--blue); }
+.search-block-current { outline: 1px solid #b2c5f9; outline-offset: 6px; }
+
+.toc-panel { position: sticky; top: var(--header-height); max-height: calc(100dvh - var(--header-height)); overflow-y: auto; padding: 38px 20px 30px 19px; border-left: 1px solid var(--line); scrollbar-width: thin; }
+.toc-panel > h2, #toc > h2, .toc-title { margin: 0 0 15px; color: var(--muted); font-size: 11px; font-weight: 600; letter-spacing: .08em; }
+#toc ul, #toc ol { list-style: none; margin: 0; padding: 0; }
+#toc a { display: block; margin: 2px 0; padding: 5px 0 5px 12px; border-left: 2px solid transparent; color: #6c6f78; font-size: 12px; line-height: 1.65; text-decoration: none; overflow-wrap: anywhere; }
+#toc a:hover { color: var(--blue); }
+#toc a[aria-current="location"], #toc a.is-active { color: var(--blue); border-left-color: var(--blue); }
+#toc a[data-level="3"], #toc .toc-h3 a, #toc a.toc-h3, #toc li.level-3 a { padding-left: 24px; font-size: 11px; }
+.document-pager { display: flex; justify-content: space-between; gap: 20px; margin-top: 60px; padding-top: 24px; border-top: 1px solid var(--line); }
+.document-pager a { flex: 1; min-width: 0; text-decoration: none; font-size: 14px; font-weight: 600; overflow-wrap: anywhere; }
+.document-pager a:last-child { text-align: right; }
+.document-pager a:only-child { text-align: left; }
+.document-pager small, .document-pager span { display: block; margin-bottom: 4px; font-size: 11px; font-weight: 400; color: var(--muted); }
+.page-footer { max-width: 1536px; margin: auto; padding: 22px 32px; border-top: 1px solid var(--line); color: var(--muted); font-size: 11px; background: var(--surface); }
+.back-top { position: fixed; right: 24px; bottom: 24px; z-index: 20; min-height: 40px; border-color: var(--line); background: var(--paper); font-size: 12px; }
+.sidebar-scrim { display: none; }
+
+@media (min-width: 1600px) {
+  .layout { border-left: 1px solid var(--line); border-right: 1px solid var(--line); }
+  .topbar { padding-left: max(32px, calc((100vw - 1472px) / 2)); padding-right: max(32px, calc((100vw - 1472px) / 2)); }
+}
+@media (max-width: 1190px) {
+  .layout { grid-template-columns: 225px minmax(0, 1fr); }
+  .toc-panel { display: none; }
+  #main { padding-left: 42px; padding-right: 42px; }
+}
+@media (max-width: 800px) {
+  :root { --header-height: 68px; }
+  .topbar { gap: 12px; padding: 13px 18px; }
+  .brand { font-size: 15px; }
+  .brand small, .brand span { font-size: 9px; }
+  .mobile-menu { display: inline-flex; align-items: center; justify-content: center; flex-shrink: 0; min-height: 34px; padding: 6px 9px; font-size: 12px; }
+  .layout { display: block; }
+  .sidebar { position: fixed; z-index: 50; left: 0; top: var(--header-height); bottom: 0; width: min(300px, calc(100vw - 44px)); height: calc(100dvh - var(--header-height)); padding: 24px 18px; transform: translateX(-101%); visibility: hidden; transition: transform .18s ease, visibility .18s; border-right: 1px solid var(--line); }
+  .menu-open .sidebar { transform: translateX(0); visibility: visible; }
+  .sidebar-scrim:not([hidden]) { display: block; position: fixed; z-index: 40; inset: var(--header-height) 0 0; background: rgb(18 21 30 / 28%); }
+  .toolbar { gap: 3px; }
+  .toolbar .font-smaller, .toolbar .font-reset, .toolbar .font-larger { min-width: 29px; min-height: 32px; padding: 4px 5px; font-size: 12px; }
+  .toolbar .print-button { display: none; }
+  #main { padding: 33px 28px 40px; }
+  .document-header h1 { font-size: 32px; }
+  .eyebrow { margin-bottom: 13px; }
+  #document-body { line-height: 1.9; }
+  #document-body h2 { margin-top: 2.3em; font-size: 1.4em; }
+  .page-footer { padding: 18px 28px; }
+  .back-top { right: 16px; bottom: 16px; }
+}
+@media (max-width: 460px) {
+  .topbar { gap: 8px; padding-left: 12px; padding-right: 12px; }
+  .brand { font-size: 13px; letter-spacing: -.035em; }
+  .brand small, .brand span { max-width: 125px; overflow: hidden; white-space: nowrap; text-overflow: ellipsis; }
+  .mobile-menu { padding: 5px 7px; font-size: 11px; }
+  #main { padding: 29px 20px 36px; }
+  .document-header h1 { font-size: 28px; }
+  .doc-meta { gap: 4px 12px; font-size: 11px; }
+  .reader-tools { margin-bottom: 28px; }
+  #search-input { flex-basis: 110px; font-size: 12px; }
+  #search-next, #search-clear { padding-left: 8px; padding-right: 8px; }
+  #document-body { font-size: calc(var(--reader-font-size) - 1px); }
+  #document-body pre > code { padding-left: 13px; padding-right: 13px; }
+  #document-body th, #document-body td { padding: 10px 12px; }
+  .document-pager { gap: 18px; margin-top: 40px; }
+  .document-pager a { font-size: 12px; }
+  .page-footer { padding-left: 20px; padding-right: 20px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { scroll-behavior: auto !important; transition: none !important; }
+}
+@media print {
+  @page { margin: 18mm 16mm; }
+  :root { --reader-font-size: 10.5pt !important; }
+  body { min-width: 0; background: white; color: black; }
+  .topbar, .sidebar, .toc-panel, .reader-tools, .document-pager, .back-top, .sidebar-scrim, .skip-link, .copy-code { display: none !important; }
+  .layout { display: block; max-width: none; border: 0; }
+  #main { padding: 0; }
+  .document-header h1 { font-size: 24pt; }
+  .document-header { margin-bottom: 24pt; }
+  .doc-meta { font-size: 8pt; }
+  #document-body { font-size: 10.5pt; line-height: 1.65; }
+  #document-body h2, #document-body h3, #document-body h4 { break-after: avoid; }
+  #document-body h2 { margin-top: 20pt; padding-top: 12pt; font-size: 15pt; }
+  #document-body a { color: inherit; text-decoration: underline; }
+  #document-body pre { padding: 9pt; overflow: visible; background: #f7f7f8; }
+  #document-body pre > code { padding: 0; overflow: visible; white-space: pre-wrap; overflow-wrap: anywhere; font-size: 8pt; }
+  .table-scroll { overflow: visible; border-radius: 0; }
+  #document-body table { table-layout: fixed; font-size: 7.5pt; }
+  #document-body th, #document-body td, #document-body th:first-child, #document-body td:first-child { min-width: 0; padding: 5pt; overflow-wrap: anywhere; }
+  #document-body thead { display: table-header-group; }
+  #document-body tr, .architecture { break-inside: avoid; }
+  #document-body details:not([open]) { display: none; }
+  .architecture > svg { max-height: 230mm; }
+  mark.reader-match, mark.reader-match.is-current { color: inherit; background: transparent; box-shadow: none; }
+  .search-block-current { outline: none; }
+  .page-footer { margin-top: 24pt; padding: 10pt 0 0; font-size: 8pt; background: white; }
+}
+</style>
+</head>
+<body>
+<a class="skip-link" href="#main">跳到正文</a>
+<header class="topbar">
+  <button type="button" class="mobile-menu" aria-controls="doc-sidebar" aria-expanded="false">文档目录</button>
+  <a class="brand" href="00-%E6%96%87%E6%A1%A3%E5%AF%BC%E8%88%AA.html">AI 自媒体<span>开发文档与调研</span></a>
+  <div class="toolbar" aria-label="阅读设置">
+    <button type="button" class="font-smaller" aria-label="缩小正文字号" title="缩小字号">A−</button>
+    <button type="button" class="font-reset" aria-label="恢复默认正文字号" title="恢复字号">默认</button>
+    <button type="button" class="font-larger" aria-label="放大正文字号" title="放大字号">A+</button>
+    <button type="button" class="print-button">打印</button>
+  </div>
+</header>
+<div class="layout">
+  <aside id="doc-sidebar" class="sidebar" aria-label="全部文档"><section class="nav-group"><h2 class="group-title">开发文档</h2><nav class="doc-nav" aria-label="开发文档"><a data-document href="00-%E6%96%87%E6%A1%A3%E5%AF%BC%E8%88%AA.html">00 文档导航</a><a data-document href="01-%E4%BA%A7%E5%93%81%E9%9C%80%E6%B1%82%E6%96%87%E6%A1%A3.html">01 产品需求文档</a><a data-document href="02-%E6%8A%80%E6%9C%AF%E9%80%89%E5%9E%8B%E5%AF%B9%E6%AF%94.html">02 技术选型对比</a><a data-document href="03-%E6%80%BB%E4%BD%93%E6%8A%80%E6%9C%AF%E6%96%B9%E6%A1%88.html">03 总体技术方案</a><a data-document href="04-%E6%8E%A5%E5%8F%A3%E5%A5%91%E7%BA%A6%E4%B8%8E%E6%95%B0%E6%8D%AE%E5%AD%97%E5%85%B8.html" aria-current="page">04 接口契约与数据字典</a><a data-document href="05-%E5%BC%80%E5%8F%91%E5%AE%9E%E6%96%BD%E8%AE%A1%E5%88%92.html">05 开发实施计划</a><a data-document href="06-%E9%AA%8C%E6%94%B6%E6%A0%87%E5%87%86%E4%B8%8E%E6%B5%8B%E8%AF%95%E6%96%B9%E6%A1%88.html">06 验收标准与测试方案</a><a data-document href="07-%E6%8A%80%E6%9C%AF%E9%80%89%E5%9E%8B%E4%B8%8E%E5%AE%9E%E6%B5%8B%E6%B5%81%E7%A8%8B.html">07 技术选型与实测流程</a><a data-document href="08-%E7%AB%AF%E5%88%B0%E7%AB%AF%E6%8A%80%E6%9C%AF%E6%B5%81%E7%A8%8B%E4%B8%8E%E6%A8%A1%E5%9E%8B%E9%80%89%E5%9E%8B%E5%9C%B0%E5%9B%BE.html">08 端到端技术流程与模型选型地图</a><a data-document href="09-%E6%A8%A1%E5%9E%8B%E9%80%89%E5%9E%8B%E5%86%B3%E7%AD%96%E4%B8%8E%E6%8E%A5%E5%85%A5%E6%96%B9%E6%A1%88.html">09 模型选型决策与接入方案</a><a data-document href="10-Agent%E7%BC%96%E6%8E%92%E9%80%89%E5%9E%8B%E4%B8%8E%E6%95%B4%E4%BD%93%E6%9E%B6%E6%9E%84.html">10 Agent编排选型与整体架构</a></nav></section><section class="nav-group"><h2 class="group-title">本轮选型试验</h2><nav class="doc-nav" aria-label="本轮选型试验"><a data-document href="../selection/01-%E6%95%B0%E5%AD%97%E4%BA%BA%E5%8F%A3%E6%92%AD/01-%E9%80%89%E5%9E%8B%E8%AF%95%E9%AA%8C%E6%96%B9%E6%A1%88.html">01 选型试验方案</a><a data-document href="../selection/01-%E6%95%B0%E5%AD%97%E4%BA%BA%E5%8F%A3%E6%92%AD/02-%E9%A6%96%E8%BD%AE%E5%AE%9E%E6%B5%8B%E7%BB%93%E6%9E%9C.html">02 首轮实测结果</a><a data-document href="../selection/01-%E6%95%B0%E5%AD%97%E4%BA%BA%E5%8F%A3%E6%92%AD/03-MuseTalk%E4%BA%91%E7%AB%AF%E9%83%A8%E7%BD%B2%E4%B8%8E%E8%AF%95%E9%AA%8C%E6%96%B9%E6%A1%88.html">03 MuseTalk云端部署与试验方案</a><a data-document href="../selection/01-%E6%95%B0%E5%AD%97%E4%BA%BA%E5%8F%A3%E6%92%AD/04-MuseTalk%E9%83%A8%E7%BD%B2%E4%B8%8E%E9%A6%96%E6%B5%8B%E7%BB%93%E6%9E%9C.html">04 MuseTalk部署与首测结果</a><a data-document href="../selection/01-%E6%95%B0%E5%AD%97%E4%BA%BA%E5%8F%A3%E6%92%AD/05-OmniHuman%E5%BC%80%E9%80%9A%E5%90%8E%E5%AE%9E%E6%B5%8B%E7%BB%93%E6%9E%9C.html">05 OmniHuman开通后实测结果</a><a data-document href="../selection/01-%E6%95%B0%E5%AD%97%E4%BA%BA%E5%8F%A3%E6%92%AD/06-%E4%BA%BA%E7%89%A9B%E8%A1%A8%E6%83%85%E5%8A%A8%E4%BD%9C%E6%94%B9%E5%96%84%E5%AE%9E%E6%B5%8B.html">06 人物B表情动作改善实测</a><a data-document href="../selection/01-%E6%95%B0%E5%AD%97%E4%BA%BA%E5%8F%A3%E6%92%AD/MuseTalk%E5%AE%98%E6%96%B9%E8%83%BD%E5%8A%9B%E6%A0%B8%E9%AA%8C.html">MuseTalk官方能力核验</a><a data-document href="../selection/01-%E6%95%B0%E5%AD%97%E4%BA%BA%E5%8F%A3%E6%92%AD/%E6%B5%8B%E8%AF%95%E7%B4%A0%E6%9D%90%E6%8E%A5%E5%8F%A3%E6%A0%B8%E9%AA%8C.html">测试素材接口核验</a><a data-document href="../selection/01-%E6%95%B0%E5%AD%97%E4%BA%BA%E5%8F%A3%E6%92%AD/%E7%81%AB%E5%B1%B1%E5%80%99%E9%80%89%E6%A0%B8%E9%AA%8C.html">火山候选核验</a><a data-document href="../selection/01-%E6%95%B0%E5%AD%97%E4%BA%BA%E5%8F%A3%E6%92%AD/%E9%98%BF%E9%87%8C%E5%80%99%E9%80%89%E6%A0%B8%E9%AA%8C.html">阿里候选核验</a></nav></section><section class="nav-group"><h2 class="group-title">已选模型接入核验</h2><nav class="doc-nav" aria-label="已选模型接入核验"><a data-document href="../selection/02-%E5%B7%B2%E9%80%89%E6%A8%A1%E5%9E%8B/%E5%AE%98%E6%96%B9%E6%96%87%E6%9C%AC%E4%B8%8E%E8%AF%AD%E9%9F%B3%E6%8E%A5%E5%8F%A3%E6%A0%B8%E9%AA%8C.html">官方文本与语音接口核验</a></nav></section><section class="nav-group"><h2 class="group-title">人物与音色候选</h2><nav class="doc-nav" aria-label="人物与音色候选"><a data-document href="../selection/03-%E4%BA%BA%E7%89%A9%E4%B8%8E%E9%9F%B3%E8%89%B2/01-%E9%A6%96%E8%BD%AE%E5%80%99%E9%80%89%E4%B8%8E%E9%80%89%E6%8B%A9%E8%AF%B4%E6%98%8E.html">01 首轮候选与选择说明</a><a data-document href="../selection/03-%E4%BA%BA%E7%89%A9%E4%B8%8E%E9%9F%B3%E8%89%B2/02-%E4%BA%BA%E7%89%A9B%E4%B8%8E%E9%9F%B3%E8%89%B23%E5%AE%9A%E7%89%88%E8%AE%B0%E5%BD%95.html">02 人物B与音色3定版记录</a></nav></section><section class="nav-group"><h2 class="group-title">调研资料</h2><nav class="doc-nav" aria-label="调研资料"><a data-document href="../research/01-%E4%BA%A7%E5%93%81%E5%BD%A2%E6%80%81%E4%B8%8E%E6%8A%96%E9%9F%B3%E7%94%9F%E6%80%81.html">01 产品形态与抖音生态</a><a data-document href="../research/02-%E4%BA%BA%E7%89%A9%E4%B8%80%E8%87%B4%E6%80%A7%E7%94%9F%E6%88%90.html">02 人物一致性生成</a><a data-document href="../research/03-%E6%95%B0%E5%AD%97%E4%BA%BA%E5%8F%A3%E6%92%AD%E9%80%89%E5%9E%8B.html">03 数字人口播选型</a><a data-document href="../research/04-TTS%E9%9F%B3%E8%89%B2%E4%B8%8E%E5%86%85%E5%AE%B9%E7%94%9F%E6%88%90%E8%B4%A8%E6%A3%80.html">04 TTS音色与内容生成质检</a><a data-document href="../research/05-%E8%A7%86%E9%A2%91%E5%90%8E%E5%A4%84%E7%90%86%E5%8F%91%E5%B8%83%E4%B8%8E%E5%90%88%E8%A7%84.html">05 视频后处理发布与合规</a><a data-document href="../research/06-%E5%86%B3%E7%AD%96%E6%B1%87%E6%80%BB.html">06 决策汇总</a></nav></section>
+    <p class="sidebar-note">11 份开发文档<br>10 份本轮选型试验<br>1 份已选模型接入核验<br>2 份人物与音色候选<br>6 份调研资料</p>
+  </aside>
+  <main id="main" tabindex="-1">
+    <header class="document-header">
+      <p class="eyebrow">开发文档 / 04</p>
+      <h1>核心契约与数据字典</h1>
+      <div class="doc-meta"><span>v2.4 · 评审版</span><span>7 个章节</span><a href="04-%E6%8E%A5%E5%8F%A3%E5%A5%91%E7%BA%A6%E4%B8%8E%E6%95%B0%E6%8D%AE%E5%AD%97%E5%85%B8.md">Markdown 原文</a></div>
+      
+    </header>
+    <div class="reader-tools">
+      <form id="search-form" role="search">
+        <label class="sr-only" for="search-input">搜索本文</label>
+        <input id="search-input" type="search" placeholder="搜索本文，按 Enter 跳转" autocomplete="off">
+        <button id="search-next" type="submit">下一处</button>
+        <button id="search-clear" type="button">清除</button>
+        <span id="search-status" role="status" aria-live="polite"></span>
+      </form>
+    </div>
+    <article id="document-body">
+<p><strong>当前基线（2026-09-23）：</strong> 用户已选 DeepAgents 主框架，由总控协调策划文案、质量审核、数字人导演、声音导演四类 subagents。决策模型为 DeepSeek 官方 <code>deepseek-flash</code>（V4.1 Flash）；媒体采用 MiniMax 官方 <code>speech-2.8-hd</code>、GPT 专用中转 <code>gpt-image-2</code>。人物 B <code>av_base_b_v1</code> 与音色 3 <code>Chinese (Mandarin)_Warm_Bestie</code> 为首个默认预设，允许创建、核验并显式选择其他人物和声音；每条作品锁定其选定版本。MVP 必交付口播路线为 OmniHuman 1.5：固定人物图＋已审且用户确认的最终 MiniMax TTS＋可编辑表演描述，直接输出身体/表情/口型视频，不经过 LivePortrait/MuseTalk。M2（LivePortrait→MuseTalk）保留低成本本地选用，不能替代 OmniHuman 验收；Grok 仅留只读历史调研。准确接口与能力由接入证据约束。见 <a href="09-%E6%A8%A1%E5%9E%8B%E9%80%89%E5%9E%8B%E5%86%B3%E7%AD%96%E4%B8%8E%E6%8E%A5%E5%85%A5%E6%96%B9%E6%A1%88.html">接入决策</a>。本轮已同步 production 骨架的角色/工具注册与代码 Worker 门禁；真实后期、模型链路和生产验收尚未完成，模型选择与验收分开记录。</p>
+<p>版本：v2.4 单用户工作台 / DeepAgents Draft；日期：2026-09-23。本文规定 <code>avatar_studio</code> 的目标数据与接口，角色与工具边界已做最小同步，不表示全部契约已实现或云服务已在本轮调用。本文是尚未冻结的业务契约草案，可随实测发现的能力边界修订；字段以必要、可验证为原则；状态枚举以本文为唯一来源，其他文档不得另建同义枚举。FastAPI、PostgreSQL＋pgvector、APScheduler 属于建议试验组合，尚未因此定为生产依赖；前端、影像 QA、字幕 ASR/对齐、超分与 embedding 模型仍待选。</p>
+<p>当前代码 Worker 仅持久登记执行边界与阻断原因（复用 media_jobs 存储），缺少已审媒体或真实后期能力时返回 blocked/not_run，不生成伪造媒体或交付包；下文描述目标实现。</p>
+<p>策划文案按用户提示词、关键词和可选用户资料直接生成三稿；质量审核保留内部历史查重与事实风险审核，两者均不进行网上搜索或抓取。视频合成、清晰度处理、字幕、封面和打包由代码 Postprocess Worker 执行，原片与成片仍由质量 Agent 审核。</p>
+<p>本版以作品为根管理人物、三稿候选、试听、音频与视频版本，新增独立的用户选择、生成路线与费用确认契约。七个功能入口始终可进入：人物形象、口播稿生成、TTS 语音、视频合成、发布、指标监控、领域模型选择；前四项为真实 MVP，后三项展示真实规划/开发状态，基础连接配置属于 MVP。业务状态由确定性代码提交，Agent 只能提出计划、调用获准工具并返回结构化结果。</p>
+<p>首阶段交付用户逐步确认的生产闭环、成片预览与可下载发布就绪包（G2），不要求排期提醒、人工回填或实际投稿。提醒/回填在后续交付，按平台取得官方权限后的自动发布和指标读取分别验收（G3）。人工报告、上传成功、创建请求受理都不能替代平台确认发布。</p>
+<p>契约依据为原始需求、已确认的 V1 范围及待评审的 <a href="03-%E6%80%BB%E4%BD%93%E6%8A%80%E6%9C%AF%E6%96%B9%E6%A1%88.html">03 总体技术方案</a> 的新模块边界。外部事实只取 <a href="../research/03-%E6%95%B0%E5%AD%97%E4%BA%BA%E5%8F%A3%E6%92%AD%E9%80%89%E5%9E%8B.html">口播厂商能力</a>、<a href="../research/04-TTS%E9%9F%B3%E8%89%B2%E4%B8%8E%E5%86%85%E5%AE%B9%E7%94%9F%E6%88%90%E8%B4%A8%E6%A3%80.html">TTS 能力与条款</a>、<a href="../research/05-%E8%A7%86%E9%A2%91%E5%90%8E%E5%A4%84%E7%90%86%E5%8F%91%E5%B8%83%E4%B8%8E%E5%90%88%E8%A7%84.html">平台发布规则</a> 中可独立追溯的证据；型号、价格、路由、时长与权限仍须接入时核实。<strong>demo 以及调研中的 demo 现状、复用、改造或既有测试结论均排除，不作为契约依据。</strong></p>
+<p>先验证离线最小编排、权限和恢复，再按 <a href="07-%E6%8A%80%E6%9C%AF%E9%80%89%E5%9E%8B%E4%B8%8E%E5%AE%9E%E6%B5%8B%E6%B5%81%E7%A8%8B.html">技术选型与实测流程</a> 验证尚未确认的能力。Provider 的厂商字段、上限和响应映射只有经过当前文档核验与真实调用后才能冻结。</p>
+<h2 id="1-公共约定">1. 公共约定</h2>
+<ul>
+<li>API 前缀 <code>/api/v1</code>；JSON 使用 <code>snake_case</code>、UTF-8。业务 ID 为服务端生成的不透明字符串，不能拼接为磁盘路径。</li>
+<li>所有时间使用含时区 RFC 3339，存储统一 UTC；排期额外保留 IANA 时区，默认 <code>Asia/Shanghai</code>。时长与时间轴统一为非负整数毫秒，区间采用 <code>[start_ms, end_ms)</code>。</li>
+<li>金额使用人民币分整数 <code>*_fen</code>，不使用浮点货币；提交前估价向上取整。其他币种必须先经版本化汇率折算，不能直接相加。</li>
+<li><code>schema_version</code> 从新系统第 <code>1</code> 版开始；只承诺本系统后续版本按明确契约升级，版本号相同不代表兼容任何外部或旧项目 schema。请求未知字段拒绝，响应允许客户端忽略新增字段。</li>
+<li>文本先统一换行为 LF、Unicode NFC，再计算 SHA-256。字符位置为规范化文本的 Unicode 码点偏移，不是 UTF-8 字节数或 UTF-16 长度。</li>
+<li><code>sha256</code> 为文件原始字节的 64 位小写十六进制摘要。<code>asset_id</code> 是稳定引用；签名 URL 是短期传输凭据，不是资产 ID，不写进业务事件或日志。</li>
+<li><code>mode</code> 值为 <code>mock | integration | production</code>，由运行环境决定，请求不能越级切换。每个任务、资产、Provider 任务和发布包均携带该值。</li>
+<li>成功响应必须包含经校验的业务结果；HTTP 200、空错误码、<code>success=true</code> 均不能单独证明成功。普通写接口返回 200/201，异步受理返回 202；冲突 409、校验失败 422、能力不支持 422、权限失败 403。</li>
+</ul>
+<h3 id="11-全新资产来源约束与零兼容保证">1.1 全新资产来源约束与零兼容保证</h3>
+<ul>
+<li>项目暂定名为 <code>avatar_studio</code>；实际语言、目录与包结构待工程栈选型，当前不据此创建生产包。新 schema 初始化空数据库，配置及 <code>AVATAR_STUDIO_</code> 凭据引用由新项目建立；启动不搜索旧配置、路径或数据库，不提供旧包别名、旧字段映射、旧数据导入或旧任务恢复接口。</li>
+<li>Base Avatar、参考图、服装/背景素材、预设音色选择或声音创建/注册记录、基准音频、成片及证据均须有新项目的来源链。允许本项目新生成、独立选择并核验使用权的预设音色，或为本项目独立取得授权的新材料；禁止读取旧数据库、导入旧头像/声音 ID/音频/视频/审批结果，即使补写新 ID 或复制文件也不改变来源。</li>
+<li>根资产须绑定新建 SourceRecord 和可核验摘要；派生资产须保留 <code>parent_asset_ids</code> 并可追溯全部根资产。创建身份/声音、提交任务、登记派生媒体和生成发布包时均校验来源；来源缺失或属于排除范围返回 <code>ASSET_SOURCE_FORBIDDEN</code>，人工审批不能豁免。</li>
+<li><code>VoiceAsset</code> 可从本项目首次预设音色选择及基准合成建立，也可来自有证据的声音创建/注册及基准验证。音色 3 为已选标准预设音色，登记须保存官方作用域、使用条款、选择记录和本项目基准合成证据，不要求额外克隆或注册。跨供应商注册使用的参考音频同样必须来自上述合法新来源；不接受只提供未经本项目建立来源证据的 <code>remote_voice_id</code>。</li>
+<li>Mock 由新写的确定性契约模拟器生成固定响应与带模拟标记的测试素材；离线负例和测试夹具全部独立新建。身份、声音、语义和视频质量阈值依据新标定集产生，不接受历史夹具或经验阈值直接放行。几何嘴型实现不作为 Mock、预览或负例生成器。</li>
+<li>仅允许新系统内部有来源证据的 <code>integration</code> 资产经显式审批新登记为生产资产；保持原始记录与模式追溯，不能直接改 <code>mode</code>。模拟资产及其后代不得进入生产。</li>
+<li>本项目 AV-001 的人物 B、音色 3 与 EXP-001 的 M2 样片属于新项目证据，不属于被排除项目。新工程可按已核验来源、摘要与选择记录受控登记这些资产；登记不继承生产质量通过结论，也不要求再次生成已选人物或声音。旧阿里实验片仅为动作参考，不可登记为人物 B 的正式动作母版。</li>
+</ul>
+<h2 id="2-权威枚举与状态规则">2. 权威枚举与状态规则</h2>
+<h3 id="21-pipelinestage处理到哪一步">2.1 PipelineStage：处理到哪一步</h3>
+<p>枚举保留：<code>topic | script | content_review | avatar_variant | tts | talking_head | postprocess | video_review | publish_package</code>。这是业务阶段视图，不要求每一项串行执行。</p>
+<ul>
+<li><code>topic</code>：整理用户提示词、关键词及可选资料；<code>script</code>：直接生成三种角度的结构化口播稿与表达标记；<code>content_review</code>：内部历史查重与事实风险等内容门禁。</li>
+<li><code>avatar_variant</code>：选择或创建已批准的同身份服装/背景变体，收集可编辑动作描述、素材与路线能力；此时不提交正式 OmniHuman 口播或最终口型。各子工作由 AgentWorkItem 区分。<code>tts</code>：两路线共用音色试听、声音选择、全文合成、质检及用户确认的最终音频。</li>
+<li><code>talking_head</code>：<code>OMNIHUMAN_1_5</code> 以已审固定人物图＋已确认最终 TTS＋可编辑表演描述直接生成身体/表情/口型；不运行 LivePortrait/MuseTalk。<code>M2</code> 以已审 LivePortrait 底片＋同一最终 TTS 调用 MuseTalk。<code>postprocess</code>：代码 Worker 执行裁剪、FFmpeg 合成、清晰度处理、规格统一、字幕、封面和标识；各子任务等待所需已审输入，最终合成等待该路线合格原片与真实时间线。</li>
+<li><code>video_review</code>：成片技术检测与人工观感检查；<code>publish_package</code>：冻结发布材料与 manifest。</li>
+</ul>
+<p>三个不同角度候选稿各自审核后，用户选稿并冻结版本。MiniMax 配音与人物/动作准备可并行；代码可提前校验用户选定的字幕和版式配置。
+两路线都必须已选人物、稿件、音色、最终 TTS 和路线，且对应质量门禁及预算满足后才提交正式口播。
+OmniHuman 输入固定人物图＋最终音频＋表演描述；M2 先以 LivePortrait 生成已审底片，再结合最终音频对口型。
+人物页不提前运行最终嘴型；第 3 页确认最终 TTS，第 4 页按路由生成。Postprocess Worker 可在音频确认后并行对齐字幕，原片经质量 Agent 审核后再核视频及剪辑偏移，成片仍须质量 Agent 审核和代码门禁通过。
+单 GPU 重型作业串行排队；独立 OmniHuman 云任务可与本地作业并行，但需分别核输入版本及预算。</p>
+<p>资产首次创建属于前置资产流程，不冒充某期视频已经完成。<code>stage</code> 为界面显示的主要阶段：从尚未完成且正在执行、待审或阻塞的阶段中按上述枚举顺序选择最早一项；尚未启动时显示下一可执行阶段，全部结束时显示最后阶段。实际并行进度读取 <code>active_stage_execution_ids</code>；不能把 <code>stage</code> 填成 <code>running</code>、<code>failed</code> 或 <code>published</code>。</p>
+<h3 id="22-taskstate本期生产任务处于什么状态">2.2 TaskState：本期生产任务处于什么状态</h3>
+<p><code>queued | running | waiting_provider | waiting_review | waiting_selection | retry_wait | succeeded | failed | cancelled | blocked</code>。</p>
+<p>合法主路径：<code>queued → running → waiting_provider/running → waiting_review/waiting_selection/running → succeeded</code>；实际按工作图在这些非终态间流转。</p>
+<ul>
+<li>Provider 外部任务未结束用 <code>waiting_provider</code>；等待人工质量判断用 <code>waiting_review</code>；等待用户选稿、选人物/音色、确认全文音频或确认路线用 <code>waiting_selection</code>。选择不能替代质量审批；预算授权不足仍为 <code>blocked</code>。</li>
+<li>明确可重试的临时错误：<code>running/waiting_provider → retry_wait → queued</code>；记录 <code>next_run_at</code> 与剩余次数。</li>
+<li>预算、许可证、权限、能力缺失或外部提交结果不明用 <code>blocked</code>。条件解决后经可审计的 resume 回到 <code>queued</code>，不能自动清除阻断原因。</li>
+<li>不可恢复错误或重试耗尽用 <code>failed</code>。生产成功只表示所有生产门禁及发布包完成，<code>succeeded</code> 不表示抖音已发布。</li>
+<li><code>cancelled</code> 只表示停止推进；已提交云任务必须继续核对、下载必要证据并结算，不能因此宣称未计费。</li>
+<li><code>succeeded/failed/cancelled</code> 是本次执行终态；再次生产创建新执行 ID 并引用 <code>previous_task_id</code>，不得修改旧证据。</li>
+</ul>
+<p><code>StageExecution.state</code>、<code>AgentWorkItem.state</code> 复用 TaskState。聚合按确定顺序执行：已接受取消后停止新调度并显示 <code>cancelled</code>；必需节点不可恢复失败为 <code>failed</code>；硬阻断为 <code>blocked</code>；所有必需节点、选择及发布包门禁完成才为 <code>succeeded</code>；否则有可执行工作为 <code>running</code>。无可执行工作时依次检查待质量审批 <code>waiting_review</code>、待用户选择 <code>waiting_selection</code>、已提交未结束作业 <code>waiting_provider</code>、延期重试 <code>retry_wait</code>，最后为 <code>queued</code>。显示状态不隐藏其他并行分支：返回 <code>active_stage_execution_ids</code>、<code>pending_selection_ids</code> 和全部阻断/待审原因。取消/失败后已提交作业继续对账，不能据聚合状态删除远端任务或释放未知费用。阶段成功必须有输出摘要、对应选择和门禁结果，不以文件存在或 Agent 回复“完成”替代。</p>
+<h3 id="23-publishstate独立的发布状态">2.3 PublishState：独立的发布状态</h3>
+<p><code>pending | ready | awaiting_human | reported_published | scheduled | submitting | submitted | published | rejected | failed | blocked | unknown | cancelled</code>。</p>
+<ul>
+<li>V1：<code>pending → ready</code>，表示包已就绪且可下载；下载不是已发布，也不自动转 <code>awaiting_human</code>。后续启用人工交接/回填能力后，才允许 <code>ready → awaiting_human → reported_published</code>；人工报告保存 URL、操作者、时间和证据，显示“人工报告已发布”。</li>
+<li>V2：能力和授权实证通过后，<code>ready → scheduled/submitting → submitted → published/rejected</code>。<code>scheduled</code> 必须有有效排期授权和 Adapter 的定时能力；V1 不启用排期；后续人工提醒也不进入 <code>scheduled</code>。</li>
+<li><code>submitted</code> 表示官方受理且有远端 ID；只有明确的官方状态响应或验签回调能转 <code>published</code>，保存该响应证据。人工回填不能直接执行此转换。</li>
+<li>提交超时、连接断开或无法确认副作用时进入 <code>unknown</code>；先查远端和既有回执，禁止自动重新创建作品。核对后可转 <code>submitted/published/rejected</code>；确认未受理后才允许新的提交尝试。</li>
+<li><code>reported_published</code> 若以后取得对应作品的官方证明，可转 <code>published</code>，同时保留原人工报告。无官方查询能力不强行核验成功。</li>
+<li><code>blocked</code> 表示缺授权/能力/标识/有效材料；<code>failed</code> 为已明确失败且无不明副作用；<code>rejected</code> 为平台审核拒绝；<code>cancelled</code> 只取消尚未执行的计划，不等于删除远端作品。</li>
+</ul>
+<p>发布与生产失败互不覆盖。例如生产 <code>succeeded</code>、包及发布记录 <code>ready</code> 是合法 G2 结果，Publication 本身也可尚未创建。</p>
+<h3 id="24-其他小枚举">2.4 其他小枚举</h3>
+<ul>
+<li>
+<p><code>ApprovalState</code>：<code>pending | approved | rejected | revoked</code>。批准总是绑定对象版本与内容摘要。</p>
+</li>
+<li>
+<p><code>CheckOutcome</code>：<code>pass | fail | review | not_run</code>。<code>not_run</code> 不能按通过计。</p>
+</li>
+<li>
+<p><code>ProviderJobState</code>：<code>prepared | submitting | queued | running | succeeded | failed | cancelled | unknown</code>。</p>
+</li>
+<li>
+<p><code>ClaimVerdict</code>：<code>supported | refuted | unverified</code>，不把“未发现问题”当作 <code>supported</code>。</p>
+</li>
+<li>
+<p><code>EvidenceOrigin</code>：<code>automatic | human | provider</code>；人工结论和机器结果分开保存。</p>
+</li>
+<li>
+<p><code>AgentRole</code>：<code>supervisor | content | quality | avatar | audio</code>，依次对应总控智能体、策划文案智能体、质量审核智能体、数字人导演智能体、声音导演智能体；后四项为 subagent 角色。<code>postprocess</code> 是代码执行阶段，不属于 AgentRole。</p>
+</li>
+<li>
+<p><code>ExecutorKind</code>：<code>agent | worker</code>，区分 Agent 阶段和代码任务；代码后期阶段使用 <code>executor_kind=worker</code>、<code>worker_kind=postprocess</code>，不伪造 Agent 角色或模型结果。</p>
+</li>
+<li>
+<p><code>MemoryCandidateState</code>：<code>proposed | approved | rejected | superseded</code>；只有审核合并后的 <code>approved</code> 版本可供跨任务检索。</p>
+</li>
+<li>
+<p><code>GenerationRoute</code>：<code>M2 | OMNIHUMAN_1_5</code>；MVP 默认且必交付 OmniHuman 1.5，M2 保留本地选用。首次合成与路线变更须用户选择，默认值不是费用授权。<code>GROK_IMAGINE_VIDEO_1_5</code> 仅允许只读历史，不接受新建任务、恢复提交或自动映射为其他路线。</p>
+</li>
+<li>
+<p><code>SelectionState</code>：<code>pending | selected | superseded | cancelled</code>；过期输入或选项版本变化使原请求 <code>superseded</code>，不能复用旧决定。</p>
+</li>
+<li>
+<p><code>FeatureState</code>：<code>planned | developing | available | blocked</code>，与运行能力分开；只有已实现、已验证能力才 <code>available</code>。占位页不得伪造生产数据、进度或连接成功。</p>
+</li>
+</ul>
+<h2 id="3-核心实体">3. 核心实体</h2>
+<p>以下为技术中立的逻辑实体；具体数据库、表布局、文档字段与索引由存储选型结果决定。除不可变内容外，实体均有 <code>id</code>、<code>created_at</code>、<code>updated_at</code>、用于乐观锁的 <code>version</code>；更新使用期望版本。</p>
+<h3 id="30-作品偏好与用户选择">3.0 作品、偏好与用户选择</h3>
+<p><strong>Work</strong>：<code>id</code>、<code>name</code>、<code>brief</code>（文案类型、用户提示词、受众、关键词、目标时长、可选 <code>provided_source_ids</code>）、<code>current_task_id</code>、<code>current_selection_refs</code>、<code>version</code>。用户未提供资料时 <code>provided_source_ids=[]</code> 合法，生成不以在线检索为前提；关键事实审核仍须有独立依据。这是单用户作品的根；任务、候选、资产和导出包均通过 <code>work_id</code> 归属，首次人物库创建可以暂不绑定作品。更新只切换当前指针，旧执行和费用证据保留。一个 Work 可有多次 Task；候选和重生成不能覆盖旧版本。</p>
+<p><strong>SelectionRequest</strong>：<code>work_id</code>（人物/声音库独立选择时可空）、<code>task_id</code>（资产库独立选择时可空）、<code>kind</code>（<code>avatar/script/voice/audio/route</code>）、<code>input_digest</code>、<code>options[]</code>（对象 ID、版本、摘要和质量状态）、<code>required</code>、<code>state</code>。<code>script</code> 目标是 3 个经审核且角度不同的候选；不足 3 个明确显示不足并在预算内返工，不能伪造合格候选，也不能自动代选。</p>
+<p><strong>SelectionDecision</strong>：<code>selection_request_id</code>、<code>selected_ref</code>（对象 ID、版本、摘要）、<code>expected_work_version</code>（无作品时为空，并校验所选资产版本）、<code>actor_id</code>、<code>decided_at</code>、<code>decision_digest</code>。选择须引用仍有效且通过该环节门禁的对象；陈旧选项返回 409。同一请求只接收一次有效决定，改变主意新建请求/版本并计算依赖失效。用户点击“采用”只表达偏好，不能代替 QualityReport、ReviewDecision 或费用授权。两路线均在生成前选择 VoiceAsset 及其全文 TTS，不能用视频模型自行生成的声音替换该音频。</p>
+<p><strong>GenerationIntent</strong>：<code>work_id</code>（可空）、<code>purpose</code>（<code>identity/variant/performance</code>）、<code>keyword_values</code>、<code>free_text</code>、<code>compiled_prompt_asset_id</code>、<code>compiler_version</code>、<code>identity_id</code>（后两种必需）、<code>identity_digest</code>、<code>capability_report_id</code>。首次人物提示词由关键词与自由描述构成；衣景编辑组合冻结身份锚点、实际参考图和用户追加衣景要求，身份冲突词提交前提示/拒绝。表演提示词保持用户可编辑；记录支持、近似和未验证项，不把自然语言等同于可执行动作。高级提示词预览只展示用户输入和本次生成描述，不暴露系统指令或凭据。</p>
+<p><strong>ProgressSnapshot</strong>：<code>work_id</code>、<code>task_id</code>、<code>stage_execution_id</code>、<code>state</code>、<code>phase</code>、<code>percent</code>（未知为 null）、<code>source</code>（<code>provider/measured/indeterminate</code>）、<code>completed_units/total_units</code>（可空）、<code>updated_at</code>。百分比只来自 Provider 可靠进度或可测量工作量；排队、质检、等待用户与超时用真实阶段和等待时间展示，不按计时器伪造线性进度。SSE/增量事件断线后按 seq 恢复。</p>
+<h3 id="31-身份与声音资产">3.1 身份与声音资产</h3>
+<p><strong>AvatarIdentity</strong></p>
+<ul>
+<li><code>id</code>、<code>name</code>：固定主播；“真人 Base Avatar”指写实成年虚拟人物，不表示采用真实自然人的肖像。</li>
+<li><code>hero_asset_id</code>、<code>reference_asset_ids</code>、<code>identity_prompt</code>、<code>identity_digest</code>：冻结的主参考图、参考集、身份锚定描述及摘要。脸型、五官、发型、肤色、年龄与性别不随单期配置改变。</li>
+<li><code>source_record_id</code>：生成来源、模型版本、提示词/seed、使用权证据。seed 仅用于复盘，不能证明身份一致。</li>
+<li><code>approval_state</code>、<code>approval_id</code>：身份质量与来源批准；<code>selection_decision_id</code>：用户采用记录，二者分开。<code>default_voice_asset_id</code> 可保存该人物默认声音版本。批准后不可覆盖 hero 文件；换身份创建新 identity，旧期视频继续引用旧资产。人物 B 是初始默认，不是全局唯一白名单。</li>
+</ul>
+<p><strong>AvatarVariant</strong></p>
+<ul>
+<li><code>identity_id</code>、<code>image_asset_id</code>、<code>outfit</code>、<code>background</code>：服装与背景选择，只描述本次可变部分。</li>
+<li><code>reference_digest</code>、<code>provider_run_id</code>、<code>generation_spec_digest</code>：能追溯到冻结身份和生成参数。</li>
+<li><code>identity_report_id</code>、<code>approval_state</code>、<code>approval_id</code>：须先过身份门禁再可生产。无许可清晰的人脸模型时，以人工对照审批代替自动打分；不得填写虚构相似度。</li>
+</ul>
+<p><strong>VoiceAsset</strong></p>
+<ul>
+<li><code>provider</code>、<code>model</code>、<code>region</code>、<code>remote_voice_id</code>：完整音色作用域；四者作为组合解释，不能仅凭字符串 ID 复用。</li>
+<li><code>reference_audio_asset_id</code>、<code>synthesis_profile</code>、<code>profile_digest</code>：冻结试听音频和基础参数；不支持 seed 的服务不得写“已固定 seed”。</li>
+<li><code>source_record_id</code>、<code>approval_state</code>、<code>approval_id</code>：预设音色选择与使用权，或声音创建/注册的来源证据，以及盲听/基准句评审。声音更换创建新版本。</li>
+<li>新模型/供应商必须创建独立 VoiceAsset 并重新验收；Qwen Voice Design 输出 ID 能否供某 CosyVoice 型号使用是待实证能力，默认不允许。允许用有权使用的参考音频重新建音色，但不承诺完全相同。</li>
+</ul>
+<p><strong>SourceRecord</strong> 只保留 <code>source_type</code>（本项目生成 / 本项目预设音色选择 / 为本项目新取得授权 / 本项目独立测试素材）、<code>provider/model/version</code>（适用时）、<code>provider_run_id</code>（真实生成、基准合成或注册时）、<code>prompt_asset_id</code>（适用时）、<code>seed</code>（可空）、<code>rights_evidence_asset_id</code>、<code>license_review_state</code>、<code>reviewed_at</code>。记录由新系统的生成、预设音色选择、创建/注册或受控素材登记流程建立，不能靠客户端自行声明来源通过。测试素材始终为模拟；来源不明、缺少该来源类型应有的合成/生成/登记证据或权利材料不完整时不能批准为生产根资产。预设音色以选择记录、官方使用权和基准合成为依据，不要求不存在的声音克隆/注册回执。生成过程与权利材料分权访问，禁止原样下传发布包。</p>
+<h3 id="32-内容与证据">3.2 内容与证据</h3>
+<p><strong>ScriptVersion</strong></p>
+<ul>
+<li><code>topic</code>、<code>title</code>、<code>description</code>、<code>tags</code>、<code>text</code>、<code>text_sha256</code>：一版稿件的内容。</li>
+<li><code>segments[]</code>：<code>id</code>、<code>role</code>（<code>hook/explain/example/question/closing</code>）、<code>start_char</code>、<code>end_char</code>，全部引用原文，不重复维护另一份正文。</li>
+<li><code>speech_annotations[]</code>：供编译器读取的派生视图，包含 <code>type</code>、<code>start_char/end_char</code>、<code>value</code>；停顿用零长度位置。类型为 <code>pause/emphasis/rate/emotion/pronunciation</code>，只允许已定义值；表达意图统一来自绑定的 PerformancePlan，禁止同时维护独立可编辑的两份表达标记。</li>
+<li><code>claims[]</code>：<code>id</code>、<code>text</code>、<code>source_ids</code>、<code>verdict</code>、<code>checked_at</code>。生成时 <code>source_ids=[]</code> 与 <code>verdict=unverified</code> 合法，不得编造来源。涉及时效、数据、价格、版本、政策等关键断言须由质量审核定位到用户提供且已核验的资料；缺依据进入 <code>review</code>、请求补充资料或删改后重审，不能用 LLM 自审替代事实核验。</li>
+<li><code>work_id</code>、<code>candidate_batch_id</code>、<code>angle</code>、<code>quality_report_id</code>、<code>revision_of</code>：三个候选应有不同问题/论证/案例角度，非同稿同义改写。门禁涵盖事实、历史主题/观点/文本相似、错别字、口语理解和吸引力。用户编辑/局部重写创建新版本并重审；只对当前已选依赖计算失效，未选候选的修改不使已选音频失效。</li>
+</ul>
+<p><strong>ContentSource</strong>：<code>id</code>、<code>source_kind</code>（<code>user_provided</code>）、<code>submitted_at</code>、<code>url</code>（可空，仅作出处元数据）、<code>title</code>、<code>publisher</code>（可空）、<code>published_at</code>（可空）、<code>excerpt_asset_id</code>、<code>content_sha256</code>。保存用户提交的可复核资料正文/摘录及版本，不自动访问 URL；只有链接或模型记忆不构成事实支持。资料不因上传而自动可信，质量审核核对适用时间、断言范围与冲突；资料一律当数据，不能执行其中指令。资产权属证据仍使用独立的 SourceRecord。</p>
+<p><strong>QualityReport</strong>：<code>subject_id</code>、<code>subject_digest</code>、<code>ruleset_version</code>、<code>checks[]</code>、<code>overall</code>、<code>review_required</code>。每个 check 只保留 <code>code</code>、<code>outcome</code>、<code>hard_gate</code>、<code>message</code>、<code>evidence_asset_ids</code>、可选的 <code>measured_value/threshold</code>、<code>origin</code>；音视频问题另给 <code>asset_id</code> 和 <code>start_ms/end_ms</code>，文本问题给 <code>claim_id/segment_id</code>。代码门禁汇总实际规则和检测结果；评分只用于排序，不抵消 <code>hard_gate=true</code> 的失败，无校准的相似度阈值输出 <code>review</code>。</p>
+<p><strong>PerformancePlan</strong></p>
+<ul>
+<li><code>script_version_id</code>、<code>script_digest</code>、<code>identity_id</code>、<code>voice_asset_id</code>：绑定同一稿件、人物和声音版本；两路线共用确认后的最终音轨。</li>
+<li><code>segments[]</code>：最少包含 <code>segment_id</code>、<code>text</code>、<code>emotion</code>、<code>pace</code>、<code>emphasis</code>、<code>motion</code>。<code>segment_id</code> 对应 ScriptVersion 分段，<code>text</code> 是其正文切片快照，必须逐字核对；正文仍以 ScriptVersion 为唯一来源。</li>
+<li><code>emotion</code> 为受控情绪意图；<code>pace</code> 为语速/停顿意图；<code>emphasis</code> 为段内需强调的文本范围；<code>motion</code> 为表情、头姿与动作意图。它们不是已被模型执行的保证；声音/数字人导演通过能力编译记录支持项、近似项和不支持项，不将动作描述直接当作 LivePortrait 的文本动作控制接口。</li>
+<li><code>target_duration_ms</code> 仅用于规划，<code>approval_id</code>、<code>plan_digest</code>、<code>revision_of</code> 用于冻结和追溯。实际分段时间来自最终 TTS 及核验后的对齐，不得以目标时长或均分时长替代。OmniHuman 分段引用同一音轨的句子边界，不重合成另一声音。</li>
+</ul>
+<p><strong>QualityDecision</strong></p>
+<ul>
+<li><code>work_item_id</code>、<code>subject_id</code>、<code>subject_digest</code>、<code>ruleset_version</code>、<code>report_ids</code>：质量 Agent 必须引用当前版本的事实报告、媒体检测或人工证据。</li>
+<li><code>recommendation</code> 使用 <code>CheckOutcome</code>；<code>issues[]</code> 只含 <code>code</code>、<code>reason</code>、<code>evidence_asset_ids</code>、定位用的 <code>claim_id/segment_id</code> 或 <code>asset_id/start_ms/end_ms</code>，以及 <code>rework_target</code>。</li>
+<li><code>model_run_id</code>、<code>decision_digest</code>：记录判断来源；未知事实或缺指标只能建议 <code>review/not_run</code>。该对象不是批准令牌，不能写 <code>ApprovalState</code>、清除代码硬失败或替代 ReviewDecision。</li>
+</ul>
+<h3 id="33-任务阶段与媒体">3.3 任务、阶段与媒体</h3>
+<p><strong>Task</strong>：<code>id</code>、<code>work_id</code>、<code>mode</code>、<code>stage</code>、<code>state</code>、<code>topic</code>、<code>identity_id</code>、<code>voice_asset_id</code>、<code>script_version_id</code>、<code>performance_plan_id</code>、<code>audio_asset_id</code>（未选时可空；正式口播前必须已审且用户确认）、<code>route</code>、<code>route_selection_id</code>、<code>input_snapshot_digest</code>、<code>active_stage_execution_ids</code>、<code>pending_selection_ids</code>、<code>config_snapshot_id</code>、<code>budget_policy_id</code>、<code>cost_confirmation_id</code>、<code>next_run_at</code>、<code>block_reason</code>、<code>last_error</code>、<code>previous_task_id</code>（可空）。本次输入一旦冻结不原地替换；选择变化创建新执行并保留旧结果。发布进度通过可空 <code>publication_id</code> 获取，不混入 TaskState。</p>
+<p><strong>StageExecution</strong>：<code>task_id</code>、<code>stage</code>、<code>executor_kind</code>、<code>worker_kind</code>（Agent 阶段为空；代码后期/打包为 <code>postprocess</code>）、<code>attempt</code>、<code>input_digest</code>、<code>state</code>、<code>output_asset_ids</code>、<code>quality_report_ids</code>、<code>provider_run_ids</code>、<code>started_at/finished_at</code>、<code>lease_owner/lease_until/fencing_token</code>。同一阶段与输入摘要只能有一个有效执行；过期 worker 的写入凭 fencing_token 拒绝。<code>postprocess/publish_package</code> 使用 <code>executor_kind=worker</code>，记录代码/工具/配置版本、输入输出摘要与执行日志，由内部执行服务登记；不创建后期 AgentWorkItem/AgentResult，不要求 Skill 或 model_run_id。</p>
+<p><strong>MediaAsset</strong>：<code>id</code>、<code>mode</code>、<code>kind</code>（<code>image/audio/video/subtitle/cover/manifest/evidence</code>）、<code>storage_key</code>、<code>sha256</code>、<code>bytes</code>、<code>mime_type</code>、<code>duration_ms</code>（适用时）、<code>width/height</code>（适用时）、<code>source_record_id</code>（根资产必需，派生资产可由父链追溯）、<code>parent_asset_ids</code>、<code>producer</code>、<code>simulated</code>、<code>validation_report_id</code>。<code>producer</code> 包含 Provider、模型/版本、请求 ID，确定性本地处理记录工具与版本；Mock 资产及其所有后代均 <code>simulated=true</code>。所有根来源须符合 §1.1，复制文件、改变 mode 或重新编码均不能消除来源限制。</p>
+<p><strong>ReviewDecision</strong>：<code>subject_id</code>、<code>subject_digest</code>、<code>decision</code>（<code>approve/reject</code>）、<code>actor_id</code>、<code>reason</code>、<code>evidence_asset_ids</code>、<code>created_at</code>。人工可以处理 <code>review</code> 项，不能豁免模拟素材、缺失标识、来源摘要不符等确定性硬门禁。撤销审批增加新记录，不覆盖旧记录。</p>
+<h3 id="34-agent-工作记忆与版本绑定">3.4 Agent 工作、记忆与版本绑定</h3>
+<p><strong>AgentWorkItem</strong>：<code>task_id</code>、<code>stage_execution_id</code>、<code>role</code>、<code>objective</code>、<code>depends_on_ids</code>、<code>input_refs</code>、<code>input_digest</code>、<code>output_schema_version</code>、<code>skill_refs</code>、<code>tool_policy_id</code>、<code>namespace</code>、<code>checkpoint_ref</code>（可空）、<code>budget_policy_id</code>、<code>state</code>。<code>role</code> 只接受 AgentRole；<code>input_refs</code> 引用对象 ID＋版本＋摘要；<code>skill_refs</code> 绑定角色所需 Skill 的 ID＋版本＋摘要；<code>state</code> 复用 TaskState。Skill 清单保留 S01～S06、S08 共 7 项，S07 字幕与剪辑撤出清单且不复用编号。权限由服务端按角色、任务和运行模式授予，不能让 Agent 自填 allowlist 或提高额度。</p>
+<p><strong>AgentResult</strong>：<code>work_item_id</code>、<code>input_digest</code>、<code>state</code>、<code>output_refs</code>、<code>evidence_asset_ids</code>、<code>quality_decision_ids</code>、<code>provider_run_ids</code>、<code>model_run_id</code>、<code>error</code>（可空）、<code>result_digest</code>。结果须通过输出 schema、对象摘要、依赖版本及工具审计核验；subagent 不能仅返回长文本就把工作标记为 <code>succeeded</code>。中间失败、阻断和重试通过既有状态机处理。</p>
+<p><strong>MemoryCandidate</strong>：<code>task_id</code>、<code>work_item_id</code>、<code>scope</code>（<code>role/project</code>）、<code>namespace</code>、<code>content_asset_id</code>、<code>content_digest</code>、<code>evidence_refs</code>、<code>applicability</code>、<code>supersedes_id</code>（可空）、<code>state</code>、<code>review_decision_id</code>（待审可空）。<code>applicability</code> 至少绑定适用模型/规则/Skill 版本；事实结论有来源和有效时间。候选、错误案例与已批准经验分开检索，经验不能替代事实来源、资产批准或预算授权。</p>
+<p>记忆分四层：任务检查点保存恢复所需工作图与引用；不可变人设/声音资产通过 ID 只读加载；历史内容库仅由质量角色用于主题/观点/文本查重，不是在线资料检索；经验库只接收有证据并经审核合并的 MemoryCandidate。每个工作项写入 <code>mode/task_id/work_item_id</code> 隔离命名空间；共享写入使用期望版本和审核合并，不让并行 Agent 覆盖公共文件。持久化实现待离线试验选定，框架检查点不替代 ProviderRun、预算账本或媒体证据。</p>
+<p>版本失效按路由和实际依赖图计算并留事件：修改已选稿件或声音表达，使对应 PerformancePlan、最终 TTS 及其口播/字幕/后期后代失效；未选候选变化不影响当前生产。改人物/衣景/动作要求使对应 OmniHuman 原片或 M2 底片/口型后代失效，未变的已确认 TTS 可复用。切换路线重新核验人物、同一最终 TTS 与该路线能力/预算。只改剪辑重算时间线、字幕和包；只改字幕样式复用原片和已校准时间轴，仅重渲染并重审。约 60 秒分段返工只重做受影响片段并复核接缝，不能换音轨或覆盖旧记录。</p>
+<p>模型/Skill/规则更新按兼容性复验。失效停止当前生产使用，保留原结果、费用和历史批准，不删除失败证据。</p>
+<h3 id="35-外部任务预算与发布">3.5 外部任务、预算与发布</h3>
+<p><strong>ProviderRun</strong>：<code>work_id</code>、<code>task_id</code>（独立资产/试听可空）、<code>stage</code>、<code>provider_account_id</code>、<code>route</code>（非口播可空）、<code>provider</code>、<code>model</code>、<code>capability_snapshot_id</code>、<code>request_digest</code>、<code>idempotency_key</code>、<code>state</code>、<code>remote_job_id</code>（未取得时可空）、<code>request_trace_id</code>、<code>poll_after</code>、<code>deadline_at</code>、<code>result_asset_ids</code>、<code>cost_reservation_id</code>、<code>last_error</code>。未知远端任务仍保留占用/预算，不因 worker 重启创建替代计费任务。</p>
+<p><strong>BudgetPolicy</strong>：<code>provider_model_allowlist</code>、<code>per_task_limit_fen</code>、<code>daily_limit_fen</code>、<code>monthly_limit_fen</code>、<code>max_billable_submissions</code>、<code>allow_failover</code>、<code>valid_until</code>、<code>authorization_evidence_id</code>。默认额度与可计费次数均为 0；不得将 0 解释为无限制。</p>
+<p><strong>CostReservation</strong>：<code>work_id</code>（独立资产可空）、<code>task_id</code>（独立资产/试听可空）、<code>provider_run_id</code>、<code>budget_policy_id</code>、<code>reserved_fen</code>、<code>actual_fen</code>（未知时为空）、<code>state</code>（<code>reserved/settled/released/disputed</code>）、<code>price_snapshot_id</code>、<code>billing_evidence_id</code>。<code>actual_fen=0</code> 只用于确认零费用，不能表示未知。预算按已花费加未结算预留校验，日界使用配置时区；重试和备用供应商也占预算。</p>
+<p><strong>PriceSnapshot</strong>：<code>provider_account_id</code>、<code>provider/model</code>、<code>region</code>、<code>billing_unit</code>、<code>unit_price</code>、<code>currency</code>、<code>fx_version</code>（非人民币必需）、<code>rounding_rule</code>、<code>effective_at/expires_at</code>、<code>evidence_asset_id</code>、<code>price_source</code>、<code>billing_verified</code>。账户套餐、分辨率、时长取整、附加费和最低消费影响估价时必须记录；不能沿用历史单价当当前报价。</p>
+<p>OmniHuman 使用用户确认 1 元/生成秒（100 分/秒）记录价格快照，<code>price_source=user_confirmed_rate</code>、<code>billing_verified=false</code>。60 秒估算 60 元、5 条/日 300 元、30 天 9000 元，仅视频生成费。当前账户取整、最低消费、失败扣费及账单待核验；报价不等于具体预算授权，Grok 的 0.38 元/秒不能移用。最终成片秒数不等于全部计费生成秒数；分段取整、失败返工、MiniMax、文本/图片、存储后期分别记账，M2 GPU 只按实际使用计入。未知费用保留待对账。</p>
+<p><strong>CostConfirmation</strong>：<code>work_id</code>（可空）、<code>task_id</code>（可空）、<code>operation</code>、<code>route</code>（适用时）、<code>request_digest</code>、<code>price_snapshot_id</code>、<code>estimated_fen</code>、<code>ceiling_fen</code>、<code>budget_policy_id</code>、<code>max_billable_submissions</code>、<code>accepted_risks</code>、<code>actor_id</code>、<code>confirmed_at</code>、<code>valid_until</code>。确认画面展示模型、片段数、生成总秒数、分辨率、估价、预算与“效果不满意仍可能收费、重生成可能再次收费”。金额/输入/路线变化须在已确认清单与预算内，否则重新确认。选择 OmniHuman 不自动授权付费，只有关联有效预算和具体调用清单的费用确认才允许提交；不允许失败静默切换或盲重试。</p>
+<p><strong>ProviderAccountConfig</strong>：<code>id</code>、<code>adapter_kind</code>、<code>provider</code>、<code>base_url</code>、<code>model</code>、<code>secret_ref</code>、<code>config_digest</code>、<code>validation_state</code>（<code>unverified/usable/invalid</code>）、<code>checked_at</code>、<code>error_code</code>。MVP 仅提供已适配 Provider 的基础配置和连接检查；可编辑 URL/模型名不代表任意协议兼容。明文密钥只通过专用设置请求写入服务端受控存储，响应只返回掩码/是否已设置；URL 和协议由适配器安全校验。验证分别报告身份认证、模型访问和所需能力，不用一次文本响应证明图像编辑/TTS 可用；会扣费的探测也须先估价确认。</p>
+<p><strong>PublishPackage</strong>：<code>work_id</code>、<code>task_id</code>、<code>mode</code>、<code>video_asset_id</code>、<code>cover_asset_id</code>、<code>subtitle_asset_id</code>、<code>title</code>、<code>description</code>、<code>tags</code>、<code>ai_label</code>、<code>manifest_asset_id</code>、<code>package_digest</code>、<code>quality_report_ids</code>、<code>review_decision_ids</code>。任何文案/成片/封面修改都生成新 package，旧审批不继承。</p>
+<p><strong>Publication</strong>：<code>package_id</code>、<code>account_binding_id</code>（未绑定账号时可空）、<code>adapter</code>、<code>state</code>、<code>idempotency_key</code>、<code>scheduled_at</code>（可空）、<code>authorization_id</code>（V2 必需）、<code>remote_item_id</code>、<code>official_evidence_asset_id</code>、<code>manual_report</code>（<code>url/actor_id/reported_at/ai_declaration_confirmed/evidence_asset_ids</code>）、<code>last_error</code>。<code>reported_published</code> 可以有 URL 但无 official evidence；<code>published</code> 必须有官方证据。</p>
+<p><strong>PublicationPlan</strong>：<code>publication_id</code>、<code>planned_at</code>、<code>timezone</code>、<code>state</code>（<code>pending/due/overdue/completed/cancelled</code>）、<code>completed_at</code>。该实体为后续人工投稿提醒保留，V1 不开放；启用后不改变 PublishState 为 scheduled；已上线应用到点置 due，休眠错过置 overdue，禁止集中自动补发。生产排产用独立 <code>ProductionSchedule</code> 保存规则、下一次触发和 <code>schedule_id + planned_fire_at</code> 唯一键。</p>
+<h2 id="4-provider-契约">4. Provider 契约</h2>
+<h3 id="41-能力声明必须先于调用">4.1 能力声明必须先于调用</h3>
+<p><code>capabilities()</code> 返回 <code>provider</code>、<code>model</code>、<code>verified_at</code>、<code>evidence_id</code>、<code>supported_modes</code>、<code>operations</code>、<code>constraints</code>。每个 capability 的状态为 <code>unverified/supported/unsupported</code>；只有 <code>supported</code> 可被生产调度采用。能力证据绑定账号、地域、模型版本，有过期时间；服务升级后重新验证。</p>
+<ul>
+<li>
+<p>图像：是否支持参考图输入、最大参考数、允许分辨率。</p>
+</li>
+<li>
+<p>TTS：可用 VoiceAsset 作用域、字/词级时间戳、可用表达控制、音频格式和最大文本长度。</p>
+</li>
+<li>
+<p>动作迁移：批准的 source image＋动作参考，LivePortrait 模型/权重/许可证、参考时长、帧率、裁剪和循环策略。约 9.13 秒循环只属 EXP-001 实验条件，不自动成为生产能力。</p>
+</li>
+<li>
+<p><code>TalkingHeadProvider</code>：按 route 声明 <code>image_audio_to_video</code>（OmniHuman）或 <code>video_audio_to_video</code>（M2/MuseTalk）；均消费已确认最终 TTS。OmniHuman 声明参考图、音频格式/长度、表演提示、分辨率、异步查询/取消/幂等的当前账户能力；不把模型可见或历史短片等同当前人物/动作/长片通过。</p>
+</li>
+<li>
+<p>当前 OmniHuman 核验依据：音频严格小于 60 秒、建议不超过 15 秒，prompt 不超过 300 字符；720p/1080p、最大输入及具体账户权限须复核。约 60 秒以同一最终音轨按句子分段，不允许加速或截字绕过限制。不承诺任意动作。</p>
+</li>
+<li>
+<p><code>GROK_IMAGINE_VIDEO_1_5</code> 不属于当前可调度能力；历史调研记录保留只读，不映射为 OmniHuman 或恢复提交。</p>
+</li>
+<li>
+<p>发布：<code>prepare_package</code>、<code>official_submit</code>、<code>official_status</code>、<code>scheduled_submit</code>、<code>ai_declaration</code>、<code>requires_human_confirm</code>。存在接口地址不等于任何能力为 <code>supported</code>。</p>
+</li>
+</ul>
+<p>不支持必需参数时返回 <code>CAPABILITY_UNSUPPORTED</code>；禁止静默忽略必需情绪/动作、改人物或声音、降级为形变嘴巴、改用未验证的视频生成路线；未验证能力不能调度。允许的近似表达必须在编译结果明确列出并经该音色的能力配置批准。</p>
+<h3 id="42-异步媒体-provider">4.2 异步媒体 Provider</h3>
+<p>以下是接口签名约定，不是可直接运行的 SDK：</p>
+<pre><code class="language-text">estimate(request, price_snapshot) -&gt; CostEstimate
+submit(request, idempotency_key) -&gt; ProviderReceipt
+poll(remote_job_id) -&gt; ProviderStatus
+lookup(client_request_id) -&gt; ProviderStatus | Unresolvable
+download(result_locator, destination) -&gt; MediaAsset
+cancel(remote_job_id) -&gt; CancellationReceipt
+</code></pre>
+<p>口播请求按路线校验实际前置，不增加第二套声音生成：</p>
+<ul>
+<li><code>TalkingHeadRequest</code> 公共字段：<code>route</code>、<code>person_asset_id</code>、<code>identity_digest</code>、最终 <code>audio_asset_id</code>、<code>audio_digest</code>、<code>voice_asset_id</code>、<code>script_version_id</code>、<code>performance_plan_id</code>、可编辑 <code>performance_prompt</code>、<code>segment_id</code>、<code>audio_start_ms/audio_end_ms</code>、<code>output_spec</code> 与输入摘要。台词与时间范围须属于已审且用户确认的同一 TTS；外部下载引用由受控资产解析。</li>
+<li><code>OMNIHUMAN_1_5</code>：固定人物图＋相应最终音频切片＋受支持的可编辑表演描述，直接生成带身体/表情/口型的原片，不要求底片，不调用 LivePortrait/MuseTalk。<code>TalkingHeadResult</code> 含 <code>video_asset_id</code>、<code>provider_run_id</code>、实际时长、音轨保持/身份/嘴型/动作报告、输出摘要与费用。</li>
+<li><code>M2</code>：另需已批准 <code>motion_video_asset_id</code> 及摘要。LivePortrait 使用人物与许可动作参考生成底片，审核后与最终 TTS 交 MuseTalk；两阶段分别保存 ProviderRun、输入输出、作业和费用。</li>
+</ul>
+<p>约 60 秒 OmniHuman 请求按同一最终音轨的语义/句子边界切片，每段严格低于当前已验证上限；保存音频全局偏移和片段顺序，不重新生成声音，不加速截字。字幕可提前基于确认 TTS 对齐，拼接后再映射实际视频前导/剪辑时间。检查原片音轨保持是独立门禁，不能用高波形相关代替嘴型、身份或身体质量。</p>
+<p>火山原生协议为 <code>visual.volcengineapi.com</code>，HMAC AK/SK 签名，<code>region=cn-north-1</code>、<code>service=cv</code>；POST <code>Action=CVSubmitTask/CVGetResult</code>、<code>Version=2022-08-31</code>，<code>req_key=jimeng_realman_avatar_picture_omni_v15</code>。密钥只由服务端引用。本版 Adapter 目标接入尚未验收，本轮不据文档修改推定已有骨架已同步；历史成功仅证明该历史账户/输入可调用，重新接入仍须核当前权限、规格与价格。</p>
+<p><code>submit</code> 前先事务持久化 ProviderRun、幂等键及预算预留，再执行外部调用。<code>ProviderReceipt</code> 含远端任务 ID、接受时间、请求追踪 ID。<code>poll</code> 一次查询后立即返回，不在 API 或 DB 事务中长轮询；用 <code>poll_after</code> 重新排队。</p>
+<p>无 remote ID 的提交超时：置 <code>unknown</code>，按服务端幂等/lookup 能力核对；能力缺失则人工核账，不能换供应商重发。已持有 ID 的超时：继续查询同一 ID。<code>download</code> 可按同一结果重复下载，临时文件完整校验后原子发布为 MediaAsset。</p>
+<p>示例是 <strong>mock 契约数据</strong>，请求 ID 不对应真实付费任务：</p>
+<pre><code class="language-json">{
+  "schema_version": 1,
+  "provider_run_id": "pr_mock_001",
+  "mode": "mock",
+  "provider": "mock_talking_head",
+  "model": "contract_v1",
+  "idempotency_key": "mock:talking_head:task_001:input_001",
+  "state": "running",
+  "remote_job_id": "mock_remote_001",
+  "request_trace_id": "trace_mock_001",
+  "poll_after": "2026-09-21T03:00:15Z",
+  "deadline_at": "2026-09-21T03:30:00Z",
+  "cost_reservation_id": "cost_mock_001",
+  "result_asset_ids": [],
+  "last_error": null
+}
+</code></pre>
+<h3 id="43-音频表达与字幕时间轴">4.3 音频、表达与字幕时间轴</h3>
+<p><strong>VoicePreview</strong>：<code>work_id</code>（可空）、<code>voice_asset_id</code>、<code>sample_text_digest</code>、<code>synthesis_profile_digest</code>、<code>audio_asset_id</code>、<code>provider_run_id</code>（复用缓存可引用原运行）、<code>cost_reservation_id</code>。音色列表可播放来源清楚的预设样例；要比较声音必须使用同一短句。短句试听不能当正文音频，缓存仅按声音/模型/参数/文本摘要精确命中。用户选音色后合成全文；全文质检与用户试听采用分别记录，更换音色重新合成并保留旧费用。</p>
+<p><code>TTSResult</code>：<code>audio_asset_id</code>、<code>voice_asset_id</code>、<code>script_version_id</code>、<code>performance_plan_id</code>、<code>duration_ms</code>、<code>spoken_text_mapping</code>、<code>timing_source</code>（未完成对齐时为空；完成后为 <code>provider/forced_alignment/asr_alignment/mock</code>）、<code>words[]</code>（未完成时可空，不算字幕已完成）。word 含 <code>segment_id/start_char/end_char/start_ms/end_ms</code>，时间均相对于对应的 <strong>实际音频文件起点</strong>。分句合成必须先加分句在整段音频中的偏移再汇总；字级能力需在具体模型和音色上验证。</p>
+<p>TTS 合成与音频确认不要求已完成字幕对齐；原生字词时间戳由代码核验，没有可靠时间戳时由 Postprocess Worker 补齐并登记新的对齐产物版本，不能原地伪填或均分时间。两路线均消费同一 <code>TTSResult</code>。字幕由代码 Postprocess Worker 在最终音频确认后并行执行 ASR/对齐；云视频生成后复核输入音轨保持与视频前导，不重新选用另一原生声音。</p>
+<p>表达编译器不得改变字幕原文。发音替换将原文范围映射到朗读字符串，例如 <code>RAG</code> 与供应商所需读法；合成后时间戳必须映回原文范围。标记范围越界、未知标记、剥离标记后正文变化均拒绝。句长均分只能用于 mock，生产不得以按字数均摊伪装时间戳；无原生时间戳时用 ASR/强制对齐并核对术语，无法可靠对齐则待审。</p>
+<p><code>EditTimeline</code>：<code>source_audio_asset_id</code>、<code>source_video_asset_id</code>、<code>segment_sources[]</code>（分段时保存每段视频/实际音轨与全局偏移）、<code>provider_lead_ms</code>、<code>clips[]</code>、<code>final_duration_ms</code>。<code>provider_lead_ms</code> 是原始口播视频相对输入音频多出的前导时长，必须测量/核对，不能默认靠改字幕掩盖口型偏移。每段先核对实际视频对输入 TTS 的偏移，再按编辑表与音频全局偏移汇总；历史样本 0 ms 不能推定未来全部任务为 0。</p>
+<p>每个 clip 含 <code>source_start_ms</code>、<code>source_end_ms</code>、<code>target_start_ms</code>；source 指原始口播视频时间轴。V1 只允许速度 1 倍和非重叠顺序剪辑。音频某时刻先映射为 <code>source_video_ms = audio_ms + provider_lead_ms</code>，再映射为 <code>final_ms = target_start_ms + source_video_ms - source_start_ms</code>。字幕区间先与 clip 求交，跨剪点则拆分；被删除区间不能产生负时间戳。片头/片尾占目标时间轴，未对应口播的区间不显示原文字幕。</p>
+<pre><code class="language-json">{
+  "schema_version": 1,
+  "source_audio_asset_id": "audio_001",
+  "source_video_asset_id": "raw_video_001",
+  "provider_lead_ms": 0,
+  "clips": [
+    {"source_start_ms": 400, "source_end_ms": 11800, "target_start_ms": 1000}
+  ],
+  "final_duration_ms": 12900,
+  "example_word": {"text": "你好", "audio_start_ms": 500, "audio_end_ms": 900, "final_start_ms": 1100, "final_end_ms": 1500}
+}
+</code></pre>
+<p>Postprocess Worker 直接调用 FFmpeg/libass 完成统一时间轴、合成、字幕烧录、封面及标识；待选 ASR/对齐、超分模型通过能力与质量验收后才能启用。普通缩放只统一输出尺寸，不等于真实细节增强；清晰度处理保留原片、参数及前后对照，质量 Agent 复核身份与伪影。最终门禁通过后由内部打包服务生成交付包，不由模型规划命令或绕道 MCP。</p>
+<p>此例裁去前 400 ms 和尾部，加入 1000 ms 片头与 500 ms 片尾。若云端因时长限制分段，另存每段输入音频范围与输出剪辑映射；不得简单 concat 重叠的音频，必须验证无重复字、漏字和段间口型跳变。默认按句无重叠切分，确需上下文重叠时先裁掉重复区再生成映射。</p>
+<h3 id="44-发布-adapter">4.4 发布 Adapter</h3>
+<pre><code class="language-text">capabilities(account_binding) -&gt; PublishCapabilities
+prepare(package_id) -&gt; Publication
+record_manual_report(publication_id, report) -&gt; Publication
+submit(publication_id, authorization_id, idempotency_key) -&gt; Publication
+status(publication_id) -&gt; Publication
+</code></pre>
+<ul>
+<li><code>ManualPackageAdapter.prepare</code> 在 V1 仅产出 <code>ready</code> 并允许下载；人工交接/回填方法后续才启用，届时交接 <code>awaiting_human</code>、回填只写 <code>reported_published</code>。其 <code>submit</code>、官方查询/定时能力必须返回不支持，不能用本地包路径充当作品 ID。</li>
+<li><code>MockPublishAdapter</code> 只接受 mock 资产，输出模拟回执；真实运行无法注册该 Adapter。</li>
+<li><code>OfficialPublishAdapter</code> 为 V2：需账号 OAuth/所需 scope、主体/场景资格、实际接口测试、有效用户授权及 AI 声明能力。当前只约定接口，不宣称可自动发布。</li>
+<li>平台响应按具体路由族校验 <code>error_code/err_no</code> 及嵌套结构，并要求预期 <code>video_id/item_id</code> 或明确状态；未知格式归为契约错误。授权错误不无限刷新重试；刷新一次仍失败即阻断。</li>
+<li>同一环境、目标账号、平台、<code>video_sha256</code> 设重复作品保护键；同一请求另有幂等键。修改标题、日期或请求键不能绕过视频重复保护。需要重发必须显式创建有理由的新发布意图并核对旧结果。</li>
+</ul>
+<h2 id="5-应用-api-最小集">5. 应用 API 最小集</h2>
+<h3 id="51-deepagentsmcp-与执行权限">5.1 DeepAgents、MCP 与执行权限</h3>
+<p>Agent 获准的外部或跨进程能力调用链为 <code>DeepAgents / subagent → 受限 MCP 工具 → Provider 适配器 → Worker</code>。本机确定性纯函数可适配为普通工具，无需为每次计算经过 MCP；其入口和结果同样执行角色/任务作用域、输入版本、schema 与业务门禁校验，不能借普通工具访问未授权文件、改变审批或绕过外部提交/预算台账。角色 Skill 是版本化操作规范，不授予系统权限；MCP 工具不实现另一套调度或状态机。总控只能委派任务、查询状态和汇总结果，不能直接运行任意 shell、任意访问文件、直连供应商或改预算/审批/固定人设。</p>
+<p>内部最小工具面为 <code>submit_work(work_item_id, operation, input_refs, idempotency_key)</code>、<code>query_work(work_item_id/provider_run_id)</code>、<code>register_result(work_item_id, result_refs, evidence_refs)</code>。角色按 allowlist 获得所需内部历史/记忆、媒体生成与检测审核操作；任务、模式、命名空间、输入版本、费用上限及许可均在服务端再次校验。<code>register_result</code> 只登记受控结果，不能替 Agent 填入不存在的检测分数或强制放行。</p>
+<p>保留两个 MCP 服务的部署建议，但仅承载 M01 内部内容历史（仅 quality）、M02 角色记忆、M03 媒体生成和 M04 检测审核；无网上搜索/抓取、字幕对齐、视频渲染或打包入口。删除 M05 交付 MCP，打包由内部服务执行。Postprocess Worker 由依赖图在输入和门禁满足后自动调度，直接运行代码/模型适配器，不进入 Agent 的 MCP 工具面；仍执行相同的输入摘要、租约、幂等、预算及版本失效校验。</p>
+<p>提交前持久化意图和预算，Worker 按资源队列执行；同一 GPU 同时只有一个有效重型作业租约。MCP 超时不证明底层未执行，先查询已记录 ProviderRun；<code>unknown</code>（界面可显示 UNKNOWN）期间禁止自动重发。即使 DeepAgents 恢复后重复调用工具，幂等层也必须返回原结果。检查点恢复首先对账现有工作项、ProviderRun 和预算，不从模型聊天记录猜测远端状态。</p>
+<h3 id="52-面向工作台的接口">5.2 面向工作台的接口</h3>
+<p>以下接口仅是开发契约。所有写接口须验证操作者；高风险发布/预算操作另核对授权范围。业务接口不得接受本地任意路径、明文 key 或未经登记的外部媒体 URL；专用配置写入接口是密钥输入的唯一例外，不回显、不写日志。单用户也需限制本机/受信访问，不能因无多人角色就公开凭据接口。</p>
+<ul>
+<li><code>GET /api/v1/capabilities</code>：返回已验证能力与阻断原因，不返回凭据。</li>
+<li><code>GET /api/v1/features</code>：七个固定功能入口的 <code>feature_id/title/feature_state/reason/available_actions</code>；占位页可打开，未实现动作禁止调用，指标缺数显示 unavailable/null 而非 0。</li>
+<li><code>POST /api/v1/works</code>、<code>GET /api/v1/works</code>、<code>GET /api/v1/works/{id}</code>：建立/读取作品与当前选择、版本、结果和任务历史；刷新后从持久记录恢复。</li>
+<li><code>POST /api/v1/selections/{id}/decisions</code>：提交绑定摘要和期望作品版本的用户选择；不是质量批准接口。</li>
+<li><code>GET /api/v1/voices</code>、<code>POST /api/v1/voice-previews</code>：读取当前 Provider 确实可用的音色及短句试听，新增计费试听也需预算。</li>
+<li><code>GET /api/v1/provider-configs</code>、<code>PUT /api/v1/provider-configs/{id}</code>、<code>POST /api/v1/provider-configs/{id}/validate</code>：MVP 支持已接入适配器的基础配置、脱敏读取与受控验证；通用模型自由接入页面后期开放。</li>
+<li><code>POST /api/v1/cost-estimates</code>、<code>POST /api/v1/cost-confirmations</code>：读取账户价格估算并记录确切请求/路线的预算确认，不替代 BudgetPolicy 原子校验。</li>
+<li><code>POST /api/v1/avatar-identities</code>、<code>GET /api/v1/avatar-identities/{id}</code>：建立候选身份/读冻结资产；没有覆盖已批准 hero 的接口。</li>
+<li><code>POST /api/v1/avatar-identities/{id}/variants</code>：提交服装/背景变体生成任务。</li>
+<li><code>POST /api/v1/voice-assets</code>、<code>GET /api/v1/voice-assets/{id}</code>：登记 MiniMax 等作用域明确的候选音色；生产需审批。</li>
+<li><code>POST /api/v1/tasks</code>：提交 <code>work_id</code>、输入版本、路线和已授权预算策略；创建或继续该作品一次生产执行，返回 <code>task_id/state/stage/pending_selection_ids</code>。内容/试听阶段不要求下游音频或路线决定已存在；route 可先记默认 OMNIHUMAN_1_5，route_selection_id 在合成前可空，默认值不代表用户已确认。只对当前将执行阶段校验必需选择，进入 talking_head 时两路线均核已审人物/已选稿/已确认最终 TTS/路线/预算；M2 另核已审动作底片。</li>
+<li><code>GET /api/v1/tasks/{id}</code>、<code>GET /api/v1/tasks/{id}/events?after_seq=...</code>：状态与增量事件。</li>
+<li><code>GET /api/v1/tasks/{id}/work-items</code>：读取角色、依赖、结构化结果和阻断证据；不返回完整提示词或密钥。</li>
+<li><code>GET /api/v1/tasks/{id}/performance-plan</code>：读取绑定稿件的当前表演计划；改动通过版本化修订接口提交并重新审核。</li>
+<li><code>POST /api/v1/tasks/{id}/performance-plan-revisions</code>：新建计划版本，按依赖失效受影响产物；不能修改已批准快照。</li>
+<li><code>POST /api/v1/tasks/{id}/cancel</code>、<code>POST /api/v1/tasks/{id}/resume</code>：停止推进/解决阻断后恢复；不得清除未知外部副作用。</li>
+<li><code>POST /api/v1/tasks/{id}/script-revisions</code>：保存修订稿，创建新的执行输入并失效下游缓存。</li>
+<li><code>POST /api/v1/reviews</code>：对精确对象摘要提交 approve/reject；过期摘要返回 409。</li>
+<li><code>GET /api/v1/publish-packages/{id}</code>、<code>GET /api/v1/publish-packages/{id}/download</code>：查看、下载经验证的发布材料。</li>
+<li><code>POST /api/v1/publications</code>：V1 可由包建立只处于 ready 的记录，实际发布入口仍是占位。</li>
+<li><code>POST /api/v1/publications/{id}/plan</code>、<code>PATCH /api/v1/publications/{id}/plan</code>：后续阶段才启用，设置/改期/取消人工投稿提醒，返回 PublicationPlan；不调用平台。</li>
+<li><code>POST /api/v1/publications/{id}/manual-report</code>：后续阶段才启用，记录作品 URL、操作者和证据，写 <code>reported_published</code>。</li>
+<li>V2 才启用 <code>POST /api/v1/publications/{id}/submit</code>、<code>POST /api/v1/publications/{id}/schedule</code>、<code>GET /api/v1/publications/{id}/status</code>。</li>
+<li><code>POST /api/v1/provider-callbacks/{provider}</code>：默认关闭；只在提供商具备验签能力并完成防重放验证后开放，原始请求体校验签名，不能复用普通登录接口放行。</li>
+</ul>
+<p>所有创建/提交/人工回填接口接受 <code>Idempotency-Key</code>。同 key 同规范化请求返回原结果；同 key 不同请求返回 409。重放不得生成新预算预留或远端请求。</p>
+<p>创建任务示例（预算策略须提前存在，示例不授予消费权限）：</p>
+<pre><code class="language-json">{
+  "work_id": "work_001",
+  "topic": "RAG 如何补充模型回答所需的信息",
+  "route": "OMNIHUMAN_1_5",
+  "identity_id": "av_base_b_v1",
+  "voice_asset_id": "voice_minimax_warm_bestie_v1",
+  "outfit": "news_suit",
+  "background": "studio",
+  "budget_policy_id": "budget_approved_001",
+  "target_duration_ms": 60000
+}
+</code></pre>
+<p>统一错误体：</p>
+<pre><code class="language-json">{
+  "error": {
+    "code": "PROVIDER_SUBMISSION_UNKNOWN",
+    "message": "云端是否已接受任务尚未确认，已暂停重复提交。",
+    "retryable": false,
+    "task_id": "task_001",
+    "provider_run_id": "pr_001",
+    "action": "reconcile_remote_job"
+  },
+  "trace_id": "trace_001"
+}
+</code></pre>
+<p>必需错误码：<code>VALIDATION_FAILED</code>、<code>STATE_CONFLICT</code>、<code>CAPABILITY_UNSUPPORTED</code>、<code>ASSET_NOT_APPROVED</code>、<code>ASSET_SOURCE_FORBIDDEN</code>、<code>SIMULATED_ASSET_FORBIDDEN</code>、<code>VOICE_SCOPE_MISMATCH</code>、<code>LICENSE_REVIEW_REQUIRED</code>、<code>BUDGET_EXCEEDED</code>、<code>PROVIDER_SUBMISSION_UNKNOWN</code>、<code>PROVIDER_CONTRACT_ERROR</code>、<code>QUALITY_GATE_FAILED</code>、<code>PUBLISH_AUTH_REQUIRED</code>、<code>DUPLICATE_PUBLICATION</code>、<code>SELECTION_REQUIRED</code>、<code>STALE_SELECTION</code>、<code>COST_CONFIRMATION_REQUIRED</code>、<code>PROVIDER_AUTH_FAILED</code>、<code>PROVIDER_BALANCE_INSUFFICIENT</code>、<code>PROVIDER_MODEL_NOT_FOUND</code>、<code>FEATURE_NOT_AVAILABLE</code>。详细原始错误存受控证据，用户错误体不得泄露 token 或签名 URL。</p>
+<h2 id="6-事件与发布包">6. 事件与发布包</h2>
+<p>事件与业务状态在同一事务提交，事件为追加记录。每个聚合的 <code>seq</code> 单调递增，消费者按 <code>event_id</code> 去重；outbox 投递是至少一次，不能承诺跨外部服务 exactly-once。</p>
+<p>事件名：<code>task.created</code>、<code>stage.started</code>、<code>provider.submission_unknown</code>、<code>provider.completed</code>、<code>quality.review_required</code>、<code>review.decided</code>、<code>stage.completed</code>、<code>package.ready</code>、<code>publication.manual_reported</code>、<code>publication.submitted</code>、<code>publication.confirmed</code>、<code>cost.settled</code>、<code>task.blocked</code>；新增 <code>work.created</code>、<code>selection.requested</code>、<code>selection.decided</code>、<code>selection.superseded</code>、<code>cost.confirmed</code>、<code>progress.updated</code>、<code>agent.work_assigned</code>、<code>agent.result_registered</code>、<code>performance_plan.frozen</code>、<code>artifact.invalidated</code>、<code>memory.candidate_proposed</code>、<code>memory.candidate_reviewed</code>。新事件仍复用同一追加审计与去重机制。</p>
+<pre><code class="language-json">{
+  "schema_version": 1,
+  "event_id": "evt_001",
+  "aggregate_type": "task",
+  "aggregate_id": "task_001",
+  "seq": 7,
+  "type": "quality.review_required",
+  "occurred_at": "2026-09-21T03:15:00Z",
+  "trace_id": "trace_001",
+  "payload": {
+    "stage": "avatar_variant",
+    "state": "waiting_review",
+    "subject_id": "variant_001",
+    "quality_report_id": "qr_001",
+    "reason_code": "LICENSE_REVIEW_REQUIRED"
+  }
+}
+</code></pre>
+<p>内部打包服务在最终质量门禁通过后由代码触发。发布包目录至少包含 <code>video.mp4</code>、<code>cover.jpg</code>、<code>subtitles.srt</code>、<code>title.txt</code>、<code>description.txt</code>、<code>tags.txt</code>、<code>ai_label.txt</code>、<code>manifest.json</code>。字幕同时烧录成片并提供文本文件；包不是“已发布证明”。</p>
+<p>包内另附可离线阅读的 <code>quality-summary.json</code> 和脱敏 <code>evidence-index.json</code>，提供必要质量/事实/查重结论与费用摘要，敏感原始证据仍在受控库中；不能仅给出无法离线解释的内部 ID。</p>
+<p>manifest 必需字段：<code>schema_version/package_id/work_id/task_id/mode/simulated</code>、每个交付文件的路径/摘要/大小、成片规格、所选 route、选择决定摘要、实际 Provider 与身份/音色版本、事实/去重报告和费用摘要、AI 显式/隐式标识检查结果、平台声明待办、<code>quality_report_ids</code>、<code>review_decision_ids</code>、<code>created_at</code>。仅包含相对文件名，不包含密钥、对象存储签名 URL、内部文件绝对路径或上游完整提示词。以确定性清单计算 package_digest，manifest 中不包含自身摘要；清单摘要存 DB，避免循环自哈希。</p>
+<p>AI 隐式标识的具体字段与封装方式由上线前确认的规范版本决定；任意 <code>comment=AI-generated</code> 不能单独算规范通过。标准未核对时对应 check 为 <code>review/not_run</code>，不得宣称合规已经验收。</p>
+<h2 id="7-契约验证清单">7. 契约验证清单</h2>
+<ul>
+<li>Work、SelectionRequest/SelectionDecision、GenerationIntent、ProgressSnapshot、CostConfirmation、AgentWorkItem/AgentResult、PerformancePlan、QualityDecision、MemoryCandidate 的最少字段、版本与摘要可验证；无依据的 Agent“通过”不能改变代码硬门禁。</li>
+<li>DeepAgents 的任务检查点可恢复；稿件未选/未审不得合成正文 TTS，两路线最终 TTS 未选/未审不得口播，M2 底片未审不得对口型；并行分支按版本汇合、重型 GPU 作业互斥；MCP 重放不重复计费，未知结果先对账。</li>
+<li>后期阶段为 <code>executor_kind=worker</code>、<code>worker_kind=postprocess</code>，没有后期 Agent 角色或结果；禁止为代码合成、字幕和打包重新引入业务 Skill/MCP。</li>
+<li>用户资料可空，生成不触发联网；关键事实缺依据转 <code>review</code>，LLM 自审和只有 URL 的资料不能将断言判为 supported。</li>
+<li>角色 Skill 与工具权限隔离，公共记忆审核合并；并行任务不能覆盖人设、历史事实或其他任务的检查点，返工按依赖使旧审批失效。</li>
+<li>枚举、JSON Schema、字符偏移、时间戳、金额和状态转移拒绝非法值；每个样例需可解析。</li>
+<li>空环境只使用新工程即可初始化；无旧包导入、旧库访问、旧配置探测或兼容入口。用独立新建的无来源/来源不符样本验证拒绝规则，不读取旧素材制作夹具。</li>
+<li>身份、VoiceAsset、根媒体及派生媒体必须追溯新 SourceRecord；测试素材复制、改 mode、转码或伪填新 ID 后仍被拒绝进入生产。阈值须关联新标定集和规则版本。</li>
+<li>G0 是文档基线；Mock 跑通只计 G0→G1 期间的开发检查。真人身份与声音定版、真实图像驱动样片另计 G1，稳定生产与发布包计 G2，官方授权自动发布另计 G3。</li>
+<li>同幂等键重放、并发提交、过期 lease 写入、worker 重启、下载半文件、URL 到期、提交丢响应、重复回调均有故障用例。</li>
+<li>测试音色跨作用域误用被拒绝、未批准变体被拒绝、模拟素材在 production 被拒绝、V1 仅包 ready；后续人工回填只得到 <code>reported_published</code>。</li>
+<li>裁剪/片头/分段/发音替换之后，字幕时间戳单调且落在成片范围，字幕原文与批准稿一致；不能用放宽时长阈值掩盖时间轴错误。</li>
+<li>发布未知结果阻止重复创建；业务错误和缺失远端 ID 不能成功；上传成功与官方发布确认分别建证据。</li>
+</ul>
+<p>详细验收场景见同目录验收文档；本文是它们的数据与状态依据。</p>
+</article>
+    <nav class="document-pager" aria-label="相邻文档"><a rel="prev" href="03-%E6%80%BB%E4%BD%93%E6%8A%80%E6%9C%AF%E6%96%B9%E6%A1%88.html"><span>上一篇</span>03-总体技术方案</a><a rel="next" href="05-%E5%BC%80%E5%8F%91%E5%AE%9E%E6%96%BD%E8%AE%A1%E5%88%92.html"><span>下一篇</span>05-开发实施计划</a></nav>
+    <footer class="page-footer">与同名 Markdown 对应的阅读版 · 可离线阅读与打印</footer>
+  </main>
+  <aside class="toc-panel" aria-label="本文章节"><p class="group-title">本页目录</p><nav id="toc"><a class="toc-h2" href="#1-%E5%85%AC%E5%85%B1%E7%BA%A6%E5%AE%9A">1. 公共约定</a><a class="toc-h3" href="#11-%E5%85%A8%E6%96%B0%E8%B5%84%E4%BA%A7%E6%9D%A5%E6%BA%90%E7%BA%A6%E6%9D%9F%E4%B8%8E%E9%9B%B6%E5%85%BC%E5%AE%B9%E4%BF%9D%E8%AF%81">1.1 全新资产来源约束与零兼容保证</a><a class="toc-h2" href="#2-%E6%9D%83%E5%A8%81%E6%9E%9A%E4%B8%BE%E4%B8%8E%E7%8A%B6%E6%80%81%E8%A7%84%E5%88%99">2. 权威枚举与状态规则</a><a class="toc-h3" href="#21-pipelinestage%E5%A4%84%E7%90%86%E5%88%B0%E5%93%AA%E4%B8%80%E6%AD%A5">2.1 PipelineStage：处理到哪一步</a><a class="toc-h3" href="#22-taskstate%E6%9C%AC%E6%9C%9F%E7%94%9F%E4%BA%A7%E4%BB%BB%E5%8A%A1%E5%A4%84%E4%BA%8E%E4%BB%80%E4%B9%88%E7%8A%B6%E6%80%81">2.2 TaskState：本期生产任务处于什么状态</a><a class="toc-h3" href="#23-publishstate%E7%8B%AC%E7%AB%8B%E7%9A%84%E5%8F%91%E5%B8%83%E7%8A%B6%E6%80%81">2.3 PublishState：独立的发布状态</a><a class="toc-h3" href="#24-%E5%85%B6%E4%BB%96%E5%B0%8F%E6%9E%9A%E4%B8%BE">2.4 其他小枚举</a><a class="toc-h2" href="#3-%E6%A0%B8%E5%BF%83%E5%AE%9E%E4%BD%93">3. 核心实体</a><a class="toc-h3" href="#30-%E4%BD%9C%E5%93%81%E5%81%8F%E5%A5%BD%E4%B8%8E%E7%94%A8%E6%88%B7%E9%80%89%E6%8B%A9">3.0 作品、偏好与用户选择</a><a class="toc-h3" href="#31-%E8%BA%AB%E4%BB%BD%E4%B8%8E%E5%A3%B0%E9%9F%B3%E8%B5%84%E4%BA%A7">3.1 身份与声音资产</a><a class="toc-h3" href="#32-%E5%86%85%E5%AE%B9%E4%B8%8E%E8%AF%81%E6%8D%AE">3.2 内容与证据</a><a class="toc-h3" href="#33-%E4%BB%BB%E5%8A%A1%E9%98%B6%E6%AE%B5%E4%B8%8E%E5%AA%92%E4%BD%93">3.3 任务、阶段与媒体</a><a class="toc-h3" href="#34-agent-%E5%B7%A5%E4%BD%9C%E8%AE%B0%E5%BF%86%E4%B8%8E%E7%89%88%E6%9C%AC%E7%BB%91%E5%AE%9A">3.4 Agent 工作、记忆与版本绑定</a><a class="toc-h3" href="#35-%E5%A4%96%E9%83%A8%E4%BB%BB%E5%8A%A1%E9%A2%84%E7%AE%97%E4%B8%8E%E5%8F%91%E5%B8%83">3.5 外部任务、预算与发布</a><a class="toc-h2" href="#4-provider-%E5%A5%91%E7%BA%A6">4. Provider 契约</a><a class="toc-h3" href="#41-%E8%83%BD%E5%8A%9B%E5%A3%B0%E6%98%8E%E5%BF%85%E9%A1%BB%E5%85%88%E4%BA%8E%E8%B0%83%E7%94%A8">4.1 能力声明必须先于调用</a><a class="toc-h3" href="#42-%E5%BC%82%E6%AD%A5%E5%AA%92%E4%BD%93-provider">4.2 异步媒体 Provider</a><a class="toc-h3" href="#43-%E9%9F%B3%E9%A2%91%E8%A1%A8%E8%BE%BE%E4%B8%8E%E5%AD%97%E5%B9%95%E6%97%B6%E9%97%B4%E8%BD%B4">4.3 音频、表达与字幕时间轴</a><a class="toc-h3" href="#44-%E5%8F%91%E5%B8%83-adapter">4.4 发布 Adapter</a><a class="toc-h2" href="#5-%E5%BA%94%E7%94%A8-api-%E6%9C%80%E5%B0%8F%E9%9B%86">5. 应用 API 最小集</a><a class="toc-h3" href="#51-deepagentsmcp-%E4%B8%8E%E6%89%A7%E8%A1%8C%E6%9D%83%E9%99%90">5.1 DeepAgents、MCP 与执行权限</a><a class="toc-h3" href="#52-%E9%9D%A2%E5%90%91%E5%B7%A5%E4%BD%9C%E5%8F%B0%E7%9A%84%E6%8E%A5%E5%8F%A3">5.2 面向工作台的接口</a><a class="toc-h2" href="#6-%E4%BA%8B%E4%BB%B6%E4%B8%8E%E5%8F%91%E5%B8%83%E5%8C%85">6. 事件与发布包</a><a class="toc-h2" href="#7-%E5%A5%91%E7%BA%A6%E9%AA%8C%E8%AF%81%E6%B8%85%E5%8D%95">7. 契约验证清单</a></nav></aside>
+</div>
+<button type="button" class="sidebar-scrim" aria-label="关闭文档目录" hidden></button>
+<button type="button" class="back-top" aria-label="返回顶部">顶部</button>
+<script>(() => {
+  'use strict';
+
+  function initializeReader() {
+    const article = document.getElementById('document-body');
+    if (!article) return;
+    const root = document.documentElement;
+    const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
+    const scrollBehavior = () => reducedMotion.matches ? 'instant' : 'smooth';
+
+    // Local files and privacy settings can deny storage; controls remain usable.
+    const fontKey = 'document-reader-font-size';
+    let fontSize = 17;
+    try {
+      const savedSize = Number(localStorage.getItem(fontKey));
+      if (Number.isFinite(savedSize) && savedSize >= 14 && savedSize <= 22) fontSize = savedSize;
+    } catch (_) { /* Storage is optional. */ }
+    const smaller = document.querySelector('.font-smaller');
+    const reset = document.querySelector('.font-reset');
+    const larger = document.querySelector('.font-larger');
+    function setFontSize(value) {
+      fontSize = Math.max(14, Math.min(22, value));
+      root.style.setProperty('--reader-font-size', `${fontSize}px`);
+      if (smaller) smaller.disabled = fontSize === 14;
+      if (larger) larger.disabled = fontSize === 22;
+      if (reset) reset.title = `恢复默认字号（当前 ${fontSize}px）`;
+      try { localStorage.setItem(fontKey, String(fontSize)); } catch (_) { /* Optional. */ }
+    }
+    setFontSize(fontSize);
+    smaller?.addEventListener('click', () => setFontSize(fontSize - 1));
+    reset?.addEventListener('click', () => setFontSize(17));
+    larger?.addEventListener('click', () => setFontSize(fontSize + 1));
+    document.querySelector('.print-button')?.addEventListener('click', () => window.print());
+
+    const menu = document.querySelector('.mobile-menu');
+    const sidebar = document.getElementById('doc-sidebar');
+    const scrim = document.querySelector('.sidebar-scrim');
+    const mobileWidth = window.matchMedia('(max-width: 800px)');
+    function setMenu(open, returnFocus = false) {
+      const visible = open && mobileWidth.matches;
+      document.body.classList.toggle('menu-open', visible);
+      menu?.setAttribute('aria-expanded', String(visible));
+      if (scrim) scrim.hidden = !visible;
+      if (visible) {
+        sidebar?.querySelector('[aria-current="page"], a, button')?.focus();
+      } else if (returnFocus) menu?.focus();
+    }
+    menu?.addEventListener('click', () => setMenu(!document.body.classList.contains('menu-open')));
+    scrim?.addEventListener('click', () => setMenu(false, true));
+    sidebar?.addEventListener('click', (event) => {
+      if (event.target.closest('a')) setMenu(false);
+    });
+    mobileWidth.addEventListener('change', () => setMenu(false));
+    document.addEventListener('keydown', (event) => {
+      if (!document.body.classList.contains('menu-open')) return;
+      if (event.key === 'Escape') {
+        event.preventDefault();
+        setMenu(false, true);
+      }
+      if (event.key === 'Tab') {
+        const focusable = [menu, ...sidebar.querySelectorAll('a[href], button:not([disabled]), [tabindex="0"]')].filter(Boolean);
+        const first = focusable[0];
+        const last = focusable[focusable.length - 1];
+        if (event.shiftKey && document.activeElement === first) {
+          event.preventDefault();
+          last?.focus();
+        } else if (!event.shiftKey && document.activeElement === last) {
+          event.preventDefault();
+          first?.focus();
+        }
+      }
+    });
+    setMenu(false);
+
+    const searchForm = document.getElementById('search-form');
+    const searchInput = document.getElementById('search-input');
+    const searchNext = document.getElementById('search-next');
+    const searchClear = document.getElementById('search-clear');
+    const searchStatus = document.getElementById('search-status');
+    let searchResults = [];
+    let currentResult = -1;
+    let currentQuery = '';
+    let searchTimer;
+
+    function clearHighlights() {
+      article.querySelectorAll('mark.reader-match').forEach((mark) => {
+        const parent = mark.parentNode;
+        mark.replaceWith(document.createTextNode(mark.textContent));
+        parent.normalize();
+      });
+      article.querySelectorAll('.search-block-current').forEach((block) => block.classList.remove('search-block-current'));
+      searchResults = [];
+      currentResult = -1;
+    }
+
+    function showResult(index, shouldScroll) {
+      searchResults.forEach((result) => {
+        result.block.classList.remove('search-block-current');
+        result.marks.forEach((mark) => mark.classList.remove('is-current'));
+      });
+      currentResult = (index + searchResults.length) % searchResults.length;
+      const result = searchResults[currentResult];
+      result.block.classList.add('search-block-current');
+      result.marks.forEach((mark) => mark.classList.add('is-current'));
+      if (searchStatus) searchStatus.textContent = `第 ${currentResult + 1} / ${searchResults.length} 处匹配 · Enter 下一处`;
+      if (shouldScroll) {
+        let container = result.block.parentElement;
+        while (container && container !== article) {
+          if (container.tagName === 'DETAILS') container.open = true;
+          container = container.parentElement;
+        }
+        result.marks[0].scrollIntoView({ behavior: scrollBehavior(), block: 'center', inline: 'nearest' });
+      }
+    }
+
+    function runSearch(shouldScroll = false) {
+      clearTimeout(searchTimer);
+      clearHighlights();
+      const query = searchInput?.value.trim() || '';
+      currentQuery = query;
+      if (searchClear) searchClear.disabled = !query;
+      if (!query) {
+        if (searchStatus) searchStatus.textContent = '';
+        if (searchNext) searchNext.disabled = true;
+        return;
+      }
+      const queryLower = query.toLocaleLowerCase();
+      const blockResults = new Map();
+      // Walk original text nodes, preserving links, emphasis, tables and code.
+      const walker = document.createTreeWalker(article, NodeFilter.SHOW_TEXT, {
+        acceptNode(node) {
+          if (!node.nodeValue.trim()) return NodeFilter.FILTER_REJECT;
+          if (node.parentElement.closest('script, style, button, svg, mark, [aria-hidden="true"]')) return NodeFilter.FILTER_REJECT;
+          return node.nodeValue.toLocaleLowerCase().includes(queryLower) ? NodeFilter.FILTER_ACCEPT : NodeFilter.FILTER_REJECT;
+        }
+      });
+      const nodes = [];
+      while (walker.nextNode()) nodes.push(walker.currentNode);
+      nodes.forEach((node) => {
+        const original = node.nodeValue;
+        const normalized = original.toLocaleLowerCase();
+        const block = node.parentElement.closest('p, li, td, th, h2, h3, h4, h5, h6, pre, summary, figcaption') || node.parentElement;
+        let result = blockResults.get(block);
+        if (!result) {
+          result = { block, marks: [] };
+          blockResults.set(block, result);
+        }
+        const fragment = document.createDocumentFragment();
+        let position = 0;
+        let matchPosition;
+        while ((matchPosition = normalized.indexOf(queryLower, position)) !== -1) {
+          fragment.append(document.createTextNode(original.slice(position, matchPosition)));
+          const mark = document.createElement('mark');
+          mark.className = 'reader-match';
+          mark.textContent = original.slice(matchPosition, matchPosition + query.length);
+          fragment.append(mark);
+          result.marks.push(mark);
+          position = matchPosition + query.length;
+        }
+        fragment.append(document.createTextNode(original.slice(position)));
+        node.replaceWith(fragment);
+      });
+      searchResults = [...blockResults.values()];
+      if (searchNext) searchNext.disabled = !searchResults.length;
+      if (!searchResults.length) {
+        if (searchStatus) searchStatus.textContent = '未找到匹配内容';
+      } else showResult(0, shouldScroll);
+    }
+
+    searchInput?.addEventListener('input', (event) => {
+      if (event.isComposing) return;
+      clearTimeout(searchTimer);
+      searchTimer = setTimeout(() => runSearch(false), 180);
+    });
+    searchInput?.addEventListener('compositionend', () => {
+      clearTimeout(searchTimer);
+      searchTimer = setTimeout(() => runSearch(false), 180);
+    });
+    searchForm?.addEventListener('submit', (event) => {
+      event.preventDefault();
+      const queryChanged = currentQuery !== searchInput.value.trim();
+      if (queryChanged) runSearch(true);
+      else if (searchResults.length) showResult(currentResult + 1, true);
+    });
+    if (searchNext && searchNext.type !== 'submit') {
+      searchNext.addEventListener('click', () => {
+        if (currentQuery !== searchInput.value.trim()) runSearch(true);
+        else if (searchResults.length) showResult(currentResult + 1, true);
+      });
+    }
+    function resetSearch() {
+      clearTimeout(searchTimer);
+      if (searchInput) searchInput.value = '';
+      currentQuery = '';
+      clearHighlights();
+      if (searchStatus) searchStatus.textContent = '';
+      if (searchNext) searchNext.disabled = true;
+      if (searchClear) searchClear.disabled = true;
+    }
+    searchClear?.addEventListener('click', (event) => {
+      event.preventDefault();
+      resetSearch();
+      searchInput?.focus();
+    });
+    searchInput?.addEventListener('keydown', (event) => {
+      if (event.key === 'Escape' && !event.isComposing) {
+        event.preventDefault();
+        resetSearch();
+      }
+      if (event.key === 'Enter' && event.isComposing) event.preventDefault();
+    });
+    resetSearch();
+
+    async function copyText(text) {
+      try {
+        if (navigator.clipboard?.writeText) {
+          await navigator.clipboard.writeText(text);
+          return true;
+        }
+      } catch (_) { /* File URLs may reject the modern Clipboard API. */ }
+      const previousFocus = document.activeElement;
+      const selection = window.getSelection();
+      const savedRanges = selection ? Array.from({ length: selection.rangeCount }, (_, i) => selection.getRangeAt(i).cloneRange()) : [];
+      const field = document.createElement('textarea');
+      field.value = text;
+      field.readOnly = true;
+      field.style.cssText = 'position:fixed;left:-9999px;top:0;opacity:0;font-size:16px';
+      document.body.append(field);
+      field.select();
+      let copied = false;
+      try { copied = document.execCommand('copy'); } catch (_) { /* Show the failure state. */ }
+      field.remove();
+      if (selection) {
+        selection.removeAllRanges();
+        savedRanges.forEach((range) => selection.addRange(range));
+      }
+      previousFocus?.focus({ preventScroll: true });
+      return copied;
+    }
+
+    article.querySelectorAll('pre').forEach((pre) => {
+      const code = pre.querySelector('code');
+      if (!code || pre.querySelector('.copy-code')) return;
+      const button = document.createElement('button');
+      button.type = 'button';
+      button.className = 'copy-code';
+      button.textContent = '复制代码';
+      button.setAttribute('aria-label', '复制代码');
+      button.setAttribute('aria-live', 'polite');
+      pre.append(button);
+      let labelTimer;
+      button.addEventListener('click', async () => {
+        clearTimeout(labelTimer);
+        const copied = await copyText(code.textContent);
+        button.textContent = copied ? '已复制' : '请选中后复制';
+        labelTimer = setTimeout(() => { button.textContent = '复制代码'; }, 2200);
+      });
+    });
+
+    // Scroll-spy works without observers and avoids changing browser history.
+    const tocLinks = Array.from(document.querySelectorAll('#toc a[href^="#"]'));
+    const sections = tocLinks.map((link) => {
+      let id;
+      try { id = decodeURIComponent(link.getAttribute('href').slice(1)); } catch (_) { return null; }
+      const heading = document.getElementById(id);
+      return heading ? { link, heading } : null;
+    }).filter(Boolean);
+    let activeLink = null;
+    const backTop = document.querySelector('.back-top');
+    let framePending = false;
+    function updateScrollState() {
+      framePending = false;
+      if (backTop) backTop.hidden = window.scrollY < 480;
+      let active = sections[0];
+      const header = document.querySelector('.topbar');
+      const threshold = (header?.getBoundingClientRect().height || 76) + 38;
+      for (const section of sections) {
+        if (section.heading.getBoundingClientRect().top <= threshold) active = section;
+        else break;
+      }
+      if (!active || active.link === activeLink) return;
+      activeLink?.removeAttribute('aria-current');
+      activeLink?.classList.remove('is-active');
+      activeLink = active.link;
+      activeLink.setAttribute('aria-current', 'location');
+      activeLink.classList.add('is-active');
+      const panel = document.querySelector('.toc-panel');
+      if (panel && panel.clientHeight) {
+        const linkRect = activeLink.getBoundingClientRect();
+        const panelRect = panel.getBoundingClientRect();
+        if (linkRect.top < panelRect.top + 25 || linkRect.bottom > panelRect.bottom - 25) {
+          panel.scrollTop += linkRect.top - panelRect.top - panel.clientHeight / 3;
+        }
+      }
+    }
+    function queueScrollUpdate() {
+      if (!framePending) {
+        framePending = true;
+        requestAnimationFrame(updateScrollState);
+      }
+    }
+    window.addEventListener('scroll', queueScrollUpdate, { passive: true });
+    window.addEventListener('resize', queueScrollUpdate, { passive: true });
+    backTop?.addEventListener('click', () => window.scrollTo({ top: 0, behavior: scrollBehavior() }));
+    updateScrollState();
+  }
+
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', initializeReader, { once: true });
+  else initializeReader();
+})();
+</script>
+</body>
+</html>

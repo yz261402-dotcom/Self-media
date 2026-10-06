@@ -1,0 +1,226 @@
+{
+  "schema_version": 1,
+  "mode": "integration",
+  "recorded_at": "2026-09-22T00:10:58.757764+00:00",
+  "purpose": "本地固定主播选型登记；不是已上线应用数据库或已验收生产资产",
+  "selection_record": "experiments/人物与音色选型/AV-001/人物与音色定版.json",
+  "avatar_identity": {
+    "id": "av_base_b_v1",
+    "name": "主播B",
+    "public_name": null,
+    "version": 1,
+    "hero_asset_id": "image_base_b_v1",
+    "reference_asset_ids": [
+      "image_base_b_v1"
+    ],
+    "identity_prompt": "约22岁的明确成年虚构女性；专业温柔，黑色长直发，真实自然五官与肤色。身份以基础人物.png原图为准；脸型、五官、发型、肤色、年龄感、性别、身体比例保持一致。",
+    "identity_digest": "b66feb11d62559a632def9f86e0915645a70fa4dbb38c6a2cd2f7cb50b607b48",
+    "source_record_id": "source_av001_image_b",
+    "approval_state": "approved",
+    "approval_id": "review_av001_b_identity_v1",
+    "approval_scope": "identity_choice_only"
+  },
+  "voice_asset": {
+    "id": "voice_minimax_warm_bestie_v1",
+    "version": 1,
+    "name": "温暖闺蜜",
+    "provider": "minimax_official",
+    "model": "speech-2.8-hd",
+    "region": "cn",
+    "remote_voice_id": "Chinese (Mandarin)_Warm_Bestie",
+    "reference_audio_asset_id": "audio_voice3_reference_v1",
+    "synthesis_profile": {
+      "model": "speech-2.8-hd",
+      "stream": false,
+      "output_format": "hex",
+      "language_boost": "Chinese",
+      "voice_setting": {
+        "voice_id": "Chinese (Mandarin)_Warm_Bestie",
+        "speed": 1.0,
+        "vol": 1.0,
+        "pitch": 0,
+        "emotion": "calm"
+      },
+      "audio_setting": {
+        "sample_rate": 32000,
+        "format": "wav",
+        "channel": 1
+      },
+      "subtitle_enable": false
+    },
+    "profile_digest": "c769e484fe6fe20493ebbbb262527875b407a89cca0c1b8870f4776cc87aa0a8",
+    "source_record_id": "source_av001_voice3",
+    "approval_state": "approved",
+    "approval_id": "review_av001_voice3_v1",
+    "approval_scope": "voice_choice_only",
+    "reference_text": "你有没有发现，AI回答得很流畅，却不一定说得对。<#0.30#>RAG，也就是检索增强生成，会先找资料，再组织答案。今天用三个步骤，带你看懂它。资料是否可靠，仍然需要检查。",
+    "reference_use": "仅音色基准句，不是完整可发布科普稿；三个步骤没有展开"
+  },
+  "appearance": {
+    "initial_outfit": {
+      "id": "outfit_ivory_blue_v1",
+      "description": "米白色西装外套，浅蓝色圆领上衣"
+    },
+    "initial_background": {
+      "id": "background_gray_studio_v1",
+      "description": "浅灰色摄影棚背景"
+    },
+    "outfit_background_separate_layers_available": false,
+    "variant_policy": "只允许基于本身份参考图换装和换背景；生成变体后对照原图验收，不随机重建人物。",
+    "reference_edit_verified": false,
+    "motion_master_asset_id": null
+  },
+  "source_records": [
+    {
+      "id": "source_av001_image_b",
+      "source_type": "本项目生成",
+      "provider": "openai_compatible_relay",
+      "model": "gpt-image-2",
+      "version": null,
+      "response_model": null,
+      "upstream_identity_verified": false,
+      "provider_run_id": "AV-001/image_B",
+      "request_digest": "f8c5a9664db5aa3c2e21e4edd3b301a1edc9f4e4cd835671452c4a045e5c5933",
+      "prompt_asset_id": "evidence_prompt_b_v1",
+      "seed": null,
+      "rights_evidence_asset_id": null,
+      "license_review_state": "pending",
+      "reviewed_at": null,
+      "requested_size": "1152x2048",
+      "actual_size": "941x1672",
+      "source_file": "experiments/人物与音色选型/AV-001/人物/人物B.png",
+      "execution_evidence": "experiments/人物与音色选型/AV-001/执行证据/image_B/执行结果.json",
+      "response_summary": "experiments/人物与音色选型/AV-001/执行证据/image_B/响应摘要.json"
+    },
+    {
+      "id": "source_av001_voice3",
+      "source_type": "本项目生成",
+      "provider": "minimax_official",
+      "model": "speech-2.8-hd",
+      "version": null,
+      "response_model": "speech-2.8-hd",
+      "provider_run_id": "AV-001/voice_3",
+      "request_trace_id": "0700f29f32da448e0881159029cc2142",
+      "request_digest": "db54ef67334b246f02688e535a50750bf2c47f23da4cc501de2bad747292fc7b",
+      "prompt_asset_id": null,
+      "seed": null,
+      "rights_evidence_asset_id": null,
+      "license_review_state": "pending",
+      "reviewed_at": null,
+      "voice_catalog_evidence": "experiments/人物与音色选型/AV-001/官方音色目录.json",
+      "source_file": "experiments/人物与音色选型/AV-001/音色/3-温暖闺蜜.wav",
+      "execution_evidence": "experiments/人物与音色选型/AV-001/执行证据/voice_3/执行结果.json",
+      "response_summary": "experiments/人物与音色选型/AV-001/执行证据/voice_3/响应摘要.json"
+    }
+  ],
+  "media_assets": [
+    {
+      "id": "image_base_b_v1",
+      "mode": "integration",
+      "kind": "image",
+      "storage_key": "assets/固定主播/主播B/版本1/基础人物.png",
+      "sha256": "b66feb11d62559a632def9f86e0915645a70fa4dbb38c6a2cd2f7cb50b607b48",
+      "bytes": 1826131,
+      "mime_type": "image/png",
+      "source_record_id": "source_av001_image_b",
+      "parent_asset_ids": [],
+      "simulated": false,
+      "width": 941,
+      "height": 1672
+    },
+    {
+      "id": "audio_voice3_reference_v1",
+      "mode": "integration",
+      "kind": "audio",
+      "storage_key": "assets/固定主播/主播B/版本1/音色3-温暖闺蜜试听.wav",
+      "sha256": "a6945eac9e317ea3643151e039f3de1a929277aceb605a2d13dee708f815fc81",
+      "bytes": 975170,
+      "mime_type": "audio/wav",
+      "source_record_id": "source_av001_voice3",
+      "parent_asset_ids": [],
+      "simulated": false,
+      "duration_ms": 15219,
+      "sample_rate_hz": 32000,
+      "channels": 1
+    },
+    {
+      "id": "evidence_prompt_b_v1",
+      "mode": "integration",
+      "kind": "evidence",
+      "storage_key": "assets/固定主播/主播B/版本1/人物原始提示词.txt",
+      "sha256": "0b3e664e751fb705f929f7fdf39aada44a8cbe8ec2a0203ca5859ac45beef967",
+      "bytes": 1617,
+      "mime_type": "text/plain",
+      "source_record_id": "source_av001_image_b",
+      "parent_asset_ids": [],
+      "simulated": false
+    }
+  ],
+  "review_decisions": [
+    {
+      "id": "review_av001_b_identity_v1",
+      "subject_id": "av_base_b_v1",
+      "subject_digest": "b66feb11d62559a632def9f86e0915645a70fa4dbb38c6a2cd2f7cb50b607b48",
+      "decision": "approve",
+      "actor_id": "project_user",
+      "reason": "用户明确选择人物B；仅确认人物外观偏好",
+      "evidence_asset_ids": [
+        "av001_b3_selection_v1"
+      ],
+      "created_at": "2026-09-22T00:10:58.757764+00:00"
+    },
+    {
+      "id": "review_av001_voice3_v1",
+      "subject_id": "voice_minimax_warm_bestie_v1",
+      "subject_digest": "c769e484fe6fe20493ebbbb262527875b407a89cca0c1b8870f4776cc87aa0a8",
+      "decision": "approve",
+      "actor_id": "project_user",
+      "reason": "用户明确选择音色3；仅确认固定音色偏好",
+      "evidence_asset_ids": [
+        "av001_b3_selection_v1"
+      ],
+      "created_at": "2026-09-22T00:10:58.757764+00:00"
+    }
+  ],
+  "acceptance": {
+    "selection_status": "SELECTED_BY_USER",
+    "production_status": "PENDING_ACCEPTANCE",
+    "production_enabled": false,
+    "checks": [
+      {
+        "code": "selected_media_hashes",
+        "outcome": "pass"
+      },
+      {
+        "code": "selected_image_decode",
+        "outcome": "pass"
+      },
+      {
+        "code": "requested_image_dimensions",
+        "outcome": "fail",
+        "message": "原图941x1672，未达到请求1152x2048；保留原图，不冒称原生1080p"
+      },
+      {
+        "code": "same_identity_variant",
+        "outcome": "not_run"
+      },
+      {
+        "code": "musetalk_b3_short_clip",
+        "outcome": "not_run"
+      },
+      {
+        "code": "motion_master_b",
+        "outcome": "not_run"
+      },
+      {
+        "code": "sixty_second_video_quality",
+        "outcome": "not_run"
+      },
+      {
+        "code": "rights_evidence_review",
+        "outcome": "review"
+      }
+    ]
+  },
+  "version_policy": "本版本原图、音频和人物/音色参数以摘要固定。变更新增版本及审批记录；保留实验原件和失败证据。"
+}

@@ -1,0 +1,32 @@
+fastapi>=0.141.1
+uvicorn>=0.53.0
+pydantic>=2.13.5
+# 参考视频上传（multipart/form-data）；缺失时 FastAPI 在注册上传路由时直接报错
+python-multipart>=0.0.20
+
+# 智能体执行框架（生产默认；依赖缺失显式失败，不回退到其他执行器）
+deepagents==0.7.17
+
+# DeepSeek 真实接入路径（仅 MODEL_BACKEND=deepseek 时使用）
+# 未安装时该路径显式报 CapabilityNotConfigured，不静默降级到离线替身。
+httpx==0.28.1
+langchain-openai>=0.3.0  # optional: 真实模型自主调度；当前未安装，默认调度与正文生成不依赖它
+
+# 图像处理：参考图尺寸核验、mask 生成与像素差量化（T03 资产验证脚本使用）
+Pillow==11.3.0
+
+# 确定性抠图合成（T03）。选型理由：均为**无预训练权重**的算法库，
+# 许可随 OpenCV（Apache-2.0），不引入 U2Net/InsightFace 那类权重授权不明的模型。
+# numpy 为数值基础依赖（残差拟合、像素断言）。
+numpy>=2.0
+opencv-python-headless>=4.10
+
+# 火山引擎 TOS 官方 SDK（素材公网发布）。必须用官方 SDK：TOS 网关不认
+# boto3 的 S3 兼容请求/签名（实测 create_bucket 恒 400），请勿改回 boto3。
+tos>=2.6.0
+
+# PostgreSQL 业务库驱动（psycopg 3，连接串见 AVATAR_STUDIO_DATABASE_URL）
+psycopg[binary]>=3.2
+
+# 测试
+pytest>=8.0.0

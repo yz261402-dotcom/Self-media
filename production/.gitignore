@@ -1,0 +1,18 @@
+# T01 排除目录：运行产物与依赖目录不得纳入版本控制，也不作为资产/契约来源被扫描。
+# 与 backend/app/config.py 的 EXCLUDED_DIR_NAMES 保持一致。
+runtime/
+.venv/
+venv/
+node_modules/
+__pycache__/
+.pytest_cache/
+*.pyc
+
+# 临时测试库与探测脚本
+tests/tmp_test.db
+tests/.tmp_compose/
+tests/probe_*.db
+tests/dbg_*.db
+backend/server.log
+backend/server.err
+backend/pytest_run.log
