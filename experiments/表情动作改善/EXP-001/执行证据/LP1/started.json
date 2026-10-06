@@ -1,0 +1,37 @@
+{
+  "started_at": "2026-09-22T01:13:50.605334+00:00",
+  "spec": {
+    "job_dir": "/root/autodl-tmp/avatar-motion/EXP-001/jobs/LP1",
+    "cwd": "/root/autodl-tmp/avatar-motion/EXP-001/LivePortrait",
+    "command": [
+      "/root/autodl-tmp/avatar-motion/EXP-001/env-liveportrait/bin/python",
+      "inference.py",
+      "-s",
+      "/root/autodl-tmp/avatar-motion/EXP-001/inputs/person_B_even.png",
+      "-d",
+      "/root/autodl-tmp/avatar-motion/EXP-001/inputs/ali_motion_loop25.mp4",
+      "-o",
+      "/root/autodl-tmp/avatar-motion/EXP-001/results/LP1",
+      "--flag_crop_driving_video",
+      "--source_max_dim",
+      "1920"
+    ],
+    "environment": {
+      "OMP_NUM_THREADS": "8",
+      "MKL_NUM_THREADS": "8",
+      "HF_HUB_OFFLINE": "1",
+      "TRANSFORMERS_OFFLINE": "1"
+    },
+    "outputs": [
+      "/root/autodl-tmp/avatar-motion/EXP-001/results/LP1/person_B_even--ali_motion_loop25.mp4"
+    ],
+    "inputs": {
+      "/root/autodl-tmp/avatar-motion/EXP-001/inputs/person_B_even.png": "a616738fc3517047da733efb5558256884292f6a2b84bb9e4a4f620e127260fa",
+      "/root/autodl-tmp/avatar-motion/EXP-001/inputs/ali_motion_loop25.mp4": "9f0897bab4f99e9b9e0026e8f4b3535f76a0824810d72a7d6261993f877d9d33"
+    },
+    "timeout_seconds": 1800,
+    "sample_gpu": true,
+    "hourly_cny": 1.58
+  },
+  "automatic_retry": false
+}

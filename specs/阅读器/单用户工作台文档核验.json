@@ -1,0 +1,15 @@
+{
+  "scope": "文档与配置规格核验，不是应用测试或模型评测",
+  "source_files": 11,
+  "html_source_hashes_checked": 30,
+  "local_links_checked": 736,
+  "anchors_checked": 221,
+  "preserved_acceptance_cases": 61,
+  "acceptance_cases": 69,
+  "metric_rows": 28,
+  "core_metrics": 14,
+  "evidence_retention_unchanged": true,
+  "backup_files_verified": 35,
+  "source_sha256": "1323e9519cd076adad651bc93d667213f966a79ee2b17ccf262806110e88547e",
+  "errors": []
+}

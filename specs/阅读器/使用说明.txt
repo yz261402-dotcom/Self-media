@@ -1,0 +1,18 @@
+HTML 阅读版（DeepAgents 方案）
+
+入口：../0001-douyin-ai-studio/00-文档导航.html
+主方案：../0001-douyin-ai-studio/03-总体技术方案.html
+当前架构图：../架构图/DeepAgents多智能体架构.html
+
+每份开发文档、选型记录和调研文档都有同名 HTML，可以直接双击阅读。
+文字样式和阅读交互内嵌；主方案中的架构 PNG、文档链接和实验媒体采用本地相对引用。
+离线阅读或分享时请保留 specs 目录结构；需要播放实验样片时同时保留对应 experiments 和 assets。
+
+功能：文档切换、章节目录、本文搜索、字号调整、代码复制、打印与手机阅读。
+Markdown 是编辑源。更新后在项目根目录运行：
+python -X utf8 specs/阅读器/生成阅读版.py
+
+生成器使用当前环境的 markdown-it-py、mdit-py-plugins、beautifulsoup4，阅读 HTML 无需安装。
+当前架构由 Archify JSON 生成，须重新校验/生成独立 HTML 和 PNG，不能只改 HTML。
+阅读器保留旧 Mermaid 渲染支持，但当前主方案不再使用旧架构图；历史图见历史版本目录。
+本次文档修改不表示生产系统已经实现。

@@ -1,0 +1,16 @@
+{
+  "stage": "image_C",
+  "state": "SUCCEEDED",
+  "elapsed_seconds": 36.21899999999994,
+  "finished_at": "2026-09-21T23:38:33.386823+00:00",
+  "result": {
+    "path": "人物\\人物C.png",
+    "sha256": "295a06f76a39b7664f9e08cebf3aac5ac8e440186b124ecd24f9ce84f9a64692",
+    "width": 1152,
+    "height": 2048,
+    "model": "gpt-image-2",
+    "upstream_identity": "relay_reported_not_independently_verified",
+    "quality": "CANDIDATE_NOT_APPROVED"
+  },
+  "automatic_retry": false
+}

@@ -1,0 +1,1773 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="light">
+<link rel="icon" href="data:,">
+<meta name="source-sha256" content="dbfd02e14a27fd18edfdb97794660f68d7f60744b9106198ef515c7b33078e42">
+<title>03 数字人口播选型调研 · AI 自媒体文档</title>
+<style>:root {
+  color-scheme: light;
+  --paper: #ffffff;
+  --surface: #f7f7f8;
+  --ink: #202126;
+  --muted: #666970;
+  --line: #dedfe3;
+  --blue: #002fa7;
+  --reader-font-size: 17px;
+  --header-height: 76px;
+  font-family: "Helvetica Neue", Helvetica, Arial, "PingFang SC", "Microsoft YaHei", sans-serif;
+  font-synthesis: none;
+}
+
+* { box-sizing: border-box; }
+.sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; border: 0; }
+.source-notice { margin-top: 22px; padding: 12px 14px; border-left: 3px solid var(--blue); background: var(--surface); color: var(--muted); font-size: 13px; }
+html { scroll-padding-top: 104px; }
+body { margin: 0; min-width: 320px; color: var(--ink); background: var(--surface); font-size: 14px; line-height: 1.6; }
+body.menu-open { overflow: hidden; }
+a { color: var(--blue); text-underline-offset: 3px; }
+button, input { font: inherit; }
+button { color: inherit; cursor: pointer; }
+button, input[type="search"] { border: 1px solid var(--line); border-radius: 3px; background: var(--paper); }
+button { min-height: 36px; padding: 6px 11px; line-height: 1.4; }
+button:hover { border-color: var(--blue); color: var(--blue); }
+button:disabled { opacity: .42; cursor: default; }
+button:disabled:hover { color: inherit; border-color: var(--line); }
+:focus-visible { outline: 2px solid var(--blue); outline-offset: 3px; }
+[hidden] { display: none !important; }
+::selection { background: #dbe4ff; color: #151c32; }
+
+.skip-link { position: fixed; z-index: 100; top: -70px; left: 16px; padding: 10px 18px; background: var(--blue); color: white; }
+.skip-link:focus { top: 10px; }
+.topbar { position: sticky; z-index: 30; top: 0; min-height: var(--header-height); display: flex; align-items: center; gap: 24px; padding: 15px 32px; border-bottom: 1px solid var(--line); background: var(--paper); }
+.brand { min-width: 0; color: var(--ink); font-size: 17px; font-weight: 700; line-height: 1.35; letter-spacing: -.02em; text-decoration: none; }
+.brand small, .brand span { display: block; margin-top: 4px; font-size: 11px; font-weight: 400; letter-spacing: .08em; color: var(--muted); }
+.toolbar { display: flex; align-items: center; gap: 6px; margin-left: auto; flex-shrink: 0; }
+.toolbar .font-smaller, .toolbar .font-reset, .toolbar .font-larger { min-width: 36px; padding: 5px 8px; font-variant-numeric: tabular-nums; }
+.toolbar .print-button { margin-left: 8px; }
+.mobile-menu { display: none; }
+.layout { display: grid; grid-template-columns: 244px minmax(0, 1fr) 208px; max-width: 1536px; margin: 0 auto; align-items: start; background: var(--paper); }
+.sidebar { position: sticky; top: var(--header-height); height: calc(100dvh - var(--header-height)); overflow-y: auto; overscroll-behavior: contain; padding: 32px 20px 36px 24px; border-right: 1px solid var(--line); scrollbar-width: thin; background: var(--surface); }
+.nav-group + .nav-group { margin-top: 32px; padding-top: 26px; border-top: 1px solid var(--line); }
+.group-title { margin: 0 10px 12px; color: var(--muted); font-size: 11px; font-weight: 600; letter-spacing: .11em; }
+.doc-nav { display: flex; flex-direction: column; gap: 4px; }
+.doc-nav a { display: block; padding: 9px 10px; border-left: 2px solid transparent; color: #55575d; font-size: 13px; line-height: 1.65; text-decoration: none; overflow-wrap: anywhere; }
+.doc-nav a:hover { color: var(--blue); background: #eeeeef; }
+.doc-nav a[aria-current="page"] { border-left-color: var(--blue); background: #eaf0ff; color: var(--blue); font-weight: 600; }
+.doc-nav .doc-number { display: inline-block; min-width: 25px; color: var(--muted); font-variant-numeric: tabular-nums; }
+
+#main { min-width: 0; padding: 46px clamp(28px, 3.7vw, 60px) 56px; }
+.document-header { margin-bottom: 29px; }
+.eyebrow { margin: 0 0 18px; color: var(--blue); font-size: 12px; font-weight: 600; letter-spacing: .08em; }
+.document-header h1 { margin: 0 0 21px; font-size: clamp(30px, 2.8vw, 42px); font-weight: 700; letter-spacing: -.045em; line-height: 1.3; overflow-wrap: anywhere; }
+.doc-meta { display: flex; flex-wrap: wrap; align-items: baseline; gap: 6px 18px; color: var(--muted); font-size: 12px; }
+.doc-meta a { color: var(--muted); }
+.doc-meta a:hover { color: var(--blue); }
+.reader-tools { margin: 0 0 36px; padding: 16px 0; border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); }
+#search-form { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; }
+#search-input { flex: 1 1 160px; min-width: 100px; width: 0; height: 36px; padding: 6px 10px; color: var(--ink); }
+#search-input::placeholder { color: #777a82; }
+#search-next, #search-clear { flex: 0 0 auto; font-size: 12px; }
+#search-status { flex: 1 0 100%; color: var(--muted); font-size: 11px; line-height: 1.5; }
+#search-status:empty { display: none; }
+
+#document-body { font-size: var(--reader-font-size); line-height: 1.9; overflow-wrap: anywhere; }
+#document-body > :first-child { margin-top: 0; }
+#document-body h2, #document-body h3, #document-body h4, #document-body h5, #document-body h6 { scroll-margin-top: 106px; font-weight: 650; line-height: 1.45; color: #15171c; }
+#document-body h2 { margin: 2.8em 0 1.05em; padding-top: 1.25em; border-top: 1px solid var(--line); font-size: 1.5em; letter-spacing: -.035em; }
+#document-body h3 { margin: 2em 0 .85em; font-size: 1.18em; letter-spacing: -.025em; }
+#document-body h4 { margin: 1.65em 0 .7em; font-size: 1.03em; }
+#document-body h5, #document-body h6 { margin: 1.4em 0 .6em; font-size: 1em; }
+#document-body p { margin: .9em 0; }
+#document-body ul, #document-body ol { margin: 1em 0; padding-left: 1.55em; }
+#document-body li { margin: .38em 0; padding-left: .15em; }
+#document-body li > p { margin: .4em 0; }
+#document-body li > ul, #document-body li > ol { margin: .35em 0 .6em; }
+#document-body strong { color: #14161b; font-weight: 650; }
+#document-body hr { margin: 2.1em 0; border: 0; border-top: 1px solid var(--line); }
+#document-body blockquote { margin: 1.5em 0; padding: .25em 1.15em; border-left: 3px solid var(--blue); background: var(--surface); color: #4c4f57; }
+#document-body blockquote p { margin: .55em 0; }
+#document-body a { overflow-wrap: anywhere; }
+#document-body a:hover { text-decoration-thickness: 2px; }
+#document-body img { max-width: 100%; height: auto; }
+#document-body code { padding: .12em .32em; border: 1px solid #e7e7ea; border-radius: 3px; background: var(--surface); font-family: Consolas, "SFMono-Regular", "Liberation Mono", monospace; font-size: .82em; overflow-wrap: anywhere; }
+#document-body pre { position: relative; margin: 1.5em 0; padding: 44px 0 0; max-width: 100%; overflow: hidden; border: 1px solid var(--line); border-radius: 4px; background: var(--surface); line-height: 1.7; }
+#document-body pre > code { display: block; max-width: 100%; overflow-x: auto; padding: 0 19px 18px; border: 0; border-radius: 0; font-size: .79em; line-height: 1.75; white-space: pre; overflow-wrap: normal; tab-size: 2; }
+.copy-code { position: absolute; top: 7px; right: 8px; min-height: 28px; padding: 4px 9px; color: var(--muted); font-size: 11px; background: var(--paper); }
+.table-scroll { max-width: 100%; margin: 1.5em 0; overflow-x: auto; border: 1px solid var(--line); border-radius: 3px; scrollbar-width: thin; }
+#document-body table { width: 100%; min-width: 100%; border-collapse: collapse; font-size: .82em; line-height: 1.7; }
+#document-body th, #document-body td { min-width: 105px; padding: 12px 14px; border-right: 1px solid var(--line); border-bottom: 1px solid var(--line); text-align: left; vertical-align: top; }
+#document-body th { background: var(--surface); font-weight: 600; color: #30333a; }
+#document-body tr > :last-child { border-right: 0; }
+#document-body tbody tr:last-child td { border-bottom: 0; }
+#document-body tbody tr:hover { background: #fafafb; }
+#document-body th:first-child, #document-body td:first-child { min-width: 95px; }
+#document-body input[type="checkbox"] { width: 14px; height: 14px; margin: 0 7px 0 0; vertical-align: middle; accent-color: var(--blue); }
+#document-body details { margin: 1.15em 0; padding: 12px 16px; border: 1px solid var(--line); border-radius: 3px; }
+#document-body summary { color: var(--muted); font-size: .85em; cursor: pointer; }
+#document-body details[open] summary { margin-bottom: 12px; }
+.architecture { margin: 1.8em 0; }
+.diagram-viewport { max-width: 100%; overflow-x: auto; border: 1px solid var(--line); scrollbar-width: thin; }
+.diagram-viewport > svg { display: block; min-width: 720px; width: 100%; height: auto; background: var(--paper); }
+.architecture > svg { display: block; width: 100%; height: auto; max-width: 100%; border: 1px solid var(--line); background: var(--paper); }
+.architecture figcaption { margin-top: 8px; color: var(--muted); font-size: .75em; }
+.architecture details { font-size: .85em; }
+mark.reader-match { padding: 1px 0; background: #dbe4ff; color: inherit; border-radius: 2px; scroll-margin-top: 120px; }
+mark.reader-match.is-current { background: var(--blue); color: white; box-shadow: 0 0 0 2px var(--blue); }
+.search-block-current { outline: 1px solid #b2c5f9; outline-offset: 6px; }
+
+.toc-panel { position: sticky; top: var(--header-height); max-height: calc(100dvh - var(--header-height)); overflow-y: auto; padding: 38px 20px 30px 19px; border-left: 1px solid var(--line); scrollbar-width: thin; }
+.toc-panel > h2, #toc > h2, .toc-title { margin: 0 0 15px; color: var(--muted); font-size: 11px; font-weight: 600; letter-spacing: .08em; }
+#toc ul, #toc ol { list-style: none; margin: 0; padding: 0; }
+#toc a { display: block; margin: 2px 0; padding: 5px 0 5px 12px; border-left: 2px solid transparent; color: #6c6f78; font-size: 12px; line-height: 1.65; text-decoration: none; overflow-wrap: anywhere; }
+#toc a:hover { color: var(--blue); }
+#toc a[aria-current="location"], #toc a.is-active { color: var(--blue); border-left-color: var(--blue); }
+#toc a[data-level="3"], #toc .toc-h3 a, #toc a.toc-h3, #toc li.level-3 a { padding-left: 24px; font-size: 11px; }
+.document-pager { display: flex; justify-content: space-between; gap: 20px; margin-top: 60px; padding-top: 24px; border-top: 1px solid var(--line); }
+.document-pager a { flex: 1; min-width: 0; text-decoration: none; font-size: 14px; font-weight: 600; overflow-wrap: anywhere; }
+.document-pager a:last-child { text-align: right; }
+.document-pager a:only-child { text-align: left; }
+.document-pager small, .document-pager span { display: block; margin-bottom: 4px; font-size: 11px; font-weight: 400; color: var(--muted); }
+.page-footer { max-width: 1536px; margin: auto; padding: 22px 32px; border-top: 1px solid var(--line); color: var(--muted); font-size: 11px; background: var(--surface); }
+.back-top { position: fixed; right: 24px; bottom: 24px; z-index: 20; min-height: 40px; border-color: var(--line); background: var(--paper); font-size: 12px; }
+.sidebar-scrim { display: none; }
+
+@media (min-width: 1600px) {
+  .layout { border-left: 1px solid var(--line); border-right: 1px solid var(--line); }
+  .topbar { padding-left: max(32px, calc((100vw - 1472px) / 2)); padding-right: max(32px, calc((100vw - 1472px) / 2)); }
+}
+@media (max-width: 1190px) {
+  .layout { grid-template-columns: 225px minmax(0, 1fr); }
+  .toc-panel { display: none; }
+  #main { padding-left: 42px; padding-right: 42px; }
+}
+@media (max-width: 800px) {
+  :root { --header-height: 68px; }
+  .topbar { gap: 12px; padding: 13px 18px; }
+  .brand { font-size: 15px; }
+  .brand small, .brand span { font-size: 9px; }
+  .mobile-menu { display: inline-flex; align-items: center; justify-content: center; flex-shrink: 0; min-height: 34px; padding: 6px 9px; font-size: 12px; }
+  .layout { display: block; }
+  .sidebar { position: fixed; z-index: 50; left: 0; top: var(--header-height); bottom: 0; width: min(300px, calc(100vw - 44px)); height: calc(100dvh - var(--header-height)); padding: 24px 18px; transform: translateX(-101%); visibility: hidden; transition: transform .18s ease, visibility .18s; border-right: 1px solid var(--line); }
+  .menu-open .sidebar { transform: translateX(0); visibility: visible; }
+  .sidebar-scrim:not([hidden]) { display: block; position: fixed; z-index: 40; inset: var(--header-height) 0 0; background: rgb(18 21 30 / 28%); }
+  .toolbar { gap: 3px; }
+  .toolbar .font-smaller, .toolbar .font-reset, .toolbar .font-larger { min-width: 29px; min-height: 32px; padding: 4px 5px; font-size: 12px; }
+  .toolbar .print-button { display: none; }
+  #main { padding: 33px 28px 40px; }
+  .document-header h1 { font-size: 32px; }
+  .eyebrow { margin-bottom: 13px; }
+  #document-body { line-height: 1.9; }
+  #document-body h2 { margin-top: 2.3em; font-size: 1.4em; }
+  .page-footer { padding: 18px 28px; }
+  .back-top { right: 16px; bottom: 16px; }
+}
+@media (max-width: 460px) {
+  .topbar { gap: 8px; padding-left: 12px; padding-right: 12px; }
+  .brand { font-size: 13px; letter-spacing: -.035em; }
+  .brand small, .brand span { max-width: 125px; overflow: hidden; white-space: nowrap; text-overflow: ellipsis; }
+  .mobile-menu { padding: 5px 7px; font-size: 11px; }
+  #main { padding: 29px 20px 36px; }
+  .document-header h1 { font-size: 28px; }
+  .doc-meta { gap: 4px 12px; font-size: 11px; }
+  .reader-tools { margin-bottom: 28px; }
+  #search-input { flex-basis: 110px; font-size: 12px; }
+  #search-next, #search-clear { padding-left: 8px; padding-right: 8px; }
+  #document-body { font-size: calc(var(--reader-font-size) - 1px); }
+  #document-body pre > code { padding-left: 13px; padding-right: 13px; }
+  #document-body th, #document-body td { padding: 10px 12px; }
+  .document-pager { gap: 18px; margin-top: 40px; }
+  .document-pager a { font-size: 12px; }
+  .page-footer { padding-left: 20px; padding-right: 20px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { scroll-behavior: auto !important; transition: none !important; }
+}
+@media print {
+  @page { margin: 18mm 16mm; }
+  :root { --reader-font-size: 10.5pt !important; }
+  body { min-width: 0; background: white; color: black; }
+  .topbar, .sidebar, .toc-panel, .reader-tools, .document-pager, .back-top, .sidebar-scrim, .skip-link, .copy-code { display: none !important; }
+  .layout { display: block; max-width: none; border: 0; }
+  #main { padding: 0; }
+  .document-header h1 { font-size: 24pt; }
+  .document-header { margin-bottom: 24pt; }
+  .doc-meta { font-size: 8pt; }
+  #document-body { font-size: 10.5pt; line-height: 1.65; }
+  #document-body h2, #document-body h3, #document-body h4 { break-after: avoid; }
+  #document-body h2 { margin-top: 20pt; padding-top: 12pt; font-size: 15pt; }
+  #document-body a { color: inherit; text-decoration: underline; }
+  #document-body pre { padding: 9pt; overflow: visible; background: #f7f7f8; }
+  #document-body pre > code { padding: 0; overflow: visible; white-space: pre-wrap; overflow-wrap: anywhere; font-size: 8pt; }
+  .table-scroll { overflow: visible; border-radius: 0; }
+  #document-body table { table-layout: fixed; font-size: 7.5pt; }
+  #document-body th, #document-body td, #document-body th:first-child, #document-body td:first-child { min-width: 0; padding: 5pt; overflow-wrap: anywhere; }
+  #document-body thead { display: table-header-group; }
+  #document-body tr, .architecture { break-inside: avoid; }
+  #document-body details:not([open]) { display: none; }
+  .architecture > svg { max-height: 230mm; }
+  mark.reader-match, mark.reader-match.is-current { color: inherit; background: transparent; box-shadow: none; }
+  .search-block-current { outline: none; }
+  .page-footer { margin-top: 24pt; padding: 10pt 0 0; font-size: 8pt; background: white; }
+}
+</style>
+</head>
+<body>
+<a class="skip-link" href="#main">跳到正文</a>
+<header class="topbar">
+  <button type="button" class="mobile-menu" aria-controls="doc-sidebar" aria-expanded="false">文档目录</button>
+  <a class="brand" href="../0001-douyin-ai-studio/00-%E6%96%87%E6%A1%A3%E5%AF%BC%E8%88%AA.html">AI 自媒体<span>开发文档与调研</span></a>
+  <div class="toolbar" aria-label="阅读设置">
+    <button type="button" class="font-smaller" aria-label="缩小正文字号" title="缩小字号">A−</button>
+    <button type="button" class="font-reset" aria-label="恢复默认正文字号" title="恢复字号">默认</button>
+    <button type="button" class="font-larger" aria-label="放大正文字号" title="放大字号">A+</button>
+    <button type="button" class="print-button">打印</button>
+  </div>
+</header>
+<div class="layout">
+  <aside id="doc-sidebar" class="sidebar" aria-label="全部文档"><section class="nav-group"><h2 class="group-title">开发文档</h2><nav class="doc-nav" aria-label="开发文档"><a data-document href="../0001-douyin-ai-studio/00-%E6%96%87%E6%A1%A3%E5%AF%BC%E8%88%AA.html">00 文档导航</a><a data-document href="../0001-douyin-ai-studio/01-%E4%BA%A7%E5%93%81%E9%9C%80%E6%B1%82%E6%96%87%E6%A1%A3.html">01 产品需求文档</a><a data-document href="../0001-douyin-ai-studio/02-%E6%8A%80%E6%9C%AF%E9%80%89%E5%9E%8B%E5%AF%B9%E6%AF%94.html">02 技术选型对比</a><a data-document href="../0001-douyin-ai-studio/03-%E6%80%BB%E4%BD%93%E6%8A%80%E6%9C%AF%E6%96%B9%E6%A1%88.html">03 总体技术方案</a><a data-document href="../0001-douyin-ai-studio/04-%E6%8E%A5%E5%8F%A3%E5%A5%91%E7%BA%A6%E4%B8%8E%E6%95%B0%E6%8D%AE%E5%AD%97%E5%85%B8.html">04 接口契约与数据字典</a><a data-document href="../0001-douyin-ai-studio/05-%E5%BC%80%E5%8F%91%E5%AE%9E%E6%96%BD%E8%AE%A1%E5%88%92.html">05 开发实施计划</a><a data-document href="../0001-douyin-ai-studio/06-%E9%AA%8C%E6%94%B6%E6%A0%87%E5%87%86%E4%B8%8E%E6%B5%8B%E8%AF%95%E6%96%B9%E6%A1%88.html">06 验收标准与测试方案</a><a data-document href="../0001-douyin-ai-studio/07-%E6%8A%80%E6%9C%AF%E9%80%89%E5%9E%8B%E4%B8%8E%E5%AE%9E%E6%B5%8B%E6%B5%81%E7%A8%8B.html">07 技术选型与实测流程</a><a data-document href="../0001-douyin-ai-studio/08-%E7%AB%AF%E5%88%B0%E7%AB%AF%E6%8A%80%E6%9C%AF%E6%B5%81%E7%A8%8B%E4%B8%8E%E6%A8%A1%E5%9E%8B%E9%80%89%E5%9E%8B%E5%9C%B0%E5%9B%BE.html">08 端到端技术流程与模型选型地图</a><a data-document href="../0001-douyin-ai-studio/09-%E6%A8%A1%E5%9E%8B%E9%80%89%E5%9E%8B%E5%86%B3%E7%AD%96%E4%B8%8E%E6%8E%A5%E5%85%A5%E6%96%B9%E6%A1%88.html">09 模型选型决策与接入方案</a><a data-document href="../0001-douyin-ai-studio/10-Agent%E7%BC%96%E6%8E%92%E9%80%89%E5%9E%8B%E4%B8%8E%E6%95%B4%E4%BD%93%E6%9E%B6%E6%9E%84.html">10 Agent编排选型与整体架构</a></nav></section><section class="nav-group"><h2 class="group-title">本轮选型试验</h2><nav class="doc-nav" aria-label="本轮选型试验"><a data-document href="../selection/01-%E6%95%B0%E5%AD%97%E4%BA%BA%E5%8F%A3%E6%92%AD/01-%E9%80%89%E5%9E%8B%E8%AF%95%E9%AA%8C%E6%96%B9%E6%A1%88.html">01 选型试验方案</a><a data-document href="../selection/01-%E6%95%B0%E5%AD%97%E4%BA%BA%E5%8F%A3%E6%92%AD/02-%E9%A6%96%E8%BD%AE%E5%AE%9E%E6%B5%8B%E7%BB%93%E6%9E%9C.html">02 首轮实测结果</a><a data-document href="../selection/01-%E6%95%B0%E5%AD%97%E4%BA%BA%E5%8F%A3%E6%92%AD/03-MuseTalk%E4%BA%91%E7%AB%AF%E9%83%A8%E7%BD%B2%E4%B8%8E%E8%AF%95%E9%AA%8C%E6%96%B9%E6%A1%88.html">03 MuseTalk云端部署与试验方案</a><a data-document href="../selection/01-%E6%95%B0%E5%AD%97%E4%BA%BA%E5%8F%A3%E6%92%AD/04-MuseTalk%E9%83%A8%E7%BD%B2%E4%B8%8E%E9%A6%96%E6%B5%8B%E7%BB%93%E6%9E%9C.html">04 MuseTalk部署与首测结果</a><a data-document href="../selection/01-%E6%95%B0%E5%AD%97%E4%BA%BA%E5%8F%A3%E6%92%AD/05-OmniHuman%E5%BC%80%E9%80%9A%E5%90%8E%E5%AE%9E%E6%B5%8B%E7%BB%93%E6%9E%9C.html">05 OmniHuman开通后实测结果</a><a data-document href="../selection/01-%E6%95%B0%E5%AD%97%E4%BA%BA%E5%8F%A3%E6%92%AD/06-%E4%BA%BA%E7%89%A9B%E8%A1%A8%E6%83%85%E5%8A%A8%E4%BD%9C%E6%94%B9%E5%96%84%E5%AE%9E%E6%B5%8B.html">06 人物B表情动作改善实测</a><a data-document href="../selection/01-%E6%95%B0%E5%AD%97%E4%BA%BA%E5%8F%A3%E6%92%AD/MuseTalk%E5%AE%98%E6%96%B9%E8%83%BD%E5%8A%9B%E6%A0%B8%E9%AA%8C.html">MuseTalk官方能力核验</a><a data-document href="../selection/01-%E6%95%B0%E5%AD%97%E4%BA%BA%E5%8F%A3%E6%92%AD/%E6%B5%8B%E8%AF%95%E7%B4%A0%E6%9D%90%E6%8E%A5%E5%8F%A3%E6%A0%B8%E9%AA%8C.html">测试素材接口核验</a><a data-document href="../selection/01-%E6%95%B0%E5%AD%97%E4%BA%BA%E5%8F%A3%E6%92%AD/%E7%81%AB%E5%B1%B1%E5%80%99%E9%80%89%E6%A0%B8%E9%AA%8C.html">火山候选核验</a><a data-document href="../selection/01-%E6%95%B0%E5%AD%97%E4%BA%BA%E5%8F%A3%E6%92%AD/%E9%98%BF%E9%87%8C%E5%80%99%E9%80%89%E6%A0%B8%E9%AA%8C.html">阿里候选核验</a></nav></section><section class="nav-group"><h2 class="group-title">已选模型接入核验</h2><nav class="doc-nav" aria-label="已选模型接入核验"><a data-document href="../selection/02-%E5%B7%B2%E9%80%89%E6%A8%A1%E5%9E%8B/%E5%AE%98%E6%96%B9%E6%96%87%E6%9C%AC%E4%B8%8E%E8%AF%AD%E9%9F%B3%E6%8E%A5%E5%8F%A3%E6%A0%B8%E9%AA%8C.html">官方文本与语音接口核验</a></nav></section><section class="nav-group"><h2 class="group-title">人物与音色候选</h2><nav class="doc-nav" aria-label="人物与音色候选"><a data-document href="../selection/03-%E4%BA%BA%E7%89%A9%E4%B8%8E%E9%9F%B3%E8%89%B2/01-%E9%A6%96%E8%BD%AE%E5%80%99%E9%80%89%E4%B8%8E%E9%80%89%E6%8B%A9%E8%AF%B4%E6%98%8E.html">01 首轮候选与选择说明</a><a data-document href="../selection/03-%E4%BA%BA%E7%89%A9%E4%B8%8E%E9%9F%B3%E8%89%B2/02-%E4%BA%BA%E7%89%A9B%E4%B8%8E%E9%9F%B3%E8%89%B23%E5%AE%9A%E7%89%88%E8%AE%B0%E5%BD%95.html">02 人物B与音色3定版记录</a></nav></section><section class="nav-group"><h2 class="group-title">调研资料</h2><nav class="doc-nav" aria-label="调研资料"><a data-document href="01-%E4%BA%A7%E5%93%81%E5%BD%A2%E6%80%81%E4%B8%8E%E6%8A%96%E9%9F%B3%E7%94%9F%E6%80%81.html">01 产品形态与抖音生态</a><a data-document href="02-%E4%BA%BA%E7%89%A9%E4%B8%80%E8%87%B4%E6%80%A7%E7%94%9F%E6%88%90.html">02 人物一致性生成</a><a data-document href="03-%E6%95%B0%E5%AD%97%E4%BA%BA%E5%8F%A3%E6%92%AD%E9%80%89%E5%9E%8B.html" aria-current="page">03 数字人口播选型</a><a data-document href="04-TTS%E9%9F%B3%E8%89%B2%E4%B8%8E%E5%86%85%E5%AE%B9%E7%94%9F%E6%88%90%E8%B4%A8%E6%A3%80.html">04 TTS音色与内容生成质检</a><a data-document href="05-%E8%A7%86%E9%A2%91%E5%90%8E%E5%A4%84%E7%90%86%E5%8F%91%E5%B8%83%E4%B8%8E%E5%90%88%E8%A7%84.html">05 视频后处理发布与合规</a><a data-document href="06-%E5%86%B3%E7%AD%96%E6%B1%87%E6%80%BB.html">06 决策汇总</a></nav></section>
+    <p class="sidebar-note">11 份开发文档<br>10 份本轮选型试验<br>1 份已选模型接入核验<br>2 份人物与音色候选<br>6 份调研资料</p>
+  </aside>
+  <main id="main" tabindex="-1">
+    <header class="document-header">
+      <p class="eyebrow">调研资料 / 03</p>
+      <h1>03 数字人口播选型调研</h1>
+      <div class="doc-meta"><span>v1.0</span><span>12 个章节</span><a href="03-%E6%95%B0%E5%AD%97%E4%BA%BA%E5%8F%A3%E6%92%AD%E9%80%89%E5%9E%8B.md">Markdown 原文</a></div>
+      <p class="source-notice">调研原始记录。当前范围和决策以最新开发文档及实测选型记录为准。</p>
+    </header>
+    <div class="reader-tools">
+      <form id="search-form" role="search">
+        <label class="sr-only" for="search-input">搜索本文</label>
+        <input id="search-input" type="search" placeholder="搜索本文，按 Enter 跳转" autocomplete="off">
+        <button id="search-next" type="submit">下一处</button>
+        <button id="search-clear" type="button">清除</button>
+        <span id="search-status" role="status" aria-live="polite"></span>
+      </form>
+    </div>
+    <article id="document-body">
+<blockquote>
+<p>版本：v1.0 ｜ 采集/核验日期：2026-09-21 ｜ 适用范围：AI 自媒体自动化系统（抖音知识/科普口播赛道）第 5 环节「数字人口播视频生成」
+调研纪律：价格、端点、限制均为 2026-09-21 实测抓取（curl 直连 / 浏览器渲染），逐条标注来源与 [实测]/[待核验]。<strong>价格一律以官网开账号后的实际计费为准</strong>，本文件中的数字仅用于量级预算与选型对比。
+上游：01 选题、02 主播形象生成（本文不涉及形象如何产生）；下游：04 TTS 音色（01~04 中「音频」作为本环节输入，音色选择不在本文范围）。</p>
+</blockquote>
+<hr/>
+<h2 id="0-结论速览l1l12">0. 结论速览（L1~L12）</h2>
+<div aria-label="可横向滚动的表格" class="table-scroll" tabindex="0"><table>
+<thead>
+<tr>
+<th>编号</th>
+<th>决策点</th>
+<th>推荐</th>
+<th>理由</th>
+<th>置信度</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>L1</td>
+<td>主方案（云端）</td>
+<td><strong>火山引擎·即梦AI「数字人快速模式」（OmniHuman）</strong></td>
+<td>单图+音频 → 真人级口播视频；官方 REST API（CVSubmitTask/CVGetResult）；按成功秒数计费 1 元/秒；大陆直连、人民币结算、支付宝/对公付款</td>
+<td>高（官方文档逐字段实测）</td>
+</tr>
+<tr>
+<td>L2</td>
+<td>性价比备选（云端国内）</td>
+<td><strong>阿里云百炼 wan2.2-s2v</strong></td>
+<td>480P 0.5 元/秒、720P 0.9 元/秒，比火山便宜 10%~50%；官方异步任务 API；单条音频须 &lt;20 秒、需分段拼接；分辨率上限 720P</td>
+<td>高（价格页实测）</td>
+</tr>
+<tr>
+<td>L3</td>
+<td>海外高质量备选</td>
+<td><strong>HeyGen API v3</strong></td>
+<td>支持「照片生成分身」「prompt 生成分身」「视频训练分身」三条路，API 端点已实测；API 计费需登录控制台核验；需海外网络+外币卡</td>
+<td>中（端点高、计费未核验）</td>
+</tr>
+<tr>
+<td>L4</td>
+<td>最便宜海外唇形</td>
+<td><strong>sync.so lipsync-1.9（$0.025/秒）</strong></td>
+<td>按时长订阅+按秒计费，可换嘴型；但要求「基础视频」（video-to-video），需先用静态主播资产做基础视频；Creator 档去水印</td>
+<td>高（价格页实测）</td>
+</tr>
+<tr>
+<td>L5</td>
+<td>零成本保底</td>
+<td><strong>本地 MuseTalk（fp16）</strong></td>
+<td>唯一官方声明可在 RTX 3050 Ti 4GB 上运行的方案（8 秒视频约 5 分钟）；MIT 可商用；但只重绘嘴部区域（256），需自行合成上屏</td>
+<td>高（README 原文实测）</td>
+</tr>
+<tr>
+<td>L6</td>
+<td>现有 deform 兜底</td>
+<td><strong>废除其「发布级」地位</strong>，仅保留为单测/离线 mock</td>
+<td>读 RMS 拉伸嘴部+椭圆口腔=不是数字人，发布必然被平台/观众识别为低质</td>
+<td>高</td>
+</tr>
+<tr>
+<td>L7</td>
+<td>文生视频</td>
+<td><strong>禁止进入管线</strong>（Sora/可灵/即梦 T2V/万相 t2v 等一律排除）</td>
+<td>与「人物资产+音频驱动」路线冲突；本文件所有入选方案均为「图/视频+音频→视频」</td>
+<td>高</td>
+</tr>
+<tr>
+<td>L8</td>
+<td>本地自研开源路线</td>
+<td><strong>不作为主线</strong>：4GB 显存下仅 MuseTalk 可用；Duix-Avatar 需 RTX 4070(12GB)+32GB 内存；LatentSync/EchoMimic/InfiniteTalk/Hallo 均显著超 4GB，且部分禁止商用</td>
+<td>硬件现实决议</td>
+<td>高</td>
+</tr>
+<tr>
+<td>L9</td>
+<td>训练分身 vs 单图驱动</td>
+<td><strong>纯 AI 虚拟人走「单图驱动」或「prompt 生成分身」</strong>；Tavus/Synthesia 的真人分身需真人授权视频，AI 人脸大概率过不了授权/审核</td>
+<td>合规+可行性</td>
+<td>中高</td>
+</tr>
+<tr>
+<td>L10</td>
+<td>质量验收</td>
+<td>落地 8 项可自动化检测（见第 6 节）：音画时长一致、口型-音频相关性、面部运动幅度、静止帧、矩形伪影、身份一致性、分辨率、水印</td>
+<td>防风控/防低质</td>
+<td>中</td>
+</tr>
+<tr>
+<td>L11</td>
+<td>成本熔断</td>
+<td><strong>必须做</strong>：按秒计费模式下无熔断会在故障时烧钱</td>
+<td>见第 5.5 节</td>
+<td>高</td>
+</tr>
+<tr>
+<td>L12</td>
+<td>合规</td>
+<td>深度合成标识（显式+隐式）、抖音「AI 生成内容」声明、虚拟形象权属留痕</td>
+<td>见第 8 节</td>
+<td>高</td>
+</tr>
+</tbody>
+</table></div>
+<hr/>
+<h2 id="1-需求拆解什么是合格的口播视频">1. 需求拆解：什么是「合格的口播视频」</h2>
+<h3 id="11-技术定义本项目的验收对象">1.1 技术定义（本项目的验收对象）</h3>
+<p>输入：<strong>固定虚拟主播资产</strong>（单张人物图 / 一段基础视频 / 已训练分身 ID）+ <strong>TTS 音频</strong>（wav/mp3）。
+输出：<strong>MP4，人物面对镜头口播</strong>，具备：</p>
+<ol>
+<li>口型与音频音素对齐（唇形同步，Lip Sync）；</li>
+<li>面部表情有起伏（眨眼、眉毛、嘴角，非贴图）；</li>
+<li>头部有轻微自然运动（点头/微转，幅度可控）；</li>
+<li>画面为半身/全身真人级写实质感（有脖子、肩膀、身体，<strong>不是被裁到下巴的头像</strong>）；</li>
+<li>无矩形遮罩/几何色块等程序化伪影。</li>
+</ol>
+<h3 id="12-现有-demo-的差距来自现状实测描述">1.2 现有 demo 的差距（来自现状实测描述）</h3>
+<p>当前成片：静态头像（裁到下巴）贴上屏 + 下半屏几何色块 + 矩形嘴部遮罩。该形态实质是「图片+程序化嘴形形变」，<strong>不属于数字人口播</strong>，无法通过 1.1 的第 1/2/3/4/5 条。本调研的目标就是给出能真正解决第 1~5 条的接入方案。</p>
+<h3 id="13-口径界定避免与其它文档重叠">1.3 口径界定（避免与其它文档重叠）</h3>
+<div aria-label="可横向滚动的表格" class="table-scroll" tabindex="0"><table>
+<thead>
+<tr>
+<th>事项</th>
+<th>归属</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>主播形象怎么生成（文生图/定妆/资产库）</td>
+<td>02 文档</td>
+</tr>
+<tr>
+<td>TTS 音色、情感参数怎么来</td>
+<td>04 文档</td>
+</tr>
+<tr>
+<td><strong>人物资产 + 音频 → 口播视频的生成/驱动/合成</strong></td>
+<td><strong>本文</strong></td>
+</tr>
+<tr>
+<td>后处理、字幕、发布</td>
+<td>05/06 文档</td>
+</tr>
+</tbody>
+</table></div>
+<hr/>
+<h2 id="2-云端-api-全景对比">2. 云端 API 全景对比</h2>
+<blockquote>
+<p>采集方式：官方文档站/定价页 curl 直连 + 浏览器渲染（JS 站）；本章所有「价格」「端点」均标注采集日期 2026-09-21。海外服务的大陆可用性受本地网络影响，测试环境为大陆家庭宽带。</p>
+</blockquote>
+<h3 id="21-总表">2.1 总表</h3>
+<div aria-label="可横向滚动的表格" class="table-scroll" tabindex="0"><table>
+<thead>
+<tr>
+<th>服务</th>
+<th>自定义形象</th>
+<th>输入形态</th>
+<th>输出/时长</th>
+<th>可编程 REST API</th>
+<th>价格（换算后）</th>
+<th>大陆访问/支付</th>
+<th>水印</th>
+<th>商用/抖音</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>火山引擎 即梦AI·数字人快速模式（OmniHuman）</strong></td>
+<td>支持：单张人物图（任意画幅，含动漫/卡通泛化）</td>
+<td>图片URL+音频URL</td>
+<td>视频；分辨率/时长上限未在计费页说明 [待核验]；单次调用出 1 个视频</td>
+<td>✅ <code>visual.volcengineapi.com</code>：POST <code>Action=CVSubmitTask&amp;Version=2022-08-31</code>，req_key=<code>jimeng_realman_avatar_picture_omni_v2</code>；GET <code>Action=CVGetResult</code> 轮询 [实测]</td>
+<td><strong>1 元/秒 = 60 元/分钟</strong>（按时长，成功才计费）[实测]</td>
+<td>✅ 大陆直连；实名+开通视觉智能；人民币/支付宝/对公</td>
+<td>无（官方能力）</td>
+<td>需以火山官方条款为准；生成内容建议加 AI 标识</td>
+</tr>
+<tr>
+<td><strong>阿里云百炼 wan2.2-s2v（万相数字人）</strong></td>
+<td>支持：单张人物图（+ 前置 detect 校验）</td>
+<td>图片URL+音频URL</td>
+<td>视频；<strong>单条音频须&lt;20s</strong>，更长需切段拼接 [实测]；计费页仅列 480P/720P</td>
+<td>✅ 异步任务：POST <code>https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services/aigc/image2video/video-synthesis</code>；GET <code>/api/v1/tasks/{task_id}</code> [实测]</td>
+<td><strong>480P 0.5 元/秒（30 元/分钟）；720P 0.9 元/秒（54 元/分钟）</strong>；免费额度 100 秒；detect 0.004 元/张（200 张免费）[实测]</td>
+<td>✅ 大陆直连；阿里云账号；人民币</td>
+<td>无</td>
+<td>需遵守百炼/万相服务条款</td>
+</tr>
+<tr>
+<td>阿里云·虚拟数字人开放平台（avatar 2022-01-30）</td>
+<td>需定制形象（<code>obtain-dvh-information</code>）</td>
+<td>文本任务 / <strong>音频任务</strong>（SubmitAudioTo2DAvatarVideoTask）</td>
+<td>2D 数字人视频；GetVideoTaskInfo 轮询</td>
+<td>✅ 老牌 OpenAPI（文本/音频合成 2D 数字人） [实测：文档与接口名]</td>
+<td>形象定制+合成费用；金额未核验（[待核验]）</td>
+<td>✅ 大陆直连</td>
+<td>未核验</td>
+<td>需商务条款</td>
+</tr>
+<tr>
+<td>阿里云·灵眸 LingMou（2025-05-27）</td>
+<td>播报模板+数字人</td>
+<td>模板+变量</td>
+<td>播报视频</td>
+<td>✅ <code>POST /api/v1/amp/customer/broadcast/video/createFromTemplate</code> [实测]</td>
+<td>未核验</td>
+<td>✅</td>
+<td>参数含 <code>watermark</code> [实测]</td>
+<td>需商务条款</td>
+</tr>
+<tr>
+<td>腾讯云·智能数智人</td>
+<td>2D/3D 形象定制（摄影棚录制、3 分钟视频训练、换脸）</td>
+<td>定制形象+文本/音频</td>
+<td>视频合成/直播/交互；「云端并发+API 对接」</td>
+<td>✅ 有 API 中心与 SDK（云渲染/端渲染两模式）[实测：购买指南]</td>
+<td>复杂：产品页展示 <strong>140 元/天、1200 元/小时、20 元/分钟</strong>；购买指南含 <strong>5,000 元/10 小时</strong> 等档；形象定制 2,500→1,000 元/个（按量）等 [实测样本，口径需销售确认]</td>
+<td>✅ 大陆直连</td>
+<td>未核验</td>
+<td>需商务条款</td>
+</tr>
+<tr>
+<td><strong>HeyGen</strong></td>
+<td>支持：视频训练 / <strong>单张照片</strong> / <strong>prompt 生成</strong> 分身（官方明示四种方式）</td>
+<td>图片+音频（API v3）或 文本</td>
+<td>视频；Avatar IV/V 引擎；免费档 3 条/月</td>
+<td>✅ <code>POST https://api.heygen.com/v3/avatars</code>（建分身）、<code>GET /v3/avatars/looks/{id}</code>（轮询）、<code>POST /v3/videos</code>（出片）[实测]</td>
+<td>网页档：Free $0、Creator $29/mo（600 credits）、Pro $49/mo（1000 credits）、Business $149/mo；<strong>API 计费页需登录</strong> [未核验]</td>
+<td>❌ 需科学网络；外币卡</td>
+<td>免费/低档有水印（去水印需付费档）[部分待核验]</td>
+<td>平台条款允许商用（目标受众含营销）[待核验细节]</td>
+</tr>
+<tr>
+<td>D-ID</td>
+<td>支持单图（talks 用 source_url 图片）+ Express avatar（视频创建）</td>
+<td>图片+文本/音频；audio ≤15MB、talks≤10min、clips≤5min</td>
+<td>视频；分钟按 15 秒向上取整</td>
+<td>✅ <code>POST https://api.d-id.com/talks</code>、<code>/clips</code>（视频+音频）、V4 表达型视频、<code>/credits</code> [实测端点]</td>
+<td><strong>API 价格页为 JS，未核验</strong>；已知 Trial/Lite 带水印（FAQ 原文）</td>
+<td>❌ 需科学网络；外币卡</td>
+<td>Trial/Lite 有水印</td>
+<td>商用需按其条款</td>
+</tr>
+<tr>
+<td>Synthesia</td>
+<td>有限：企业版「无限个人形象」；个人形象需真人录制（Studio Express-1 为付费加项 $1,000/年）</td>
+<td>文本脚本为主（scriptText）</td>
+<td>视频；生成耗时 3-5 分钟/条</td>
+<td>✅ <code>POST https://api.synthesia.io/v2/videos</code>（Legacy v2 key）；轮询 Retrieve video [实测]</td>
+<td>Starter <strong>$29/mo（约 10 分钟/月）</strong>；Creator <strong>$89/mo（约 30 分钟/月）</strong>；企业版不限期 [实测价格页]</td>
+<td>❌ 需科学网络；外币卡</td>
+<td>测试模式视频带水印（免费不计额度）[实测]</td>
+<td>需按其条款；AI 生成虚拟人自定义形象支持不明确</td>
+</tr>
+<tr>
+<td>Tavus</td>
+<td>需真人 2 分钟视频训练 replica（$65/$40 每条）</td>
+<td>文本脚本（视频生成）/实时对话</td>
+<td>视频生成 $1/分钟（加量 $0.90/分钟）；对话 $0.37/$0.32 每分钟</td>
+<td>✅ REST API（openapi.yaml 公开）；faces/voices/pals/conversations [实测]</td>
+<td>档位 $59/mo（3 次训练+100 分钟对话）至 $397/mo；<strong>视频生成加量 $1/分钟</strong> [实测价格页]</td>
+<td>❌ 需科学网络；外币卡</td>
+<td>付费档无 Tavus 水印 [实测]</td>
+<td>需按其条款；真人授权要求严格</td>
+</tr>
+<tr>
+<td><strong>sync.so（Sync Labs）</strong></td>
+<td>不需要形象库：对任意视频换嘴型（video-to-video）</td>
+<td><strong>一段视频 + 音频</strong>（MP4+WAV/MP3，URL 或资产上传）</td>
+<td>时长上限随档位 1/5/10/30 分钟；并发 1/3/6/15</td>
+<td>✅ <code>POST /v2/generate</code>、<code>GET /v2/generate/{id}</code>、<code>/v2/models</code>、<code>/v2/assets</code>、<code>/v2/batch</code> [实测 OpenAPI]</td>
+<td>订阅 $5~$249/mo + 按秒：<strong>lipsync-1.9 $0.025/s（≈$1.5/分钟）</strong>、lipsync-2 $0.05/s、lipsync-2-pro $0.083/s、sync-3 $0.133/s、react-1 $0.167/s [实测]</td>
+<td>❌ 需科学网络；外币卡</td>
+<td>Hobbyist 有水印；Creator+ 无</td>
+<td>付费档可商用 [待核验细则]</td>
+</tr>
+<tr>
+<td>Argil</td>
+<td>支持基于自有形象</td>
+<td>未核验（网页以文本驱动为主）</td>
+<td>未核验</td>
+<td>API 存在性未核验（官网被 Cloudflare 挡）</td>
+<td><strong>未核验</strong></td>
+<td>❌ 需科学网络</td>
+<td>未核验</td>
+<td>未核验</td>
+</tr>
+<tr>
+<td>腾讯智影（zhiying.tencent.com）</td>
+<td>网页端数字人播报</td>
+<td>网页操作</td>
+<td>网页成品</td>
+<td><strong>未核验（本机网络不可达 000）</strong>；无公开 API 证据</td>
+<td>未核验</td>
+<td>✅（网页）</td>
+<td>未核验</td>
+<td>未核验</td>
+</tr>
+<tr>
+<td>硅基智能（guiji.ai）</td>
+<td>克隆/定制</td>
+<td>未核验（站点不可达）</td>
+<td>未核验</td>
+<td>国际站 duix.com 有 SDK/API 与 docs.duix.com；细节未核验</td>
+<td>未核验（duix.com/pricing 为 JS）</td>
+<td>⚠️ guiji.ai 本机不可达；duix.com 可达</td>
+<td>未核验</td>
+<td>未核验</td>
+</tr>
+<tr>
+<td>魔珐科技·有言（youyan3d.com）</td>
+<td>3D 数字人形象在线编辑</td>
+<td><strong>文本/PPT → 视频</strong>（自带语音）</td>
+<td>mp4/mov/webm；720P/1080P/4K</td>
+<td>✅ 有 API（官网 /api 页明示：文本生成视频 API、PPT 生成视频 API、集成登录 API）[实测]</td>
+<td><strong>联系销售报价</strong>（未核验）</td>
+<td>✅ 大陆直连</td>
+<td>未核验</td>
+<td>企业方案</td>
+</tr>
+<tr>
+<td>出门问问·奇妙元</td>
+<td>支持创建自有数字形象</td>
+<td>网页为主（视频/直播）</td>
+<td>未核验</td>
+<td><strong>未核验</strong></td>
+<td>未核验</td>
+<td>✅ 大陆（mobvoi.com/digital-human 为登录应用）</td>
+<td>未核验</td>
+<td>未核验</td>
+</tr>
+<tr>
+<td>百度曦灵/数字员工（cloud.baidu.com/doc/AI_DH）</td>
+<td>支持（含真人克隆、3D 定制）</td>
+<td>未核验</td>
+<td>未核验</td>
+<td>✅ 存在「组件开放平台」（原子能力组件化输出）[实测：文档与官网]</td>
+<td><strong>未核验（销售报价）</strong></td>
+<td>✅ 大陆直连</td>
+<td>未核验</td>
+<td>企业方案</td>
+</tr>
+<tr>
+<td>讯飞/商汤如影等</td>
+<td>未纳入本轮核验</td>
+<td>-</td>
+<td>-</td>
+<td>-</td>
+<td>-</td>
+<td>-</td>
+<td>-</td>
+<td>-</td>
+</tr>
+</tbody>
+</table></div>
+<h3 id="22-训练数字人分身vs单图驱动纯-ai-虚拟人适用性">2.2 「训练数字人分身」vs「单图驱动」（纯 AI 虚拟人适用性）</h3>
+<div aria-label="可横向滚动的表格" class="table-scroll" tabindex="0"><table>
+<thead>
+<tr>
+<th>维度</th>
+<th>训练分身（Video/Replica Avatar）</th>
+<th>单图驱动（Photo/Image + Audio）</th>
+<th>Prompt 生成分身</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>代表服务</td>
+<td>HeyGen（avatar-from-video）、Tavus（2 分钟真人视频训练，$65/$40 每条）、D-ID Express Avatar、腾讯数智人（摄影棚录制/3 分钟视频训练）、Synthesia 个人形象（Express-1 加项 $1,000/年）</td>
+<td>火山 OmniHuman、阿里 wan2.2-s2v、D-ID talks、HeyGen avatar-from-photo</td>
+<td>HeyGen avatar-from-prompt（Avatar V/IV/III 引擎）</td>
+</tr>
+<tr>
+<td>所需素材</td>
+<td>真人出镜视频（约 2 分钟起）+ 授权/同意书</td>
+<td>单张人物图（AI 生成即可）</td>
+<td>文本描述 +（可选）参考图</td>
+</tr>
+<tr>
+<td>单条成本</td>
+<td>训练一次性费用（Tavus $65/$40；国内定制数千元级起）</td>
+<td>0（只付生成费）</td>
+<td>0</td>
+</tr>
+<tr>
+<td>交付时间</td>
+<td>训练 10 分钟~数天</td>
+<td>即时（单条数十秒~数分钟）</td>
+<td>建分身一次性，之后即时</td>
+</tr>
+<tr>
+<td>质量/一致性</td>
+<td>最高（手势、长视频稳定性最好）</td>
+<td>高（口型+表情+头部，视服务上限）</td>
+<td>高（服务端引擎渲染，可控性中等）</td>
+</tr>
+<tr>
+<td>对纯 AI 虚拟人可行性</td>
+<td><strong>低</strong>：多数平台要求真人授权/同意书与人脸核验，AI 生成人脸大概率被拒或在审核环节卡住</td>
+<td><strong>高</strong>：只要求图片合规</td>
+<td><strong>高</strong>（HeyGen 官方明示支持）</td>
+</tr>
+<tr>
+<td>主要坑</td>
+<td>授权视频必须真人录制；形象被平台绑定（迁移成本高）</td>
+<td>上下限由单张图质量决定（见 02 文档）；长视频偶发漂移</td>
+<td>形象可控性弱，需多轮抽卡，风格受引擎限制</td>
+</tr>
+</tbody>
+</table></div>
+<p><strong>结论</strong>：本项目（全 AI 生成虚拟人）走「<strong>单图驱动为主 + prompt 分身（HeyGen）为辅</strong>」；「训练分身」仅在用户未来引入真人出镜/IP 授权时才启用。另注意：<code>Tavus</code> 的 replica 训练把「2 分钟真人视频」写死在产品设计里，与本项目路线冲突，只保留其视频生成 API 作为海外备选。</p>
+<h3 id="23-关键结论对选型有直接影响">2.3 关键结论（对选型有直接影响）</h3>
+<ol>
+<li><strong>可编程性</strong>：国内「即梦AI 数字人」「阿里 wan2.2-s2v」「阿里 avatar/灵眸」「腾讯云数智人」「百度数字员工组件开放平台」「魔珐有言」均有 REST API；<strong>腾讯智影、出门问问奇妙元以网页产品为主，未发现公开 API</strong>（智影本机不可达，待核验）。</li>
+<li><strong>「人物资产+音频」形态</strong>：火山 OmniHuman 与阿里 wan2.2-s2v 是标准「单图+音频」；sync.so/D-ID clips 是「视频+音频」；D-ID talks 是「图+文本/音频」；Synthesia/有言是「文本/PPT」驱动（与本项目『自己出 TTS 音频』的耦合度较低）。</li>
+<li><strong>价格量级（每分钟成片）</strong>：阿里 480P 30 元 &lt; 阿里 720P 54 元 &lt; 火山 60 元；海外 sync.so lipsync-1.9 约 $1.5/分钟（≈10 元）最低，但需要基础视频且大陆网络+外币卡。</li>
+<li><strong>【重要坑】阿里 wan2.2-s2v 单条音频必须 &lt;20 秒</strong>（官方原文：超过 20 秒任务报错；需切分音频分段生成再拼接）。火山未见到该限制说明 [待核验]，但按「秒数计费」推测时长上限在几分钟级，落地前必须试跑确认。</li>
+<li><strong>水印</strong>：Synthesia「测试模式」、D-ID Trial/Lite、sync.so Hobbyist 档、HeyGen 免费档均有水印；生产必须落在<strong>付费去水印档位</strong>。</li>
+<li><strong>大陆可用性</strong>：国内四家（火山/阿里/腾讯/百度）均大陆直连+人民币；海外四家（HeyGen/D-ID/Synthesia/Tavus/sync.so）均需科学网络+外币卡，在自动化管线里属于「低可靠支线」，只做备选。</li>
+</ol>
+<hr/>
+<h2 id="3-开源方案-4gb-显存可行性裁决表">3. 开源方案 4GB 显存可行性裁决表</h2>
+<blockquote>
+<p>数据来源：GitHub API + shields.io badge（stars/license/最近提交，2026-09-21 实测）+ 各仓库 README 原文抓取。显存需求除注明「官方声明」外均为社区参考值 [待核验]。</p>
+</blockquote>
+<div aria-label="可横向滚动的表格" class="table-scroll" tabindex="0"><table>
+<thead>
+<tr>
+<th>项目</th>
+<th>Stars</th>
+<th>许可证（可否商用）</th>
+<th>最近提交</th>
+<th>4GB 能否跑</th>
+<th>出图质量</th>
+<th>速度参考</th>
+<th>裁决</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>MuseTalk (TMElyralab)</strong></td>
+<td>6.6k</td>
+<td><strong>MIT（可商用）</strong>[实测 LICENSE]</td>
+<td>2025-09</td>
+<td><strong>能</strong>：README 原文「tested on Windows with RTX 3050 Ti Laptop GPU <strong>4GB VRAM</strong>，fp16 下 8 秒视频约 5 分钟」[实测]</td>
+<td>嘴部区域重绘（256 级），全脸/全屏需自行合成；近景可用</td>
+<td>1 分钟成片 ≈ 35~40 分钟推理</td>
+<td><strong>保底方案（唯一 4GB 可用）</strong></td>
+</tr>
+<tr>
+<td>Wav2Lip</td>
+<td>13k</td>
+<td><strong>无 LICENSE；README 明示「仅限研究/学术/个人，商业使用严格禁止」</strong>（LRS2 数据集限制）[实测]</td>
+<td>2025-06</td>
+<td>能（推理轻量）</td>
+<td>旧、嘴部模糊（96×96 区域），有明显方块感</td>
+<td>快</td>
+<td><strong>禁止用于商用发布</strong>（除非买 Sync Labs 商业版）</td>
+</tr>
+<tr>
+<td>Wav2Lip-HD / SD-Wav2Lip-UHQ 等社区增强</td>
+<td>1.4k（numz/sd-wav2lip-uhq）</td>
+<td>Apache-2.0（但底层 Wav2Lip 权重仍非商用）</td>
+<td>2024-06</td>
+<td>能</td>
+<td>比原版清晰，仍非真人级</td>
+<td>中</td>
+<td>仅实验</td>
+</tr>
+<tr>
+<td>SadTalker</td>
+<td>14.1k</td>
+<td><strong>Apache-2.0（README 明示已移除非商用限制）</strong>[实测]</td>
+<td>2024-06（停滞）</td>
+<td>边界可行（fp16 推理约 3~4GB [待核验]）</td>
+<td>全头驱动、单图+音频；画质偏软、偶发扭曲</td>
+<td>慢（GPU 数分钟/10 秒级）</td>
+<td>备选实验（非主线）</td>
+</tr>
+<tr>
+<td>LivePortrait (快手)</td>
+<td>19k</td>
+<td>MIT（代码）[实测 LICENSE]；模型权重条款 [待核验]</td>
+<td>2026-06</td>
+<td>能（推理约 2~6GB [待核验]）</td>
+<td>表情/头部驱动质量高</td>
+<td>快</td>
+<td><strong>非音频驱动</strong>：需另配 audio→motion，链路复杂</td>
+</tr>
+<tr>
+<td>LatentSync (字节)</td>
+<td>6.1k</td>
+<td>Apache-2.0</td>
+<td>2025-06</td>
+<td><strong>不能</strong>（README 主要为训练显存 20~55GB；推理显存未明示但远超 4GB [待核验]）</td>
+<td>唇形质量高（SD 系）</td>
+<td>慢</td>
+<td>4GB 下不可行</td>
+</tr>
+<tr>
+<td>EchoMimic v1/v2/v3 (蚂蚁)</td>
+<td>4.3k/4.7k/1.1k</td>
+<td>Apache-2.0（README：<strong>仅限学术研究</strong>）[实测]</td>
+<td>2026-04 / 2026-02 / 2026-03</td>
+<td>不能（扩散模型，远超 4GB）</td>
+<td>半身/全身动作+表情，质量高</td>
+<td>慢</td>
+<td>不可行（且授权限制）</td>
+</tr>
+<tr>
+<td>Hallo / Hallo2 (复旦)</td>
+<td>8.7k/3.7k</td>
+<td>MIT（代码）；依赖 SD1.5 等权重</td>
+<td>2024-09/2025-02</td>
+<td>不能（扩散，约 12GB+ [待核验]）</td>
+<td>高质量，长视频（Hallo2）</td>
+<td>很慢</td>
+<td>不可行</td>
+</tr>
+<tr>
+<td>InfiniteTalk / MultiTalk (MeiGen)</td>
+<td>7.9k/3k</td>
+<td>Apache-2.0；官方提供 low-VRAM 模式与量化</td>
+<td>2026-05</td>
+<td>不能（实际 ≥12GB 起 [待核验]）</td>
+<td>长视频、多人对话，质量高</td>
+<td>很慢</td>
+<td>不可行</td>
+</tr>
+<tr>
+<td>Duix-Avatar（硅基智能开源）</td>
+<td>16k</td>
+<td>免费商用（超过 10 万用户/年营收 1000 万美元需签商用协议）[实测 README]</td>
+<td>2026-04</td>
+<td><strong>不能</strong>：需 <strong>RTX 4070（12GB）+ 32GB 内存 + Docker + 100GB 磁盘</strong>（README 原文）[实测]</td>
+<td>高（商用级克隆）</td>
+<td>中</td>
+<td>4GB 不可行</td>
+</tr>
+<tr>
+<td>Ultralight-Digital-Human</td>
+<td>2.6k</td>
+<td>无 LICENSE（默认保留权利）[实测]</td>
+<td>2026-07</td>
+<td>能（移动端实时）</td>
+<td>低（轻量小模型）</td>
+<td>快</td>
+<td>不可商用</td>
+</tr>
+<tr>
+<td>Sonic / HunyuanVideo-Avatar / FLOAT</td>
+<td>3.3k/2.2k/0.5k</td>
+<td>均为 NOASSERTION（自定义限制，非标准 OSI）[实测]</td>
+<td>2026-01/2025-12/2025-11</td>
+<td>不能（大模型）</td>
+<td>高</td>
+<td>慢</td>
+<td>不可行</td>
+</tr>
+<tr>
+<td>Linly-Talker</td>
+<td>3.5k</td>
+<td>MIT（集成框架）</td>
+<td>2026-02</td>
+<td>取决于后端</td>
+<td>集成 MuseTalk/SadTalker 等</td>
+<td>-</td>
+<td>可参考其集成方式</td>
+</tr>
+<tr>
+<td>LiveTalking (lipku)</td>
+<td>9.6k</td>
+<td>Apache-2.0</td>
+<td>2026-09</td>
+<td>实时流媒体方案（集成 MuseTalk）</td>
+<td>直播向</td>
+<td>实时</td>
+<td>直播场景参考，短视频不适用</td>
+</tr>
+<tr>
+<td>facefusion</td>
+<td>30k</td>
+<td>自定义许可（非标准）</td>
+<td>2026-09</td>
+<td>能（执行轻）</td>
+<td>换脸+唇形（用 Wav2Lip 模型）</td>
+<td>快</td>
+<td>唇形部分同 Wav2Lip 授权限制</td>
+</tr>
+</tbody>
+</table></div>
+<p><strong>裁决（4GB 显存）</strong>：</p>
+<ul>
+<li>唯一「官方声明可在 RTX 3050 Ti 4GB 运行」的开源唇形方案是 <strong>MuseTalk（MIT，可商用）</strong> → 作为零成本保底。</li>
+<li>其余高质量方案（LatentSync、EchoMimic、Hallo、InfiniteTalk、Duix-Avatar）在 4GB 上<strong>不可行</strong>，不要浪费工期尝试。</li>
+<li>Wav2Lip 及其衍生（含 Wav2Lip-HD）<strong>开源版一律禁止商用</strong>（README 原文），pass。</li>
+<li>任何「本地高质量数字人」的幻想需要 &gt;=12GB 显存或云 GPU 租用；若未来升级硬件，优先复评 Duix-Avatar（免费商用、Docker 一键）与 InfiniteTalk。</li>
+</ul>
+<hr/>
+<h2 id="4-推荐方案主-备-降级链">4. 推荐方案：主 + 备 + 降级链</h2>
+<h3 id="41-推荐矩阵明确到服务名与接入形态">4.1 推荐矩阵（明确到服务名与接入形态）</h3>
+<div aria-label="可横向滚动的表格" class="table-scroll" tabindex="0"><table>
+<thead>
+<tr>
+<th>层级</th>
+<th>服务</th>
+<th>接入形态</th>
+<th>用途</th>
+<th>备注</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>主</strong></td>
+<td>火山引擎·即梦AI 数字人快速模式（OmniHuman）</td>
+<td><code>visual.volcengineapi.com</code> 签名 API（AK/SK）+ 对象存储托管图片/音频生成公网 URL</td>
+<td>日常成片</td>
+<td>1 元/秒；并发=1（串行排队）；建议做并发队列</td>
+</tr>
+<tr>
+<td><strong>备 1（省钱）</strong></td>
+<td>阿里云百炼 wan2.2-s2v</td>
+<td>百炼异步任务 API（image+audio→video），&lt;20s 分段+拼接</td>
+<td>预算敏感期；可把长稿切成 15s 段生成再 ffmpeg 拼接</td>
+<td>720P 0.9 元/秒；480P 0.5 元/秒</td>
+</tr>
+<tr>
+<td><strong>备 2（海外/质量）</strong></td>
+<td>HeyGen API v3</td>
+<td><code>/v3/avatars</code>（prompt/photo 建立分身）→ <code>/v3/videos</code></td>
+<td>火山/阿里不可用或需要英文/海外受众时</td>
+<td>需科学网络+外币卡；计费待核验</td>
+</tr>
+<tr>
+<td><strong>备 3（换嘴型）</strong></td>
+<td>sync.so <code>lipsync-1.9</code>/<code>lipsync-2</code></td>
+<td><code>/v2/generate</code>（video+audio）</td>
+<td>当已有「基础视频资产」（比如 02 文档产出的主播形象视频）时补充嘴型</td>
+<td>$0.025~$0.05/秒；需先产出基础视频</td>
+</tr>
+<tr>
+<td><strong>保底（零成本）</strong></td>
+<td>本地 MuseTalk（fp16）</td>
+<td>本地推理服务（子进程/HTTP 微服务）+ 合成器</td>
+<td>API 全线不可用（断网/欠费/封控）时的最后防线</td>
+<td>1 分钟成片≈35 分钟；嘴部 256 区域合成需实现；先跑通再谈质量</td>
+</tr>
+<tr>
+<td><strong>禁止</strong></td>
+<td>deform（现兜底）、Wav2Lip 开源版、一切 T2V</td>
+<td>-</td>
+<td>-</td>
+<td>deform 仅保留单测；T2V 违反路线决策</td>
+</tr>
+</tbody>
+</table></div>
+<h3 id="42-降级链failover-chain按顺序降级">4.2 降级链（failover chain，按顺序降级）</h3>
+<pre><code>火山 OmniHuman（1元/秒）
+  ├─(超预算)──&gt; 阿里 wan2.2-s2v 480P/720P（0.5/0.9元/秒）
+  ├─(国内服务不可用)──&gt; HeyGen API（需网络+卡）
+  ├─(仅剩基础视频能力)──&gt; sync.so lipsync-1.9
+  └─(全部不可用)──&gt; 本地 MuseTalk 保底（限 1 条/天产能）
+         └─(再不行)──&gt; 不发布，任务标记 FAILED（宁缺毋滥，禁止用 deform 顶替发布）
+</code></pre>
+<p>降级触发条件（自动化）：HTTP 5xx/超时 3 次、欠费/配额错误、连续 2 条质检不通过、当日成本熔断触发。</p>
+<hr/>
+<h2 id="5-adapter-接入设计针对现有代码的改造">5. Adapter 接入设计（针对现有代码的改造）</h2>
+<h3 id="51-现有抽象的问题srcdouyin_autodigital_humanlipsyncpy">5.1 现有抽象的问题（src/douyin_auto/digital_human/lipsync.py）</h3>
+<ul>
+<li>接口签名 <code>apply_mouth(person: Image, mouth_box, level) -&gt; Image</code> 是「逐帧改造静态图」的管道，本质只能支撑 deform 类伪方案；<strong>无法承载「API 合成整段视频」的异步任务模型</strong>（提交→轮询→下载）。</li>
+<li><code>MuseTalkLipSync/Wav2LipLipSync/ApiLipSync</code> 均直接继承 <code>DeformLipSync</code>，属于空壳；<code>available()</code> 只查目录/环境变量，不构成真实实现。</li>
+<li>结论：<strong>不要在这套接口上继续打补丁</strong>，新增独立的视频级抽象，把 lipsync.py 收缩为「本地渲染/离线预览」模块。</li>
+</ul>
+<h3 id="52-新接口建议落在-srcdouyin_autodigital_humantalking_headpy">5.2 新接口（建议落在 src/douyin_auto/digital_human/talking_head.py）</h3>
+<pre><code class="language-python">from abc import ABC, abstractmethod
+from dataclasses import dataclass, field
+from pathlib import Path
+from typing import Literal, Optional
+
+AssetKind = Literal["image", "video", "avatar_id"]
+
+@dataclass
+class PersonAsset:
+    kind: AssetKind
+    path: Optional[Path] = None      # image/video 本地路径
+    avatar_id: Optional[str] = None  # 云端已训练分身 ID（HeyGen/Synthesia 等）
+    emotion: Optional[str] = None    # happy/serious/...（不支持的 provider 忽略）
+    aspect: str = "9:16"
+
+@dataclass
+class TalkingHeadJob:
+    job_id: str
+    provider: str
+    status: Literal["queued", "running", "success", "failed", "timeout"]
+    video_url: Optional[str] = None
+    error: Optional[str] = None
+    est_cost_cny: float = 0.0
+    actual_seconds: float = 0.0
+
+@dataclass
+class CostPolicy:
+    daily_limit_cny: float = 200.0
+    per_video_limit_cny: float = 120.0
+
+class TalkingHeadProvider(ABC):
+    name: str = "base"
+    unit_price_cny_per_sec: float = 0.0   # 火山 1.0 / 阿里720p 0.9 / 阿里480p 0.5
+    max_concurrency: int = 1
+
+    @abstractmethod
+    def estimate_cost_cny(self, audio_seconds: float) -&gt; float: ...
+
+    @abstractmethod
+    def submit(self, asset: PersonAsset, audio_path: Path, *, idempotency_key: str) -&gt; TalkingHeadJob: ...
+
+    @abstractmethod
+    def poll(self, job: TalkingHeadJob, *, timeout_s: int = 1800) -&gt; TalkingHeadJob: ...
+
+    @abstractmethod
+    def download(self, job: TalkingHeadJob, dest: Path) -&gt; Path: ...
+
+    def generate(self, asset, audio_path, *, idempotency_key, policy: CostPolicy) -&gt; Path:
+        # 成本熔断 -&gt; 幂等查表 -&gt; submit -&gt; poll -&gt; download -&gt; 记录实际费用
+        ...
+</code></pre>
+<p>三个真实实现（+可选的 HeyGen）：</p>
+<ol>
+<li><code>VolcengineOmniHumanProvider</code>：<code>visual.volcengineapi.com</code>，<code>Action=CVSubmitTask</code>（req_key=<code>jimeng_realman_avatar_picture_omni_v2</code>，body: <code>image_url</code>,<code>audio_url</code>）→ <code>Action=CVGetResult</code> 轮询；Region <code>cn-north-1</code>、Service <code>cv</code>、AK/SK 签名（建议用官方 <code>volcengine</code> Python SDK 做签名，避免手写 HMAC 出错）。</li>
+<li><code>AliyunWanS2VProvider</code>：<code>POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services/aigc/image2video/video-synthesis</code> + <code>GET /api/v1/tasks/{task_id}</code>；&gt;20s 音频自动切段（15s/段，留 0.5s 重叠）→ 逐段生成 → ffmpeg concat。</li>
+<li><code>SyncSoProvider</code>：<code>POST /v2/generate</code>（video+audio）→ <code>GET /v2/generate/{id}</code>；支持 webhook。</li>
+<li>（可选）<code>HeyGenProvider</code>：<code>POST /v3/avatars</code>（一次性建分身，asset_id 持久化）→ <code>POST /v3/videos</code>。</li>
+</ol>
+<p><code>lipsync.py</code> 中保留 <code>DeformLipSync</code> 作为 <code>--dry-run</code> 单测替身（CI 无网时用），<code>MuseTalkLipSync</code> 改为调用本地 MuseTalk 服务（子进程或 127.0.0.1 HTTP）。</p>
+<h3 id="53-编排轮询与回调">5.3 编排、轮询与回调</h3>
+<div aria-label="可横向滚动的表格" class="table-scroll" tabindex="0"><table>
+<thead>
+<tr>
+<th>项</th>
+<th>设计</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>提交</td>
+<td>任务入库（现有 <code>db.py</code> SQLite）：<code>jobs(job_id, provider, idempotency_key, status, cost, created_at, updated_at)</code></td>
+</tr>
+<tr>
+<td>轮询</td>
+<td>间隔 10~15s（官方建议级别），总超时 20~30 分钟；火山/阿里为轮询制，sync.so/HeyGen 支持 webhook（回调地址需公网暴露，本地开发用轮询）</td>
+</tr>
+<tr>
+<td>状态机</td>
+<td>queued → running → success/failed/timeout；入库持久化，进程重启后可续跑（resume）</td>
+</tr>
+</tbody>
+</table></div>
+<h3 id="54-幂等与重试">5.4 幂等与重试</h3>
+<ul>
+<li><strong>幂等键</strong>：<code>sha256(person_asset_hash + audio_sha256 + provider + params)</code>；提交前查库命中直接复用结果（防止重试重复计费——这是按秒计费的核心防线）。</li>
+<li><strong>重试</strong>：网络类（超时/5xx/连接重置）指数退避 3 次（5s/20s/60s + jitter）；业务类（音频过长、图片无人物、moderation 拒绝、额度不足）<strong>不重试</strong>，直接换 provider 或标记 FAILED。</li>
+<li><strong>并发</strong>：火山数字人快速模式并发=1，必须本地串行队列（<code>max_concurrency</code> 配置化）；同步/海外服务按其档位（sync.so 1/3/6/15）。</li>
+</ul>
+<h3 id="55-成本熔断">5.5 成本熔断</h3>
+<ul>
+<li>提交前 <code>estimate_cost_cny = audio_seconds × unit_price</code>，与 <code>per_video_limit_cny</code>、<code>daily_limit_cny</code> 比较，超限直接拒绝并降级（写审计日志）。</li>
+<li>记录<strong>实际计费秒数</strong>（产出视频秒数），日终对账：实际 vs 估算偏差 &gt;20% 告警（防止报价口径变化）。</li>
+<li>默认阈值建议：单条 ≤120 元、每日 ≤200 元（可配置）。</li>
+</ul>
+<h3 id="56-资产托管公网-url-要求">5.6 资产托管（公网 URL 要求）</h3>
+<p>火山与阿里都要求 <code>image_url</code>/<code>audio_url</code> 公网可访问 → 管线需集成对象存储（阿里 OSS / 火山 TOS / 任意 S3 兼容），策略：</p>
+<ol>
+<li>上传时设对象 TTL（1 天自动删除）；</li>
+<li>只上传「生成所需最小集」（人物图、TTS 音频）；</li>
+<li>任务成功后立即删除（含副本），生成日志中不落音频/图片的公网 URL 明文（防隐私泄露）。</li>
+</ol>
+<hr/>
+<h2 id="6-质量验收指标可自动化检测">6. 质量验收指标（可自动化检测）</h2>
+<blockquote>
+<p>目标：给下游质检模块（quality/checker.py）提供可落地、可自动判定的数字人专项检查。建议实现为 <code>quality/digital_human_checks.py</code>，输入「成片 mp4 + 原始音频 + 人物资产图」。</p>
+</blockquote>
+<div aria-label="可横向滚动的表格" class="table-scroll" tabindex="0"><table>
+<thead>
+<tr>
+<th>#</th>
+<th>指标</th>
+<th>方法</th>
+<th>通过阈值（建议）</th>
+<th>目的</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Q1</td>
+<td>音画时长一致性</td>
+<td>ffprobe 秒数对比</td>
+<td>|video_dur − audio_dur| ≤ 0.25s</td>
+<td>抓「视频比音频短/长」的合成故障</td>
+</tr>
+<tr>
+<td>Q2</td>
+<td>口型-音频相关性</td>
+<td>逐帧嘴部开合度（人脸关键点上下唇距离）与音频 RMS 包络的皮尔逊相关</td>
+<td>r ≥ 0.5（近景口播）；&lt; 0.2 判不合格</td>
+<td>廉价高效的「嘴在动且跟着音频动」代理指标</td>
+</tr>
+<tr>
+<td>Q3</td>
+<td>面部运动幅度</td>
+<td>连续帧关键点位移均值 / 头部 pose 方差</td>
+<td>位移均值落在 [0.3, 3.0] px 区间；pose 变化 &gt; 0 且 &lt; 大幅抖动</td>
+<td>抓「静止贴图」（当前 demo 的病）与「抽搐抖动」两类废片</td>
+</tr>
+<tr>
+<td>Q4</td>
+<td>静止帧检测</td>
+<td>连续 N 帧（&gt;1s）面部区域像素差 &lt; 阈值</td>
+<td>不允许 &gt;1s 完全静止（除刻意停顿）</td>
+<td>静态贴图判废</td>
+</tr>
+<tr>
+<td>Q5</td>
+<td>矩形伪影/遮罩检测</td>
+<td>嘴部邻域边缘检测：检测水平/垂直直线段 + 拉普拉斯方差突变</td>
+<td>检出规则矩形边即判废</td>
+<td>直接封杀当前 demo 的「矩形口腔遮罩」类问题</td>
+</tr>
+<tr>
+<td>Q6</td>
+<td>身份一致性</td>
+<td>ArcFace 人脸嵌入与人物资产图的余弦相似度（抽样 5 帧）</td>
+<td>≥ 0.6</td>
+<td>抓「越生成越不像」</td>
+</tr>
+<tr>
+<td>Q7</td>
+<td>画面质量</td>
+<td>人脸裁剪分辨率 ≥512px；拉普拉斯清晰度方差 ≥ 阈值；黑帧比例 &lt;1%</td>
+<td>按分发分辨率设阈值</td>
+<td>防止糊片/黑帧</td>
+</tr>
+<tr>
+<td>Q8</td>
+<td>水印/角标检测</td>
+<td>四角模板匹配 + 固定位置高频纹理检测</td>
+<td>检出即告警（防止免费档水印流出）</td>
+<td>商业化红线</td>
+</tr>
+</tbody>
+</table></div>
+<p>补充：</p>
+<ul>
+<li><strong>人工金标</strong>：建立 10 条「金标准成片」，每条记录（服务商/参数/主观评分 1-5），每次换服务商或调参后重跑对比。</li>
+<li>音频侧质检（响度、削波、静音段）归属 04 文档，不在此重复。</li>
+<li>LSE-C/LSE-D（SyncNet）类学术指标作为「离线抽检」而非在线质检（依赖模型与算力，成本高）。</li>
+</ul>
+<hr/>
+<h2 id="7-成本预算模型">7. 成本预算模型</h2>
+<blockquote>
+<p>前提假设：知识口播视频平均时长 <strong>1.5 分钟/条</strong>；日更节奏 1/2/3 条 = 月 45 / 90 / 180 分钟成片。汇率按 1 USD ≈ 7.1 CNY 估算（标注≈）。所有单价来自 2026-09-21 实测，落地前复核。</p>
+</blockquote>
+<h3 id="71-单价对照每分钟成片">7.1 单价对照（每分钟成片）</h3>
+<div aria-label="可横向滚动的表格" class="table-scroll" tabindex="0"><table>
+<thead>
+<tr>
+<th>服务</th>
+<th>单价</th>
+<th>折算每 1.5 分钟/条</th>
+<th>备注</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>火山 即梦AI 数字人快速模式</td>
+<td>1 元/秒</td>
+<td><strong>90 元/条</strong></td>
+<td>并发=1，串行</td>
+</tr>
+<tr>
+<td>阿里 wan2.2-s2v 720P</td>
+<td>0.9 元/秒</td>
+<td>81 元/条</td>
+<td>&lt;20s 分段</td>
+</tr>
+<tr>
+<td>阿里 wan2.2-s2v 480P</td>
+<td>0.5 元/秒</td>
+<td>45 元/条</td>
+<td>&lt;20s 分段</td>
+</tr>
+<tr>
+<td>腾讯云数智人（样本口径）</td>
+<td>约 8.3~20 元/分钟</td>
+<td>12~30 元/条</td>
+<td>口径复杂，需商务确认 [待核验]</td>
+</tr>
+<tr>
+<td>HeyGen（网页档换算）</td>
+<td>未核验</td>
+<td>未核验</td>
+<td>Creator $29/mo 600 credits，credit↔分钟换算需登录确认</td>
+</tr>
+<tr>
+<td>D-ID</td>
+<td>未核验</td>
+<td>未核验</td>
+<td>按分钟+15 秒取整</td>
+</tr>
+<tr>
+<td>Tavus 视频生成</td>
+<td>$1/分钟（加量 $0.90）</td>
+<td>≈$1.5/条（≈11 元）</td>
+<td>另有 $59/mo 订阅</td>
+</tr>
+<tr>
+<td>sync.so lipsync-1.9</td>
+<td>$0.025/秒 ≈ 0.18 元/秒</td>
+<td>≈$2.25/条（≈16 元）</td>
+<td>需基础视频</td>
+</tr>
+<tr>
+<td>sync.so lipsync-2</td>
+<td>$0.05/秒</td>
+<td>≈$4.5/条（≈32 元）</td>
+<td>需基础视频</td>
+</tr>
+<tr>
+<td>sync.so sync-3</td>
+<td>$0.1334/秒</td>
+<td>≈$12/条（≈85 元）</td>
+<td>最高质量档</td>
+</tr>
+<tr>
+<td>本地 MuseTalk</td>
+<td>0 元</td>
+<td>0 元（约 0.9~1.0 小时 GPU 时间/条）</td>
+<td>RTX 3050 Ti 功耗成本~可忽略</td>
+</tr>
+</tbody>
+</table></div>
+<h3 id="72-月成本估算成片-45-90-180-分钟">7.2 月成本估算（成片 45 / 90 / 180 分钟）</h3>
+<div aria-label="可横向滚动的表格" class="table-scroll" tabindex="0"><table>
+<thead>
+<tr>
+<th>服务</th>
+<th>45 分钟/月（1条/天）</th>
+<th>90 分钟/月（2条/天）</th>
+<th>180 分钟/月（3条/天）</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>火山 OmniHuman</td>
+<td><strong>2,700 元</strong></td>
+<td><strong>5,400 元</strong></td>
+<td><strong>10,800 元</strong></td>
+</tr>
+<tr>
+<td>阿里 wan2.2-s2v 720P</td>
+<td>2,430 元</td>
+<td>4,860 元</td>
+<td>9,720 元</td>
+</tr>
+<tr>
+<td>阿里 wan2.2-s2v 480P</td>
+<td>1,350 元</td>
+<td>2,700 元</td>
+<td>5,400 元</td>
+</tr>
+<tr>
+<td>sync.so lipsync-1.9（+订阅 $5）</td>
+<td>≈ $72.5（≈515 元）</td>
+<td>≈$140（≈995 元）</td>
+<td>≈$275（≈1,955 元）</td>
+</tr>
+<tr>
+<td>sync.so lipsync-2（+订阅 $5）</td>
+<td>≈$140（≈995 元）</td>
+<td>≈$275（≈1,955 元）</td>
+<td>≈$545（≈3,870 元）</td>
+</tr>
+<tr>
+<td>Tavus（$1/分钟 + $59 订阅）</td>
+<td>≈$104（≈740 元）</td>
+<td>≈$149（≈1,060 元）</td>
+<td>≈$239（≈1,700 元）</td>
+</tr>
+<tr>
+<td>本地 MuseTalk</td>
+<td>0 元（≈28 小时 GPU）</td>
+<td>0 元（≈56 小时 GPU）</td>
+<td>0 元（≈112 小时 GPU）</td>
+</tr>
+<tr>
+<td>腾讯智影/百度/魔珐/硅基</td>
+<td>未核验（销售报价）</td>
+<td>-</td>
+<td>-</td>
+</tr>
+</tbody>
+</table></div>
+<p>预算建议：</p>
+<ul>
+<li><strong>主用火山 + 阿里 480P 混合</strong>：日常用阿里 480P（1,350 元/月@1条/天）保底成本，重点视频用火山（2,700 元/月@1条/天）冲质量；日均 1 条节奏月预算可控制在 <strong>1,500~2,700 元</strong>。</li>
+<li>3 条/天全部走火山要 <strong>1 万+元/月</strong> → 此时必须做「热度预测后只对高潜选题用高端通道」的策略（选题侧配合）。</li>
+<li>海外通道（sync.so/Tavus）除非已有海外卡+稳定网络，不纳入常态预算。</li>
+</ul>
+<hr/>
+<h2 id="8-风险与坑">8. 风险与坑</h2>
+<div aria-label="可横向滚动的表格" class="table-scroll" tabindex="0"><table>
+<thead>
+<tr>
+<th>#</th>
+<th>风险</th>
+<th>说明</th>
+<th>缓解</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>R1</td>
+<td>服务不可用/限流</td>
+<td>火山并发=1；云服务故障、账号欠费（火山欠费 2 小时停服、24 小时释放资源，[实测条款]）</td>
+<td>多 Provider 降级链 + 本地保底 + 余额监控告警</td>
+</tr>
+<tr>
+<td>R2</td>
+<td>涨价/计费口径变化</td>
+<td>按秒计费，官方文档也写「以控制台实际接入为准」[原文]</td>
+<td>成本熔断 + 日终对账 + 单价配置化</td>
+</tr>
+<tr>
+<td>R3</td>
+<td>接口/版本变更</td>
+<td>HeyGen v2→v3 已迁移（文档以 v3 为准）；阿里 &lt;20s 限制是一次浏览才发现</td>
+<td>Adapter 隔离 + 版本号写进配置 + 契约测试</td>
+</tr>
+<tr>
+<td>R4</td>
+<td>时长/分辨率上限</td>
+<td>阿里单条 &lt;20s（原文）；火山时长上限文档未明示 [待核验]</td>
+<td>分段+拼接实现进 Adapter；上线前实测边界</td>
+</tr>
+<tr>
+<td>R5</td>
+<td>水印</td>
+<td>HeyGen 免费档/D-ID Trial/Lite/Synthesia 测试模式/sync.so Hobbyist 有水印</td>
+<td>只用付费去水印档；Q8 质检兜底</td>
+</tr>
+<tr>
+<td>R6</td>
+<td>开源许可</td>
+<td>Wav2Lip 开源版<strong>禁止商用</strong>（原文）；EchoMimic 限学术；Duix 有商用阈值</td>
+<td>商用白名单：MuseTalk(MIT)、SadTalker(Apache-2.0)、Duix(带条件)</td>
+</tr>
+<tr>
+<td>R7</td>
+<td>肖像/形象授权</td>
+<td>全 AI 生成虚拟人也要防「撞脸」真实人物；训练分身（Tavus/HeyGen video-avatar）需真人授权书</td>
+<td>形象生成侧做相似度筛查（02 文档）；优先 prompt/单图路线</td>
+</tr>
+<tr>
+<td>R8</td>
+<td>深度合成合规</td>
+<td>《互联网信息服务深度合成管理规定》要求对 AI 生成内容标识；抖音平台要求 AI 内容声明</td>
+<td>显式标识（角标/文案）+ 隐式标识（元数据）；发布模块统一注入</td>
+</tr>
+<tr>
+<td>R9</td>
+<td>大陆访问海外服务</td>
+<td>网络波动、支付失败、账号风控</td>
+<td>海外仅作备选；API Key/账单专人管理</td>
+</tr>
+<tr>
+<td>R10</td>
+<td>数据隐私</td>
+<td>公网 URL 托管音频/图片</td>
+<td>对象存储 TTL + 用后即删（见 5.6）</td>
+</tr>
+<tr>
+<td>R11</td>
+<td>4GB 本地保底产能</td>
+<td>MuseTalk 1 分钟≈35 分钟，日更多条时排队</td>
+<td>保底档限流（1 条/天）；或后续升级硬件</td>
+</tr>
+<tr>
+<td>R12</td>
+<td>「AI 虚拟人注册审核」</td>
+<td>各平台对 AI 分身训练的人脸审核政策趋严，AI 人脸可能被拒</td>
+<td>优先单图驱动；HeyGen 用 prompt avatar 路线并保留生成记录</td>
+</tr>
+</tbody>
+</table></div>
+<hr/>
+<h2 id="9-待核验-清单落地前必做">9. [待核验] 清单（落地前必做）</h2>
+<ol class="contains-task-list">
+<li class="task-list-item"><input class="task-list-item-checkbox" disabled="disabled" type="checkbox"/> 火山 即梦AI 数字人快速模式：<strong>单次支持的最长音频/输出时长、输出分辨率（含 1080P?）、并发提升方式</strong>——console 试跑 1 条 1.5 分钟音频确认。</li>
+<li class="task-list-item"><input class="task-list-item-checkbox" disabled="disabled" type="checkbox"/> 火山：计费是否「按输出秒数」且是否含最低消费；资源包是否覆盖「数字人快速模式」。</li>
+<li class="task-list-item"><input class="task-list-item-checkbox" disabled="disabled" type="checkbox"/> 阿里 wan2.2-s2v：20s 限制的分段拼接是否符合条款；720P 以上是否支持；detect 前置接口的调用方式。</li>
+<li class="task-list-item"><input class="task-list-item-checkbox" disabled="disabled" type="checkbox"/> HeyGen：API 计费页（app.heygen.com/developers/api?modal=pricing，需登录）credit→分钟换算；Avatar IV/V 对「prompt 生成分身」的支持矩阵（supported_api_engines）。</li>
+<li class="task-list-item"><input class="task-list-item-checkbox" disabled="disabled" type="checkbox"/> D-ID：API 计费页（www.d-id.com/pricing/api，JS 未渲染）具体分钟单价；talks 是否仍支持「纯图片+音频」。</li>
+<li class="task-list-item"><input class="task-list-item-checkbox" disabled="disabled" type="checkbox"/> Synthesia：AI 生成虚拟人能否作为自定义形象（个人形象是否必须真人录制）；API 在各档的可用性。</li>
+<li class="task-list-item"><input class="task-list-item-checkbox" disabled="disabled" type="checkbox"/> Tavus：视频生成 API 是否支持 <code>audio_url</code> 输入（当前文档以 script 为主）；replica 审核对 AI 人脸的接受度。</li>
+<li class="task-list-item"><input class="task-list-item-checkbox" disabled="disabled" type="checkbox"/> sync.so：生成时长上限与去水印档位细则；<code>/v2/generate</code> 对「静态图转视频」的支持与否（当前认知为 video-to-video）。</li>
+<li class="task-list-item"><input class="task-list-item-checkbox" disabled="disabled" type="checkbox"/> 百度曦灵/数字员工、魔珐有言、硅基智能 duix.com、出门问问奇妙元：实际 API 文档、计费口径、大陆结算方式（本轮仅确认「有 API 入口」）。</li>
+<li class="task-list-item"><input class="task-list-item-checkbox" disabled="disabled" type="checkbox"/> 腾讯云数智人：视频合成「元/分钟」的准确口径与最小采购量（购买指南数字众多，需销售确认）。</li>
+<li class="task-list-item"><input class="task-list-item-checkbox" disabled="disabled" type="checkbox"/> 各平台「生成内容用于抖音商用发布」的条款原文截图留档。</li>
+<li class="task-list-item"><input class="task-list-item-checkbox" disabled="disabled" type="checkbox"/> MuseTalk 本地部署在 RTX 3050 Ti 实测：显存峰值、8 秒/5 分钟基准复现、嘴部区域合成脚本效果。</li>
+<li class="task-list-item"><input class="task-list-item-checkbox" disabled="disabled" type="checkbox"/> 质检阈值（第 6 节）用 10 条金标视频标定，避免误杀。</li>
+</ol>
+<hr/>
+<h2 id="附录-a本轮实测证据索引2026-09-21">附录 A：本轮实测证据索引（2026-09-21）</h2>
+<div aria-label="可横向滚动的表格" class="table-scroll" tabindex="0"><table>
+<thead>
+<tr>
+<th>证据</th>
+<th>获取方式</th>
+<th>结果片段</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>火山 即梦AI 数字人快速模式 API</td>
+<td>浏览器渲染 docs.volcengine.com（由 www.volcengine.com/docs/85621/1810471 重定向）</td>
+<td>接口 <code>POST https://visual.volcengineapi.com</code>，<code>Action=CVSubmitTask&amp;Version=2022-08-31</code>，req_key=<code>jimeng_realman_avatar_picture_omni_v2</code>，body <code>{image_url, audio_url}</code>；查询 <code>Action=CVGetResult</code>；文案「输入单张图片+音频，生成该图片对应的视频效果」</td>
+</tr>
+<tr>
+<td>火山 计费</td>
+<td>浏览器渲染 docs.volcengine.com/docs/85621/1544714（页面更新于 2026.04.01）</td>
+<td>「数字人快速模式 按时长计费 <strong>1 元/秒</strong>，并发限制（免费/付费）均 1」；「即梦AI-视频生成3.0 Pro 1 元/秒；3.0 1080P 0.63 元/秒；720P 0.28 元/秒」；「只有调用成功才会计费」</td>
+</tr>
+<tr>
+<td>阿里 wan2.2-s2v</td>
+<td>curl help.aliyun.com/zh/model-studio/wan-s2v-api 与 /model-pricing</td>
+<td>端点 <code>POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services/aigc/image2video/video-synthesis</code>；「视频时长须小于 20 秒，超过会报错」；价格「480P：0.5 元/秒、720P：0.9 元/秒，免费额度 100 秒」；detect「0.004 元/张、200 张免费」</td>
+</tr>
+<tr>
+<td>腾讯云数智人</td>
+<td>curl cloud.tencent.com/product/ivh、/document/product/1240、/document/buy-guide/1240/101944</td>
+<td>「2D 形象制作管线，支持摄影棚录制训练、3 分钟视频训练、换脸定制」；产品页 140 元/天、1200 元/小时、20 元/分钟；购买指南「5,000 元/个（10 小时）」等</td>
+</tr>
+<tr>
+<td>HeyGen</td>
+<td>curl developers.heygen.com/docs/create-avatar.md、avatar-from-photo.md、avatar-from-prompt.md</td>
+<td>「The four ways to create a HeyGen avatar over the API: from video footage, from one photo, from a text prompt, or Look Pack」；<code>POST https://api.heygen.com/v3/avatars</code>、<code>GET /v3/avatars/looks/$LOOK_ID</code>、<code>POST https://api.heygen.com/v3/videos</code>；「Prompt avatars render on Avatar V, IV, and III」；网页档 $0/$29/$49/$149</td>
+</tr>
+<tr>
+<td>D-ID</td>
+<td>curl docs.d-id.com/llms.txt、reference/createtalk.md、createclip.md、createv4video.md</td>
+<td>API base <code>https://api.d-id.com/</code>；<code>/talks</code>（source_url 图片）<code>/clips</code>（视频+音频）<code>/credits</code>；「Audio length is limited 5 minutes for clips and 10 minutes for talks」；定价页 FAQ「Trial 和 Lite 有水印、分钟按 15 秒向上取整」</td>
+</tr>
+<tr>
+<td>Synthesia</td>
+<td>curl synthesia.io/pricing、docs.synthesia.io/reference/create-video.md、synthesia-api-quickstart.md</td>
+<td>API base <code>https://api.synthesia.io</code>，Create a video（scriptText），生成 3-5 分钟；价格 $29/$89/mo（年付 $264/$804）；Studio Express-1 形象 $1,000/年加项；测试模式免费但加水印</td>
+</tr>
+<tr>
+<td>Tavus</td>
+<td>curl tavus.io/pricing、docs.tavus.io/api-reference/overview</td>
+<td>「视频生成加量 $1/分钟、$0.90/分钟」；「3/7 Custom Replica trainings，$65/$40 per Replica」（2 分钟真人视频训练）；付费档无 Tavus 水印</td>
+</tr>
+<tr>
+<td>sync.so</td>
+<td>curl sync.so/pricing + docs.sync.so/llms.txt + openapi.json</td>
+<td>档位 $5/$19/$49/$249；模型价：sync-3 $0.13340/秒、react-1 $0.16675/秒、lipsync-2-pro $0.08325/秒、lipsync-2 $0.05/秒、lipsync-1.9 $0.025/秒；上限 1/5/10/30 分钟；API <code>/v2/generate</code>、<code>/v2/assets</code>、<code>/v2/batch</code>；免费试用 3 条/月、单条 ≤20 秒</td>
+</tr>
+<tr>
+<td>魔珐有言</td>
+<td>curl www.youyan3d.com/api</td>
+<td>「有言提供视频生成 API，支持将文本、PPT 转化为高质量数字人视频」；输出 mp4/mov/webm、720P/1080P/4K；RESTful；报价联系销售</td>
+</tr>
+<tr>
+<td>百度</td>
+<td>curl cloud.baidu.com/doc/AI_DH（数字员工-组件开放平台）+ 浏览器渲染 xiling.cloud.baidu.com</td>
+<td>官网含「组件开放平台」「企业定制」，存在价格与文档入口</td>
+</tr>
+<tr>
+<td>开源仓库</td>
+<td>GitHub API + shields.io（stars/license/last-commit）</td>
+<td>MuseTalk 6.6k/MIT/2025-09；Wav2Lip 13k/无许可证/2025-06；LivePortrait 19k/MIT/2026-06；SadTalker 14.1k/Apache-2.0/2024-06；Duix-Avatar 16k/自定义/2026-04；InfiniteTalk 7.9k/Apache-2.0/2026-05</td>
+</tr>
+<tr>
+<td>MuseTalk 4GB 依据</td>
+<td>curl raw.githubusercontent.com/TMElyralab/MuseTalk/main/README.md</td>
+<td>「tested the system on a Windows environment using an NVIDIA GeForce RTX 3050 Ti Laptop GPU with 4GB VRAM. In fp16 mode, generating an 8-second video takes approximately 5 minutes」</td>
+</tr>
+<tr>
+<td>Wav2Lip 许可</td>
+<td>curl README.md</td>
+<td>「All results ... should only be used for research/academic/personal purposes only ... any form of commercial use is strictly prohibited」</td>
+</tr>
+<tr>
+<td>Duix-Avatar 硬件/许可</td>
+<td>curl README.md</td>
+<td>显卡 RTX 4070；内存 32GB（必须）；磁盘 100GB；「Supports global free commercial use（超 10 万用户或年营收 1000 万美元需签商用协议）」</td>
+</tr>
+</tbody>
+</table></div>
+<h2 id="附录-b给-020405-文档的接口约定本文对外承诺">附录 B：给 02/04/05 文档的接口约定（本文对外承诺）</h2>
+<ul>
+<li>对 02（形象）：需要产出「人物单图（≥1080×1920，脸部清晰、可被检测）」+（若走 sync.so 路线）「一段 5~30 秒中性表情基础视频」。</li>
+<li>对 04（TTS）：音频统一 16k/44.1k wav 或 mp3，<strong>单条建议 ≤60 秒</strong>（阿里需 &lt;20 秒分段），响度标准化后再送生成。</li>
+<li>对 05（后处理/字幕）：数字人成片输出为 1080×1920 H.264 MP4 无声或带音轨（生成服务多带音轨），后处理不得覆盖人物面部区域（避免再次引入遮罩类问题）。</li>
+</ul>
+</article>
+    <nav class="document-pager" aria-label="相邻文档"><a rel="prev" href="02-%E4%BA%BA%E7%89%A9%E4%B8%80%E8%87%B4%E6%80%A7%E7%94%9F%E6%88%90.html"><span>上一篇</span>02-人物一致性生成</a><a rel="next" href="04-TTS%E9%9F%B3%E8%89%B2%E4%B8%8E%E5%86%85%E5%AE%B9%E7%94%9F%E6%88%90%E8%B4%A8%E6%A3%80.html"><span>下一篇</span>04-TTS音色与内容生成质检</a></nav>
+    <footer class="page-footer">与同名 Markdown 对应的阅读版 · 可离线阅读与打印</footer>
+  </main>
+  <aside class="toc-panel" aria-label="本文章节"><p class="group-title">本页目录</p><nav id="toc"><a class="toc-h2" href="#0-%E7%BB%93%E8%AE%BA%E9%80%9F%E8%A7%88l1l12">0. 结论速览（L1~L12）</a><a class="toc-h2" href="#1-%E9%9C%80%E6%B1%82%E6%8B%86%E8%A7%A3%E4%BB%80%E4%B9%88%E6%98%AF%E5%90%88%E6%A0%BC%E7%9A%84%E5%8F%A3%E6%92%AD%E8%A7%86%E9%A2%91">1. 需求拆解：什么是「合格的口播视频」</a><a class="toc-h3" href="#11-%E6%8A%80%E6%9C%AF%E5%AE%9A%E4%B9%89%E6%9C%AC%E9%A1%B9%E7%9B%AE%E7%9A%84%E9%AA%8C%E6%94%B6%E5%AF%B9%E8%B1%A1">1.1 技术定义（本项目的验收对象）</a><a class="toc-h3" href="#12-%E7%8E%B0%E6%9C%89-demo-%E7%9A%84%E5%B7%AE%E8%B7%9D%E6%9D%A5%E8%87%AA%E7%8E%B0%E7%8A%B6%E5%AE%9E%E6%B5%8B%E6%8F%8F%E8%BF%B0">1.2 现有 demo 的差距（来自现状实测描述）</a><a class="toc-h3" href="#13-%E5%8F%A3%E5%BE%84%E7%95%8C%E5%AE%9A%E9%81%BF%E5%85%8D%E4%B8%8E%E5%85%B6%E5%AE%83%E6%96%87%E6%A1%A3%E9%87%8D%E5%8F%A0">1.3 口径界定（避免与其它文档重叠）</a><a class="toc-h2" href="#2-%E4%BA%91%E7%AB%AF-api-%E5%85%A8%E6%99%AF%E5%AF%B9%E6%AF%94">2. 云端 API 全景对比</a><a class="toc-h3" href="#21-%E6%80%BB%E8%A1%A8">2.1 总表</a><a class="toc-h3" href="#22-%E8%AE%AD%E7%BB%83%E6%95%B0%E5%AD%97%E4%BA%BA%E5%88%86%E8%BA%ABvs%E5%8D%95%E5%9B%BE%E9%A9%B1%E5%8A%A8%E7%BA%AF-ai-%E8%99%9A%E6%8B%9F%E4%BA%BA%E9%80%82%E7%94%A8%E6%80%A7">2.2 「训练数字人分身」vs「单图驱动」（纯 AI 虚拟人适用性）</a><a class="toc-h3" href="#23-%E5%85%B3%E9%94%AE%E7%BB%93%E8%AE%BA%E5%AF%B9%E9%80%89%E5%9E%8B%E6%9C%89%E7%9B%B4%E6%8E%A5%E5%BD%B1%E5%93%8D">2.3 关键结论（对选型有直接影响）</a><a class="toc-h2" href="#3-%E5%BC%80%E6%BA%90%E6%96%B9%E6%A1%88-4gb-%E6%98%BE%E5%AD%98%E5%8F%AF%E8%A1%8C%E6%80%A7%E8%A3%81%E5%86%B3%E8%A1%A8">3. 开源方案 4GB 显存可行性裁决表</a><a class="toc-h2" href="#4-%E6%8E%A8%E8%8D%90%E6%96%B9%E6%A1%88%E4%B8%BB-%E5%A4%87-%E9%99%8D%E7%BA%A7%E9%93%BE">4. 推荐方案：主 + 备 + 降级链</a><a class="toc-h3" href="#41-%E6%8E%A8%E8%8D%90%E7%9F%A9%E9%98%B5%E6%98%8E%E7%A1%AE%E5%88%B0%E6%9C%8D%E5%8A%A1%E5%90%8D%E4%B8%8E%E6%8E%A5%E5%85%A5%E5%BD%A2%E6%80%81">4.1 推荐矩阵（明确到服务名与接入形态）</a><a class="toc-h3" href="#42-%E9%99%8D%E7%BA%A7%E9%93%BEfailover-chain%E6%8C%89%E9%A1%BA%E5%BA%8F%E9%99%8D%E7%BA%A7">4.2 降级链（failover chain，按顺序降级）</a><a class="toc-h2" href="#5-adapter-%E6%8E%A5%E5%85%A5%E8%AE%BE%E8%AE%A1%E9%92%88%E5%AF%B9%E7%8E%B0%E6%9C%89%E4%BB%A3%E7%A0%81%E7%9A%84%E6%94%B9%E9%80%A0">5. Adapter 接入设计（针对现有代码的改造）</a><a class="toc-h3" href="#51-%E7%8E%B0%E6%9C%89%E6%8A%BD%E8%B1%A1%E7%9A%84%E9%97%AE%E9%A2%98srcdouyin_autodigital_humanlipsyncpy">5.1 现有抽象的问题（src/douyin_auto/digital_human/lipsync.py）</a><a class="toc-h3" href="#52-%E6%96%B0%E6%8E%A5%E5%8F%A3%E5%BB%BA%E8%AE%AE%E8%90%BD%E5%9C%A8-srcdouyin_autodigital_humantalking_headpy">5.2 新接口（建议落在 src/douyin_auto/digital_human/talking_head.py）</a><a class="toc-h3" href="#53-%E7%BC%96%E6%8E%92%E8%BD%AE%E8%AF%A2%E4%B8%8E%E5%9B%9E%E8%B0%83">5.3 编排、轮询与回调</a><a class="toc-h3" href="#54-%E5%B9%82%E7%AD%89%E4%B8%8E%E9%87%8D%E8%AF%95">5.4 幂等与重试</a><a class="toc-h3" href="#55-%E6%88%90%E6%9C%AC%E7%86%94%E6%96%AD">5.5 成本熔断</a><a class="toc-h3" href="#56-%E8%B5%84%E4%BA%A7%E6%89%98%E7%AE%A1%E5%85%AC%E7%BD%91-url-%E8%A6%81%E6%B1%82">5.6 资产托管（公网 URL 要求）</a><a class="toc-h2" href="#6-%E8%B4%A8%E9%87%8F%E9%AA%8C%E6%94%B6%E6%8C%87%E6%A0%87%E5%8F%AF%E8%87%AA%E5%8A%A8%E5%8C%96%E6%A3%80%E6%B5%8B">6. 质量验收指标（可自动化检测）</a><a class="toc-h2" href="#7-%E6%88%90%E6%9C%AC%E9%A2%84%E7%AE%97%E6%A8%A1%E5%9E%8B">7. 成本预算模型</a><a class="toc-h3" href="#71-%E5%8D%95%E4%BB%B7%E5%AF%B9%E7%85%A7%E6%AF%8F%E5%88%86%E9%92%9F%E6%88%90%E7%89%87">7.1 单价对照（每分钟成片）</a><a class="toc-h3" href="#72-%E6%9C%88%E6%88%90%E6%9C%AC%E4%BC%B0%E7%AE%97%E6%88%90%E7%89%87-45-90-180-%E5%88%86%E9%92%9F">7.2 月成本估算（成片 45 / 90 / 180 分钟）</a><a class="toc-h2" href="#8-%E9%A3%8E%E9%99%A9%E4%B8%8E%E5%9D%91">8. 风险与坑</a><a class="toc-h2" href="#9-%E5%BE%85%E6%A0%B8%E9%AA%8C-%E6%B8%85%E5%8D%95%E8%90%BD%E5%9C%B0%E5%89%8D%E5%BF%85%E5%81%9A">9. [待核验] 清单（落地前必做）</a><a class="toc-h2" href="#%E9%99%84%E5%BD%95-a%E6%9C%AC%E8%BD%AE%E5%AE%9E%E6%B5%8B%E8%AF%81%E6%8D%AE%E7%B4%A2%E5%BC%952026-09-21">附录 A：本轮实测证据索引（2026-09-21）</a><a class="toc-h2" href="#%E9%99%84%E5%BD%95-b%E7%BB%99-020405-%E6%96%87%E6%A1%A3%E7%9A%84%E6%8E%A5%E5%8F%A3%E7%BA%A6%E5%AE%9A%E6%9C%AC%E6%96%87%E5%AF%B9%E5%A4%96%E6%89%BF%E8%AF%BA">附录 B：给 02/04/05 文档的接口约定（本文对外承诺）</a></nav></aside>
+</div>
+<button type="button" class="sidebar-scrim" aria-label="关闭文档目录" hidden></button>
+<button type="button" class="back-top" aria-label="返回顶部">顶部</button>
+<script>(() => {
+  'use strict';
+
+  function initializeReader() {
+    const article = document.getElementById('document-body');
+    if (!article) return;
+    const root = document.documentElement;
+    const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
+    const scrollBehavior = () => reducedMotion.matches ? 'instant' : 'smooth';
+
+    // Local files and privacy settings can deny storage; controls remain usable.
+    const fontKey = 'document-reader-font-size';
+    let fontSize = 17;
+    try {
+      const savedSize = Number(localStorage.getItem(fontKey));
+      if (Number.isFinite(savedSize) && savedSize >= 14 && savedSize <= 22) fontSize = savedSize;
+    } catch (_) { /* Storage is optional. */ }
+    const smaller = document.querySelector('.font-smaller');
+    const reset = document.querySelector('.font-reset');
+    const larger = document.querySelector('.font-larger');
+    function setFontSize(value) {
+      fontSize = Math.max(14, Math.min(22, value));
+      root.style.setProperty('--reader-font-size', `${fontSize}px`);
+      if (smaller) smaller.disabled = fontSize === 14;
+      if (larger) larger.disabled = fontSize === 22;
+      if (reset) reset.title = `恢复默认字号（当前 ${fontSize}px）`;
+      try { localStorage.setItem(fontKey, String(fontSize)); } catch (_) { /* Optional. */ }
+    }
+    setFontSize(fontSize);
+    smaller?.addEventListener('click', () => setFontSize(fontSize - 1));
+    reset?.addEventListener('click', () => setFontSize(17));
+    larger?.addEventListener('click', () => setFontSize(fontSize + 1));
+    document.querySelector('.print-button')?.addEventListener('click', () => window.print());
+
+    const menu = document.querySelector('.mobile-menu');
+    const sidebar = document.getElementById('doc-sidebar');
+    const scrim = document.querySelector('.sidebar-scrim');
+    const mobileWidth = window.matchMedia('(max-width: 800px)');
+    function setMenu(open, returnFocus = false) {
+      const visible = open && mobileWidth.matches;
+      document.body.classList.toggle('menu-open', visible);
+      menu?.setAttribute('aria-expanded', String(visible));
+      if (scrim) scrim.hidden = !visible;
+      if (visible) {
+        sidebar?.querySelector('[aria-current="page"], a, button')?.focus();
+      } else if (returnFocus) menu?.focus();
+    }
+    menu?.addEventListener('click', () => setMenu(!document.body.classList.contains('menu-open')));
+    scrim?.addEventListener('click', () => setMenu(false, true));
+    sidebar?.addEventListener('click', (event) => {
+      if (event.target.closest('a')) setMenu(false);
+    });
+    mobileWidth.addEventListener('change', () => setMenu(false));
+    document.addEventListener('keydown', (event) => {
+      if (!document.body.classList.contains('menu-open')) return;
+      if (event.key === 'Escape') {
+        event.preventDefault();
+        setMenu(false, true);
+      }
+      if (event.key === 'Tab') {
+        const focusable = [menu, ...sidebar.querySelectorAll('a[href], button:not([disabled]), [tabindex="0"]')].filter(Boolean);
+        const first = focusable[0];
+        const last = focusable[focusable.length - 1];
+        if (event.shiftKey && document.activeElement === first) {
+          event.preventDefault();
+          last?.focus();
+        } else if (!event.shiftKey && document.activeElement === last) {
+          event.preventDefault();
+          first?.focus();
+        }
+      }
+    });
+    setMenu(false);
+
+    const searchForm = document.getElementById('search-form');
+    const searchInput = document.getElementById('search-input');
+    const searchNext = document.getElementById('search-next');
+    const searchClear = document.getElementById('search-clear');
+    const searchStatus = document.getElementById('search-status');
+    let searchResults = [];
+    let currentResult = -1;
+    let currentQuery = '';
+    let searchTimer;
+
+    function clearHighlights() {
+      article.querySelectorAll('mark.reader-match').forEach((mark) => {
+        const parent = mark.parentNode;
+        mark.replaceWith(document.createTextNode(mark.textContent));
+        parent.normalize();
+      });
+      article.querySelectorAll('.search-block-current').forEach((block) => block.classList.remove('search-block-current'));
+      searchResults = [];
+      currentResult = -1;
+    }
+
+    function showResult(index, shouldScroll) {
+      searchResults.forEach((result) => {
+        result.block.classList.remove('search-block-current');
+        result.marks.forEach((mark) => mark.classList.remove('is-current'));
+      });
+      currentResult = (index + searchResults.length) % searchResults.length;
+      const result = searchResults[currentResult];
+      result.block.classList.add('search-block-current');
+      result.marks.forEach((mark) => mark.classList.add('is-current'));
+      if (searchStatus) searchStatus.textContent = `第 ${currentResult + 1} / ${searchResults.length} 处匹配 · Enter 下一处`;
+      if (shouldScroll) {
+        let container = result.block.parentElement;
+        while (container && container !== article) {
+          if (container.tagName === 'DETAILS') container.open = true;
+          container = container.parentElement;
+        }
+        result.marks[0].scrollIntoView({ behavior: scrollBehavior(), block: 'center', inline: 'nearest' });
+      }
+    }
+
+    function runSearch(shouldScroll = false) {
+      clearTimeout(searchTimer);
+      clearHighlights();
+      const query = searchInput?.value.trim() || '';
+      currentQuery = query;
+      if (searchClear) searchClear.disabled = !query;
+      if (!query) {
+        if (searchStatus) searchStatus.textContent = '';
+        if (searchNext) searchNext.disabled = true;
+        return;
+      }
+      const queryLower = query.toLocaleLowerCase();
+      const blockResults = new Map();
+      // Walk original text nodes, preserving links, emphasis, tables and code.
+      const walker = document.createTreeWalker(article, NodeFilter.SHOW_TEXT, {
+        acceptNode(node) {
+          if (!node.nodeValue.trim()) return NodeFilter.FILTER_REJECT;
+          if (node.parentElement.closest('script, style, button, svg, mark, [aria-hidden="true"]')) return NodeFilter.FILTER_REJECT;
+          return node.nodeValue.toLocaleLowerCase().includes(queryLower) ? NodeFilter.FILTER_ACCEPT : NodeFilter.FILTER_REJECT;
+        }
+      });
+      const nodes = [];
+      while (walker.nextNode()) nodes.push(walker.currentNode);
+      nodes.forEach((node) => {
+        const original = node.nodeValue;
+        const normalized = original.toLocaleLowerCase();
+        const block = node.parentElement.closest('p, li, td, th, h2, h3, h4, h5, h6, pre, summary, figcaption') || node.parentElement;
+        let result = blockResults.get(block);
+        if (!result) {
+          result = { block, marks: [] };
+          blockResults.set(block, result);
+        }
+        const fragment = document.createDocumentFragment();
+        let position = 0;
+        let matchPosition;
+        while ((matchPosition = normalized.indexOf(queryLower, position)) !== -1) {
+          fragment.append(document.createTextNode(original.slice(position, matchPosition)));
+          const mark = document.createElement('mark');
+          mark.className = 'reader-match';
+          mark.textContent = original.slice(matchPosition, matchPosition + query.length);
+          fragment.append(mark);
+          result.marks.push(mark);
+          position = matchPosition + query.length;
+        }
+        fragment.append(document.createTextNode(original.slice(position)));
+        node.replaceWith(fragment);
+      });
+      searchResults = [...blockResults.values()];
+      if (searchNext) searchNext.disabled = !searchResults.length;
+      if (!searchResults.length) {
+        if (searchStatus) searchStatus.textContent = '未找到匹配内容';
+      } else showResult(0, shouldScroll);
+    }
+
+    searchInput?.addEventListener('input', (event) => {
+      if (event.isComposing) return;
+      clearTimeout(searchTimer);
+      searchTimer = setTimeout(() => runSearch(false), 180);
+    });
+    searchInput?.addEventListener('compositionend', () => {
+      clearTimeout(searchTimer);
+      searchTimer = setTimeout(() => runSearch(false), 180);
+    });
+    searchForm?.addEventListener('submit', (event) => {
+      event.preventDefault();
+      const queryChanged = currentQuery !== searchInput.value.trim();
+      if (queryChanged) runSearch(true);
+      else if (searchResults.length) showResult(currentResult + 1, true);
+    });
+    if (searchNext && searchNext.type !== 'submit') {
+      searchNext.addEventListener('click', () => {
+        if (currentQuery !== searchInput.value.trim()) runSearch(true);
+        else if (searchResults.length) showResult(currentResult + 1, true);
+      });
+    }
+    function resetSearch() {
+      clearTimeout(searchTimer);
+      if (searchInput) searchInput.value = '';
+      currentQuery = '';
+      clearHighlights();
+      if (searchStatus) searchStatus.textContent = '';
+      if (searchNext) searchNext.disabled = true;
+      if (searchClear) searchClear.disabled = true;
+    }
+    searchClear?.addEventListener('click', (event) => {
+      event.preventDefault();
+      resetSearch();
+      searchInput?.focus();
+    });
+    searchInput?.addEventListener('keydown', (event) => {
+      if (event.key === 'Escape' && !event.isComposing) {
+        event.preventDefault();
+        resetSearch();
+      }
+      if (event.key === 'Enter' && event.isComposing) event.preventDefault();
+    });
+    resetSearch();
+
+    async function copyText(text) {
+      try {
+        if (navigator.clipboard?.writeText) {
+          await navigator.clipboard.writeText(text);
+          return true;
+        }
+      } catch (_) { /* File URLs may reject the modern Clipboard API. */ }
+      const previousFocus = document.activeElement;
+      const selection = window.getSelection();
+      const savedRanges = selection ? Array.from({ length: selection.rangeCount }, (_, i) => selection.getRangeAt(i).cloneRange()) : [];
+      const field = document.createElement('textarea');
+      field.value = text;
+      field.readOnly = true;
+      field.style.cssText = 'position:fixed;left:-9999px;top:0;opacity:0;font-size:16px';
+      document.body.append(field);
+      field.select();
+      let copied = false;
+      try { copied = document.execCommand('copy'); } catch (_) { /* Show the failure state. */ }
+      field.remove();
+      if (selection) {
+        selection.removeAllRanges();
+        savedRanges.forEach((range) => selection.addRange(range));
+      }
+      previousFocus?.focus({ preventScroll: true });
+      return copied;
+    }
+
+    article.querySelectorAll('pre').forEach((pre) => {
+      const code = pre.querySelector('code');
+      if (!code || pre.querySelector('.copy-code')) return;
+      const button = document.createElement('button');
+      button.type = 'button';
+      button.className = 'copy-code';
+      button.textContent = '复制代码';
+      button.setAttribute('aria-label', '复制代码');
+      button.setAttribute('aria-live', 'polite');
+      pre.append(button);
+      let labelTimer;
+      button.addEventListener('click', async () => {
+        clearTimeout(labelTimer);
+        const copied = await copyText(code.textContent);
+        button.textContent = copied ? '已复制' : '请选中后复制';
+        labelTimer = setTimeout(() => { button.textContent = '复制代码'; }, 2200);
+      });
+    });
+
+    // Scroll-spy works without observers and avoids changing browser history.
+    const tocLinks = Array.from(document.querySelectorAll('#toc a[href^="#"]'));
+    const sections = tocLinks.map((link) => {
+      let id;
+      try { id = decodeURIComponent(link.getAttribute('href').slice(1)); } catch (_) { return null; }
+      const heading = document.getElementById(id);
+      return heading ? { link, heading } : null;
+    }).filter(Boolean);
+    let activeLink = null;
+    const backTop = document.querySelector('.back-top');
+    let framePending = false;
+    function updateScrollState() {
+      framePending = false;
+      if (backTop) backTop.hidden = window.scrollY < 480;
+      let active = sections[0];
+      const header = document.querySelector('.topbar');
+      const threshold = (header?.getBoundingClientRect().height || 76) + 38;
+      for (const section of sections) {
+        if (section.heading.getBoundingClientRect().top <= threshold) active = section;
+        else break;
+      }
+      if (!active || active.link === activeLink) return;
+      activeLink?.removeAttribute('aria-current');
+      activeLink?.classList.remove('is-active');
+      activeLink = active.link;
+      activeLink.setAttribute('aria-current', 'location');
+      activeLink.classList.add('is-active');
+      const panel = document.querySelector('.toc-panel');
+      if (panel && panel.clientHeight) {
+        const linkRect = activeLink.getBoundingClientRect();
+        const panelRect = panel.getBoundingClientRect();
+        if (linkRect.top < panelRect.top + 25 || linkRect.bottom > panelRect.bottom - 25) {
+          panel.scrollTop += linkRect.top - panelRect.top - panel.clientHeight / 3;
+        }
+      }
+    }
+    function queueScrollUpdate() {
+      if (!framePending) {
+        framePending = true;
+        requestAnimationFrame(updateScrollState);
+      }
+    }
+    window.addEventListener('scroll', queueScrollUpdate, { passive: true });
+    window.addEventListener('resize', queueScrollUpdate, { passive: true });
+    backTop?.addEventListener('click', () => window.scrollTo({ top: 0, behavior: scrollBehavior() }));
+    updateScrollState();
+  }
+
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', initializeReader, { once: true });
+  else initializeReader();
+})();
+</script>
+</body>
+</html>

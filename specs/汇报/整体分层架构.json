@@ -1,0 +1,124 @@
+{
+  "schema_version": 1,
+  "diagram_type": "architecture",
+  "meta": {
+    "title": "整体技术架构 · 六层职责",
+    "quality_profile": "showcase",
+    "viewBox": [
+      1160,
+      620
+    ],
+    "legend": {
+      "mode": "hidden"
+    }
+  },
+  "components": [
+    {
+      "id": "layer-workbench",
+      "type": "frontend",
+      "label": "01  工作台与 API 层",
+      "sublabel": "人物形象 · 口播稿 · TTS · 视频合成｜发布 · 指标监控 · 模型选择（后续）",
+      "tag": "单用户 · Work 贯穿七入口 · Vue / React、FastAPI 仍待选型",
+      "pos": [
+        60,
+        20
+      ],
+      "size": [
+        1040,
+        80
+      ]
+    },
+    {
+      "id": "layer-agents",
+      "type": "backend",
+      "label": "02  DeepAgents 协作层",
+      "sublabel": "总控 supervisor ＋ 策划 content · 审核 quality · 数字人 avatar · 声音 audio",
+      "tag": "按提示直接生成三稿；quality 负责内部查重与已有材料核对；LangGraph 承载状态与恢复",
+      "pos": [
+        60,
+        118
+      ],
+      "size": [
+        1040,
+        80
+      ]
+    },
+    {
+      "id": "layer-business",
+      "type": "security",
+      "label": "03  业务执行层",
+      "sublabel": "作品与版本 · 用户选择 · 质量放行 · 预算预留 · 持久作业 · 幂等与恢复",
+      "tag": "两路统一门禁：固定人物版本＋最终 TTS 已审且用户确认＋路线与适用预算，才能提交生成",
+      "pos": [
+        60,
+        216
+      ],
+      "size": [
+        1040,
+        80
+      ]
+    },
+    {
+      "id": "layer-capabilities",
+      "type": "messagebus",
+      "label": "04  Skill / MCP / 记忆支撑层",
+      "sublabel": "7 个业务 Skill · 4 组 MCP 能力（初期拟建 2 个服务）· 四层记忆",
+      "tag": "M01 仅供 quality 查历史；其余提供角色记忆、媒体生产与质量检测；无联网搜索抓取工具",
+      "pos": [
+        60,
+        314
+      ],
+      "size": [
+        1040,
+        80
+      ]
+    },
+    {
+      "id": "layer-execution",
+      "type": "cloud",
+      "label": "05  Provider 与 Worker 层",
+      "sublabel": "DeepSeek · GPT Image 2 · MiniMax｜OmniHuman 1.5（MVP）｜M2 可选：LivePortrait → MuseTalk",
+      "tag": "后期代码：确认音频后字幕可并行；原片通过＋字幕就绪后合成/清晰度/封面；终审后内部打包",
+      "pos": [
+        60,
+        412
+      ],
+      "size": [
+        1040,
+        80
+      ]
+    },
+    {
+      "id": "layer-data",
+      "type": "database",
+      "label": "06  数据与媒体层",
+      "sublabel": "作品与费用账本 · 检查点 / Store · 内容索引 · 固定人物 / 音色与最终音频版本 · 原片与质检证据",
+      "tag": "PostgreSQL / pgvector 为候选；Agent 传递 ID、版本与摘要，媒体文件独立保存",
+      "pos": [
+        60,
+        510
+      ],
+      "size": [
+        1040,
+        80
+      ]
+    }
+  ],
+  "connections": [],
+  "cards": [
+    {
+      "dot": "cyan",
+      "title": "职责分层，不表示逐层流水线",
+      "items": [
+        "Agent → MCP → 业务校验 → Provider；后期由业务服务直接调度 Worker，成片返回 quality 终审。"
+      ]
+    },
+    {
+      "dot": "slate",
+      "title": "目标架构，非已完成部署",
+      "items": [
+        "当前为目标设计；无依据事实须人工复核；OmniHuman 人物 B、身体动作与分钟级成片待验。"
+      ]
+    }
+  ]
+}

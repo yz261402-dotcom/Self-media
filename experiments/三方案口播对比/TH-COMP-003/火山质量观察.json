@@ -1,0 +1,18 @@
+{
+  "identity_observation": "输入与五个关键帧的脸部外观、黑色齐肩发、深蓝西装和浅灰背景总体相近；全片身份稳定性尚未验收。",
+  "motion_observation": "五个关键帧可见开闭嘴、表情及轻微头部姿态变化；上半身构图稳定，完整动作自然度待视听评审。",
+  "detail_observation": "脸部皮肤比参考图更平滑，开口时牙齿可见；五帧未见明显缺肢/新增主体，但不能排除瞬时嘴唇或牙齿伪影。",
+  "review_scope": "只对原图和0.948、2.844、4.740、6.636、8.532秒五个关键帧作视觉观察，未完整听看、未作身份embedding或逐音素口型测量。",
+  "full_audiovisual_review": "NOT_REVIEWED",
+  "production_selection": "UNSELECTED",
+  "technical_findings": {
+    "requested_resolution": 720,
+    "actual_pixels": [
+      704,
+      1248
+    ],
+    "video_audio_duration_difference_ms": 120,
+    "audio_waveform_lag_ms": 0.0,
+    "not_lip_sync_metric": true
+  }
+}

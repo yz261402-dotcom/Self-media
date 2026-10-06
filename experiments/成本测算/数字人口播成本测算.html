@@ -1,0 +1,71 @@
+<!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><link rel="icon" href="data:,"><title>每天五条：数字人口播成本测算</title><style>
+:root{--blue:#002FA7;--rule:#dddfe5;--muted:#656873;--bg:#F7F7F8}*{box-sizing:border-box}body{margin:0;font-family:"Helvetica Neue",Arial,"Microsoft YaHei",sans-serif;color:#202127;background:white;line-height:1.7}main{max-width:1240px;margin:auto;padding:32px}nav{display:flex;justify-content:space-between;gap:12px;border-bottom:1px solid var(--rule);padding-bottom:18px;font-size:13px}a{color:var(--blue)}h1{font-size:clamp(28px,4vw,44px);line-height:1.25;margin:30px 0 16px}h2{font-size:23px;margin:34px 0 16px}.lead,.muted{color:var(--muted)}.notice{padding:15px 20px;border-left:4px solid var(--blue);background:var(--bg);margin:22px 0}.controls{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:18px;border-block:1px solid var(--rule);padding:20px 0}label{font-size:13px;display:block}input,select{display:block;width:100%;margin-top:5px;border:1px solid var(--rule);background:white;font:inherit;font-size:16px;padding:9px 10px;color:#202127}input:focus,select:focus{outline:2px solid var(--blue)}small{display:block;font-size:12px;color:var(--muted);margin-top:5px}.results{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));border-block:1px solid var(--rule);margin:24px 0}.result{padding:22px 20px;border-right:1px solid var(--rule)}.result:first-child{padding-left:0}.result:last-child{border:0}.result h3{font-size:16px;margin:0 0 10px}.num{font-size:32px;font-weight:700;font-variant-numeric:tabular-nums;letter-spacing:-1px;color:var(--blue);overflow-wrap:anywhere}.unit{font-size:13px;color:var(--muted)}.tablebox{overflow:auto;border:1px solid var(--rule)}table{border-collapse:collapse;width:100%;min-width:760px;font-size:13px}th,td{text-align:left;vertical-align:top;padding:13px 15px;border:1px solid var(--rule)}th{background:var(--bg)}td strong{color:var(--blue)}.formula{background:var(--bg);padding:16px 20px;font-size:14px;overflow-wrap:anywhere}.chart{border-top:1px solid var(--rule);padding-top:20px}.barrow{display:grid;grid-template-columns:150px 1fr 110px;align-items:center;gap:12px;margin:14px 0;font-size:13px}.track{background:var(--bg);height:26px}.bar{background:var(--blue);height:26px;min-width:2px}.barvalue{text-align:right;font-variant-numeric:tabular-nums}.axis{display:flex;justify-content:space-between;margin:5px 122px 0 162px;font-size:12px;color:var(--muted)}.cols{display:grid;grid-template-columns:1fr 1fr;gap:32px}.cols p,.cols li{font-size:14px}details{border-top:1px solid var(--rule);padding-top:16px;margin-top:24px}summary{cursor:pointer;font-weight:600}footer{margin-top:32px;border-top:1px solid var(--rule);padding-top:18px;font-size:12px;color:var(--muted)}.error{color:var(--blue);font-weight:700}button{padding:9px 15px;background:white;border:1px solid var(--rule);font:inherit;font-size:13px;cursor:pointer}code{font-size:12px}@media(max-width:850px){main{padding:20px}.controls{grid-template-columns:1fr 1fr}.results{grid-template-columns:1fr 1fr}.result:nth-child(2){border-right:0}.result:nth-child(n+3){border-top:1px solid var(--rule)}.result:nth-child(3){padding-left:0}.num{font-size:27px}.cols{grid-template-columns:1fr;gap:0}.barrow{grid-template-columns:86px 1fr 82px;gap:8px}.axis{margin-left:94px;margin-right:90px}nav{flex-direction:column}}@media print{button{display:none}main{padding:0}details{display:block}}
+</style></head><body><main>
+<nav><span>2026.09.21 · 用户计划：每天 5 条，每条 1 分钟</span><a href="../三方案口播对比/TH-COMP-003/三方案数字人口播对比报告.html">查看实际样片与速度证据</a></nav>
+<h1>成本关键：GPU 开多久，产出多少合格视频</h1>
+<p class="lead">对比按时长付费 API、按需租用 GPU、全天租用 GPU、购买整机四种方式。当前租机费 1.58 元/小时已经包含硬件使用成本；只有自购机器才单独计折旧和电费。以下是口播阶段预算，不是完整内容生产报价。</p>
+<div class="notice"><strong>默认计划：每月 150 条、150 分钟成片。</strong> 每天开机 2 小时是预算情景，不是已证明的一分钟视频生产能力。合格率未知，默认 100% 仅用于无重做基线；请调低查看返工影响。</div>
+<form id="calculator"><div class="controls">
+<label>每天合格视频（条）<input id="daily" type="number" min="0" max="1000" step="1" value="5"></label>
+<label>每条成片时长（秒）<input id="seconds" type="number" min="1" max="3600" value="60"></label>
+<label>30 天账期内生产天数（天）<input id="days" type="number" min="1" max="30" value="30"></label>
+<label>API 价格（元/成片分钟）<input id="apiRate" type="number" min="0" step="0.01" value="60"><small>对应火山名义 1 元/秒；阿里 720P 可改为 54。</small></label>
+<label>GPU 租金（元/开机小时）<input id="gpuRate" type="number" min="0" step="0.01" value="1.58"></label>
+<label>按需每日计划开机（小时）<input id="hours" type="number" min="0" max="24" step="0.25" value="2"><small>按完整计划窗口计租金，空闲也计入。</small></label>
+<label>API 付费尝试合格率（%）<input id="apiYield" type="number" min="1" max="100" value="100"><small>包括成功收费但质量不合格；非实测默认值。</small></label>
+<label>MuseTalk 尝试合格率（%）<input id="gpuYield" type="number" min="1" max="100" value="100"><small>同一质量标准下分别估计，不能默认两者相同。</small></label>
+<label>速度推算基线<select id="mode"><option value="m1">单图：9.36 秒输出 / 99 秒整进程</option><option value="m3">动作母版缓存：9.36 秒 / 22.84 秒</option></select><small>两种不同流程，均未验证 60 秒长片；不是置信区间。</small></label>
+<label>每日额外占机预算（分钟）<input id="overhead" type="number" min="0" max="1440" value="15"><small>假设值，供装载、传输、后处理等；单图基线已含一次加载。</small></label>
+<label>云端额外月费（元）<input id="cloudExtra" type="number" min="0" value="0"><small>存储、流量、维护、母版摊销；0 表示未计入。</small></label>
+<label>API 额外月费（元）<input id="apiExtra" type="number" min="0" value="0"><small>检测、存储、维护等；0 表示未计入。</small></label>
+</div>
+<details><summary>自购机器假设：整机、电费、折旧与维护</summary><p class="muted">以下是算术示例，不是采购报价，也没有证明该机器与当前云实例同等性能。默认整机价格 10,000 元，需一次性支付；报表中的折旧不是每月实际付款。</p><div class="controls">
+<label>整机购买价（元）<input id="purchase" type="number" min="0" value="10000"></label>
+<label>预计残值（元）<input id="residual" type="number" min="0" value="0"></label>
+<label>摊销期限（月）<input id="life" type="number" min="1" value="36"></label>
+<label>开机平均整机功率（W）<input id="watts" type="number" min="0" value="400"><small>不是显卡 TDP；含主机、均值待功率计实测。</small></label>
+<label>电价（元/kWh）<input id="electric" type="number" min="0" step="0.01" value="0.8"></label>
+<label>自购机器额外月费（元）<input id="ownExtra" type="number" min="0" value="0"><small>维修、硬盘、维护和母版摊销；0 表示未计入。</small></label>
+</div></details></form>
+<h2>按当前参数的月度预算</h2><div id="error" class="error" role="alert"></div><div class="results" aria-live="polite">
+<div class="result"><h3>调用 API</h3><div class="num" id="apiCost"></div><div class="unit">元 / 月</div><small id="apiUnit"></small></div>
+<div class="result"><h3>按需租 GPU</h3><div class="num" id="cloudCost"></div><div class="unit">元 / 月</div><small id="cloudUnit"></small></div>
+<div class="result"><h3>全天租 GPU</h3><div class="num" id="alwaysCost"></div><div class="unit">元 / 月</div><small id="alwaysUnit"></small></div>
+<div class="result"><h3>自购整机</h3><div class="num" id="ownCost"></div><div class="unit">元 / 月（折旧口径）</div><small id="ownUnit"></small></div>
+</div>
+<p id="workload"></p><div id="capacity" class="notice"></div>
+<h2>费用组成与开机容量</h2><div class="tablebox" tabindex="0"><table><thead><tr><th>项目</th><th>API</th><th>按需租 GPU</th><th>全天租 GPU</th><th>自购整机</th></tr></thead><tbody id="breakdown"></tbody></table></div>
+<div class="chart"><h2>月成本对比（元 / 月）</h2><div id="bars"></div><div class="axis"><span>0 元</span><span id="axisMax"></span></div><p class="muted"><small>线性尺度，短柱不代表零成本。横轴：元/月；纵轴：部署方式。来源：用户价格与可编辑假设；自购列含折旧，租用列含整个开机窗口，均非已核账单。</small></p></div>
+<h2>什么时候值得买硬件</h2><div class="cols"><div><p id="buyBreak"></p><p id="alwaysBreak"></p></div><div><p>按需租 GPU 不要再加一遍显卡折旧和电费。自购成本则按整机购买、残值、使用寿命、电费和维护计算；若机器已有，现金增量成本可能主要是电费，但经济成本仍包括损耗与占用。</p><p>当前需求更适合先租云 GPU、批量做完即关机。持续高利用率、画质通过、机器报价与实际吞吐已确认后，再评估采购。</p></div></div>
+<details open><summary>计算公式与容易漏掉的成本</summary><div class="formula">月合格条数 = 每天条数 × 生产天数<br>API 月费 = 合格条数 × 单条分钟数 ÷ API 付费尝试合格率 × 单价 + 额外月费<br>预计 GPU 占机小时 = 尝试条数 × 每条视频秒数 × 实测时间比 ÷ 3600 + 每日额外预算 × 生产天数 ÷ 60<br>按需云月费 = 计划开机小时 × 租金 + 云额外月费（超出容量时标记预算不足）<br>全天云月费 = 720 小时 × 租金 + 云额外月费（此处按 30 天账期）<br>自购月成本 = (购买价 − 残值) ÷ 摊销月数 + 计划开机小时 × 平均整机 kW × 电价 + 额外月费</div>
+<p>尚需补齐：动作母版创建/更新、TTS 与内容模型、字幕、存储/传输、安装调试、人工质检、运维、质量不合格重做。若这些环节占用同一 GPU，也必须计入实际开机时长。多设备多租金不能只算一张卡。</p><p>动作母版可复用，但每套服装/背景可能要重建；费用按实际复用次数摊销。如果每条视频都先调用 API 生成整段母版，再用 MuseTalk 重驱动，并不能省掉整条 API 费用。</p><p><strong>质量是前提：</strong>MuseTalk 单图头部/眼睛基本静止；缓存样片动作来自阿里母版。60 秒以上的自然动作、循环接缝和稳定合格率尚未验证。短片线性推算只是预算情景，不能把 0.06～0.28 元的活跃时费当成“同等质量的一分钟成片价格”。</p></details>
+<details><summary>现有短片速度证据</summary><p>单图 M1：9.36 秒输出，整个进程 99 秒。线性到 60 秒输出约 634.62 秒，即 10.58 分钟；活跃时费约 0.27853 元。</p><p>动作母版缓存 M3：9.36 秒音轨，同进程缓存调用 22.840906 秒。线性到 60 秒约 146.42 秒，即 2.44 分钟；活跃时费约 0.06426 元。不含启动和母版准备，原样片视频轨有一帧遗漏，不能把这项性能与完整单图流程等同。</p><a href="../MuseTalk部署/MT-001/部署记录.json">原始部署记录</a> · <a href="../../specs/selection/01-数字人口播/04-MuseTalk部署与首测结果.html">实测边界与质量问题</a></details>
+<footer>离线计算，不调用任何模型、不启动云实例、不执行采购。当前按用户输入计算每天 5 条、每条 60 秒；价格和产能以实际账单与合格长片测试修正。<button id="reset" type="button">恢复默认参数</button></footer>
+</main><script>
+const $=id=>document.getElementById(id);const f=n=>n.toLocaleString('zh-CN',{minimumFractionDigits:2,maximumFractionDigits:2});
+function calculate(){
+ const inputs=[...document.querySelectorAll('input')];if(inputs.some(i=>!i.checkValidity()||i.value==='')){$('error').textContent='请输入范围内的数字，下面保留上一组有效结果。';return}
+ const v=id=>Number($(id).value);if(v('residual')>v('purchase')){$('error').textContent='预计残值不能高于购买价。';return}$('error').textContent='';
+ const count=v('daily')*v('days'),duration=v('seconds'),minutes=count*duration/60;
+ const apiAttempts=count/(v('apiYield')/100),gpuAttempts=count/(v('gpuYield')/100);
+ const ratio=$('mode').value==='m1'?99/9.36:22.840906/9.36;
+ const computeHours=gpuAttempts*duration*ratio/3600,overheadHours=count? v('days')*v('overhead')/60:0,requiredHours=computeHours+overheadHours;
+ const plannedHours=v('days')*v('hours'),cloudFeasible=requiredHours<=plannedHours+1e-9,alwaysFeasible=requiredHours<=720;
+ const apiVariable=apiAttempts*duration/60*v('apiRate'),api=apiVariable+v('apiExtra'),cloudRent=plannedHours*v('gpuRate'),cloud=cloudRent+v('cloudExtra'),always=720*v('gpuRate')+v('cloudExtra');
+ const depreciation=(v('purchase')-v('residual'))/v('life'),energyHourly=v('watts')/1000*v('electric'),power=plannedHours*energyHourly,own=depreciation+power+v('ownExtra');
+ for(const [id,cost]of[['apiCost',api],['cloudCost',cloud],['alwaysCost',always],['ownCost',own]])$(id).textContent=f(cost);
+ const unit=(cost,feasible=true)=>!count?'没有计划产出，不计算单条费用':!feasible?'容量不足，不能作为每条合格视频报价':`约 ${f(cost/count)} 元 / 合格条（仅已计项目）`;
+ $('apiUnit').textContent=unit(api);$('cloudUnit').textContent=unit(cloud,cloudFeasible);$('alwaysUnit').textContent=unit(always,alwaysFeasible);$('ownUnit').textContent=unit(own,cloudFeasible);
+ $('workload').textContent=`每月 ${f(count)} 条 / ${f(minutes)} 分钟成片；API 预计付费尝试 ${f(apiAttempts)} 次，MuseTalk 预计尝试 ${f(gpuAttempts)} 次。`;
+ $('capacity').textContent=`按短片速度线性推算，本月需要 ${f(computeHours)} 小时处理＋${f(overheadHours)} 小时额外预算＝${f(requiredHours)} 小时。计划开机 ${f(plannedHours)} 小时。${cloudFeasible?'算术容量覆盖；真实长片仍须验证。':'计划窗口不足，需要增加开机时长、改善合格率或验证更快流程，当前按需/自购预算不能支撑目标产量。'}`;
+ const rows=[['生成调用 / GPU租金',f(apiVariable)+' 元',f(cloudRent)+' 元',f(720*v('gpuRate'))+' 元','已在折旧体现硬件'],['开机窗口','供应商负责',f(plannedHours)+' h', '720.00 h（30天）',f(plannedHours)+' h（与按需相同）'],['整机折旧','含在API价格','含在租金','含在租金',f(depreciation)+' 元'],['电费','含在API价格','含在租金','含在租金',f(power)+' 元'],['额外月费（默认未计）',f(v('apiExtra'))+' 元',f(v('cloudExtra'))+' 元',f(v('cloudExtra'))+' 元',f(v('ownExtra'))+' 元'],['一次性硬件现金支出','无需购买','无需购买','无需购买',f(v('purchase'))+' 元'],['容量状态','并发/最长时长待接口实测',cloudFeasible?'算术覆盖，待长片实测':'计划窗口不足',alwaysFeasible?'算术覆盖，待长片实测':'单卡720小时仍不足',cloudFeasible?'假设同吞吐；硬件未选':'计划窗口不足']];
+ $('breakdown').innerHTML=rows.map(r=>'<tr><th>'+r[0]+'</th>'+r.slice(1).map(t=>'<td>'+t+'</td>').join('')+'</tr>').join('');
+ const costs=[['API',api],['按需租GPU',cloud],['全天租GPU',always],['自购（折旧）',own]],max=Math.max(...costs.map(x=>x[1]),1);
+ $('bars').innerHTML=costs.map(([name,cost])=>`<div class="barrow"><span>${name}</span><div class="track"><div class="bar" style="width:${cost/max*100}%" aria-label="${name} ${f(cost)}元每月"></div></div><span class="barvalue">${f(cost)} 元</span></div>`).join('');$('axisMax').textContent=f(max)+' 元';
+ const denominator=v('gpuRate')-energyHourly;const fixedOwn=depreciation+v('ownExtra')-v('cloudExtra');
+ $('buyBreak').textContent=denominator>0&&fixedOwn>=0?`相同吞吐、相同开机时长和当前额外月费假设下，自购折旧口径约在 ${f(fixedOwn/denominator)} 小时/月（按30天约 ${f(fixedOwn/denominator/30)} 小时/天）与租用持平；低于此值租用更便宜，高于此值自购可能更便宜。需持续使用整个摊销期，不能把它当现金回本月份。`:'当前功耗/额外费用参数没有适用的正时长平衡点，直接比较总费用并核实硬件性能。';
+ const perMin=v('apiRate')/(v('apiYield')/100);$('alwaysBreak').textContent=perMin>0?`全天租用与 API 的算术费用平衡量约 ${f(Math.max(0,(always-v('apiExtra'))/perMin))} 合格成片分钟/月；前提是相同质量、可用产能，以及只计当前所填成本。它不表示全天开机是最省钱的策略。`:'API 单价为零时，不计算付费 API 的平衡量。';
+ window.costResult={count,minutes,apiAttempts,gpuAttempts,computeHours,overheadHours,requiredHours,plannedHours,cloudFeasible,alwaysFeasible,api,cloud,always,own,depreciation,power};
+}
+$('calculator').addEventListener('input',calculate);$('calculator').addEventListener('change',calculate);$('calculator').addEventListener('submit',e=>e.preventDefault());$('reset').addEventListener('click',()=>{$('calculator').reset();calculate()});calculate();
+</script></body></html>

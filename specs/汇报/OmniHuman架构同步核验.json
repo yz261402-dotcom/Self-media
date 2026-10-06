@@ -1,0 +1,96 @@
+{
+  "scope": "五图与两张PNG；OmniHuman MVP＋M2可选；固定TTS前置",
+  "artifacts": [
+    {
+      "file": "specs\\汇报\\整体分层架构.html",
+      "artifact_sha256": "d64d5448cb169fd66149520aabd144cf08a5d39a5c8a3b8592e4bf7bf06bcbe7",
+      "showcase": "9/9",
+      "errors": 0,
+      "warnings": 0,
+      "containment": "4/4",
+      "visual_review": "passed",
+      "screenshots": [
+        "2048x1320.light",
+        "1440x900.light",
+        "1440x900.dark",
+        "2048x1320.dark"
+      ]
+    },
+    {
+      "file": "specs\\汇报\\Agent协作框架.html",
+      "artifact_sha256": "bdc061bfdbc15eddd602bd6ba356699bb15c73ab766ccf7a8d31ede39f004145",
+      "showcase": "9/9",
+      "errors": 0,
+      "warnings": 0,
+      "containment": "4/4",
+      "visual_review": "passed",
+      "screenshots": [
+        "2048x1320.light",
+        "1440x900.light",
+        "1440x900.dark",
+        "2048x1320.dark"
+      ]
+    },
+    {
+      "file": "specs\\架构图\\DeepAgents多智能体架构.html",
+      "artifact_sha256": "3ca0a9199bd2682b6bf9bc96571f66d40cb19ce3023a909322640437288eb315",
+      "showcase": "9/9",
+      "errors": 0,
+      "warnings": 0,
+      "containment": "4/4",
+      "visual_review": "passed",
+      "screenshots": [
+        "2048x1320.light",
+        "1440x900.light",
+        "1440x900.dark",
+        "2048x1320.dark"
+      ],
+      "png": {
+        "file": "specs\\架构图\\DeepAgents多智能体架构.png",
+        "size": [
+          4920,
+          2340
+        ],
+        "sha256": "9f9897a23e9075c7bd760461cee0ed75e96adfb8f34d0b8f09b717dff468b5f5"
+      }
+    },
+    {
+      "file": "specs\\汇报\\项目汇报架构.html",
+      "artifact_sha256": "01ca28d7ca62f9319f1f984ef6998e22f40f7fd251fe249c04c8890fe9aa9b99",
+      "showcase": "9/9",
+      "errors": 0,
+      "warnings": 0,
+      "containment": "4/4",
+      "visual_review": "passed",
+      "screenshots": [
+        "2048x1320.light",
+        "1440x900.light",
+        "1440x900.dark",
+        "2048x1320.dark"
+      ]
+    },
+    {
+      "file": "specs\\架构图\\作品生产数据流.html",
+      "artifact_sha256": "aca46771fbdf2f39feafb78b1037916e4b2b05d3561139dc2e864494e48febed",
+      "showcase": "9/9",
+      "errors": 0,
+      "warnings": 0,
+      "containment": "4/4",
+      "visual_review": "passed",
+      "screenshots": [
+        "2048x1320.light",
+        "1440x900.light",
+        "1440x900.dark",
+        "2048x1320.dark"
+      ],
+      "png": {
+        "file": "specs\\架构图\\作品生产数据流.png",
+        "size": [
+          4320,
+          2480
+        ],
+        "sha256": "e5ec25ae551fbfbcf5ae9fca489f1919fa74cbf2d9456e5ae8e9e7dbcc9e1dbb"
+      }
+    }
+  ]
+}

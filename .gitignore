@@ -31,7 +31,6 @@ dist/
 .vite/
 
 # ===== 过程产物（不属于项目本体）=====
-experiments/
 docs/
 .playwright-mcp/
 .workbuddy/
@@ -39,15 +38,40 @@ docs/
 .superpowers/
 .claude/
 
-# ===== specs 内的过程目录，保留 0001 正式文档 =====
-specs/历史版本/
-specs/汇报/
+# experiments 只上传被正式文档引用的证据；
+# 用 experiments/* 而非 experiments/，否则父目录被排除后子项无法放行。
+experiments/*
+!experiments/表情动作改善/
+!experiments/三方案口播对比/
+!experiments/成本测算/
+!experiments/人物与音色选型/
+!experiments/MVP重构/
+# MVP重构 内同样只保留被引用的几处
+experiments/MVP重构/*
+!experiments/MVP重构/20260926-前端重做/
+!experiments/MVP重构/20260927-抖音发布/
+!experiments/MVP重构/20260925/
+!experiments/MVP重构/20260928-发布恢复/
+# MuseTalk 部署只保留远端证据、补丁脚本与测量结果（权重缓存 632M 不传）
+!experiments/MuseTalk部署/
+experiments/MuseTalk部署/MT-001/*
+!experiments/MuseTalk部署/MT-001/远端证据/
+!experiments/MuseTalk部署/MT-001/tests/
+!experiments/MuseTalk部署/MT-001/*.json
+!experiments/MuseTalk部署/MT-001/*.html
+!experiments/MuseTalk部署/MT-001/*.mp4
+!experiments/MuseTalk部署/MT-001/*.jpg
+!experiments/MuseTalk部署/MT-001/*.py
+# experiments 内的回归日志作为验收证据保留（体积仅数百 KB）
+!experiments/**/*.log
+
+# ===== specs 内仅排除纯归档目录（体积大且为可再生的历史快照）=====
 specs/答辩/
-specs/阅读器/
-specs/research/
-specs/selection/
-specs/架构图/
-specs/配置/
+# 历史版本只保留被正式文档引用的三份归档
+specs/历史版本/*/
+!specs/历史版本/2026-09-23-075305-撤回Grok未定稿方案/
+!specs/历史版本/2026-09-22-165025-单用户工作台方案确认前/
+!specs/历史版本/2026-09-22-173935-数据流与评估完善前/
 
 # ===== 测试运行产生的临时目录与临时库 =====
 tmp_*

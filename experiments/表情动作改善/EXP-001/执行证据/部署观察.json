@@ -1,0 +1,15 @@
+{
+  "observed_from": "2026-09-22T00:47:11+00:00",
+  "observed_until": "2026-09-22T01:34:48.923185+00:00",
+  "hourly_cny_user_reported": 1.58,
+  "mode": "integration",
+  "production_accepted": false,
+  "cloud_instance_shutdown": false,
+  "models": {
+    "MuseTalk": "0a89dec45a0192b824e3cf4daf96c239440c5ed8",
+    "LivePortrait": "9b294b3d0536135442ea73cb01e6cb3ca7029dd3",
+    "SadTalker": "cd4c0465ae0b54a6f85af57f5c65fec9fe23e7f8"
+  },
+  "observed_interval_seconds": 2857.923185,
+  "observed_interval_estimated_cny": 1.2543
+}

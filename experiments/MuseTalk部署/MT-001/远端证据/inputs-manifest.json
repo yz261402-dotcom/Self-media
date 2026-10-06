@@ -1,0 +1,27 @@
+[
+  {
+    "name": "avatar.png",
+    "bytes": 2420915,
+    "sha256": "6531d41f561927836d496c169e8c53751c93243aad9fb0d8e624ad4c73e4f135"
+  },
+  {
+    "name": "speech.wav",
+    "bytes": 449324,
+    "sha256": "3aa5637692cfb333e0594d949bae2522cd44f698fe40c87718c96163408411ba"
+  },
+  {
+    "name": "aliyun_original.mp4",
+    "bytes": 2334918,
+    "sha256": "29e8af401d8f4701a01cf50c35d526b7ff13a159715d4d9e6627dfc05c0c2fd0"
+  },
+  {
+    "name": "speech_delayed.wav",
+    "bytes": 473324,
+    "sha256": "71c29ca60e1ff3dd19541f67e3aec34e3efef0b574482332629be20aae351994"
+  },
+  {
+    "name": "motion_25fps.mp4",
+    "bytes": 2126169,
+    "sha256": "b9d02cbc73fc7b4dbb48034fff5da3cfd3914901d6feaeb979b14b8cddd97f87"
+  }
+]

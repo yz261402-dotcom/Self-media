@@ -1,0 +1,4 @@
+OPENAI_API_KEY is set.
+Calling Image API (generation). This can take up to a couple of minutes.
+Generation completed in 35.2s.
+Wrote C:\Users\22346\Desktop\自媒体视频生成\experiments\人物与音色选型\AV-001\人物\人物C.png

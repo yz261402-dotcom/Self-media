@@ -1,0 +1,23 @@
+{
+  "checked_at": "2026-09-22T23:45:52.556409+00:00",
+  "kind": "read_only_model_listing",
+  "base_url": "https://airelay.dog.airelay.buzz",
+  "path": "/v1/models",
+  "http_status": 200,
+  "model_ids": [
+    "grok-imagine-video",
+    "grok-imagine-video-1.5",
+    "grok-imagine-video-1.5-preview"
+  ],
+  "requested_model": "grok-imagine-video-1.5",
+  "listed": true,
+  "billable_generation_submissions": 0,
+  "uploaded_media_count": 0,
+  "video_protocol_verified": false,
+  "native_speech_quality_verified": false,
+  "external_audio_drive_verified": false,
+  "price_fen_per_second": 38,
+  "price_source": "user_quote",
+  "billing_verified": false,
+  "credential_value_saved": false
+}

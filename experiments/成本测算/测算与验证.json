@@ -1,0 +1,32 @@
+{
+  "scenario": {
+    "videos_per_day": 5,
+    "seconds_per_video": 60,
+    "production_days": 30,
+    "cloud_hours_per_day": 2,
+    "yield_assumption_percent": 100
+  },
+  "monthly": {
+    "api_cny": 9000,
+    "cloud_scheduled_cny": 94.8,
+    "cloud_always_on_cny": 1137.6,
+    "self_owned_depreciation_and_power_cny": 296.9777777778
+  },
+  "validation": {
+    "independent_python_math": "PASS",
+    "browser_default_values": "PASS",
+    "50_percent_gpu_yield_flags_insufficient_capacity": "PASS",
+    "switch_to_warm_cache_changes_processing_hours": "PASS",
+    "invalid_residual_rejected": "PASS",
+    "reset": "PASS",
+    "desktop_and_390px_mobile_no_overflow": true,
+    "local_links": "PASS"
+  },
+  "limitations": [
+    "short_video_linear_projection_not_60s_measurement",
+    "hardware_purchase_values_are_hypothetical_not_quotation",
+    "quality_not_accepted",
+    "actual_bill_not_reconciled",
+    "other_costs_default_zero_means_not_counted"
+  ]
+}

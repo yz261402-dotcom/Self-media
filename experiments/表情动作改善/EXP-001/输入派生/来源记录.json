@@ -1,0 +1,12 @@
+{
+  "source_path": "assets/固定主播/主播B/版本1/基础人物.png",
+  "source_sha256": "b66feb11d62559a632def9f86e0915645a70fa4dbb38c6a2cd2f7cb50b607b48",
+  "derived_path": "人物B-偶数尺寸.png",
+  "derived_sha256": "a616738fc3517047da733efb5558256884292f6a2b84bb9e4a4f620e127260fa",
+  "size": [
+    942,
+    1672
+  ],
+  "operation": "Duplicate last pixel column on right; original 941x1672 pixels unchanged, no resize",
+  "reason": "H264 yuv420p requires even width"
+}

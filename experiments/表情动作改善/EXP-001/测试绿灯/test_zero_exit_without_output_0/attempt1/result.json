@@ -1,0 +1,13 @@
+{
+  "state": "FAILED",
+  "reason": "missing_outputs",
+  "pid": 18676,
+  "returncode": 0,
+  "gpu_peak_total_mib_sampled": null,
+  "outputs": [],
+  "quality": "NOT_REVIEWED",
+  "finished_at": "2026-09-22T00:50:08.046053+00:00",
+  "wall_seconds": 0.25,
+  "estimated_job_gpu_cny": 0.00011,
+  "cost_scope": "job_wall_clock_only; excludes installation, idle time and all previous costs"
+}

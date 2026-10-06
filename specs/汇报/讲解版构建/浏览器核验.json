@@ -1,0 +1,48 @@
+{
+  "artifact": "项目白话讲解.html",
+  "checked_at": "2026-09-29T09:21:14.220100+08:00",
+  "sha256": "a87f7bf6d8e39d04eb4e4c04117c87131ccc7c2b070bb79150cce3763ab4ac97",
+  "bytes": 105350,
+  "chapters": [
+    "overview",
+    "architecture",
+    "dataflow",
+    "stack",
+    "performance",
+    "deployment",
+    "evaluation",
+    "roadmap",
+    "glossary",
+    "talk"
+  ],
+  "glossary_terms": 49,
+  "html_structure": "passed",
+  "links": "passed",
+  "offline_external_resources": 0,
+  "browser_checks": {
+    "qps_default_and_change": "passed",
+    "percentile_default_and_tail_change": "passed",
+    "gpu_default_change_and_invalid_input": "passed",
+    "glossary_search_and_empty_state": "passed",
+    "expand_and_collapse_six_details": "passed",
+    "beforeprint_expansion_and_afterprint_restoration": "passed",
+    "mobile_all_eleven_options_and_first_chapter": "passed",
+    "desktop_navigation_after_scroll_settles": "passed",
+    "console_errors": 0
+  },
+  "responsive_widths_without_page_overflow": [
+    320,
+    390,
+    1440,
+    1920
+  ],
+  "visual_review": [
+    "desktop cover",
+    "mobile cover",
+    "percentile demo",
+    "print pages 1 and 2"
+  ],
+  "print_pdf_pages": 34,
+  "print_minimum_page_text_characters": 114,
+  "content_review": "completed; current/target/sample distinctions and three additional clarifications applied"
+}

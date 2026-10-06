@@ -1,0 +1,340 @@
+{
+  "schema_version": 1,
+  "diagram_type": "dataflow",
+  "meta": {
+    "title": "作品生产数据流 · 固定音频驱动",
+    "quality_profile": "showcase",
+    "viewBox": [
+      1080,
+      620
+    ],
+    "legend": {
+      "entries": {
+        "default": {
+          "label": "数据引用"
+        },
+        "emphasis": {
+          "label": "主要产物"
+        },
+        "security": {
+          "label": "确认或审核门禁"
+        },
+        "database": {
+          "label": "版本资产"
+        }
+      }
+    }
+  },
+  "stages": [
+    {
+      "label": "作品与输入"
+    },
+    {
+      "label": "稿件与固定声音"
+    },
+    {
+      "label": "确认与并行"
+    },
+    {
+      "label": "口播与交付"
+    },
+    {
+      "label": "原片审核与代码后期"
+    }
+  ],
+  "nodes": [
+    {
+      "id": "avatar",
+      "type": "database",
+      "label": "已审人物版本",
+      "sublabel": "选人／参考编辑＋用户确认",
+      "stage": 0,
+      "row": 0,
+      "width": 152,
+      "tag": "独立准备；人物页不做口型",
+      "yOffset": -20
+    },
+    {
+      "id": "drafts",
+      "type": "backend",
+      "label": "提示 → content 生成三稿",
+      "sublabel": "用户提示＋可选自带材料",
+      "stage": 0,
+      "row": 3,
+      "width": 152,
+      "tag": "Work 记录用户输入；不联网",
+      "yOffset": -92
+    },
+    {
+      "id": "script",
+      "type": "security",
+      "label": "quality 审核 → 用户选稿",
+      "sublabel": "内部查重／已有材料核对",
+      "stage": 1,
+      "row": 3,
+      "width": 180,
+      "tag": "无依据事实转人工复核",
+      "yOffset": -92
+    },
+    {
+      "id": "audio",
+      "type": "security",
+      "label": "TTS → 质检 → 用户确认",
+      "sublabel": "固定 MiniMax 音色与 WAV",
+      "stage": 1,
+      "row": 1,
+      "width": 180,
+      "tag": "两路统一最终音频确认门",
+      "yOffset": -44
+    },
+    {
+      "id": "route",
+      "type": "security",
+      "label": "用户选路线与预算",
+      "sublabel": "人物＋最终音频版本汇合",
+      "stage": 2,
+      "row": 1,
+      "width": 180,
+      "tag": "OmniHuman 与 M2 均须通过",
+      "yOffset": -44
+    },
+    {
+      "id": "postprocess",
+      "type": "backend",
+      "label": "确定性后期 Worker",
+      "sublabel": "合格原片＋字幕时间线",
+      "stage": 4,
+      "row": 3,
+      "width": 180,
+      "tag": "FFmpeg／清晰度／封面",
+      "yOffset": -92
+    },
+    {
+      "id": "m2",
+      "type": "backend",
+      "label": "M2 · 低成本可选",
+      "sublabel": "LivePortrait → MuseTalk 1.5",
+      "stage": 3,
+      "row": 0,
+      "width": 180,
+      "tag": "动作底片＋同一最终音频",
+      "yOffset": -20
+    },
+    {
+      "id": "omni",
+      "type": "cloud",
+      "label": "OmniHuman 1.5",
+      "sublabel": "人物图＋最终音频＋动作描述",
+      "stage": 3,
+      "row": 2,
+      "width": 180,
+      "tag": "MVP 必验；不再接 MuseTalk",
+      "yOffset": -68
+    },
+    {
+      "id": "rawreview",
+      "type": "security",
+      "label": "口播原片审核",
+      "sublabel": "身份、口型、身体与音轨",
+      "stage": 4,
+      "row": 1,
+      "width": 180,
+      "tag": "仅接收所选路线的合格结果",
+      "yOffset": -44
+    },
+    {
+      "id": "post",
+      "type": "security",
+      "label": "quality 成片终审",
+      "sublabel": "检查字幕、音轨与视频规格",
+      "stage": 4,
+      "row": 4,
+      "width": 180,
+      "tag": "不通过返回对应环节修正",
+      "yOffset": -106
+    },
+    {
+      "id": "package",
+      "type": "frontend",
+      "label": "内部打包 → 预览下载",
+      "sublabel": "成片／文案／清单／证据",
+      "stage": 3,
+      "row": 4,
+      "width": 180,
+      "tag": "终审通过才生成发布就绪包",
+      "yOffset": -106
+    },
+    {
+      "id": "subtitle",
+      "type": "backend",
+      "label": "字幕代码识别与对齐",
+      "sublabel": "最终音频＋批准稿原文",
+      "stage": 2,
+      "row": 3,
+      "width": 180,
+      "tag": "音频确认后与口播生成并行",
+      "yOffset": -92
+    }
+  ],
+  "flows": [
+    {
+      "id": "evidence-script",
+      "from": "drafts",
+      "to": "script",
+      "label": "三稿与材料引用",
+      "variant": "emphasis",
+      "labelAt": [
+        208,
+        450
+      ]
+    },
+    {
+      "id": "script-audio",
+      "from": "script",
+      "to": "audio",
+      "label": "所选稿件版本",
+      "variant": "security"
+    },
+    {
+      "id": "avatar-route",
+      "from": "avatar",
+      "to": "route",
+      "label": "人物图版本",
+      "variant": "default",
+      "fromSide": "right",
+      "toSide": "top",
+      "via": [
+        [
+          530,
+          137
+        ]
+      ]
+    },
+    {
+      "id": "audio-route",
+      "from": "audio",
+      "to": "route",
+      "label": "最终 WAV",
+      "variant": "security",
+      "labelAt": [
+        423,
+        184
+      ]
+    },
+    {
+      "id": "route-m2",
+      "from": "route",
+      "to": "m2",
+      "label": "M2 输入快照",
+      "variant": "security",
+      "labelAt": [
+        638,
+        180
+      ]
+    },
+    {
+      "id": "route-omni",
+      "from": "route",
+      "to": "omni",
+      "label": "Omni 输入快照",
+      "variant": "security",
+      "labelAt": [
+        638,
+        270
+      ]
+    },
+    {
+      "id": "m2-raw",
+      "from": "m2",
+      "to": "rawreview",
+      "label": "M2 原片",
+      "variant": "emphasis",
+      "labelAt": [
+        853,
+        180
+      ]
+    },
+    {
+      "id": "omni-raw",
+      "from": "omni",
+      "to": "rawreview",
+      "label": "Omni 原片",
+      "variant": "emphasis",
+      "labelAt": [
+        853,
+        270
+      ]
+    },
+    {
+      "id": "subtitle-post",
+      "from": "postprocess",
+      "to": "post",
+      "label": "成片提交终审",
+      "variant": "default"
+    },
+    {
+      "id": "post-package",
+      "from": "post",
+      "to": "package",
+      "label": "终审通过",
+      "variant": "security",
+      "labelAt": [
+        853,
+        550
+      ]
+    },
+    {
+      "id": "raw-worker",
+      "from": "rawreview",
+      "to": "postprocess",
+      "label": "合格原片",
+      "variant": "security",
+      "labelAt": [
+        960,
+        320
+      ]
+    },
+    {
+      "id": "audio-subtitle",
+      "from": "audio",
+      "to": "subtitle",
+      "label": "最终音频／原文",
+      "variant": "default"
+    },
+    {
+      "id": "subtitle-postprocess",
+      "from": "subtitle",
+      "to": "postprocess",
+      "label": "字幕时间线",
+      "variant": "default"
+    }
+  ],
+  "cards": [
+    {
+      "dot": "cyan",
+      "title": "直接生成与内部质检",
+      "items": [
+        "content 按用户提示生成三稿；不搜索网络、抓取网页或收集热榜。",
+        "quality 查询内部历史并核对用户材料/既存已核材料；无依据事实转人工。"
+      ]
+    },
+    {
+      "dot": "rose",
+      "title": "确定性后期与终审",
+      "items": [
+        "最终音频确认后，字幕可与两路视频生成并行。",
+        "原片审核通过＋字幕就绪 → 代码后期合成/清晰度/封面 → quality 终审。",
+        "终审通过后由内部代码打包；两路仍共用固定人物与 MiniMax 声音版本。"
+      ]
+    },
+    {
+      "dot": "amber",
+      "title": "MVP 范围与待验能力",
+      "items": [
+        "OmniHuman 为首版必验；当前人物 B、身体动作和分钟级成片待验证。",
+        "旧接口建议音频≤15 秒且须<60 秒；用户报价 1 元/秒，尚待账单核验。",
+        "V1 到终审通过后的预览下载；不代表平台已发布。"
+      ]
+    }
+  ]
+}

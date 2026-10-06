@@ -1,0 +1,634 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="light">
+<link rel="icon" href="data:,">
+<meta name="source-sha256" content="01a2b64472387ec46f4dc88897ca5a1abf9f4e8ad28d1de694a7030ceaa2af96">
+<title>人物 B 表情动作改善实测 · AI 自媒体文档</title>
+<style>:root {
+  color-scheme: light;
+  --paper: #ffffff;
+  --surface: #f7f7f8;
+  --ink: #202126;
+  --muted: #666970;
+  --line: #dedfe3;
+  --blue: #002fa7;
+  --reader-font-size: 17px;
+  --header-height: 76px;
+  font-family: "Helvetica Neue", Helvetica, Arial, "PingFang SC", "Microsoft YaHei", sans-serif;
+  font-synthesis: none;
+}
+
+* { box-sizing: border-box; }
+.sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; border: 0; }
+.source-notice { margin-top: 22px; padding: 12px 14px; border-left: 3px solid var(--blue); background: var(--surface); color: var(--muted); font-size: 13px; }
+html { scroll-padding-top: 104px; }
+body { margin: 0; min-width: 320px; color: var(--ink); background: var(--surface); font-size: 14px; line-height: 1.6; }
+body.menu-open { overflow: hidden; }
+a { color: var(--blue); text-underline-offset: 3px; }
+button, input { font: inherit; }
+button { color: inherit; cursor: pointer; }
+button, input[type="search"] { border: 1px solid var(--line); border-radius: 3px; background: var(--paper); }
+button { min-height: 36px; padding: 6px 11px; line-height: 1.4; }
+button:hover { border-color: var(--blue); color: var(--blue); }
+button:disabled { opacity: .42; cursor: default; }
+button:disabled:hover { color: inherit; border-color: var(--line); }
+:focus-visible { outline: 2px solid var(--blue); outline-offset: 3px; }
+[hidden] { display: none !important; }
+::selection { background: #dbe4ff; color: #151c32; }
+
+.skip-link { position: fixed; z-index: 100; top: -70px; left: 16px; padding: 10px 18px; background: var(--blue); color: white; }
+.skip-link:focus { top: 10px; }
+.topbar { position: sticky; z-index: 30; top: 0; min-height: var(--header-height); display: flex; align-items: center; gap: 24px; padding: 15px 32px; border-bottom: 1px solid var(--line); background: var(--paper); }
+.brand { min-width: 0; color: var(--ink); font-size: 17px; font-weight: 700; line-height: 1.35; letter-spacing: -.02em; text-decoration: none; }
+.brand small, .brand span { display: block; margin-top: 4px; font-size: 11px; font-weight: 400; letter-spacing: .08em; color: var(--muted); }
+.toolbar { display: flex; align-items: center; gap: 6px; margin-left: auto; flex-shrink: 0; }
+.toolbar .font-smaller, .toolbar .font-reset, .toolbar .font-larger { min-width: 36px; padding: 5px 8px; font-variant-numeric: tabular-nums; }
+.toolbar .print-button { margin-left: 8px; }
+.mobile-menu { display: none; }
+.layout { display: grid; grid-template-columns: 244px minmax(0, 1fr) 208px; max-width: 1536px; margin: 0 auto; align-items: start; background: var(--paper); }
+.sidebar { position: sticky; top: var(--header-height); height: calc(100dvh - var(--header-height)); overflow-y: auto; overscroll-behavior: contain; padding: 32px 20px 36px 24px; border-right: 1px solid var(--line); scrollbar-width: thin; background: var(--surface); }
+.nav-group + .nav-group { margin-top: 32px; padding-top: 26px; border-top: 1px solid var(--line); }
+.group-title { margin: 0 10px 12px; color: var(--muted); font-size: 11px; font-weight: 600; letter-spacing: .11em; }
+.doc-nav { display: flex; flex-direction: column; gap: 4px; }
+.doc-nav a { display: block; padding: 9px 10px; border-left: 2px solid transparent; color: #55575d; font-size: 13px; line-height: 1.65; text-decoration: none; overflow-wrap: anywhere; }
+.doc-nav a:hover { color: var(--blue); background: #eeeeef; }
+.doc-nav a[aria-current="page"] { border-left-color: var(--blue); background: #eaf0ff; color: var(--blue); font-weight: 600; }
+.doc-nav .doc-number { display: inline-block; min-width: 25px; color: var(--muted); font-variant-numeric: tabular-nums; }
+
+#main { min-width: 0; padding: 46px clamp(28px, 3.7vw, 60px) 56px; }
+.document-header { margin-bottom: 29px; }
+.eyebrow { margin: 0 0 18px; color: var(--blue); font-size: 12px; font-weight: 600; letter-spacing: .08em; }
+.document-header h1 { margin: 0 0 21px; font-size: clamp(30px, 2.8vw, 42px); font-weight: 700; letter-spacing: -.045em; line-height: 1.3; overflow-wrap: anywhere; }
+.doc-meta { display: flex; flex-wrap: wrap; align-items: baseline; gap: 6px 18px; color: var(--muted); font-size: 12px; }
+.doc-meta a { color: var(--muted); }
+.doc-meta a:hover { color: var(--blue); }
+.reader-tools { margin: 0 0 36px; padding: 16px 0; border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); }
+#search-form { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; }
+#search-input { flex: 1 1 160px; min-width: 100px; width: 0; height: 36px; padding: 6px 10px; color: var(--ink); }
+#search-input::placeholder { color: #777a82; }
+#search-next, #search-clear { flex: 0 0 auto; font-size: 12px; }
+#search-status { flex: 1 0 100%; color: var(--muted); font-size: 11px; line-height: 1.5; }
+#search-status:empty { display: none; }
+
+#document-body { font-size: var(--reader-font-size); line-height: 1.9; overflow-wrap: anywhere; }
+#document-body > :first-child { margin-top: 0; }
+#document-body h2, #document-body h3, #document-body h4, #document-body h5, #document-body h6 { scroll-margin-top: 106px; font-weight: 650; line-height: 1.45; color: #15171c; }
+#document-body h2 { margin: 2.8em 0 1.05em; padding-top: 1.25em; border-top: 1px solid var(--line); font-size: 1.5em; letter-spacing: -.035em; }
+#document-body h3 { margin: 2em 0 .85em; font-size: 1.18em; letter-spacing: -.025em; }
+#document-body h4 { margin: 1.65em 0 .7em; font-size: 1.03em; }
+#document-body h5, #document-body h6 { margin: 1.4em 0 .6em; font-size: 1em; }
+#document-body p { margin: .9em 0; }
+#document-body ul, #document-body ol { margin: 1em 0; padding-left: 1.55em; }
+#document-body li { margin: .38em 0; padding-left: .15em; }
+#document-body li > p { margin: .4em 0; }
+#document-body li > ul, #document-body li > ol { margin: .35em 0 .6em; }
+#document-body strong { color: #14161b; font-weight: 650; }
+#document-body hr { margin: 2.1em 0; border: 0; border-top: 1px solid var(--line); }
+#document-body blockquote { margin: 1.5em 0; padding: .25em 1.15em; border-left: 3px solid var(--blue); background: var(--surface); color: #4c4f57; }
+#document-body blockquote p { margin: .55em 0; }
+#document-body a { overflow-wrap: anywhere; }
+#document-body a:hover { text-decoration-thickness: 2px; }
+#document-body img { max-width: 100%; height: auto; }
+#document-body code { padding: .12em .32em; border: 1px solid #e7e7ea; border-radius: 3px; background: var(--surface); font-family: Consolas, "SFMono-Regular", "Liberation Mono", monospace; font-size: .82em; overflow-wrap: anywhere; }
+#document-body pre { position: relative; margin: 1.5em 0; padding: 44px 0 0; max-width: 100%; overflow: hidden; border: 1px solid var(--line); border-radius: 4px; background: var(--surface); line-height: 1.7; }
+#document-body pre > code { display: block; max-width: 100%; overflow-x: auto; padding: 0 19px 18px; border: 0; border-radius: 0; font-size: .79em; line-height: 1.75; white-space: pre; overflow-wrap: normal; tab-size: 2; }
+.copy-code { position: absolute; top: 7px; right: 8px; min-height: 28px; padding: 4px 9px; color: var(--muted); font-size: 11px; background: var(--paper); }
+.table-scroll { max-width: 100%; margin: 1.5em 0; overflow-x: auto; border: 1px solid var(--line); border-radius: 3px; scrollbar-width: thin; }
+#document-body table { width: 100%; min-width: 100%; border-collapse: collapse; font-size: .82em; line-height: 1.7; }
+#document-body th, #document-body td { min-width: 105px; padding: 12px 14px; border-right: 1px solid var(--line); border-bottom: 1px solid var(--line); text-align: left; vertical-align: top; }
+#document-body th { background: var(--surface); font-weight: 600; color: #30333a; }
+#document-body tr > :last-child { border-right: 0; }
+#document-body tbody tr:last-child td { border-bottom: 0; }
+#document-body tbody tr:hover { background: #fafafb; }
+#document-body th:first-child, #document-body td:first-child { min-width: 95px; }
+#document-body input[type="checkbox"] { width: 14px; height: 14px; margin: 0 7px 0 0; vertical-align: middle; accent-color: var(--blue); }
+#document-body details { margin: 1.15em 0; padding: 12px 16px; border: 1px solid var(--line); border-radius: 3px; }
+#document-body summary { color: var(--muted); font-size: .85em; cursor: pointer; }
+#document-body details[open] summary { margin-bottom: 12px; }
+.architecture { margin: 1.8em 0; }
+.diagram-viewport { max-width: 100%; overflow-x: auto; border: 1px solid var(--line); scrollbar-width: thin; }
+.diagram-viewport > svg { display: block; min-width: 720px; width: 100%; height: auto; background: var(--paper); }
+.architecture > svg { display: block; width: 100%; height: auto; max-width: 100%; border: 1px solid var(--line); background: var(--paper); }
+.architecture figcaption { margin-top: 8px; color: var(--muted); font-size: .75em; }
+.architecture details { font-size: .85em; }
+mark.reader-match { padding: 1px 0; background: #dbe4ff; color: inherit; border-radius: 2px; scroll-margin-top: 120px; }
+mark.reader-match.is-current { background: var(--blue); color: white; box-shadow: 0 0 0 2px var(--blue); }
+.search-block-current { outline: 1px solid #b2c5f9; outline-offset: 6px; }
+
+.toc-panel { position: sticky; top: var(--header-height); max-height: calc(100dvh - var(--header-height)); overflow-y: auto; padding: 38px 20px 30px 19px; border-left: 1px solid var(--line); scrollbar-width: thin; }
+.toc-panel > h2, #toc > h2, .toc-title { margin: 0 0 15px; color: var(--muted); font-size: 11px; font-weight: 600; letter-spacing: .08em; }
+#toc ul, #toc ol { list-style: none; margin: 0; padding: 0; }
+#toc a { display: block; margin: 2px 0; padding: 5px 0 5px 12px; border-left: 2px solid transparent; color: #6c6f78; font-size: 12px; line-height: 1.65; text-decoration: none; overflow-wrap: anywhere; }
+#toc a:hover { color: var(--blue); }
+#toc a[aria-current="location"], #toc a.is-active { color: var(--blue); border-left-color: var(--blue); }
+#toc a[data-level="3"], #toc .toc-h3 a, #toc a.toc-h3, #toc li.level-3 a { padding-left: 24px; font-size: 11px; }
+.document-pager { display: flex; justify-content: space-between; gap: 20px; margin-top: 60px; padding-top: 24px; border-top: 1px solid var(--line); }
+.document-pager a { flex: 1; min-width: 0; text-decoration: none; font-size: 14px; font-weight: 600; overflow-wrap: anywhere; }
+.document-pager a:last-child { text-align: right; }
+.document-pager a:only-child { text-align: left; }
+.document-pager small, .document-pager span { display: block; margin-bottom: 4px; font-size: 11px; font-weight: 400; color: var(--muted); }
+.page-footer { max-width: 1536px; margin: auto; padding: 22px 32px; border-top: 1px solid var(--line); color: var(--muted); font-size: 11px; background: var(--surface); }
+.back-top { position: fixed; right: 24px; bottom: 24px; z-index: 20; min-height: 40px; border-color: var(--line); background: var(--paper); font-size: 12px; }
+.sidebar-scrim { display: none; }
+
+@media (min-width: 1600px) {
+  .layout { border-left: 1px solid var(--line); border-right: 1px solid var(--line); }
+  .topbar { padding-left: max(32px, calc((100vw - 1472px) / 2)); padding-right: max(32px, calc((100vw - 1472px) / 2)); }
+}
+@media (max-width: 1190px) {
+  .layout { grid-template-columns: 225px minmax(0, 1fr); }
+  .toc-panel { display: none; }
+  #main { padding-left: 42px; padding-right: 42px; }
+}
+@media (max-width: 800px) {
+  :root { --header-height: 68px; }
+  .topbar { gap: 12px; padding: 13px 18px; }
+  .brand { font-size: 15px; }
+  .brand small, .brand span { font-size: 9px; }
+  .mobile-menu { display: inline-flex; align-items: center; justify-content: center; flex-shrink: 0; min-height: 34px; padding: 6px 9px; font-size: 12px; }
+  .layout { display: block; }
+  .sidebar { position: fixed; z-index: 50; left: 0; top: var(--header-height); bottom: 0; width: min(300px, calc(100vw - 44px)); height: calc(100dvh - var(--header-height)); padding: 24px 18px; transform: translateX(-101%); visibility: hidden; transition: transform .18s ease, visibility .18s; border-right: 1px solid var(--line); }
+  .menu-open .sidebar { transform: translateX(0); visibility: visible; }
+  .sidebar-scrim:not([hidden]) { display: block; position: fixed; z-index: 40; inset: var(--header-height) 0 0; background: rgb(18 21 30 / 28%); }
+  .toolbar { gap: 3px; }
+  .toolbar .font-smaller, .toolbar .font-reset, .toolbar .font-larger { min-width: 29px; min-height: 32px; padding: 4px 5px; font-size: 12px; }
+  .toolbar .print-button { display: none; }
+  #main { padding: 33px 28px 40px; }
+  .document-header h1 { font-size: 32px; }
+  .eyebrow { margin-bottom: 13px; }
+  #document-body { line-height: 1.9; }
+  #document-body h2 { margin-top: 2.3em; font-size: 1.4em; }
+  .page-footer { padding: 18px 28px; }
+  .back-top { right: 16px; bottom: 16px; }
+}
+@media (max-width: 460px) {
+  .topbar { gap: 8px; padding-left: 12px; padding-right: 12px; }
+  .brand { font-size: 13px; letter-spacing: -.035em; }
+  .brand small, .brand span { max-width: 125px; overflow: hidden; white-space: nowrap; text-overflow: ellipsis; }
+  .mobile-menu { padding: 5px 7px; font-size: 11px; }
+  #main { padding: 29px 20px 36px; }
+  .document-header h1 { font-size: 28px; }
+  .doc-meta { gap: 4px 12px; font-size: 11px; }
+  .reader-tools { margin-bottom: 28px; }
+  #search-input { flex-basis: 110px; font-size: 12px; }
+  #search-next, #search-clear { padding-left: 8px; padding-right: 8px; }
+  #document-body { font-size: calc(var(--reader-font-size) - 1px); }
+  #document-body pre > code { padding-left: 13px; padding-right: 13px; }
+  #document-body th, #document-body td { padding: 10px 12px; }
+  .document-pager { gap: 18px; margin-top: 40px; }
+  .document-pager a { font-size: 12px; }
+  .page-footer { padding-left: 20px; padding-right: 20px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { scroll-behavior: auto !important; transition: none !important; }
+}
+@media print {
+  @page { margin: 18mm 16mm; }
+  :root { --reader-font-size: 10.5pt !important; }
+  body { min-width: 0; background: white; color: black; }
+  .topbar, .sidebar, .toc-panel, .reader-tools, .document-pager, .back-top, .sidebar-scrim, .skip-link, .copy-code { display: none !important; }
+  .layout { display: block; max-width: none; border: 0; }
+  #main { padding: 0; }
+  .document-header h1 { font-size: 24pt; }
+  .document-header { margin-bottom: 24pt; }
+  .doc-meta { font-size: 8pt; }
+  #document-body { font-size: 10.5pt; line-height: 1.65; }
+  #document-body h2, #document-body h3, #document-body h4 { break-after: avoid; }
+  #document-body h2 { margin-top: 20pt; padding-top: 12pt; font-size: 15pt; }
+  #document-body a { color: inherit; text-decoration: underline; }
+  #document-body pre { padding: 9pt; overflow: visible; background: #f7f7f8; }
+  #document-body pre > code { padding: 0; overflow: visible; white-space: pre-wrap; overflow-wrap: anywhere; font-size: 8pt; }
+  .table-scroll { overflow: visible; border-radius: 0; }
+  #document-body table { table-layout: fixed; font-size: 7.5pt; }
+  #document-body th, #document-body td, #document-body th:first-child, #document-body td:first-child { min-width: 0; padding: 5pt; overflow-wrap: anywhere; }
+  #document-body thead { display: table-header-group; }
+  #document-body tr, .architecture { break-inside: avoid; }
+  #document-body details:not([open]) { display: none; }
+  .architecture > svg { max-height: 230mm; }
+  mark.reader-match, mark.reader-match.is-current { color: inherit; background: transparent; box-shadow: none; }
+  .search-block-current { outline: none; }
+  .page-footer { margin-top: 24pt; padding: 10pt 0 0; font-size: 8pt; background: white; }
+}
+</style>
+</head>
+<body>
+<a class="skip-link" href="#main">跳到正文</a>
+<header class="topbar">
+  <button type="button" class="mobile-menu" aria-controls="doc-sidebar" aria-expanded="false">文档目录</button>
+  <a class="brand" href="../../0001-douyin-ai-studio/00-%E6%96%87%E6%A1%A3%E5%AF%BC%E8%88%AA.html">AI 自媒体<span>开发文档与调研</span></a>
+  <div class="toolbar" aria-label="阅读设置">
+    <button type="button" class="font-smaller" aria-label="缩小正文字号" title="缩小字号">A−</button>
+    <button type="button" class="font-reset" aria-label="恢复默认正文字号" title="恢复字号">默认</button>
+    <button type="button" class="font-larger" aria-label="放大正文字号" title="放大字号">A+</button>
+    <button type="button" class="print-button">打印</button>
+  </div>
+</header>
+<div class="layout">
+  <aside id="doc-sidebar" class="sidebar" aria-label="全部文档"><section class="nav-group"><h2 class="group-title">开发文档</h2><nav class="doc-nav" aria-label="开发文档"><a data-document href="../../0001-douyin-ai-studio/00-%E6%96%87%E6%A1%A3%E5%AF%BC%E8%88%AA.html">00 文档导航</a><a data-document href="../../0001-douyin-ai-studio/01-%E4%BA%A7%E5%93%81%E9%9C%80%E6%B1%82%E6%96%87%E6%A1%A3.html">01 产品需求文档</a><a data-document href="../../0001-douyin-ai-studio/02-%E6%8A%80%E6%9C%AF%E9%80%89%E5%9E%8B%E5%AF%B9%E6%AF%94.html">02 技术选型对比</a><a data-document href="../../0001-douyin-ai-studio/03-%E6%80%BB%E4%BD%93%E6%8A%80%E6%9C%AF%E6%96%B9%E6%A1%88.html">03 总体技术方案</a><a data-document href="../../0001-douyin-ai-studio/04-%E6%8E%A5%E5%8F%A3%E5%A5%91%E7%BA%A6%E4%B8%8E%E6%95%B0%E6%8D%AE%E5%AD%97%E5%85%B8.html">04 接口契约与数据字典</a><a data-document href="../../0001-douyin-ai-studio/05-%E5%BC%80%E5%8F%91%E5%AE%9E%E6%96%BD%E8%AE%A1%E5%88%92.html">05 开发实施计划</a><a data-document href="../../0001-douyin-ai-studio/06-%E9%AA%8C%E6%94%B6%E6%A0%87%E5%87%86%E4%B8%8E%E6%B5%8B%E8%AF%95%E6%96%B9%E6%A1%88.html">06 验收标准与测试方案</a><a data-document href="../../0001-douyin-ai-studio/07-%E6%8A%80%E6%9C%AF%E9%80%89%E5%9E%8B%E4%B8%8E%E5%AE%9E%E6%B5%8B%E6%B5%81%E7%A8%8B.html">07 技术选型与实测流程</a><a data-document href="../../0001-douyin-ai-studio/08-%E7%AB%AF%E5%88%B0%E7%AB%AF%E6%8A%80%E6%9C%AF%E6%B5%81%E7%A8%8B%E4%B8%8E%E6%A8%A1%E5%9E%8B%E9%80%89%E5%9E%8B%E5%9C%B0%E5%9B%BE.html">08 端到端技术流程与模型选型地图</a><a data-document href="../../0001-douyin-ai-studio/09-%E6%A8%A1%E5%9E%8B%E9%80%89%E5%9E%8B%E5%86%B3%E7%AD%96%E4%B8%8E%E6%8E%A5%E5%85%A5%E6%96%B9%E6%A1%88.html">09 模型选型决策与接入方案</a><a data-document href="../../0001-douyin-ai-studio/10-Agent%E7%BC%96%E6%8E%92%E9%80%89%E5%9E%8B%E4%B8%8E%E6%95%B4%E4%BD%93%E6%9E%B6%E6%9E%84.html">10 Agent编排选型与整体架构</a></nav></section><section class="nav-group"><h2 class="group-title">本轮选型试验</h2><nav class="doc-nav" aria-label="本轮选型试验"><a data-document href="01-%E9%80%89%E5%9E%8B%E8%AF%95%E9%AA%8C%E6%96%B9%E6%A1%88.html">01 选型试验方案</a><a data-document href="02-%E9%A6%96%E8%BD%AE%E5%AE%9E%E6%B5%8B%E7%BB%93%E6%9E%9C.html">02 首轮实测结果</a><a data-document href="03-MuseTalk%E4%BA%91%E7%AB%AF%E9%83%A8%E7%BD%B2%E4%B8%8E%E8%AF%95%E9%AA%8C%E6%96%B9%E6%A1%88.html">03 MuseTalk云端部署与试验方案</a><a data-document href="04-MuseTalk%E9%83%A8%E7%BD%B2%E4%B8%8E%E9%A6%96%E6%B5%8B%E7%BB%93%E6%9E%9C.html">04 MuseTalk部署与首测结果</a><a data-document href="05-OmniHuman%E5%BC%80%E9%80%9A%E5%90%8E%E5%AE%9E%E6%B5%8B%E7%BB%93%E6%9E%9C.html">05 OmniHuman开通后实测结果</a><a data-document href="06-%E4%BA%BA%E7%89%A9B%E8%A1%A8%E6%83%85%E5%8A%A8%E4%BD%9C%E6%94%B9%E5%96%84%E5%AE%9E%E6%B5%8B.html" aria-current="page">06 人物B表情动作改善实测</a><a data-document href="MuseTalk%E5%AE%98%E6%96%B9%E8%83%BD%E5%8A%9B%E6%A0%B8%E9%AA%8C.html">MuseTalk官方能力核验</a><a data-document href="%E6%B5%8B%E8%AF%95%E7%B4%A0%E6%9D%90%E6%8E%A5%E5%8F%A3%E6%A0%B8%E9%AA%8C.html">测试素材接口核验</a><a data-document href="%E7%81%AB%E5%B1%B1%E5%80%99%E9%80%89%E6%A0%B8%E9%AA%8C.html">火山候选核验</a><a data-document href="%E9%98%BF%E9%87%8C%E5%80%99%E9%80%89%E6%A0%B8%E9%AA%8C.html">阿里候选核验</a></nav></section><section class="nav-group"><h2 class="group-title">已选模型接入核验</h2><nav class="doc-nav" aria-label="已选模型接入核验"><a data-document href="../02-%E5%B7%B2%E9%80%89%E6%A8%A1%E5%9E%8B/%E5%AE%98%E6%96%B9%E6%96%87%E6%9C%AC%E4%B8%8E%E8%AF%AD%E9%9F%B3%E6%8E%A5%E5%8F%A3%E6%A0%B8%E9%AA%8C.html">官方文本与语音接口核验</a></nav></section><section class="nav-group"><h2 class="group-title">人物与音色候选</h2><nav class="doc-nav" aria-label="人物与音色候选"><a data-document href="../03-%E4%BA%BA%E7%89%A9%E4%B8%8E%E9%9F%B3%E8%89%B2/01-%E9%A6%96%E8%BD%AE%E5%80%99%E9%80%89%E4%B8%8E%E9%80%89%E6%8B%A9%E8%AF%B4%E6%98%8E.html">01 首轮候选与选择说明</a><a data-document href="../03-%E4%BA%BA%E7%89%A9%E4%B8%8E%E9%9F%B3%E8%89%B2/02-%E4%BA%BA%E7%89%A9B%E4%B8%8E%E9%9F%B3%E8%89%B23%E5%AE%9A%E7%89%88%E8%AE%B0%E5%BD%95.html">02 人物B与音色3定版记录</a></nav></section><section class="nav-group"><h2 class="group-title">调研资料</h2><nav class="doc-nav" aria-label="调研资料"><a data-document href="../../research/01-%E4%BA%A7%E5%93%81%E5%BD%A2%E6%80%81%E4%B8%8E%E6%8A%96%E9%9F%B3%E7%94%9F%E6%80%81.html">01 产品形态与抖音生态</a><a data-document href="../../research/02-%E4%BA%BA%E7%89%A9%E4%B8%80%E8%87%B4%E6%80%A7%E7%94%9F%E6%88%90.html">02 人物一致性生成</a><a data-document href="../../research/03-%E6%95%B0%E5%AD%97%E4%BA%BA%E5%8F%A3%E6%92%AD%E9%80%89%E5%9E%8B.html">03 数字人口播选型</a><a data-document href="../../research/04-TTS%E9%9F%B3%E8%89%B2%E4%B8%8E%E5%86%85%E5%AE%B9%E7%94%9F%E6%88%90%E8%B4%A8%E6%A3%80.html">04 TTS音色与内容生成质检</a><a data-document href="../../research/05-%E8%A7%86%E9%A2%91%E5%90%8E%E5%A4%84%E7%90%86%E5%8F%91%E5%B8%83%E4%B8%8E%E5%90%88%E8%A7%84.html">05 视频后处理发布与合规</a><a data-document href="../../research/06-%E5%86%B3%E7%AD%96%E6%B1%87%E6%80%BB.html">06 决策汇总</a></nav></section>
+    <p class="sidebar-note">11 份开发文档<br>10 份本轮选型试验<br>1 份已选模型接入核验<br>2 份人物与音色候选<br>6 份调研资料</p>
+  </aside>
+  <main id="main" tabindex="-1">
+    <header class="document-header">
+      <p class="eyebrow">本轮选型试验 / 06</p>
+      <h1>人物 B 表情动作改善实测</h1>
+      <div class="doc-meta"><span>2026-09-21 核验记录</span><span>5 个章节</span><a href="06-%E4%BA%BA%E7%89%A9B%E8%A1%A8%E6%83%85%E5%8A%A8%E4%BD%9C%E6%94%B9%E5%96%84%E5%AE%9E%E6%B5%8B.md">Markdown 原文</a></div>
+      
+    </header>
+    <div class="reader-tools">
+      <form id="search-form" role="search">
+        <label class="sr-only" for="search-input">搜索本文</label>
+        <input id="search-input" type="search" placeholder="搜索本文，按 Enter 跳转" autocomplete="off">
+        <button id="search-next" type="submit">下一处</button>
+        <button id="search-clear" type="button">清除</button>
+        <span id="search-status" role="status" aria-live="polite"></span>
+      </form>
+    </div>
+    <article id="document-body">
+<p>日期：2026-09-22；实验：EXP-001。<strong>三条真实样片已生成；用户已选择 M2（LivePortrait → MuseTalk 1.5），生产质量仍待验收。</strong></p>
+<p><a href="../../../experiments/%E8%A1%A8%E6%83%85%E5%8A%A8%E4%BD%9C%E6%94%B9%E5%96%84/EXP-001/%E4%BA%BA%E7%89%A9B%E8%A1%A8%E6%83%85%E5%8A%A8%E4%BD%9C%E5%AF%B9%E6%AF%94.html">打开三方案可播放对比报告</a> · <a href="../../../experiments/%E8%A1%A8%E6%83%85%E5%8A%A8%E4%BD%9C%E6%94%B9%E5%96%84/EXP-001/%E5%AF%B9%E6%AF%94%E7%BB%93%E6%9E%9C.json">实测数据</a> · <a href="../../../experiments/%E8%A1%A8%E6%83%85%E5%8A%A8%E4%BD%9C%E6%94%B9%E5%96%84/EXP-001/%E5%8F%A3%E6%92%AD%E8%B7%AF%E7%BA%BF%E5%AE%9A%E7%89%88.json">口播路线定版</a></p>
+<h2 id="当前路线决定">当前路线决定</h2>
+<p>用户在三条样片对比后明确决定“那就选用 M2 吧”。本次选择记录为 <code>exp001_m2_selection_v1</code>：路线状态 <code>SELECTED_BY_USER</code>，生产验收状态 <code>PENDING_ACCEPTANCE</code>。后续默认采用现有算力云自部署的 <strong>LivePortrait 动作迁移 → MuseTalk 1.5 嘴型生成</strong>，固定人物 B（<code>av_base_b_v1</code>）与音色 3（<code>Chinese (Mandarin)_Warm_Bestie</code>）。</p>
+<p>端到端顺序：固定人物 B 原图或已批准的同身份变体＋合格动作参考 → LivePortrait 生成保持人物 B 身份的动态画面 → MuseTalk 1.5 结合 MiniMax 固定音色 3 的最终旁白配嘴 → 自然度、身份、口型和音轨质检 → 字幕与后处理。动作参考仅提供动作，输出人物始终为 B。</p>
+<p>M1 单图 MuseTalk 仅保留为基准，M3 SadTalker 仅保留为对照，不配置自动回退。以下实测结果记录本次实验事实；路线选择不把未完成的视听、60 秒或批量生产验收改成通过。本次定版没有新增模型调用。</p>
+<h2 id="输入与方法">输入与方法</h2>
+<p>统一使用已选人物 B 与 MiniMax 音色 3“温暖闺蜜”的 15.218844 秒原始 WAV，没有再次调用生图、TTS 或云口播 API。原图 941×1672 为奇数宽度，首次 MuseTalk 在 H.264 编码阶段失败；保留失败记录后，三条路线统一使用右侧复制一列像素的 942×1672 派生图，原始像素与正式资产不变。</p>
+<p>模型在现有算力云的独立目录 <code>/root/autodl-tmp/avatar-motion/EXP-001</code> 中执行；MuseTalk 使用原环境，LivePortrait 与 SadTalker 新建隔离环境。GPU 报告 RTX 4080 / 32760 MiB。</p>
+<p>LivePortrait 使用本项目之前的阿里样片作为 driving video，人物 B 作为 source image，经真实模型迁移动作后再交给 MuseTalk 配嘴。动作参考原长约 9.13 秒，原速循环至 381 帧 / 25 fps；不是将旧人物视频直接充当人物 B 成片，也没有采用文生视频。</p>
+<h2 id="实测对照">实测对照</h2>
+<div aria-label="可横向滚动的表格" class="table-scroll" tabindex="0"><table>
+<thead>
+<tr>
+<th>路线</th>
+<th>原片规格</th>
+<th>首次作业耗时</th>
+<th>GPU 作业费估算</th>
+<th>可见动作与问题</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>M1 单图 MuseTalk 1.5</td>
+<td>942×1672 / 25fps；视频15.20秒，音频15.218844秒</td>
+<td>111.684秒</td>
+<td>0.049017元</td>
+<td>嘴型变化；头部和眉眼基本固定</td>
+</tr>
+<tr>
+<td>M2 LivePortrait＋MuseTalk</td>
+<td>同 M1</td>
+<td>235.177秒：动作53.505＋口播181.672</td>
+<td>0.103217元</td>
+<td>眼睑变化更明显，有轻微表情/头姿变化；肩膀与躯干仍固定，部分笑容被嘴型重配削弱</td>
+</tr>
+<tr>
+<td>M3 SadTalker 512 / full</td>
+<td>942×1672 / 25fps；视频和音频均15.20秒</td>
+<td>193.795秒</td>
+<td>0.085054元</td>
+<td>小幅头动；采样中嘴部开合偏小，脸部细节较软；没有开启 still 或增强器</td>
+</tr>
+</tbody>
+</table></div>
+<p>这是一次作业的墙钟时间，包含进程加载及编码；M2 包含两阶段首次处理，尚未测缓存复用吞吐。单价按用户提供的 1.58 元/小时估算，<strong>不含安装、下载、空闲、素材及历史动作片成本，也不是实际账单</strong>。另保留 M1 编码失败的 103.665 秒，以及 S1 因摘要录入错误被预检阻止的 0.956 秒；S1 当时未启动模型推理。</p>
+<p>本轮可观察实例区间为北京时间 08:47:11—09:34:48，共约 47.63 分钟，含安装及等待的费估算约 1.2543 元。它与上表作业费用重叠，不能相加；区间结束后实例仍开机，推理和安装作业已结束。</p>
+<h2 id="验证范围">验证范围</h2>
+<ul>
+<li>三条原片均核对文件摘要并完整解码；不以模型进程退出码 0 代替有效视频。</li>
+<li>三条实际音轨对原始 TTS 的最佳波形偏移均为 0ms，重叠相关系数约 0.9986～0.9996。这只说明音轨对齐，不能替代嘴型同步测量。</li>
+<li>SadTalker 原片为 MPEG-4 Part2，另存 H.264 浏览器兼容版；仅转码视频、复制 AAC，不补帧、不改脸，原片保留。其原流程将声音转为16kHz，前两条为32kHz。</li>
+<li>画面结论来自代表帧和眼部密集采样，尚未给出完整人类视听评分、身份相似度分数或自然度分数。</li>
+<li>M2 约9.13秒处有动作循环，未据此宣称一分钟自然动作通过。三条路线都未解决明显的躯干和手势表现。</li>
+</ul>
+<h2 id="已选路线的待验收事项">已选路线的待验收事项</h2>
+<p>M2 已成为用户选定的后续路线，仍需完整观看并评审其眼睑、表情、头姿、口型与身份稳定性。现有证据支持“补充动作来源能改善单图 MuseTalk 的僵硬”，但不支持“整体已经达到自然真人主播效果”；代表帧观察和音轨相关性均不替代全片视听验收。</p>
+<ul>
+<li>当前约 9.13 秒旧阿里片只作为 EXP-001 动作参考，其循环不能定为长期生产母版。下一轮需更自然且时长适合的动作参考，验证循环接缝、头颈融合和肩膀/躯干表现。</li>
+<li>真实 60 秒成片的自然度、身份稳定、口型同步、字幕和后处理仍待验收；15.20 秒样片不构成长片通过证据。</li>
+<li>每日 5 条的批量稳定性、合格率、缓存复用吞吐、完整占机时间及全链路成本仍待验证。235.177 秒和 0.103217 元仅是本次 M2 两阶段作业耗时与 GPU 作业费估算。</li>
+<li>LivePortrait 默认 InsightFace 权重的商用许可仍待核实；当前非商业研究许可不构成生产商用批准。</li>
+</ul>
+<p>部署固定提交、权重和兼容性依据见实验目录中的 <a href="../../../experiments/%E8%A1%A8%E6%83%85%E5%8A%A8%E4%BD%9C%E6%94%B9%E5%96%84/EXP-001/LivePortrait%E9%83%A8%E7%BD%B2%E6%A0%B8%E9%AA%8C.md">LivePortrait部署核验</a> 与 <a href="../../../experiments/%E8%A1%A8%E6%83%85%E5%8A%A8%E4%BD%9C%E6%94%B9%E5%96%84/EXP-001/SadTalker%E9%83%A8%E7%BD%B2%E6%A0%B8%E9%AA%8C.md">SadTalker部署核验</a>。</p>
+</article>
+    <nav class="document-pager" aria-label="相邻文档"><a rel="prev" href="05-OmniHuman%E5%BC%80%E9%80%9A%E5%90%8E%E5%AE%9E%E6%B5%8B%E7%BB%93%E6%9E%9C.html"><span>上一篇</span>05-OmniHuman开通后实测结果</a><a rel="next" href="MuseTalk%E5%AE%98%E6%96%B9%E8%83%BD%E5%8A%9B%E6%A0%B8%E9%AA%8C.html"><span>下一篇</span>MuseTalk官方能力核验</a></nav>
+    <footer class="page-footer">与同名 Markdown 对应的阅读版 · 可离线阅读与打印</footer>
+  </main>
+  <aside class="toc-panel" aria-label="本文章节"><p class="group-title">本页目录</p><nav id="toc"><a class="toc-h2" href="#%E5%BD%93%E5%89%8D%E8%B7%AF%E7%BA%BF%E5%86%B3%E5%AE%9A">当前路线决定</a><a class="toc-h2" href="#%E8%BE%93%E5%85%A5%E4%B8%8E%E6%96%B9%E6%B3%95">输入与方法</a><a class="toc-h2" href="#%E5%AE%9E%E6%B5%8B%E5%AF%B9%E7%85%A7">实测对照</a><a class="toc-h2" href="#%E9%AA%8C%E8%AF%81%E8%8C%83%E5%9B%B4">验证范围</a><a class="toc-h2" href="#%E5%B7%B2%E9%80%89%E8%B7%AF%E7%BA%BF%E7%9A%84%E5%BE%85%E9%AA%8C%E6%94%B6%E4%BA%8B%E9%A1%B9">已选路线的待验收事项</a></nav></aside>
+</div>
+<button type="button" class="sidebar-scrim" aria-label="关闭文档目录" hidden></button>
+<button type="button" class="back-top" aria-label="返回顶部">顶部</button>
+<script>(() => {
+  'use strict';
+
+  function initializeReader() {
+    const article = document.getElementById('document-body');
+    if (!article) return;
+    const root = document.documentElement;
+    const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
+    const scrollBehavior = () => reducedMotion.matches ? 'instant' : 'smooth';
+
+    // Local files and privacy settings can deny storage; controls remain usable.
+    const fontKey = 'document-reader-font-size';
+    let fontSize = 17;
+    try {
+      const savedSize = Number(localStorage.getItem(fontKey));
+      if (Number.isFinite(savedSize) && savedSize >= 14 && savedSize <= 22) fontSize = savedSize;
+    } catch (_) { /* Storage is optional. */ }
+    const smaller = document.querySelector('.font-smaller');
+    const reset = document.querySelector('.font-reset');
+    const larger = document.querySelector('.font-larger');
+    function setFontSize(value) {
+      fontSize = Math.max(14, Math.min(22, value));
+      root.style.setProperty('--reader-font-size', `${fontSize}px`);
+      if (smaller) smaller.disabled = fontSize === 14;
+      if (larger) larger.disabled = fontSize === 22;
+      if (reset) reset.title = `恢复默认字号（当前 ${fontSize}px）`;
+      try { localStorage.setItem(fontKey, String(fontSize)); } catch (_) { /* Optional. */ }
+    }
+    setFontSize(fontSize);
+    smaller?.addEventListener('click', () => setFontSize(fontSize - 1));
+    reset?.addEventListener('click', () => setFontSize(17));
+    larger?.addEventListener('click', () => setFontSize(fontSize + 1));
+    document.querySelector('.print-button')?.addEventListener('click', () => window.print());
+
+    const menu = document.querySelector('.mobile-menu');
+    const sidebar = document.getElementById('doc-sidebar');
+    const scrim = document.querySelector('.sidebar-scrim');
+    const mobileWidth = window.matchMedia('(max-width: 800px)');
+    function setMenu(open, returnFocus = false) {
+      const visible = open && mobileWidth.matches;
+      document.body.classList.toggle('menu-open', visible);
+      menu?.setAttribute('aria-expanded', String(visible));
+      if (scrim) scrim.hidden = !visible;
+      if (visible) {
+        sidebar?.querySelector('[aria-current="page"], a, button')?.focus();
+      } else if (returnFocus) menu?.focus();
+    }
+    menu?.addEventListener('click', () => setMenu(!document.body.classList.contains('menu-open')));
+    scrim?.addEventListener('click', () => setMenu(false, true));
+    sidebar?.addEventListener('click', (event) => {
+      if (event.target.closest('a')) setMenu(false);
+    });
+    mobileWidth.addEventListener('change', () => setMenu(false));
+    document.addEventListener('keydown', (event) => {
+      if (!document.body.classList.contains('menu-open')) return;
+      if (event.key === 'Escape') {
+        event.preventDefault();
+        setMenu(false, true);
+      }
+      if (event.key === 'Tab') {
+        const focusable = [menu, ...sidebar.querySelectorAll('a[href], button:not([disabled]), [tabindex="0"]')].filter(Boolean);
+        const first = focusable[0];
+        const last = focusable[focusable.length - 1];
+        if (event.shiftKey && document.activeElement === first) {
+          event.preventDefault();
+          last?.focus();
+        } else if (!event.shiftKey && document.activeElement === last) {
+          event.preventDefault();
+          first?.focus();
+        }
+      }
+    });
+    setMenu(false);
+
+    const searchForm = document.getElementById('search-form');
+    const searchInput = document.getElementById('search-input');
+    const searchNext = document.getElementById('search-next');
+    const searchClear = document.getElementById('search-clear');
+    const searchStatus = document.getElementById('search-status');
+    let searchResults = [];
+    let currentResult = -1;
+    let currentQuery = '';
+    let searchTimer;
+
+    function clearHighlights() {
+      article.querySelectorAll('mark.reader-match').forEach((mark) => {
+        const parent = mark.parentNode;
+        mark.replaceWith(document.createTextNode(mark.textContent));
+        parent.normalize();
+      });
+      article.querySelectorAll('.search-block-current').forEach((block) => block.classList.remove('search-block-current'));
+      searchResults = [];
+      currentResult = -1;
+    }
+
+    function showResult(index, shouldScroll) {
+      searchResults.forEach((result) => {
+        result.block.classList.remove('search-block-current');
+        result.marks.forEach((mark) => mark.classList.remove('is-current'));
+      });
+      currentResult = (index + searchResults.length) % searchResults.length;
+      const result = searchResults[currentResult];
+      result.block.classList.add('search-block-current');
+      result.marks.forEach((mark) => mark.classList.add('is-current'));
+      if (searchStatus) searchStatus.textContent = `第 ${currentResult + 1} / ${searchResults.length} 处匹配 · Enter 下一处`;
+      if (shouldScroll) {
+        let container = result.block.parentElement;
+        while (container && container !== article) {
+          if (container.tagName === 'DETAILS') container.open = true;
+          container = container.parentElement;
+        }
+        result.marks[0].scrollIntoView({ behavior: scrollBehavior(), block: 'center', inline: 'nearest' });
+      }
+    }
+
+    function runSearch(shouldScroll = false) {
+      clearTimeout(searchTimer);
+      clearHighlights();
+      const query = searchInput?.value.trim() || '';
+      currentQuery = query;
+      if (searchClear) searchClear.disabled = !query;
+      if (!query) {
+        if (searchStatus) searchStatus.textContent = '';
+        if (searchNext) searchNext.disabled = true;
+        return;
+      }
+      const queryLower = query.toLocaleLowerCase();
+      const blockResults = new Map();
+      // Walk original text nodes, preserving links, emphasis, tables and code.
+      const walker = document.createTreeWalker(article, NodeFilter.SHOW_TEXT, {
+        acceptNode(node) {
+          if (!node.nodeValue.trim()) return NodeFilter.FILTER_REJECT;
+          if (node.parentElement.closest('script, style, button, svg, mark, [aria-hidden="true"]')) return NodeFilter.FILTER_REJECT;
+          return node.nodeValue.toLocaleLowerCase().includes(queryLower) ? NodeFilter.FILTER_ACCEPT : NodeFilter.FILTER_REJECT;
+        }
+      });
+      const nodes = [];
+      while (walker.nextNode()) nodes.push(walker.currentNode);
+      nodes.forEach((node) => {
+        const original = node.nodeValue;
+        const normalized = original.toLocaleLowerCase();
+        const block = node.parentElement.closest('p, li, td, th, h2, h3, h4, h5, h6, pre, summary, figcaption') || node.parentElement;
+        let result = blockResults.get(block);
+        if (!result) {
+          result = { block, marks: [] };
+          blockResults.set(block, result);
+        }
+        const fragment = document.createDocumentFragment();
+        let position = 0;
+        let matchPosition;
+        while ((matchPosition = normalized.indexOf(queryLower, position)) !== -1) {
+          fragment.append(document.createTextNode(original.slice(position, matchPosition)));
+          const mark = document.createElement('mark');
+          mark.className = 'reader-match';
+          mark.textContent = original.slice(matchPosition, matchPosition + query.length);
+          fragment.append(mark);
+          result.marks.push(mark);
+          position = matchPosition + query.length;
+        }
+        fragment.append(document.createTextNode(original.slice(position)));
+        node.replaceWith(fragment);
+      });
+      searchResults = [...blockResults.values()];
+      if (searchNext) searchNext.disabled = !searchResults.length;
+      if (!searchResults.length) {
+        if (searchStatus) searchStatus.textContent = '未找到匹配内容';
+      } else showResult(0, shouldScroll);
+    }
+
+    searchInput?.addEventListener('input', (event) => {
+      if (event.isComposing) return;
+      clearTimeout(searchTimer);
+      searchTimer = setTimeout(() => runSearch(false), 180);
+    });
+    searchInput?.addEventListener('compositionend', () => {
+      clearTimeout(searchTimer);
+      searchTimer = setTimeout(() => runSearch(false), 180);
+    });
+    searchForm?.addEventListener('submit', (event) => {
+      event.preventDefault();
+      const queryChanged = currentQuery !== searchInput.value.trim();
+      if (queryChanged) runSearch(true);
+      else if (searchResults.length) showResult(currentResult + 1, true);
+    });
+    if (searchNext && searchNext.type !== 'submit') {
+      searchNext.addEventListener('click', () => {
+        if (currentQuery !== searchInput.value.trim()) runSearch(true);
+        else if (searchResults.length) showResult(currentResult + 1, true);
+      });
+    }
+    function resetSearch() {
+      clearTimeout(searchTimer);
+      if (searchInput) searchInput.value = '';
+      currentQuery = '';
+      clearHighlights();
+      if (searchStatus) searchStatus.textContent = '';
+      if (searchNext) searchNext.disabled = true;
+      if (searchClear) searchClear.disabled = true;
+    }
+    searchClear?.addEventListener('click', (event) => {
+      event.preventDefault();
+      resetSearch();
+      searchInput?.focus();
+    });
+    searchInput?.addEventListener('keydown', (event) => {
+      if (event.key === 'Escape' && !event.isComposing) {
+        event.preventDefault();
+        resetSearch();
+      }
+      if (event.key === 'Enter' && event.isComposing) event.preventDefault();
+    });
+    resetSearch();
+
+    async function copyText(text) {
+      try {
+        if (navigator.clipboard?.writeText) {
+          await navigator.clipboard.writeText(text);
+          return true;
+        }
+      } catch (_) { /* File URLs may reject the modern Clipboard API. */ }
+      const previousFocus = document.activeElement;
+      const selection = window.getSelection();
+      const savedRanges = selection ? Array.from({ length: selection.rangeCount }, (_, i) => selection.getRangeAt(i).cloneRange()) : [];
+      const field = document.createElement('textarea');
+      field.value = text;
+      field.readOnly = true;
+      field.style.cssText = 'position:fixed;left:-9999px;top:0;opacity:0;font-size:16px';
+      document.body.append(field);
+      field.select();
+      let copied = false;
+      try { copied = document.execCommand('copy'); } catch (_) { /* Show the failure state. */ }
+      field.remove();
+      if (selection) {
+        selection.removeAllRanges();
+        savedRanges.forEach((range) => selection.addRange(range));
+      }
+      previousFocus?.focus({ preventScroll: true });
+      return copied;
+    }
+
+    article.querySelectorAll('pre').forEach((pre) => {
+      const code = pre.querySelector('code');
+      if (!code || pre.querySelector('.copy-code')) return;
+      const button = document.createElement('button');
+      button.type = 'button';
+      button.className = 'copy-code';
+      button.textContent = '复制代码';
+      button.setAttribute('aria-label', '复制代码');
+      button.setAttribute('aria-live', 'polite');
+      pre.append(button);
+      let labelTimer;
+      button.addEventListener('click', async () => {
+        clearTimeout(labelTimer);
+        const copied = await copyText(code.textContent);
+        button.textContent = copied ? '已复制' : '请选中后复制';
+        labelTimer = setTimeout(() => { button.textContent = '复制代码'; }, 2200);
+      });
+    });
+
+    // Scroll-spy works without observers and avoids changing browser history.
+    const tocLinks = Array.from(document.querySelectorAll('#toc a[href^="#"]'));
+    const sections = tocLinks.map((link) => {
+      let id;
+      try { id = decodeURIComponent(link.getAttribute('href').slice(1)); } catch (_) { return null; }
+      const heading = document.getElementById(id);
+      return heading ? { link, heading } : null;
+    }).filter(Boolean);
+    let activeLink = null;
+    const backTop = document.querySelector('.back-top');
+    let framePending = false;
+    function updateScrollState() {
+      framePending = false;
+      if (backTop) backTop.hidden = window.scrollY < 480;
+      let active = sections[0];
+      const header = document.querySelector('.topbar');
+      const threshold = (header?.getBoundingClientRect().height || 76) + 38;
+      for (const section of sections) {
+        if (section.heading.getBoundingClientRect().top <= threshold) active = section;
+        else break;
+      }
+      if (!active || active.link === activeLink) return;
+      activeLink?.removeAttribute('aria-current');
+      activeLink?.classList.remove('is-active');
+      activeLink = active.link;
+      activeLink.setAttribute('aria-current', 'location');
+      activeLink.classList.add('is-active');
+      const panel = document.querySelector('.toc-panel');
+      if (panel && panel.clientHeight) {
+        const linkRect = activeLink.getBoundingClientRect();
+        const panelRect = panel.getBoundingClientRect();
+        if (linkRect.top < panelRect.top + 25 || linkRect.bottom > panelRect.bottom - 25) {
+          panel.scrollTop += linkRect.top - panelRect.top - panel.clientHeight / 3;
+        }
+      }
+    }
+    function queueScrollUpdate() {
+      if (!framePending) {
+        framePending = true;
+        requestAnimationFrame(updateScrollState);
+      }
+    }
+    window.addEventListener('scroll', queueScrollUpdate, { passive: true });
+    window.addEventListener('resize', queueScrollUpdate, { passive: true });
+    backTop?.addEventListener('click', () => window.scrollTo({ top: 0, behavior: scrollBehavior() }));
+    updateScrollState();
+  }
+
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', initializeReader, { once: true });
+  else initializeReader();
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,29 @@
+........................................................................ [  7%]
+........................................................................ [ 15%]
+........................................................................ [ 22%]
+........................F............................................... [ 30%]
+........................................................................ [ 37%]
+........................................................................ [ 45%]
+........................................................................ [ 53%]
+........................................................................ [ 60%]
+........................................................................ [ 68%]
+........................................................................ [ 75%]
+........................................................................ [ 83%]
+........................................................................ [ 91%]
+........................................................................ [ 98%]
+............                                                             [100%]
+================================== FAILURES ===================================
+_________________ test_lock_file_pins_every_declared_package __________________
+production\backend\tests\contract\test_configuration.py:238: in test_lock_file_pins_every_declared_package
+    assert key in lock, f"���ļ�ȱ�� {name}"
+E   AssertionError: ���ļ�ȱ�� langchain-openai
+E   assert 'langchain-openai' in {'pyyaml': '6.0.3', 'pygments': '2.21.0', 'annotated-doc': '0.0.5', 'annotated-types': '0.8.0', ...}
+============================== warnings summary ===============================
+production\backend\.venv\Lib\site-packages\starlette\testclient.py:53
+  C:\Users\22346\Desktop\��ý����Ƶ����\production\backend\.venv\Lib\site-packages\starlette\testclient.py:53: DeprecationWarning: The anyio.abc.BlockingPortal alias is deprecated, use anyio.from_thread.BlockingPortal instead.
+    _PortalFactoryType = Callable[[], AbstractContextManager[anyio.abc.BlockingPortal]]
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+=========================== short test summary info ===========================
+FAILED production/backend/tests/contract/test_configuration.py::test_lock_file_pins_every_declared_package
+1 failed, 947 passed, 1 warning in 176.21s (0:02:56)

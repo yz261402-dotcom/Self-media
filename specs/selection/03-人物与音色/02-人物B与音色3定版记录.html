@@ -1,0 +1,609 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="light">
+<link rel="icon" href="data:,">
+<meta name="source-sha256" content="2ca11144e04542776e2169447b7189d0a9b606599bd3e0f510f098a526958180">
+<title>人物 B 与音色 3 定版记录 · AI 自媒体文档</title>
+<style>:root {
+  color-scheme: light;
+  --paper: #ffffff;
+  --surface: #f7f7f8;
+  --ink: #202126;
+  --muted: #666970;
+  --line: #dedfe3;
+  --blue: #002fa7;
+  --reader-font-size: 17px;
+  --header-height: 76px;
+  font-family: "Helvetica Neue", Helvetica, Arial, "PingFang SC", "Microsoft YaHei", sans-serif;
+  font-synthesis: none;
+}
+
+* { box-sizing: border-box; }
+.sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; border: 0; }
+.source-notice { margin-top: 22px; padding: 12px 14px; border-left: 3px solid var(--blue); background: var(--surface); color: var(--muted); font-size: 13px; }
+html { scroll-padding-top: 104px; }
+body { margin: 0; min-width: 320px; color: var(--ink); background: var(--surface); font-size: 14px; line-height: 1.6; }
+body.menu-open { overflow: hidden; }
+a { color: var(--blue); text-underline-offset: 3px; }
+button, input { font: inherit; }
+button { color: inherit; cursor: pointer; }
+button, input[type="search"] { border: 1px solid var(--line); border-radius: 3px; background: var(--paper); }
+button { min-height: 36px; padding: 6px 11px; line-height: 1.4; }
+button:hover { border-color: var(--blue); color: var(--blue); }
+button:disabled { opacity: .42; cursor: default; }
+button:disabled:hover { color: inherit; border-color: var(--line); }
+:focus-visible { outline: 2px solid var(--blue); outline-offset: 3px; }
+[hidden] { display: none !important; }
+::selection { background: #dbe4ff; color: #151c32; }
+
+.skip-link { position: fixed; z-index: 100; top: -70px; left: 16px; padding: 10px 18px; background: var(--blue); color: white; }
+.skip-link:focus { top: 10px; }
+.topbar { position: sticky; z-index: 30; top: 0; min-height: var(--header-height); display: flex; align-items: center; gap: 24px; padding: 15px 32px; border-bottom: 1px solid var(--line); background: var(--paper); }
+.brand { min-width: 0; color: var(--ink); font-size: 17px; font-weight: 700; line-height: 1.35; letter-spacing: -.02em; text-decoration: none; }
+.brand small, .brand span { display: block; margin-top: 4px; font-size: 11px; font-weight: 400; letter-spacing: .08em; color: var(--muted); }
+.toolbar { display: flex; align-items: center; gap: 6px; margin-left: auto; flex-shrink: 0; }
+.toolbar .font-smaller, .toolbar .font-reset, .toolbar .font-larger { min-width: 36px; padding: 5px 8px; font-variant-numeric: tabular-nums; }
+.toolbar .print-button { margin-left: 8px; }
+.mobile-menu { display: none; }
+.layout { display: grid; grid-template-columns: 244px minmax(0, 1fr) 208px; max-width: 1536px; margin: 0 auto; align-items: start; background: var(--paper); }
+.sidebar { position: sticky; top: var(--header-height); height: calc(100dvh - var(--header-height)); overflow-y: auto; overscroll-behavior: contain; padding: 32px 20px 36px 24px; border-right: 1px solid var(--line); scrollbar-width: thin; background: var(--surface); }
+.nav-group + .nav-group { margin-top: 32px; padding-top: 26px; border-top: 1px solid var(--line); }
+.group-title { margin: 0 10px 12px; color: var(--muted); font-size: 11px; font-weight: 600; letter-spacing: .11em; }
+.doc-nav { display: flex; flex-direction: column; gap: 4px; }
+.doc-nav a { display: block; padding: 9px 10px; border-left: 2px solid transparent; color: #55575d; font-size: 13px; line-height: 1.65; text-decoration: none; overflow-wrap: anywhere; }
+.doc-nav a:hover { color: var(--blue); background: #eeeeef; }
+.doc-nav a[aria-current="page"] { border-left-color: var(--blue); background: #eaf0ff; color: var(--blue); font-weight: 600; }
+.doc-nav .doc-number { display: inline-block; min-width: 25px; color: var(--muted); font-variant-numeric: tabular-nums; }
+
+#main { min-width: 0; padding: 46px clamp(28px, 3.7vw, 60px) 56px; }
+.document-header { margin-bottom: 29px; }
+.eyebrow { margin: 0 0 18px; color: var(--blue); font-size: 12px; font-weight: 600; letter-spacing: .08em; }
+.document-header h1 { margin: 0 0 21px; font-size: clamp(30px, 2.8vw, 42px); font-weight: 700; letter-spacing: -.045em; line-height: 1.3; overflow-wrap: anywhere; }
+.doc-meta { display: flex; flex-wrap: wrap; align-items: baseline; gap: 6px 18px; color: var(--muted); font-size: 12px; }
+.doc-meta a { color: var(--muted); }
+.doc-meta a:hover { color: var(--blue); }
+.reader-tools { margin: 0 0 36px; padding: 16px 0; border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); }
+#search-form { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; }
+#search-input { flex: 1 1 160px; min-width: 100px; width: 0; height: 36px; padding: 6px 10px; color: var(--ink); }
+#search-input::placeholder { color: #777a82; }
+#search-next, #search-clear { flex: 0 0 auto; font-size: 12px; }
+#search-status { flex: 1 0 100%; color: var(--muted); font-size: 11px; line-height: 1.5; }
+#search-status:empty { display: none; }
+
+#document-body { font-size: var(--reader-font-size); line-height: 1.9; overflow-wrap: anywhere; }
+#document-body > :first-child { margin-top: 0; }
+#document-body h2, #document-body h3, #document-body h4, #document-body h5, #document-body h6 { scroll-margin-top: 106px; font-weight: 650; line-height: 1.45; color: #15171c; }
+#document-body h2 { margin: 2.8em 0 1.05em; padding-top: 1.25em; border-top: 1px solid var(--line); font-size: 1.5em; letter-spacing: -.035em; }
+#document-body h3 { margin: 2em 0 .85em; font-size: 1.18em; letter-spacing: -.025em; }
+#document-body h4 { margin: 1.65em 0 .7em; font-size: 1.03em; }
+#document-body h5, #document-body h6 { margin: 1.4em 0 .6em; font-size: 1em; }
+#document-body p { margin: .9em 0; }
+#document-body ul, #document-body ol { margin: 1em 0; padding-left: 1.55em; }
+#document-body li { margin: .38em 0; padding-left: .15em; }
+#document-body li > p { margin: .4em 0; }
+#document-body li > ul, #document-body li > ol { margin: .35em 0 .6em; }
+#document-body strong { color: #14161b; font-weight: 650; }
+#document-body hr { margin: 2.1em 0; border: 0; border-top: 1px solid var(--line); }
+#document-body blockquote { margin: 1.5em 0; padding: .25em 1.15em; border-left: 3px solid var(--blue); background: var(--surface); color: #4c4f57; }
+#document-body blockquote p { margin: .55em 0; }
+#document-body a { overflow-wrap: anywhere; }
+#document-body a:hover { text-decoration-thickness: 2px; }
+#document-body img { max-width: 100%; height: auto; }
+#document-body code { padding: .12em .32em; border: 1px solid #e7e7ea; border-radius: 3px; background: var(--surface); font-family: Consolas, "SFMono-Regular", "Liberation Mono", monospace; font-size: .82em; overflow-wrap: anywhere; }
+#document-body pre { position: relative; margin: 1.5em 0; padding: 44px 0 0; max-width: 100%; overflow: hidden; border: 1px solid var(--line); border-radius: 4px; background: var(--surface); line-height: 1.7; }
+#document-body pre > code { display: block; max-width: 100%; overflow-x: auto; padding: 0 19px 18px; border: 0; border-radius: 0; font-size: .79em; line-height: 1.75; white-space: pre; overflow-wrap: normal; tab-size: 2; }
+.copy-code { position: absolute; top: 7px; right: 8px; min-height: 28px; padding: 4px 9px; color: var(--muted); font-size: 11px; background: var(--paper); }
+.table-scroll { max-width: 100%; margin: 1.5em 0; overflow-x: auto; border: 1px solid var(--line); border-radius: 3px; scrollbar-width: thin; }
+#document-body table { width: 100%; min-width: 100%; border-collapse: collapse; font-size: .82em; line-height: 1.7; }
+#document-body th, #document-body td { min-width: 105px; padding: 12px 14px; border-right: 1px solid var(--line); border-bottom: 1px solid var(--line); text-align: left; vertical-align: top; }
+#document-body th { background: var(--surface); font-weight: 600; color: #30333a; }
+#document-body tr > :last-child { border-right: 0; }
+#document-body tbody tr:last-child td { border-bottom: 0; }
+#document-body tbody tr:hover { background: #fafafb; }
+#document-body th:first-child, #document-body td:first-child { min-width: 95px; }
+#document-body input[type="checkbox"] { width: 14px; height: 14px; margin: 0 7px 0 0; vertical-align: middle; accent-color: var(--blue); }
+#document-body details { margin: 1.15em 0; padding: 12px 16px; border: 1px solid var(--line); border-radius: 3px; }
+#document-body summary { color: var(--muted); font-size: .85em; cursor: pointer; }
+#document-body details[open] summary { margin-bottom: 12px; }
+.architecture { margin: 1.8em 0; }
+.diagram-viewport { max-width: 100%; overflow-x: auto; border: 1px solid var(--line); scrollbar-width: thin; }
+.diagram-viewport > svg { display: block; min-width: 720px; width: 100%; height: auto; background: var(--paper); }
+.architecture > svg { display: block; width: 100%; height: auto; max-width: 100%; border: 1px solid var(--line); background: var(--paper); }
+.architecture figcaption { margin-top: 8px; color: var(--muted); font-size: .75em; }
+.architecture details { font-size: .85em; }
+mark.reader-match { padding: 1px 0; background: #dbe4ff; color: inherit; border-radius: 2px; scroll-margin-top: 120px; }
+mark.reader-match.is-current { background: var(--blue); color: white; box-shadow: 0 0 0 2px var(--blue); }
+.search-block-current { outline: 1px solid #b2c5f9; outline-offset: 6px; }
+
+.toc-panel { position: sticky; top: var(--header-height); max-height: calc(100dvh - var(--header-height)); overflow-y: auto; padding: 38px 20px 30px 19px; border-left: 1px solid var(--line); scrollbar-width: thin; }
+.toc-panel > h2, #toc > h2, .toc-title { margin: 0 0 15px; color: var(--muted); font-size: 11px; font-weight: 600; letter-spacing: .08em; }
+#toc ul, #toc ol { list-style: none; margin: 0; padding: 0; }
+#toc a { display: block; margin: 2px 0; padding: 5px 0 5px 12px; border-left: 2px solid transparent; color: #6c6f78; font-size: 12px; line-height: 1.65; text-decoration: none; overflow-wrap: anywhere; }
+#toc a:hover { color: var(--blue); }
+#toc a[aria-current="location"], #toc a.is-active { color: var(--blue); border-left-color: var(--blue); }
+#toc a[data-level="3"], #toc .toc-h3 a, #toc a.toc-h3, #toc li.level-3 a { padding-left: 24px; font-size: 11px; }
+.document-pager { display: flex; justify-content: space-between; gap: 20px; margin-top: 60px; padding-top: 24px; border-top: 1px solid var(--line); }
+.document-pager a { flex: 1; min-width: 0; text-decoration: none; font-size: 14px; font-weight: 600; overflow-wrap: anywhere; }
+.document-pager a:last-child { text-align: right; }
+.document-pager a:only-child { text-align: left; }
+.document-pager small, .document-pager span { display: block; margin-bottom: 4px; font-size: 11px; font-weight: 400; color: var(--muted); }
+.page-footer { max-width: 1536px; margin: auto; padding: 22px 32px; border-top: 1px solid var(--line); color: var(--muted); font-size: 11px; background: var(--surface); }
+.back-top { position: fixed; right: 24px; bottom: 24px; z-index: 20; min-height: 40px; border-color: var(--line); background: var(--paper); font-size: 12px; }
+.sidebar-scrim { display: none; }
+
+@media (min-width: 1600px) {
+  .layout { border-left: 1px solid var(--line); border-right: 1px solid var(--line); }
+  .topbar { padding-left: max(32px, calc((100vw - 1472px) / 2)); padding-right: max(32px, calc((100vw - 1472px) / 2)); }
+}
+@media (max-width: 1190px) {
+  .layout { grid-template-columns: 225px minmax(0, 1fr); }
+  .toc-panel { display: none; }
+  #main { padding-left: 42px; padding-right: 42px; }
+}
+@media (max-width: 800px) {
+  :root { --header-height: 68px; }
+  .topbar { gap: 12px; padding: 13px 18px; }
+  .brand { font-size: 15px; }
+  .brand small, .brand span { font-size: 9px; }
+  .mobile-menu { display: inline-flex; align-items: center; justify-content: center; flex-shrink: 0; min-height: 34px; padding: 6px 9px; font-size: 12px; }
+  .layout { display: block; }
+  .sidebar { position: fixed; z-index: 50; left: 0; top: var(--header-height); bottom: 0; width: min(300px, calc(100vw - 44px)); height: calc(100dvh - var(--header-height)); padding: 24px 18px; transform: translateX(-101%); visibility: hidden; transition: transform .18s ease, visibility .18s; border-right: 1px solid var(--line); }
+  .menu-open .sidebar { transform: translateX(0); visibility: visible; }
+  .sidebar-scrim:not([hidden]) { display: block; position: fixed; z-index: 40; inset: var(--header-height) 0 0; background: rgb(18 21 30 / 28%); }
+  .toolbar { gap: 3px; }
+  .toolbar .font-smaller, .toolbar .font-reset, .toolbar .font-larger { min-width: 29px; min-height: 32px; padding: 4px 5px; font-size: 12px; }
+  .toolbar .print-button { display: none; }
+  #main { padding: 33px 28px 40px; }
+  .document-header h1 { font-size: 32px; }
+  .eyebrow { margin-bottom: 13px; }
+  #document-body { line-height: 1.9; }
+  #document-body h2 { margin-top: 2.3em; font-size: 1.4em; }
+  .page-footer { padding: 18px 28px; }
+  .back-top { right: 16px; bottom: 16px; }
+}
+@media (max-width: 460px) {
+  .topbar { gap: 8px; padding-left: 12px; padding-right: 12px; }
+  .brand { font-size: 13px; letter-spacing: -.035em; }
+  .brand small, .brand span { max-width: 125px; overflow: hidden; white-space: nowrap; text-overflow: ellipsis; }
+  .mobile-menu { padding: 5px 7px; font-size: 11px; }
+  #main { padding: 29px 20px 36px; }
+  .document-header h1 { font-size: 28px; }
+  .doc-meta { gap: 4px 12px; font-size: 11px; }
+  .reader-tools { margin-bottom: 28px; }
+  #search-input { flex-basis: 110px; font-size: 12px; }
+  #search-next, #search-clear { padding-left: 8px; padding-right: 8px; }
+  #document-body { font-size: calc(var(--reader-font-size) - 1px); }
+  #document-body pre > code { padding-left: 13px; padding-right: 13px; }
+  #document-body th, #document-body td { padding: 10px 12px; }
+  .document-pager { gap: 18px; margin-top: 40px; }
+  .document-pager a { font-size: 12px; }
+  .page-footer { padding-left: 20px; padding-right: 20px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { scroll-behavior: auto !important; transition: none !important; }
+}
+@media print {
+  @page { margin: 18mm 16mm; }
+  :root { --reader-font-size: 10.5pt !important; }
+  body { min-width: 0; background: white; color: black; }
+  .topbar, .sidebar, .toc-panel, .reader-tools, .document-pager, .back-top, .sidebar-scrim, .skip-link, .copy-code { display: none !important; }
+  .layout { display: block; max-width: none; border: 0; }
+  #main { padding: 0; }
+  .document-header h1 { font-size: 24pt; }
+  .document-header { margin-bottom: 24pt; }
+  .doc-meta { font-size: 8pt; }
+  #document-body { font-size: 10.5pt; line-height: 1.65; }
+  #document-body h2, #document-body h3, #document-body h4 { break-after: avoid; }
+  #document-body h2 { margin-top: 20pt; padding-top: 12pt; font-size: 15pt; }
+  #document-body a { color: inherit; text-decoration: underline; }
+  #document-body pre { padding: 9pt; overflow: visible; background: #f7f7f8; }
+  #document-body pre > code { padding: 0; overflow: visible; white-space: pre-wrap; overflow-wrap: anywhere; font-size: 8pt; }
+  .table-scroll { overflow: visible; border-radius: 0; }
+  #document-body table { table-layout: fixed; font-size: 7.5pt; }
+  #document-body th, #document-body td, #document-body th:first-child, #document-body td:first-child { min-width: 0; padding: 5pt; overflow-wrap: anywhere; }
+  #document-body thead { display: table-header-group; }
+  #document-body tr, .architecture { break-inside: avoid; }
+  #document-body details:not([open]) { display: none; }
+  .architecture > svg { max-height: 230mm; }
+  mark.reader-match, mark.reader-match.is-current { color: inherit; background: transparent; box-shadow: none; }
+  .search-block-current { outline: none; }
+  .page-footer { margin-top: 24pt; padding: 10pt 0 0; font-size: 8pt; background: white; }
+}
+</style>
+</head>
+<body>
+<a class="skip-link" href="#main">跳到正文</a>
+<header class="topbar">
+  <button type="button" class="mobile-menu" aria-controls="doc-sidebar" aria-expanded="false">文档目录</button>
+  <a class="brand" href="../../0001-douyin-ai-studio/00-%E6%96%87%E6%A1%A3%E5%AF%BC%E8%88%AA.html">AI 自媒体<span>开发文档与调研</span></a>
+  <div class="toolbar" aria-label="阅读设置">
+    <button type="button" class="font-smaller" aria-label="缩小正文字号" title="缩小字号">A−</button>
+    <button type="button" class="font-reset" aria-label="恢复默认正文字号" title="恢复字号">默认</button>
+    <button type="button" class="font-larger" aria-label="放大正文字号" title="放大字号">A+</button>
+    <button type="button" class="print-button">打印</button>
+  </div>
+</header>
+<div class="layout">
+  <aside id="doc-sidebar" class="sidebar" aria-label="全部文档"><section class="nav-group"><h2 class="group-title">开发文档</h2><nav class="doc-nav" aria-label="开发文档"><a data-document href="../../0001-douyin-ai-studio/00-%E6%96%87%E6%A1%A3%E5%AF%BC%E8%88%AA.html">00 文档导航</a><a data-document href="../../0001-douyin-ai-studio/01-%E4%BA%A7%E5%93%81%E9%9C%80%E6%B1%82%E6%96%87%E6%A1%A3.html">01 产品需求文档</a><a data-document href="../../0001-douyin-ai-studio/02-%E6%8A%80%E6%9C%AF%E9%80%89%E5%9E%8B%E5%AF%B9%E6%AF%94.html">02 技术选型对比</a><a data-document href="../../0001-douyin-ai-studio/03-%E6%80%BB%E4%BD%93%E6%8A%80%E6%9C%AF%E6%96%B9%E6%A1%88.html">03 总体技术方案</a><a data-document href="../../0001-douyin-ai-studio/04-%E6%8E%A5%E5%8F%A3%E5%A5%91%E7%BA%A6%E4%B8%8E%E6%95%B0%E6%8D%AE%E5%AD%97%E5%85%B8.html">04 接口契约与数据字典</a><a data-document href="../../0001-douyin-ai-studio/05-%E5%BC%80%E5%8F%91%E5%AE%9E%E6%96%BD%E8%AE%A1%E5%88%92.html">05 开发实施计划</a><a data-document href="../../0001-douyin-ai-studio/06-%E9%AA%8C%E6%94%B6%E6%A0%87%E5%87%86%E4%B8%8E%E6%B5%8B%E8%AF%95%E6%96%B9%E6%A1%88.html">06 验收标准与测试方案</a><a data-document href="../../0001-douyin-ai-studio/07-%E6%8A%80%E6%9C%AF%E9%80%89%E5%9E%8B%E4%B8%8E%E5%AE%9E%E6%B5%8B%E6%B5%81%E7%A8%8B.html">07 技术选型与实测流程</a><a data-document href="../../0001-douyin-ai-studio/08-%E7%AB%AF%E5%88%B0%E7%AB%AF%E6%8A%80%E6%9C%AF%E6%B5%81%E7%A8%8B%E4%B8%8E%E6%A8%A1%E5%9E%8B%E9%80%89%E5%9E%8B%E5%9C%B0%E5%9B%BE.html">08 端到端技术流程与模型选型地图</a><a data-document href="../../0001-douyin-ai-studio/09-%E6%A8%A1%E5%9E%8B%E9%80%89%E5%9E%8B%E5%86%B3%E7%AD%96%E4%B8%8E%E6%8E%A5%E5%85%A5%E6%96%B9%E6%A1%88.html">09 模型选型决策与接入方案</a><a data-document href="../../0001-douyin-ai-studio/10-Agent%E7%BC%96%E6%8E%92%E9%80%89%E5%9E%8B%E4%B8%8E%E6%95%B4%E4%BD%93%E6%9E%B6%E6%9E%84.html">10 Agent编排选型与整体架构</a></nav></section><section class="nav-group"><h2 class="group-title">本轮选型试验</h2><nav class="doc-nav" aria-label="本轮选型试验"><a data-document href="../01-%E6%95%B0%E5%AD%97%E4%BA%BA%E5%8F%A3%E6%92%AD/01-%E9%80%89%E5%9E%8B%E8%AF%95%E9%AA%8C%E6%96%B9%E6%A1%88.html">01 选型试验方案</a><a data-document href="../01-%E6%95%B0%E5%AD%97%E4%BA%BA%E5%8F%A3%E6%92%AD/02-%E9%A6%96%E8%BD%AE%E5%AE%9E%E6%B5%8B%E7%BB%93%E6%9E%9C.html">02 首轮实测结果</a><a data-document href="../01-%E6%95%B0%E5%AD%97%E4%BA%BA%E5%8F%A3%E6%92%AD/03-MuseTalk%E4%BA%91%E7%AB%AF%E9%83%A8%E7%BD%B2%E4%B8%8E%E8%AF%95%E9%AA%8C%E6%96%B9%E6%A1%88.html">03 MuseTalk云端部署与试验方案</a><a data-document href="../01-%E6%95%B0%E5%AD%97%E4%BA%BA%E5%8F%A3%E6%92%AD/04-MuseTalk%E9%83%A8%E7%BD%B2%E4%B8%8E%E9%A6%96%E6%B5%8B%E7%BB%93%E6%9E%9C.html">04 MuseTalk部署与首测结果</a><a data-document href="../01-%E6%95%B0%E5%AD%97%E4%BA%BA%E5%8F%A3%E6%92%AD/05-OmniHuman%E5%BC%80%E9%80%9A%E5%90%8E%E5%AE%9E%E6%B5%8B%E7%BB%93%E6%9E%9C.html">05 OmniHuman开通后实测结果</a><a data-document href="../01-%E6%95%B0%E5%AD%97%E4%BA%BA%E5%8F%A3%E6%92%AD/06-%E4%BA%BA%E7%89%A9B%E8%A1%A8%E6%83%85%E5%8A%A8%E4%BD%9C%E6%94%B9%E5%96%84%E5%AE%9E%E6%B5%8B.html">06 人物B表情动作改善实测</a><a data-document href="../01-%E6%95%B0%E5%AD%97%E4%BA%BA%E5%8F%A3%E6%92%AD/MuseTalk%E5%AE%98%E6%96%B9%E8%83%BD%E5%8A%9B%E6%A0%B8%E9%AA%8C.html">MuseTalk官方能力核验</a><a data-document href="../01-%E6%95%B0%E5%AD%97%E4%BA%BA%E5%8F%A3%E6%92%AD/%E6%B5%8B%E8%AF%95%E7%B4%A0%E6%9D%90%E6%8E%A5%E5%8F%A3%E6%A0%B8%E9%AA%8C.html">测试素材接口核验</a><a data-document href="../01-%E6%95%B0%E5%AD%97%E4%BA%BA%E5%8F%A3%E6%92%AD/%E7%81%AB%E5%B1%B1%E5%80%99%E9%80%89%E6%A0%B8%E9%AA%8C.html">火山候选核验</a><a data-document href="../01-%E6%95%B0%E5%AD%97%E4%BA%BA%E5%8F%A3%E6%92%AD/%E9%98%BF%E9%87%8C%E5%80%99%E9%80%89%E6%A0%B8%E9%AA%8C.html">阿里候选核验</a></nav></section><section class="nav-group"><h2 class="group-title">已选模型接入核验</h2><nav class="doc-nav" aria-label="已选模型接入核验"><a data-document href="../02-%E5%B7%B2%E9%80%89%E6%A8%A1%E5%9E%8B/%E5%AE%98%E6%96%B9%E6%96%87%E6%9C%AC%E4%B8%8E%E8%AF%AD%E9%9F%B3%E6%8E%A5%E5%8F%A3%E6%A0%B8%E9%AA%8C.html">官方文本与语音接口核验</a></nav></section><section class="nav-group"><h2 class="group-title">人物与音色候选</h2><nav class="doc-nav" aria-label="人物与音色候选"><a data-document href="01-%E9%A6%96%E8%BD%AE%E5%80%99%E9%80%89%E4%B8%8E%E9%80%89%E6%8B%A9%E8%AF%B4%E6%98%8E.html">01 首轮候选与选择说明</a><a data-document href="02-%E4%BA%BA%E7%89%A9B%E4%B8%8E%E9%9F%B3%E8%89%B23%E5%AE%9A%E7%89%88%E8%AE%B0%E5%BD%95.html" aria-current="page">02 人物B与音色3定版记录</a></nav></section><section class="nav-group"><h2 class="group-title">调研资料</h2><nav class="doc-nav" aria-label="调研资料"><a data-document href="../../research/01-%E4%BA%A7%E5%93%81%E5%BD%A2%E6%80%81%E4%B8%8E%E6%8A%96%E9%9F%B3%E7%94%9F%E6%80%81.html">01 产品形态与抖音生态</a><a data-document href="../../research/02-%E4%BA%BA%E7%89%A9%E4%B8%80%E8%87%B4%E6%80%A7%E7%94%9F%E6%88%90.html">02 人物一致性生成</a><a data-document href="../../research/03-%E6%95%B0%E5%AD%97%E4%BA%BA%E5%8F%A3%E6%92%AD%E9%80%89%E5%9E%8B.html">03 数字人口播选型</a><a data-document href="../../research/04-TTS%E9%9F%B3%E8%89%B2%E4%B8%8E%E5%86%85%E5%AE%B9%E7%94%9F%E6%88%90%E8%B4%A8%E6%A3%80.html">04 TTS音色与内容生成质检</a><a data-document href="../../research/05-%E8%A7%86%E9%A2%91%E5%90%8E%E5%A4%84%E7%90%86%E5%8F%91%E5%B8%83%E4%B8%8E%E5%90%88%E8%A7%84.html">05 视频后处理发布与合规</a><a data-document href="../../research/06-%E5%86%B3%E7%AD%96%E6%B1%87%E6%80%BB.html">06 决策汇总</a></nav></section>
+    <p class="sidebar-note">11 份开发文档<br>10 份本轮选型试验<br>1 份已选模型接入核验<br>2 份人物与音色候选<br>6 份调研资料</p>
+  </aside>
+  <main id="main" tabindex="-1">
+    <header class="document-header">
+      <p class="eyebrow">人物与音色候选 / 02</p>
+      <h1>人物 B 与音色 3 定版记录</h1>
+      <div class="doc-meta"><span>2026-09-21 核验记录</span><span>4 个章节</span><a href="02-%E4%BA%BA%E7%89%A9B%E4%B8%8E%E9%9F%B3%E8%89%B23%E5%AE%9A%E7%89%88%E8%AE%B0%E5%BD%95.md">Markdown 原文</a></div>
+      
+    </header>
+    <div class="reader-tools">
+      <form id="search-form" role="search">
+        <label class="sr-only" for="search-input">搜索本文</label>
+        <input id="search-input" type="search" placeholder="搜索本文，按 Enter 跳转" autocomplete="off">
+        <button id="search-next" type="submit">下一处</button>
+        <button id="search-clear" type="button">清除</button>
+        <span id="search-status" role="status" aria-live="polite"></span>
+      </form>
+    </div>
+    <article id="document-body">
+<p>日期：2026-09-22。用户已明确选择 <strong>人物 B＋音色 3（温暖闺蜜）</strong>，本轮将原始素材和声音参数登记为固定主播版本 1。</p>
+<p><a href="../../../experiments/%E4%BA%BA%E7%89%A9%E4%B8%8E%E9%9F%B3%E8%89%B2%E9%80%89%E5%9E%8B/AV-001/%E4%BA%BA%E7%89%A9%E4%B8%8E%E9%9F%B3%E8%89%B2%E9%80%89%E6%8B%A9.html">查看人物与试听声音</a> · <a href="../../../assets/%E5%9B%BA%E5%AE%9A%E4%B8%BB%E6%92%AD/%E4%B8%BB%E6%92%ADB/%E7%89%88%E6%9C%AC1/%E8%A7%92%E8%89%B2%E6%A1%A3%E6%A1%88.json">角色档案</a> · <a href="../../../experiments/%E4%BA%BA%E7%89%A9%E4%B8%8E%E9%9F%B3%E8%89%B2%E9%80%89%E5%9E%8B/AV-001/%E4%BA%BA%E7%89%A9%E4%B8%8E%E9%9F%B3%E8%89%B2%E5%AE%9A%E7%89%88.json">用户选择记录</a></p>
+<h2 id="固定人物">固定人物</h2>
+<p><img alt="已选定的人物 B，约 22 岁的成年女性虚拟主播" src="../../../assets/%E5%9B%BA%E5%AE%9A%E4%B8%BB%E6%92%AD/%E4%B8%BB%E6%92%ADB/%E7%89%88%E6%9C%AC1/%E5%9F%BA%E7%A1%80%E4%BA%BA%E7%89%A9.png"/></p>
+<ul>
+<li>身份 ID：<code>av_base_b_v1</code>；内部名称“主播 B”，对外名字尚未指定，不影响身份固定。</li>
+<li>风格：约 22 岁、明确成年、专业温柔的虚构女性；黑色长直发，正面半身构图。</li>
+<li>原始画面：米白色西装外套、浅蓝色圆领上衣、浅灰色摄影棚背景。</li>
+<li>当前唯一主参考图：<a href="../../../assets/%E5%9B%BA%E5%AE%9A%E4%B8%BB%E6%92%AD/%E4%B8%BB%E6%92%ADB/%E7%89%88%E6%9C%AC1/%E5%9F%BA%E7%A1%80%E4%BA%BA%E7%89%A9.png">基础人物.png</a>，<strong>941×1672</strong>，保留原始字节。</li>
+<li>来源：本项目 AV-001 的 <code>image_B</code>；通过专用中转请求 <code>gpt-image-2</code>。响应未包含模型字段，上游模型身份未独立核实。</li>
+</ul>
+<p>脸型、五官、发型、肤色、年龄感、性别、身体比例均以这张主参考图固定。后续换装与换背景需要引用该图，经身份对照后登记为变体。目前服装、背景仍在同一张图片中，尚未生成可独立替换的素材图层或其他视角资产。</p>
+<p>本次请求尺寸是 1152×2048，实际仅返回 941×1672。人物选择成立，尺寸偏差继续保留；尚未完成最终 1080×1920 视频的画质验收。</p>
+<h2 id="固定声音">固定声音</h2>
+<p><a href="../../../assets/%E5%9B%BA%E5%AE%9A%E4%B8%BB%E6%92%AD/%E4%B8%BB%E6%92%ADB/%E7%89%88%E6%9C%AC1/%E9%9F%B3%E8%89%B23-%E6%B8%A9%E6%9A%96%E9%97%BA%E8%9C%9C%E8%AF%95%E5%90%AC.wav">播放或下载音色 3 原始试听 WAV</a></p>
+<ul>
+<li>声音资产 ID：<code>voice_minimax_warm_bestie_v1</code>。</li>
+<li>服务：MiniMax 官方 API；模型：<code>speech-2.8-hd</code>。</li>
+<li>音色名称：温暖闺蜜；<code>voice_id = Chinese (Mandarin)_Warm_Bestie</code>。</li>
+<li>基础参数：<code>speed=1.0</code>、<code>vol=1.0</code>、<code>pitch=0</code>、<code>emotion=calm</code>。</li>
+<li><code>language_boost=Chinese</code>；WAV、32000 Hz、单声道；本次试听实际时长约 <strong>15.22 秒</strong>。</li>
+</ul>
+<p>后续默认使用以上模型、音色与基础参数。改变声音模型或音色需要新版本及重新试听；固定 ID 与参数不保证供应商未来更新后波形完全相同。</p>
+<p>试听稿用于比较音色，其中“用三个步骤”没有展开，不能当作完整的 RAG 发布稿。字幕时间戳能力仍未验收。</p>
+<h2 id="保存与配置">保存与配置</h2>
+<p>冻结副本位于 <code>assets/固定主播/主播B/版本1/</code>：基础人物、试听 WAV、原始生图提示词、角色档案及校验摘要。复制不改变文件内容，实验原件与全部失败记录保留。</p>
+<ul>
+<li>人物 SHA-256：<code>b66feb11d62559a632def9f86e0915645a70fa4dbb38c6a2cd2f7cb50b607b48</code></li>
+<li>声音 SHA-256：<code>a6945eac9e317ea3643151e039f3de1a929277aceb605a2d13dee708f815fc81</code></li>
+</ul>
+<p><a href="../../%E9%85%8D%E7%BD%AE/%E5%B7%B2%E9%80%89%E6%A8%A1%E5%9E%8B%E9%85%8D%E7%BD%AE.example.json">已选模型配置示例</a> 已绑定人物、声音和角色档案摘要。该文件仍是接入规格，应用运行层尚未实现；本次登记没有触发模型请求或远程 GPU 任务。</p>
+<p>资产记录沿用 <a href="../../0001-douyin-ai-studio/04-%E6%8E%A5%E5%8F%A3%E5%A5%91%E7%BA%A6%E4%B8%8E%E6%95%B0%E6%8D%AE%E5%AD%97%E5%85%B8.html">核心契约</a> 的身份、声音、来源、摘要和审批结构；本地档案处于 <code>integration</code> 模式。<code>approved</code> 仅表示用户确认这组外观与音色，生产状态仍为 <code>PENDING_ACCEPTANCE</code>。角色档案不是已导入数据库的证明。</p>
+<h2 id="下一阶段验收">下一阶段验收</h2>
+<ol>
+<li>用人物 B 与音色 3 的原始音频做 MuseTalk 真实短片，检查嘴型、牙齿、脸部边缘、音画同步和人物辨识度。</li>
+<li>为人物 B 建立身份一致、经批准的动作母版，验证眨眼、表情与轻微头部运动。旧千问人物的动作视频不能作为人物 B 的素材直接沿用；单图 MuseTalk 试验也不等于自然动作已解决。</li>
+<li>验证参考图换装、换背景，并完成实际 60 秒口播、最终分辨率、字幕和音量检查。</li>
+</ol>
+<p>本轮完成的是人物与声音定版登记。自然动作、变体一致性、完整权利材料归档和生产质量仍有待完成。全部技术验收依据新增实测证据，不能因用户选定人物与声音而自动通过。</p>
+</article>
+    <nav class="document-pager" aria-label="相邻文档"><a rel="prev" href="01-%E9%A6%96%E8%BD%AE%E5%80%99%E9%80%89%E4%B8%8E%E9%80%89%E6%8B%A9%E8%AF%B4%E6%98%8E.html"><span>上一篇</span>01-首轮候选与选择说明</a><a rel="next" href="../../research/01-%E4%BA%A7%E5%93%81%E5%BD%A2%E6%80%81%E4%B8%8E%E6%8A%96%E9%9F%B3%E7%94%9F%E6%80%81.html"><span>下一篇</span>01-产品形态与抖音生态</a></nav>
+    <footer class="page-footer">与同名 Markdown 对应的阅读版 · 可离线阅读与打印</footer>
+  </main>
+  <aside class="toc-panel" aria-label="本文章节"><p class="group-title">本页目录</p><nav id="toc"><a class="toc-h2" href="#%E5%9B%BA%E5%AE%9A%E4%BA%BA%E7%89%A9">固定人物</a><a class="toc-h2" href="#%E5%9B%BA%E5%AE%9A%E5%A3%B0%E9%9F%B3">固定声音</a><a class="toc-h2" href="#%E4%BF%9D%E5%AD%98%E4%B8%8E%E9%85%8D%E7%BD%AE">保存与配置</a><a class="toc-h2" href="#%E4%B8%8B%E4%B8%80%E9%98%B6%E6%AE%B5%E9%AA%8C%E6%94%B6">下一阶段验收</a></nav></aside>
+</div>
+<button type="button" class="sidebar-scrim" aria-label="关闭文档目录" hidden></button>
+<button type="button" class="back-top" aria-label="返回顶部">顶部</button>
+<script>(() => {
+  'use strict';
+
+  function initializeReader() {
+    const article = document.getElementById('document-body');
+    if (!article) return;
+    const root = document.documentElement;
+    const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
+    const scrollBehavior = () => reducedMotion.matches ? 'instant' : 'smooth';
+
+    // Local files and privacy settings can deny storage; controls remain usable.
+    const fontKey = 'document-reader-font-size';
+    let fontSize = 17;
+    try {
+      const savedSize = Number(localStorage.getItem(fontKey));
+      if (Number.isFinite(savedSize) && savedSize >= 14 && savedSize <= 22) fontSize = savedSize;
+    } catch (_) { /* Storage is optional. */ }
+    const smaller = document.querySelector('.font-smaller');
+    const reset = document.querySelector('.font-reset');
+    const larger = document.querySelector('.font-larger');
+    function setFontSize(value) {
+      fontSize = Math.max(14, Math.min(22, value));
+      root.style.setProperty('--reader-font-size', `${fontSize}px`);
+      if (smaller) smaller.disabled = fontSize === 14;
+      if (larger) larger.disabled = fontSize === 22;
+      if (reset) reset.title = `恢复默认字号（当前 ${fontSize}px）`;
+      try { localStorage.setItem(fontKey, String(fontSize)); } catch (_) { /* Optional. */ }
+    }
+    setFontSize(fontSize);
+    smaller?.addEventListener('click', () => setFontSize(fontSize - 1));
+    reset?.addEventListener('click', () => setFontSize(17));
+    larger?.addEventListener('click', () => setFontSize(fontSize + 1));
+    document.querySelector('.print-button')?.addEventListener('click', () => window.print());
+
+    const menu = document.querySelector('.mobile-menu');
+    const sidebar = document.getElementById('doc-sidebar');
+    const scrim = document.querySelector('.sidebar-scrim');
+    const mobileWidth = window.matchMedia('(max-width: 800px)');
+    function setMenu(open, returnFocus = false) {
+      const visible = open && mobileWidth.matches;
+      document.body.classList.toggle('menu-open', visible);
+      menu?.setAttribute('aria-expanded', String(visible));
+      if (scrim) scrim.hidden = !visible;
+      if (visible) {
+        sidebar?.querySelector('[aria-current="page"], a, button')?.focus();
+      } else if (returnFocus) menu?.focus();
+    }
+    menu?.addEventListener('click', () => setMenu(!document.body.classList.contains('menu-open')));
+    scrim?.addEventListener('click', () => setMenu(false, true));
+    sidebar?.addEventListener('click', (event) => {
+      if (event.target.closest('a')) setMenu(false);
+    });
+    mobileWidth.addEventListener('change', () => setMenu(false));
+    document.addEventListener('keydown', (event) => {
+      if (!document.body.classList.contains('menu-open')) return;
+      if (event.key === 'Escape') {
+        event.preventDefault();
+        setMenu(false, true);
+      }
+      if (event.key === 'Tab') {
+        const focusable = [menu, ...sidebar.querySelectorAll('a[href], button:not([disabled]), [tabindex="0"]')].filter(Boolean);
+        const first = focusable[0];
+        const last = focusable[focusable.length - 1];
+        if (event.shiftKey && document.activeElement === first) {
+          event.preventDefault();
+          last?.focus();
+        } else if (!event.shiftKey && document.activeElement === last) {
+          event.preventDefault();
+          first?.focus();
+        }
+      }
+    });
+    setMenu(false);
+
+    const searchForm = document.getElementById('search-form');
+    const searchInput = document.getElementById('search-input');
+    const searchNext = document.getElementById('search-next');
+    const searchClear = document.getElementById('search-clear');
+    const searchStatus = document.getElementById('search-status');
+    let searchResults = [];
+    let currentResult = -1;
+    let currentQuery = '';
+    let searchTimer;
+
+    function clearHighlights() {
+      article.querySelectorAll('mark.reader-match').forEach((mark) => {
+        const parent = mark.parentNode;
+        mark.replaceWith(document.createTextNode(mark.textContent));
+        parent.normalize();
+      });
+      article.querySelectorAll('.search-block-current').forEach((block) => block.classList.remove('search-block-current'));
+      searchResults = [];
+      currentResult = -1;
+    }
+
+    function showResult(index, shouldScroll) {
+      searchResults.forEach((result) => {
+        result.block.classList.remove('search-block-current');
+        result.marks.forEach((mark) => mark.classList.remove('is-current'));
+      });
+      currentResult = (index + searchResults.length) % searchResults.length;
+      const result = searchResults[currentResult];
+      result.block.classList.add('search-block-current');
+      result.marks.forEach((mark) => mark.classList.add('is-current'));
+      if (searchStatus) searchStatus.textContent = `第 ${currentResult + 1} / ${searchResults.length} 处匹配 · Enter 下一处`;
+      if (shouldScroll) {
+        let container = result.block.parentElement;
+        while (container && container !== article) {
+          if (container.tagName === 'DETAILS') container.open = true;
+          container = container.parentElement;
+        }
+        result.marks[0].scrollIntoView({ behavior: scrollBehavior(), block: 'center', inline: 'nearest' });
+      }
+    }
+
+    function runSearch(shouldScroll = false) {
+      clearTimeout(searchTimer);
+      clearHighlights();
+      const query = searchInput?.value.trim() || '';
+      currentQuery = query;
+      if (searchClear) searchClear.disabled = !query;
+      if (!query) {
+        if (searchStatus) searchStatus.textContent = '';
+        if (searchNext) searchNext.disabled = true;
+        return;
+      }
+      const queryLower = query.toLocaleLowerCase();
+      const blockResults = new Map();
+      // Walk original text nodes, preserving links, emphasis, tables and code.
+      const walker = document.createTreeWalker(article, NodeFilter.SHOW_TEXT, {
+        acceptNode(node) {
+          if (!node.nodeValue.trim()) return NodeFilter.FILTER_REJECT;
+          if (node.parentElement.closest('script, style, button, svg, mark, [aria-hidden="true"]')) return NodeFilter.FILTER_REJECT;
+          return node.nodeValue.toLocaleLowerCase().includes(queryLower) ? NodeFilter.FILTER_ACCEPT : NodeFilter.FILTER_REJECT;
+        }
+      });
+      const nodes = [];
+      while (walker.nextNode()) nodes.push(walker.currentNode);
+      nodes.forEach((node) => {
+        const original = node.nodeValue;
+        const normalized = original.toLocaleLowerCase();
+        const block = node.parentElement.closest('p, li, td, th, h2, h3, h4, h5, h6, pre, summary, figcaption') || node.parentElement;
+        let result = blockResults.get(block);
+        if (!result) {
+          result = { block, marks: [] };
+          blockResults.set(block, result);
+        }
+        const fragment = document.createDocumentFragment();
+        let position = 0;
+        let matchPosition;
+        while ((matchPosition = normalized.indexOf(queryLower, position)) !== -1) {
+          fragment.append(document.createTextNode(original.slice(position, matchPosition)));
+          const mark = document.createElement('mark');
+          mark.className = 'reader-match';
+          mark.textContent = original.slice(matchPosition, matchPosition + query.length);
+          fragment.append(mark);
+          result.marks.push(mark);
+          position = matchPosition + query.length;
+        }
+        fragment.append(document.createTextNode(original.slice(position)));
+        node.replaceWith(fragment);
+      });
+      searchResults = [...blockResults.values()];
+      if (searchNext) searchNext.disabled = !searchResults.length;
+      if (!searchResults.length) {
+        if (searchStatus) searchStatus.textContent = '未找到匹配内容';
+      } else showResult(0, shouldScroll);
+    }
+
+    searchInput?.addEventListener('input', (event) => {
+      if (event.isComposing) return;
+      clearTimeout(searchTimer);
+      searchTimer = setTimeout(() => runSearch(false), 180);
+    });
+    searchInput?.addEventListener('compositionend', () => {
+      clearTimeout(searchTimer);
+      searchTimer = setTimeout(() => runSearch(false), 180);
+    });
+    searchForm?.addEventListener('submit', (event) => {
+      event.preventDefault();
+      const queryChanged = currentQuery !== searchInput.value.trim();
+      if (queryChanged) runSearch(true);
+      else if (searchResults.length) showResult(currentResult + 1, true);
+    });
+    if (searchNext && searchNext.type !== 'submit') {
+      searchNext.addEventListener('click', () => {
+        if (currentQuery !== searchInput.value.trim()) runSearch(true);
+        else if (searchResults.length) showResult(currentResult + 1, true);
+      });
+    }
+    function resetSearch() {
+      clearTimeout(searchTimer);
+      if (searchInput) searchInput.value = '';
+      currentQuery = '';
+      clearHighlights();
+      if (searchStatus) searchStatus.textContent = '';
+      if (searchNext) searchNext.disabled = true;
+      if (searchClear) searchClear.disabled = true;
+    }
+    searchClear?.addEventListener('click', (event) => {
+      event.preventDefault();
+      resetSearch();
+      searchInput?.focus();
+    });
+    searchInput?.addEventListener('keydown', (event) => {
+      if (event.key === 'Escape' && !event.isComposing) {
+        event.preventDefault();
+        resetSearch();
+      }
+      if (event.key === 'Enter' && event.isComposing) event.preventDefault();
+    });
+    resetSearch();
+
+    async function copyText(text) {
+      try {
+        if (navigator.clipboard?.writeText) {
+          await navigator.clipboard.writeText(text);
+          return true;
+        }
+      } catch (_) { /* File URLs may reject the modern Clipboard API. */ }
+      const previousFocus = document.activeElement;
+      const selection = window.getSelection();
+      const savedRanges = selection ? Array.from({ length: selection.rangeCount }, (_, i) => selection.getRangeAt(i).cloneRange()) : [];
+      const field = document.createElement('textarea');
+      field.value = text;
+      field.readOnly = true;
+      field.style.cssText = 'position:fixed;left:-9999px;top:0;opacity:0;font-size:16px';
+      document.body.append(field);
+      field.select();
+      let copied = false;
+      try { copied = document.execCommand('copy'); } catch (_) { /* Show the failure state. */ }
+      field.remove();
+      if (selection) {
+        selection.removeAllRanges();
+        savedRanges.forEach((range) => selection.addRange(range));
+      }
+      previousFocus?.focus({ preventScroll: true });
+      return copied;
+    }
+
+    article.querySelectorAll('pre').forEach((pre) => {
+      const code = pre.querySelector('code');
+      if (!code || pre.querySelector('.copy-code')) return;
+      const button = document.createElement('button');
+      button.type = 'button';
+      button.className = 'copy-code';
+      button.textContent = '复制代码';
+      button.setAttribute('aria-label', '复制代码');
+      button.setAttribute('aria-live', 'polite');
+      pre.append(button);
+      let labelTimer;
+      button.addEventListener('click', async () => {
+        clearTimeout(labelTimer);
+        const copied = await copyText(code.textContent);
+        button.textContent = copied ? '已复制' : '请选中后复制';
+        labelTimer = setTimeout(() => { button.textContent = '复制代码'; }, 2200);
+      });
+    });
+
+    // Scroll-spy works without observers and avoids changing browser history.
+    const tocLinks = Array.from(document.querySelectorAll('#toc a[href^="#"]'));
+    const sections = tocLinks.map((link) => {
+      let id;
+      try { id = decodeURIComponent(link.getAttribute('href').slice(1)); } catch (_) { return null; }
+      const heading = document.getElementById(id);
+      return heading ? { link, heading } : null;
+    }).filter(Boolean);
+    let activeLink = null;
+    const backTop = document.querySelector('.back-top');
+    let framePending = false;
+    function updateScrollState() {
+      framePending = false;
+      if (backTop) backTop.hidden = window.scrollY < 480;
+      let active = sections[0];
+      const header = document.querySelector('.topbar');
+      const threshold = (header?.getBoundingClientRect().height || 76) + 38;
+      for (const section of sections) {
+        if (section.heading.getBoundingClientRect().top <= threshold) active = section;
+        else break;
+      }
+      if (!active || active.link === activeLink) return;
+      activeLink?.removeAttribute('aria-current');
+      activeLink?.classList.remove('is-active');
+      activeLink = active.link;
+      activeLink.setAttribute('aria-current', 'location');
+      activeLink.classList.add('is-active');
+      const panel = document.querySelector('.toc-panel');
+      if (panel && panel.clientHeight) {
+        const linkRect = activeLink.getBoundingClientRect();
+        const panelRect = panel.getBoundingClientRect();
+        if (linkRect.top < panelRect.top + 25 || linkRect.bottom > panelRect.bottom - 25) {
+          panel.scrollTop += linkRect.top - panelRect.top - panel.clientHeight / 3;
+        }
+      }
+    }
+    function queueScrollUpdate() {
+      if (!framePending) {
+        framePending = true;
+        requestAnimationFrame(updateScrollState);
+      }
+    }
+    window.addEventListener('scroll', queueScrollUpdate, { passive: true });
+    window.addEventListener('resize', queueScrollUpdate, { passive: true });
+    backTop?.addEventListener('click', () => window.scrollTo({ top: 0, behavior: scrollBehavior() }));
+    updateScrollState();
+  }
+
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', initializeReader, { once: true });
+  else initializeReader();
+})();
+</script>
+</body>
+</html>

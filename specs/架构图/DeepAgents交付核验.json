@@ -1,0 +1,24 @@
+{
+  "schemaVersion": 1,
+  "ok": true,
+  "command": "deliver",
+  "type": "architecture",
+  "input": "C:\\Users\\22346\\Desktop\\自媒体视频生成\\specs\\架构图\\DeepAgents多智能体架构.json",
+  "output": "C:\\Users\\22346\\Desktop\\自媒体视频生成\\specs\\架构图\\DeepAgents多智能体架构.html",
+  "specification": {
+    "sha256": "7cb99433af180373155bf9ae63b66dcc6522ffb6870f65d248b555306e42ce2e",
+    "bytes": 7947
+  },
+  "artifact": {
+    "sha256": "db6f14ac0a9fbff02bd426a7c8ec8756bbedacd348b00c38a669f5ed9bc420bc",
+    "bytes": 645741
+  },
+  "validation": {
+    "checksPassed": 9,
+    "checkCount": 9,
+    "compositionProfile": "showcase",
+    "compositionStatus": "pass",
+    "errors": 0,
+    "warnings": 0
+  }
+}

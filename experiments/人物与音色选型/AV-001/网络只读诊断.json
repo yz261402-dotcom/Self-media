@@ -1,0 +1,30 @@
+[
+  {
+    "method": "GET",
+    "host": "airelay.dog.airelay.buzz",
+    "path": "/v1/models",
+    "http_status": 401,
+    "seconds": 1.0
+  },
+  {
+    "method": "GET",
+    "host": "airelay.dog.airelay.buzz",
+    "path": "/v1/images/generations",
+    "http_status": 404,
+    "seconds": 1.0
+  },
+  {
+    "method": "GET",
+    "host": "api.minimax.cn",
+    "path": "/v1/t2a_v2",
+    "http_status": 404,
+    "seconds": 0.719
+  },
+  {
+    "method": "GET",
+    "host": "api.minimaxi.com",
+    "path": "/v1/get_voice",
+    "http_status": 404,
+    "seconds": 0.781
+  }
+]

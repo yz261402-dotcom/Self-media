@@ -1,0 +1,182 @@
+{
+  "at": "2026-09-23T00:07:20.711Z",
+  "checks": [
+    {
+      "name": "containment_system_1440",
+      "pass": true
+    },
+    {
+      "name": "node_text_system_1440",
+      "pass": true,
+      "details": []
+    },
+    {
+      "name": "containment_flow_1440",
+      "pass": true
+    },
+    {
+      "name": "node_text_flow_1440",
+      "pass": true,
+      "details": []
+    },
+    {
+      "name": "containment_agents_1440",
+      "pass": true
+    },
+    {
+      "name": "node_text_agents_1440",
+      "pass": true,
+      "details": []
+    },
+    {
+      "name": "containment_stack_1440",
+      "pass": true
+    },
+    {
+      "name": "containment_quality_1440",
+      "pass": true
+    },
+    {
+      "name": "containment_progress_1440",
+      "pass": true
+    },
+    {
+      "name": "containment_system_2048",
+      "pass": true
+    },
+    {
+      "name": "node_text_system_2048",
+      "pass": true,
+      "details": []
+    },
+    {
+      "name": "containment_flow_2048",
+      "pass": true
+    },
+    {
+      "name": "node_text_flow_2048",
+      "pass": true,
+      "details": []
+    },
+    {
+      "name": "containment_agents_2048",
+      "pass": true
+    },
+    {
+      "name": "node_text_agents_2048",
+      "pass": true,
+      "details": []
+    },
+    {
+      "name": "containment_stack_2048",
+      "pass": true
+    },
+    {
+      "name": "containment_quality_2048",
+      "pass": true
+    },
+    {
+      "name": "containment_progress_2048",
+      "pass": true
+    },
+    {
+      "name": "containment_system_390",
+      "pass": true
+    },
+    {
+      "name": "node_text_system_390",
+      "pass": true,
+      "details": []
+    },
+    {
+      "name": "containment_flow_390",
+      "pass": true
+    },
+    {
+      "name": "node_text_flow_390",
+      "pass": true,
+      "details": []
+    },
+    {
+      "name": "containment_agents_390",
+      "pass": true
+    },
+    {
+      "name": "node_text_agents_390",
+      "pass": true,
+      "details": []
+    },
+    {
+      "name": "containment_stack_390",
+      "pass": true
+    },
+    {
+      "name": "containment_quality_390",
+      "pass": true
+    },
+    {
+      "name": "containment_progress_390",
+      "pass": true
+    },
+    {
+      "name": "node_detail_system",
+      "pass": true
+    },
+    {
+      "name": "zoom_system",
+      "pass": true
+    },
+    {
+      "name": "node_detail_flow",
+      "pass": true
+    },
+    {
+      "name": "zoom_flow",
+      "pass": true
+    },
+    {
+      "name": "node_detail_agents",
+      "pass": true
+    },
+    {
+      "name": "zoom_agents",
+      "pass": true
+    },
+    {
+      "name": "price_and_mvp",
+      "pass": true
+    },
+    {
+      "name": "export_svg",
+      "pass": true,
+      "details": "作品生产数据流.svg"
+    },
+    {
+      "name": "model_filter",
+      "pass": true
+    },
+    {
+      "name": "metrics_core",
+      "pass": true
+    },
+    {
+      "name": "metrics_all",
+      "pass": true
+    },
+    {
+      "name": "presentation_mode",
+      "pass": true
+    },
+    {
+      "name": "print_all",
+      "pass": true
+    },
+    {
+      "name": "no_page_errors",
+      "pass": true,
+      "details": []
+    }
+  ],
+  "failures": [],
+  "errors": []
+}

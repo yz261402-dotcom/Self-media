@@ -1,0 +1,24 @@
+{
+  "schemaVersion": 1,
+  "ok": true,
+  "command": "deliver",
+  "type": "architecture",
+  "input": "C:\\Users\\22346\\Desktop\\自媒体视频生成\\specs\\汇报\\整体分层架构.json",
+  "output": "C:\\Users\\22346\\Desktop\\自媒体视频生成\\specs\\汇报\\整体分层架构.html",
+  "specification": {
+    "sha256": "303e98b6e5ef8334834c25f4da4bc74da20aa426bbb931bc2a34407a7757c282",
+    "bytes": 3649
+  },
+  "artifact": {
+    "sha256": "f51445cd7c5a3ecdae219f841bb6f8e38f1a1cfc037bc917d9bc0bbb960c9d0d",
+    "bytes": 630368
+  },
+  "validation": {
+    "checksPassed": 9,
+    "checkCount": 9,
+    "compositionProfile": "showcase",
+    "compositionStatus": "pass",
+    "errors": 0,
+    "warnings": 0
+  }
+}

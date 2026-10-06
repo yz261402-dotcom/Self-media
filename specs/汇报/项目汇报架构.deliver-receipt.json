@@ -1,0 +1,24 @@
+{
+  "schemaVersion": 1,
+  "ok": true,
+  "command": "deliver",
+  "type": "architecture",
+  "input": "C:\\Users\\22346\\Desktop\\自媒体视频生成\\specs\\汇报\\项目汇报架构.json",
+  "output": "C:\\Users\\22346\\Desktop\\自媒体视频生成\\specs\\汇报\\项目汇报架构.html",
+  "specification": {
+    "sha256": "ca0c2d1c8386be2993b0e133b690592bbc6ba1d5839fd1eb3b98acf3da1dcf22",
+    "bytes": 4112
+  },
+  "artifact": {
+    "sha256": "6dae19bda16a00367f0fb48b1a62c7fda9d07a49647fc417569d8a1138ca72ff",
+    "bytes": 633199
+  },
+  "validation": {
+    "checksPassed": 9,
+    "checkCount": 9,
+    "compositionProfile": "showcase",
+    "compositionStatus": "pass",
+    "errors": 0,
+    "warnings": 0
+  }
+}

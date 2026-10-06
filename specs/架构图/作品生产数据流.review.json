@@ -1,0 +1,29 @@
+{
+  "revision": "v2.4-终审后打包",
+  "visual_review": "passed",
+  "review_method": "agent-image-inspection",
+  "inspected": [
+    "作品生产数据流.visual-check.2048x1320.light.png"
+  ],
+  "artifact": {
+    "file": "specs\\架构图\\作品生产数据流.html",
+    "artifact_sha256": "84270856a5b14f2389a774fc335279613dbf72e8bd675b106bf5c2ed31415a12",
+    "showcase": "9/9",
+    "errors": 0,
+    "warnings": 0,
+    "containment": "4/4",
+    "visual_review": "passed",
+    "inspected": [
+      "2048x1320.light"
+    ],
+    "png": {
+      "file": "specs\\架构图\\作品生产数据流.png",
+      "size": [
+        4320,
+        2480
+      ],
+      "sha256": "76aa4016e7abd54dfaf14ea94e51519d173f0cd4cdbaa1f78b6a4d2928fa1f9c"
+    }
+  },
+  "scope": "仅图面核验，不代表应用实现或模型验收"
+}

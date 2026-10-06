@@ -1,0 +1,55 @@
+{
+  "scope": "本地文档阅读版视觉核验，不是生产前端验收",
+  "records": [
+    {
+      "file": "DeepAgents多智能体架构.png",
+      "export": "rendered SVG screenshot",
+      "source_html_sha256": "4c7be5e3b97098642aff918c0deb2b5bb97b5902b7c2cdee2cbeecfd0fb535f1"
+    },
+    {
+      "title": "抖音 AI 自媒体生产系统 · 产品需求文档 · AI 自媒体文档",
+      "ready": "complete",
+      "width": 1440,
+      "scrollWidth": 1425,
+      "images": [],
+      "file": "01-产品需求文档.html",
+      "viewport": [
+        1440,
+        1000
+      ]
+    },
+    {
+      "title": "抖音 AI 自媒体生产系统 · 产品需求文档 · AI 自媒体文档",
+      "ready": "complete",
+      "width": 390,
+      "scrollWidth": 375,
+      "images": [],
+      "file": "01-产品需求文档.html",
+      "viewport": [
+        390,
+        844
+      ]
+    },
+    {
+      "title": "总体技术方案：DeepAgents 多智能体视频生产 · AI 自媒体文档",
+      "ready": "complete",
+      "width": 1440,
+      "scrollWidth": 1425,
+      "images": [
+        {
+          "loaded": true,
+          "width": 4938
+        }
+      ],
+      "file": "03-总体技术方案.html",
+      "viewport": [
+        1440,
+        1000
+      ]
+    }
+  ],
+  "visual_review": "passed",
+  "browser": "isolated native Chrome CDP",
+  "playwright_connector": "navigation timeout; native HTTP 200 and Chrome checked independently",
+  "review_note": "已实际查看桌面/手机PRD截图及技术方案截图；七入口表格可读，无页面横向溢出。架构图已查看大屏浅色与桌面深色截图。仅文档视觉验证。"
+}

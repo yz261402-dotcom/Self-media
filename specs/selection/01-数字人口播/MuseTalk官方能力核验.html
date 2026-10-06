@@ -1,0 +1,702 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="light">
+<link rel="icon" href="data:,">
+<meta name="source-sha256" content="835a1eed4d75158d14239ca34bc652893044bf3d502dff1801b80cc4502990b1">
+<title>MuseTalk 官方能力核验 · AI 自媒体文档</title>
+<style>:root {
+  color-scheme: light;
+  --paper: #ffffff;
+  --surface: #f7f7f8;
+  --ink: #202126;
+  --muted: #666970;
+  --line: #dedfe3;
+  --blue: #002fa7;
+  --reader-font-size: 17px;
+  --header-height: 76px;
+  font-family: "Helvetica Neue", Helvetica, Arial, "PingFang SC", "Microsoft YaHei", sans-serif;
+  font-synthesis: none;
+}
+
+* { box-sizing: border-box; }
+.sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; border: 0; }
+.source-notice { margin-top: 22px; padding: 12px 14px; border-left: 3px solid var(--blue); background: var(--surface); color: var(--muted); font-size: 13px; }
+html { scroll-padding-top: 104px; }
+body { margin: 0; min-width: 320px; color: var(--ink); background: var(--surface); font-size: 14px; line-height: 1.6; }
+body.menu-open { overflow: hidden; }
+a { color: var(--blue); text-underline-offset: 3px; }
+button, input { font: inherit; }
+button { color: inherit; cursor: pointer; }
+button, input[type="search"] { border: 1px solid var(--line); border-radius: 3px; background: var(--paper); }
+button { min-height: 36px; padding: 6px 11px; line-height: 1.4; }
+button:hover { border-color: var(--blue); color: var(--blue); }
+button:disabled { opacity: .42; cursor: default; }
+button:disabled:hover { color: inherit; border-color: var(--line); }
+:focus-visible { outline: 2px solid var(--blue); outline-offset: 3px; }
+[hidden] { display: none !important; }
+::selection { background: #dbe4ff; color: #151c32; }
+
+.skip-link { position: fixed; z-index: 100; top: -70px; left: 16px; padding: 10px 18px; background: var(--blue); color: white; }
+.skip-link:focus { top: 10px; }
+.topbar { position: sticky; z-index: 30; top: 0; min-height: var(--header-height); display: flex; align-items: center; gap: 24px; padding: 15px 32px; border-bottom: 1px solid var(--line); background: var(--paper); }
+.brand { min-width: 0; color: var(--ink); font-size: 17px; font-weight: 700; line-height: 1.35; letter-spacing: -.02em; text-decoration: none; }
+.brand small, .brand span { display: block; margin-top: 4px; font-size: 11px; font-weight: 400; letter-spacing: .08em; color: var(--muted); }
+.toolbar { display: flex; align-items: center; gap: 6px; margin-left: auto; flex-shrink: 0; }
+.toolbar .font-smaller, .toolbar .font-reset, .toolbar .font-larger { min-width: 36px; padding: 5px 8px; font-variant-numeric: tabular-nums; }
+.toolbar .print-button { margin-left: 8px; }
+.mobile-menu { display: none; }
+.layout { display: grid; grid-template-columns: 244px minmax(0, 1fr) 208px; max-width: 1536px; margin: 0 auto; align-items: start; background: var(--paper); }
+.sidebar { position: sticky; top: var(--header-height); height: calc(100dvh - var(--header-height)); overflow-y: auto; overscroll-behavior: contain; padding: 32px 20px 36px 24px; border-right: 1px solid var(--line); scrollbar-width: thin; background: var(--surface); }
+.nav-group + .nav-group { margin-top: 32px; padding-top: 26px; border-top: 1px solid var(--line); }
+.group-title { margin: 0 10px 12px; color: var(--muted); font-size: 11px; font-weight: 600; letter-spacing: .11em; }
+.doc-nav { display: flex; flex-direction: column; gap: 4px; }
+.doc-nav a { display: block; padding: 9px 10px; border-left: 2px solid transparent; color: #55575d; font-size: 13px; line-height: 1.65; text-decoration: none; overflow-wrap: anywhere; }
+.doc-nav a:hover { color: var(--blue); background: #eeeeef; }
+.doc-nav a[aria-current="page"] { border-left-color: var(--blue); background: #eaf0ff; color: var(--blue); font-weight: 600; }
+.doc-nav .doc-number { display: inline-block; min-width: 25px; color: var(--muted); font-variant-numeric: tabular-nums; }
+
+#main { min-width: 0; padding: 46px clamp(28px, 3.7vw, 60px) 56px; }
+.document-header { margin-bottom: 29px; }
+.eyebrow { margin: 0 0 18px; color: var(--blue); font-size: 12px; font-weight: 600; letter-spacing: .08em; }
+.document-header h1 { margin: 0 0 21px; font-size: clamp(30px, 2.8vw, 42px); font-weight: 700; letter-spacing: -.045em; line-height: 1.3; overflow-wrap: anywhere; }
+.doc-meta { display: flex; flex-wrap: wrap; align-items: baseline; gap: 6px 18px; color: var(--muted); font-size: 12px; }
+.doc-meta a { color: var(--muted); }
+.doc-meta a:hover { color: var(--blue); }
+.reader-tools { margin: 0 0 36px; padding: 16px 0; border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); }
+#search-form { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; }
+#search-input { flex: 1 1 160px; min-width: 100px; width: 0; height: 36px; padding: 6px 10px; color: var(--ink); }
+#search-input::placeholder { color: #777a82; }
+#search-next, #search-clear { flex: 0 0 auto; font-size: 12px; }
+#search-status { flex: 1 0 100%; color: var(--muted); font-size: 11px; line-height: 1.5; }
+#search-status:empty { display: none; }
+
+#document-body { font-size: var(--reader-font-size); line-height: 1.9; overflow-wrap: anywhere; }
+#document-body > :first-child { margin-top: 0; }
+#document-body h2, #document-body h3, #document-body h4, #document-body h5, #document-body h6 { scroll-margin-top: 106px; font-weight: 650; line-height: 1.45; color: #15171c; }
+#document-body h2 { margin: 2.8em 0 1.05em; padding-top: 1.25em; border-top: 1px solid var(--line); font-size: 1.5em; letter-spacing: -.035em; }
+#document-body h3 { margin: 2em 0 .85em; font-size: 1.18em; letter-spacing: -.025em; }
+#document-body h4 { margin: 1.65em 0 .7em; font-size: 1.03em; }
+#document-body h5, #document-body h6 { margin: 1.4em 0 .6em; font-size: 1em; }
+#document-body p { margin: .9em 0; }
+#document-body ul, #document-body ol { margin: 1em 0; padding-left: 1.55em; }
+#document-body li { margin: .38em 0; padding-left: .15em; }
+#document-body li > p { margin: .4em 0; }
+#document-body li > ul, #document-body li > ol { margin: .35em 0 .6em; }
+#document-body strong { color: #14161b; font-weight: 650; }
+#document-body hr { margin: 2.1em 0; border: 0; border-top: 1px solid var(--line); }
+#document-body blockquote { margin: 1.5em 0; padding: .25em 1.15em; border-left: 3px solid var(--blue); background: var(--surface); color: #4c4f57; }
+#document-body blockquote p { margin: .55em 0; }
+#document-body a { overflow-wrap: anywhere; }
+#document-body a:hover { text-decoration-thickness: 2px; }
+#document-body img { max-width: 100%; height: auto; }
+#document-body code { padding: .12em .32em; border: 1px solid #e7e7ea; border-radius: 3px; background: var(--surface); font-family: Consolas, "SFMono-Regular", "Liberation Mono", monospace; font-size: .82em; overflow-wrap: anywhere; }
+#document-body pre { position: relative; margin: 1.5em 0; padding: 44px 0 0; max-width: 100%; overflow: hidden; border: 1px solid var(--line); border-radius: 4px; background: var(--surface); line-height: 1.7; }
+#document-body pre > code { display: block; max-width: 100%; overflow-x: auto; padding: 0 19px 18px; border: 0; border-radius: 0; font-size: .79em; line-height: 1.75; white-space: pre; overflow-wrap: normal; tab-size: 2; }
+.copy-code { position: absolute; top: 7px; right: 8px; min-height: 28px; padding: 4px 9px; color: var(--muted); font-size: 11px; background: var(--paper); }
+.table-scroll { max-width: 100%; margin: 1.5em 0; overflow-x: auto; border: 1px solid var(--line); border-radius: 3px; scrollbar-width: thin; }
+#document-body table { width: 100%; min-width: 100%; border-collapse: collapse; font-size: .82em; line-height: 1.7; }
+#document-body th, #document-body td { min-width: 105px; padding: 12px 14px; border-right: 1px solid var(--line); border-bottom: 1px solid var(--line); text-align: left; vertical-align: top; }
+#document-body th { background: var(--surface); font-weight: 600; color: #30333a; }
+#document-body tr > :last-child { border-right: 0; }
+#document-body tbody tr:last-child td { border-bottom: 0; }
+#document-body tbody tr:hover { background: #fafafb; }
+#document-body th:first-child, #document-body td:first-child { min-width: 95px; }
+#document-body input[type="checkbox"] { width: 14px; height: 14px; margin: 0 7px 0 0; vertical-align: middle; accent-color: var(--blue); }
+#document-body details { margin: 1.15em 0; padding: 12px 16px; border: 1px solid var(--line); border-radius: 3px; }
+#document-body summary { color: var(--muted); font-size: .85em; cursor: pointer; }
+#document-body details[open] summary { margin-bottom: 12px; }
+.architecture { margin: 1.8em 0; }
+.diagram-viewport { max-width: 100%; overflow-x: auto; border: 1px solid var(--line); scrollbar-width: thin; }
+.diagram-viewport > svg { display: block; min-width: 720px; width: 100%; height: auto; background: var(--paper); }
+.architecture > svg { display: block; width: 100%; height: auto; max-width: 100%; border: 1px solid var(--line); background: var(--paper); }
+.architecture figcaption { margin-top: 8px; color: var(--muted); font-size: .75em; }
+.architecture details { font-size: .85em; }
+mark.reader-match { padding: 1px 0; background: #dbe4ff; color: inherit; border-radius: 2px; scroll-margin-top: 120px; }
+mark.reader-match.is-current { background: var(--blue); color: white; box-shadow: 0 0 0 2px var(--blue); }
+.search-block-current { outline: 1px solid #b2c5f9; outline-offset: 6px; }
+
+.toc-panel { position: sticky; top: var(--header-height); max-height: calc(100dvh - var(--header-height)); overflow-y: auto; padding: 38px 20px 30px 19px; border-left: 1px solid var(--line); scrollbar-width: thin; }
+.toc-panel > h2, #toc > h2, .toc-title { margin: 0 0 15px; color: var(--muted); font-size: 11px; font-weight: 600; letter-spacing: .08em; }
+#toc ul, #toc ol { list-style: none; margin: 0; padding: 0; }
+#toc a { display: block; margin: 2px 0; padding: 5px 0 5px 12px; border-left: 2px solid transparent; color: #6c6f78; font-size: 12px; line-height: 1.65; text-decoration: none; overflow-wrap: anywhere; }
+#toc a:hover { color: var(--blue); }
+#toc a[aria-current="location"], #toc a.is-active { color: var(--blue); border-left-color: var(--blue); }
+#toc a[data-level="3"], #toc .toc-h3 a, #toc a.toc-h3, #toc li.level-3 a { padding-left: 24px; font-size: 11px; }
+.document-pager { display: flex; justify-content: space-between; gap: 20px; margin-top: 60px; padding-top: 24px; border-top: 1px solid var(--line); }
+.document-pager a { flex: 1; min-width: 0; text-decoration: none; font-size: 14px; font-weight: 600; overflow-wrap: anywhere; }
+.document-pager a:last-child { text-align: right; }
+.document-pager a:only-child { text-align: left; }
+.document-pager small, .document-pager span { display: block; margin-bottom: 4px; font-size: 11px; font-weight: 400; color: var(--muted); }
+.page-footer { max-width: 1536px; margin: auto; padding: 22px 32px; border-top: 1px solid var(--line); color: var(--muted); font-size: 11px; background: var(--surface); }
+.back-top { position: fixed; right: 24px; bottom: 24px; z-index: 20; min-height: 40px; border-color: var(--line); background: var(--paper); font-size: 12px; }
+.sidebar-scrim { display: none; }
+
+@media (min-width: 1600px) {
+  .layout { border-left: 1px solid var(--line); border-right: 1px solid var(--line); }
+  .topbar { padding-left: max(32px, calc((100vw - 1472px) / 2)); padding-right: max(32px, calc((100vw - 1472px) / 2)); }
+}
+@media (max-width: 1190px) {
+  .layout { grid-template-columns: 225px minmax(0, 1fr); }
+  .toc-panel { display: none; }
+  #main { padding-left: 42px; padding-right: 42px; }
+}
+@media (max-width: 800px) {
+  :root { --header-height: 68px; }
+  .topbar { gap: 12px; padding: 13px 18px; }
+  .brand { font-size: 15px; }
+  .brand small, .brand span { font-size: 9px; }
+  .mobile-menu { display: inline-flex; align-items: center; justify-content: center; flex-shrink: 0; min-height: 34px; padding: 6px 9px; font-size: 12px; }
+  .layout { display: block; }
+  .sidebar { position: fixed; z-index: 50; left: 0; top: var(--header-height); bottom: 0; width: min(300px, calc(100vw - 44px)); height: calc(100dvh - var(--header-height)); padding: 24px 18px; transform: translateX(-101%); visibility: hidden; transition: transform .18s ease, visibility .18s; border-right: 1px solid var(--line); }
+  .menu-open .sidebar { transform: translateX(0); visibility: visible; }
+  .sidebar-scrim:not([hidden]) { display: block; position: fixed; z-index: 40; inset: var(--header-height) 0 0; background: rgb(18 21 30 / 28%); }
+  .toolbar { gap: 3px; }
+  .toolbar .font-smaller, .toolbar .font-reset, .toolbar .font-larger { min-width: 29px; min-height: 32px; padding: 4px 5px; font-size: 12px; }
+  .toolbar .print-button { display: none; }
+  #main { padding: 33px 28px 40px; }
+  .document-header h1 { font-size: 32px; }
+  .eyebrow { margin-bottom: 13px; }
+  #document-body { line-height: 1.9; }
+  #document-body h2 { margin-top: 2.3em; font-size: 1.4em; }
+  .page-footer { padding: 18px 28px; }
+  .back-top { right: 16px; bottom: 16px; }
+}
+@media (max-width: 460px) {
+  .topbar { gap: 8px; padding-left: 12px; padding-right: 12px; }
+  .brand { font-size: 13px; letter-spacing: -.035em; }
+  .brand small, .brand span { max-width: 125px; overflow: hidden; white-space: nowrap; text-overflow: ellipsis; }
+  .mobile-menu { padding: 5px 7px; font-size: 11px; }
+  #main { padding: 29px 20px 36px; }
+  .document-header h1 { font-size: 28px; }
+  .doc-meta { gap: 4px 12px; font-size: 11px; }
+  .reader-tools { margin-bottom: 28px; }
+  #search-input { flex-basis: 110px; font-size: 12px; }
+  #search-next, #search-clear { padding-left: 8px; padding-right: 8px; }
+  #document-body { font-size: calc(var(--reader-font-size) - 1px); }
+  #document-body pre > code { padding-left: 13px; padding-right: 13px; }
+  #document-body th, #document-body td { padding: 10px 12px; }
+  .document-pager { gap: 18px; margin-top: 40px; }
+  .document-pager a { font-size: 12px; }
+  .page-footer { padding-left: 20px; padding-right: 20px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { scroll-behavior: auto !important; transition: none !important; }
+}
+@media print {
+  @page { margin: 18mm 16mm; }
+  :root { --reader-font-size: 10.5pt !important; }
+  body { min-width: 0; background: white; color: black; }
+  .topbar, .sidebar, .toc-panel, .reader-tools, .document-pager, .back-top, .sidebar-scrim, .skip-link, .copy-code { display: none !important; }
+  .layout { display: block; max-width: none; border: 0; }
+  #main { padding: 0; }
+  .document-header h1 { font-size: 24pt; }
+  .document-header { margin-bottom: 24pt; }
+  .doc-meta { font-size: 8pt; }
+  #document-body { font-size: 10.5pt; line-height: 1.65; }
+  #document-body h2, #document-body h3, #document-body h4 { break-after: avoid; }
+  #document-body h2 { margin-top: 20pt; padding-top: 12pt; font-size: 15pt; }
+  #document-body a { color: inherit; text-decoration: underline; }
+  #document-body pre { padding: 9pt; overflow: visible; background: #f7f7f8; }
+  #document-body pre > code { padding: 0; overflow: visible; white-space: pre-wrap; overflow-wrap: anywhere; font-size: 8pt; }
+  .table-scroll { overflow: visible; border-radius: 0; }
+  #document-body table { table-layout: fixed; font-size: 7.5pt; }
+  #document-body th, #document-body td, #document-body th:first-child, #document-body td:first-child { min-width: 0; padding: 5pt; overflow-wrap: anywhere; }
+  #document-body thead { display: table-header-group; }
+  #document-body tr, .architecture { break-inside: avoid; }
+  #document-body details:not([open]) { display: none; }
+  .architecture > svg { max-height: 230mm; }
+  mark.reader-match, mark.reader-match.is-current { color: inherit; background: transparent; box-shadow: none; }
+  .search-block-current { outline: none; }
+  .page-footer { margin-top: 24pt; padding: 10pt 0 0; font-size: 8pt; background: white; }
+}
+</style>
+</head>
+<body>
+<a class="skip-link" href="#main">跳到正文</a>
+<header class="topbar">
+  <button type="button" class="mobile-menu" aria-controls="doc-sidebar" aria-expanded="false">文档目录</button>
+  <a class="brand" href="../../0001-douyin-ai-studio/00-%E6%96%87%E6%A1%A3%E5%AF%BC%E8%88%AA.html">AI 自媒体<span>开发文档与调研</span></a>
+  <div class="toolbar" aria-label="阅读设置">
+    <button type="button" class="font-smaller" aria-label="缩小正文字号" title="缩小字号">A−</button>
+    <button type="button" class="font-reset" aria-label="恢复默认正文字号" title="恢复字号">默认</button>
+    <button type="button" class="font-larger" aria-label="放大正文字号" title="放大字号">A+</button>
+    <button type="button" class="print-button">打印</button>
+  </div>
+</header>
+<div class="layout">
+  <aside id="doc-sidebar" class="sidebar" aria-label="全部文档"><section class="nav-group"><h2 class="group-title">开发文档</h2><nav class="doc-nav" aria-label="开发文档"><a data-document href="../../0001-douyin-ai-studio/00-%E6%96%87%E6%A1%A3%E5%AF%BC%E8%88%AA.html">00 文档导航</a><a data-document href="../../0001-douyin-ai-studio/01-%E4%BA%A7%E5%93%81%E9%9C%80%E6%B1%82%E6%96%87%E6%A1%A3.html">01 产品需求文档</a><a data-document href="../../0001-douyin-ai-studio/02-%E6%8A%80%E6%9C%AF%E9%80%89%E5%9E%8B%E5%AF%B9%E6%AF%94.html">02 技术选型对比</a><a data-document href="../../0001-douyin-ai-studio/03-%E6%80%BB%E4%BD%93%E6%8A%80%E6%9C%AF%E6%96%B9%E6%A1%88.html">03 总体技术方案</a><a data-document href="../../0001-douyin-ai-studio/04-%E6%8E%A5%E5%8F%A3%E5%A5%91%E7%BA%A6%E4%B8%8E%E6%95%B0%E6%8D%AE%E5%AD%97%E5%85%B8.html">04 接口契约与数据字典</a><a data-document href="../../0001-douyin-ai-studio/05-%E5%BC%80%E5%8F%91%E5%AE%9E%E6%96%BD%E8%AE%A1%E5%88%92.html">05 开发实施计划</a><a data-document href="../../0001-douyin-ai-studio/06-%E9%AA%8C%E6%94%B6%E6%A0%87%E5%87%86%E4%B8%8E%E6%B5%8B%E8%AF%95%E6%96%B9%E6%A1%88.html">06 验收标准与测试方案</a><a data-document href="../../0001-douyin-ai-studio/07-%E6%8A%80%E6%9C%AF%E9%80%89%E5%9E%8B%E4%B8%8E%E5%AE%9E%E6%B5%8B%E6%B5%81%E7%A8%8B.html">07 技术选型与实测流程</a><a data-document href="../../0001-douyin-ai-studio/08-%E7%AB%AF%E5%88%B0%E7%AB%AF%E6%8A%80%E6%9C%AF%E6%B5%81%E7%A8%8B%E4%B8%8E%E6%A8%A1%E5%9E%8B%E9%80%89%E5%9E%8B%E5%9C%B0%E5%9B%BE.html">08 端到端技术流程与模型选型地图</a><a data-document href="../../0001-douyin-ai-studio/09-%E6%A8%A1%E5%9E%8B%E9%80%89%E5%9E%8B%E5%86%B3%E7%AD%96%E4%B8%8E%E6%8E%A5%E5%85%A5%E6%96%B9%E6%A1%88.html">09 模型选型决策与接入方案</a><a data-document href="../../0001-douyin-ai-studio/10-Agent%E7%BC%96%E6%8E%92%E9%80%89%E5%9E%8B%E4%B8%8E%E6%95%B4%E4%BD%93%E6%9E%B6%E6%9E%84.html">10 Agent编排选型与整体架构</a></nav></section><section class="nav-group"><h2 class="group-title">本轮选型试验</h2><nav class="doc-nav" aria-label="本轮选型试验"><a data-document href="01-%E9%80%89%E5%9E%8B%E8%AF%95%E9%AA%8C%E6%96%B9%E6%A1%88.html">01 选型试验方案</a><a data-document href="02-%E9%A6%96%E8%BD%AE%E5%AE%9E%E6%B5%8B%E7%BB%93%E6%9E%9C.html">02 首轮实测结果</a><a data-document href="03-MuseTalk%E4%BA%91%E7%AB%AF%E9%83%A8%E7%BD%B2%E4%B8%8E%E8%AF%95%E9%AA%8C%E6%96%B9%E6%A1%88.html">03 MuseTalk云端部署与试验方案</a><a data-document href="04-MuseTalk%E9%83%A8%E7%BD%B2%E4%B8%8E%E9%A6%96%E6%B5%8B%E7%BB%93%E6%9E%9C.html">04 MuseTalk部署与首测结果</a><a data-document href="05-OmniHuman%E5%BC%80%E9%80%9A%E5%90%8E%E5%AE%9E%E6%B5%8B%E7%BB%93%E6%9E%9C.html">05 OmniHuman开通后实测结果</a><a data-document href="06-%E4%BA%BA%E7%89%A9B%E8%A1%A8%E6%83%85%E5%8A%A8%E4%BD%9C%E6%94%B9%E5%96%84%E5%AE%9E%E6%B5%8B.html">06 人物B表情动作改善实测</a><a data-document href="MuseTalk%E5%AE%98%E6%96%B9%E8%83%BD%E5%8A%9B%E6%A0%B8%E9%AA%8C.html" aria-current="page">MuseTalk官方能力核验</a><a data-document href="%E6%B5%8B%E8%AF%95%E7%B4%A0%E6%9D%90%E6%8E%A5%E5%8F%A3%E6%A0%B8%E9%AA%8C.html">测试素材接口核验</a><a data-document href="%E7%81%AB%E5%B1%B1%E5%80%99%E9%80%89%E6%A0%B8%E9%AA%8C.html">火山候选核验</a><a data-document href="%E9%98%BF%E9%87%8C%E5%80%99%E9%80%89%E6%A0%B8%E9%AA%8C.html">阿里候选核验</a></nav></section><section class="nav-group"><h2 class="group-title">已选模型接入核验</h2><nav class="doc-nav" aria-label="已选模型接入核验"><a data-document href="../02-%E5%B7%B2%E9%80%89%E6%A8%A1%E5%9E%8B/%E5%AE%98%E6%96%B9%E6%96%87%E6%9C%AC%E4%B8%8E%E8%AF%AD%E9%9F%B3%E6%8E%A5%E5%8F%A3%E6%A0%B8%E9%AA%8C.html">官方文本与语音接口核验</a></nav></section><section class="nav-group"><h2 class="group-title">人物与音色候选</h2><nav class="doc-nav" aria-label="人物与音色候选"><a data-document href="../03-%E4%BA%BA%E7%89%A9%E4%B8%8E%E9%9F%B3%E8%89%B2/01-%E9%A6%96%E8%BD%AE%E5%80%99%E9%80%89%E4%B8%8E%E9%80%89%E6%8B%A9%E8%AF%B4%E6%98%8E.html">01 首轮候选与选择说明</a><a data-document href="../03-%E4%BA%BA%E7%89%A9%E4%B8%8E%E9%9F%B3%E8%89%B2/02-%E4%BA%BA%E7%89%A9B%E4%B8%8E%E9%9F%B3%E8%89%B23%E5%AE%9A%E7%89%88%E8%AE%B0%E5%BD%95.html">02 人物B与音色3定版记录</a></nav></section><section class="nav-group"><h2 class="group-title">调研资料</h2><nav class="doc-nav" aria-label="调研资料"><a data-document href="../../research/01-%E4%BA%A7%E5%93%81%E5%BD%A2%E6%80%81%E4%B8%8E%E6%8A%96%E9%9F%B3%E7%94%9F%E6%80%81.html">01 产品形态与抖音生态</a><a data-document href="../../research/02-%E4%BA%BA%E7%89%A9%E4%B8%80%E8%87%B4%E6%80%A7%E7%94%9F%E6%88%90.html">02 人物一致性生成</a><a data-document href="../../research/03-%E6%95%B0%E5%AD%97%E4%BA%BA%E5%8F%A3%E6%92%AD%E9%80%89%E5%9E%8B.html">03 数字人口播选型</a><a data-document href="../../research/04-TTS%E9%9F%B3%E8%89%B2%E4%B8%8E%E5%86%85%E5%AE%B9%E7%94%9F%E6%88%90%E8%B4%A8%E6%A3%80.html">04 TTS音色与内容生成质检</a><a data-document href="../../research/05-%E8%A7%86%E9%A2%91%E5%90%8E%E5%A4%84%E7%90%86%E5%8F%91%E5%B8%83%E4%B8%8E%E5%90%88%E8%A7%84.html">05 视频后处理发布与合规</a><a data-document href="../../research/06-%E5%86%B3%E7%AD%96%E6%B1%87%E6%80%BB.html">06 决策汇总</a></nav></section>
+    <p class="sidebar-note">11 份开发文档<br>10 份本轮选型试验<br>1 份已选模型接入核验<br>2 份人物与音色候选<br>6 份调研资料</p>
+  </aside>
+  <main id="main" tabindex="-1">
+    <header class="document-header">
+      <p class="eyebrow">本轮选型试验 / MuseTalk官方能力核验</p>
+      <h1>MuseTalk 官方能力核验</h1>
+      <div class="doc-meta"><span>2026-09-21 核验记录</span><span>8 个章节</span><a href="MuseTalk%E5%AE%98%E6%96%B9%E8%83%BD%E5%8A%9B%E6%A0%B8%E9%AA%8C.md">Markdown 原文</a></div>
+      
+    </header>
+    <div class="reader-tools">
+      <form id="search-form" role="search">
+        <label class="sr-only" for="search-input">搜索本文</label>
+        <input id="search-input" type="search" placeholder="搜索本文，按 Enter 跳转" autocomplete="off">
+        <button id="search-next" type="submit">下一处</button>
+        <button id="search-clear" type="button">清除</button>
+        <span id="search-status" role="status" aria-live="polite"></span>
+      </form>
+    </div>
+    <article id="document-body">
+<p>核验日期：2026-09-21（本任务环境日期）。范围：为固定真人 Base Avatar 的长期口播，核验 MuseTalk 自托管候选的能力、输入、部署条件、缓存与许可证。本文不作云资源报价、不执行安装、不提交生成任务。</p>
+<p><strong>结论：MuseTalk 1.5 可以进入“真人动态底板视频 + 新音频 → 换口型”的验证分支。官方资料与代码不支持把“单张真人照片 + 音频”直接认定为具备自然头动、眨眼和完整表情的数字人方案。</strong> 本项目禁止 T2V、也不能用静态头像动嘴冒充完整数字人；若当前 Base Avatar 只有一张图，需要补充动作来源，不能把官方提到的 MuseV 示例自动纳入已获认可的路线。<a href="https://github.com/TMElyralab/MuseTalk/blob/0a89dec45a0192b824e3cf4daf96c239440c5ed8/scripts/inference.py" rel="noopener noreferrer" target="_blank">S1</a><a href="https://github.com/TMElyralab/MuseTalk/blob/0a89dec45a0192b824e3cf4daf96c239440c5ed8/musetalk/utils/blending.py" rel="noopener noreferrer" target="_blank">S4</a></p>
+<h2 id="1-证据范围与固定版本">1. 证据范围与固定版本</h2>
+<ul>
+<li><strong>官方声明</strong>：来自 TMElyralab/MuseTalk 的 README、LICENSE，以及官方指向的模型仓库。官方的“高质量”“实时”等描述不等同于本项目测得的效果。</li>
+<li><strong>代码事实</strong>：只读检查固定提交的普通推理、实时推理及直接相关融合代码、环境清单和权重下载清单；没有运行这些脚本。</li>
+<li><strong>本项目未测</strong>：没有 GPU 实测、没有下载权重、没有生成本项目头像视频；身份一致性、嘴型、自然动作、显存、速度、长视频稳定性均未验收。</li>
+<li><strong>获取方式</strong>：按 agent-reach 路由使用 Exa 定位与读取第一方页面，GitHub CLI API 读取固定提交源码。Jina Reader 对两个 Hugging Face 页面未返回有效正文，模型页面证据改由 Exa 获取。没有查看、下载或播放官方案例媒体；没有读取本地 <code>demo/</code>、<code>.env</code> 或 private 回执。</li>
+<li><strong>GitHub 快照</strong>：核验时 <code>main</code> 为 <code>0a89dec45a0192b824e3cf4daf96c239440c5ed8</code>，提交日期为 2025-09-26；下文 GitHub 证据链接均固定至该提交。<a href="https://github.com/TMElyralab/MuseTalk/commit/0a89dec45a0192b824e3cf4daf96c239440c5ed8" rel="noopener noreferrer" target="_blank">S0</a></li>
+<li><strong>版本判断</strong>：此快照 README 推荐 <strong>MuseTalk 1.5</strong>，保留 1.0；1.5 发布新闻日期为 2025-03-28，训练代码开放新闻日期为 2025-04-05。此结论是“所核验官方入口当前推荐版本”，不是对所有分支、fork 或未来版本的判断。<a href="https://github.com/TMElyralab/MuseTalk/blob/0a89dec45a0192b824e3cf4daf96c239440c5ed8/README.md" rel="noopener noreferrer" target="_blank">S1</a></li>
+<li><strong>权重入口</strong>：官方 <code>musetalkV15/unet.pth</code> 与 <code>musetalkV15/musetalk.json</code> 位于 <code>TMElyralab/MuseTalk</code> 的 Hugging Face 仓库；页面列出权重约 3.4 GB，这只是文件体积，不能当显存需求。模型仓库页面显示提交 <code>3ef28bc5cff08c90ad8178a25f1b570cd800170f</code>。<a href="https://huggingface.co/TMElyralab/MuseTalk/tree/main/musetalkV15" rel="noopener noreferrer" target="_blank">S8</a></li>
+</ul>
+<h2 id="2-图片视频和自然动作分别能说明什么">2. 图片、视频和自然动作分别能说明什么</h2>
+<h3 id="21-普通推理明确支持单图视频与帧目录">2.1 普通推理明确支持单图、视频与帧目录</h3>
+<p><strong>官方声明</strong>：README 把 <code>video_path</code> 定义为输入视频、图像文件或图像目录，另需 <code>audio_path</code>；推荐 25 fps 的输入视频，与训练帧率一致。<a href="https://github.com/TMElyralab/MuseTalk/blob/0a89dec45a0192b824e3cf4daf96c239440c5ed8/README.md" rel="noopener noreferrer" target="_blank">S1</a></p>
+<p><strong>代码事实</strong>：<code>scripts/inference.py</code> 对三类输入分别处理：<a href="https://github.com/TMElyralab/MuseTalk/blob/0a89dec45a0192b824e3cf4daf96c239440c5ed8/scripts/inference.py" rel="noopener noreferrer" target="_blank">S3</a></p>
+<ol>
+<li>视频：调用 FFmpeg 抽帧，读取源视频帧率。</li>
+<li>单图：<code>input_img_list = [video_path]</code>，帧率取 <code>args.fps</code>。</li>
+<li>帧目录：按数字文件名排序，帧率取 <code>args.fps</code>。</li>
+</ol>
+<p>所有分支随后裁剪源脸，将裁剪图缩放到 <code>256 × 256</code>，提取 latent；将源帧、坐标和 latent 都拼成“正序 + 倒序”的循环列表。输出每帧从对应源帧复制背景与身体，再将生成脸部按 mask 融合回去。<a href="https://github.com/TMElyralab/MuseTalk/blob/0a89dec45a0192b824e3cf4daf96c239440c5ed8/musetalk/utils/blending.py" rel="noopener noreferrer" target="_blank">S3</a></p>
+<h3 id="22-单图能运行唇形推理不等于能生成完整自然动作">2.2 单图能运行唇形推理，不等于能生成完整自然动作</h3>
+<p><strong>代码事实</strong>：单图分支只有一张源帧，正序/倒序后仍是同一张图。核验的普通/实时推理链路没有独立生成全局头姿、身体动作或眨眼轨迹的模块；融合操作受局部脸部 mask 限制。官方也将 MuseTalk 定位为 lip-syncing / video dubbing，而不是完整的单图动作生成器。<a href="https://github.com/TMElyralab/MuseTalk/blob/0a89dec45a0192b824e3cf4daf96c239440c5ed8/scripts/inference.py" rel="noopener noreferrer" target="_blank">S1</a><a href="https://github.com/TMElyralab/MuseTalk/blob/0a89dec45a0192b824e3cf4daf96c239440c5ed8/musetalk/utils/blending.py" rel="noopener noreferrer" target="_blank">S4</a></p>
+<p>因此可以确认“输入单图后按音频修改局部说话区域”，<strong>不能确认“单图自动获得自然点头、转头、眨眼、眉眼表情和上身动作”</strong>。局部脸颊、下颌随口型的变化也不等于全脸表情驱动。不能仅凭导出 MP4、嘴能动或脸部 mask 有变化，就通过完整数字人验收。</p>
+<h3 id="23-视频输入的头动主要来自底板">2.3 视频输入的头动主要来自底板</h3>
+<p><strong>代码事实及其含义</strong>：输入真人动态视频时，输出使用源视频的帧、头部位置、身体和背景；原有头动、眨眼与姿态有可保留的来源。它不等于按新口播语义重新编排这些动作。源视频中的眉眼情绪、点头节奏与新音频是否协调，仍需本项目观看验证。<a href="https://github.com/TMElyralab/MuseTalk/blob/0a89dec45a0192b824e3cf4daf96c239440c5ed8/scripts/realtime_inference.py" rel="noopener noreferrer" target="_blank">S3</a><a href="https://github.com/TMElyralab/MuseTalk/blob/0a89dec45a0192b824e3cf4daf96c239440c5ed8/musetalk/utils/blending.py" rel="noopener noreferrer" target="_blank">S5</a></p>
+<p><strong>循环边界</strong>：普通与实时代码都构造“源帧正序 + 源帧倒序”的循环，并按音频长度持续取帧。长口播可能出现重复动作、动作倒放或周期感。README 中平滑首尾的意图不能替代对实际底板的自然度验收。<a href="https://github.com/TMElyralab/MuseTalk/blob/0a89dec45a0192b824e3cf4daf96c239440c5ed8/scripts/realtime_inference.py" rel="noopener noreferrer" target="_blank">S3</a></p>
+<p><strong>本项目适配边界</strong>：若使用用户认可、身份固定且已有自然头动和眨眼的真人底板视频，MuseTalk 可作为其口型重配组件；若只允许一张 Base Avatar 图片且不提供其他动作来源，当前证据不足以把 MuseTalk 单独列为满足全部动作要求的候选。官方提到“可结合 MuseV 输入视频”只说明组合用法，不证明本项目已允许引入该生成路线。<a href="https://github.com/TMElyralab/MuseTalk/blob/0a89dec45a0192b824e3cf4daf96c239440c5ed8/README.md" rel="noopener noreferrer" target="_blank">S1</a></p>
+<h2 id="3-256-脸部处理画幅与已知质量限制">3. 256 脸部处理、画幅与已知质量限制</h2>
+<ul>
+<li><strong>官方声明及代码事实</strong>：脸部生成处理尺寸为 <code>256 × 256</code>。代码将其缩放回源脸 bounding box 后融合至原始画幅。输出画布为 720p 或 1080p，不等于生成的人脸具有原生 720p/1080p 细节。<a href="https://github.com/TMElyralab/MuseTalk/blob/0a89dec45a0192b824e3cf4daf96c239440c5ed8/scripts/inference.py" rel="noopener noreferrer" target="_blank">S1</a><a href="https://github.com/TMElyralab/MuseTalk/blob/0a89dec45a0192b824e3cf4daf96c239440c5ed8/scripts/realtime_inference.py" rel="noopener noreferrer" target="_blank">S4</a></li>
+<li><strong>官方声明</strong>：README 的限制章节明确提及分辨率限制、部分原脸细节保留不足（例如胡须、唇形、唇色），以及逐帧生成带来的 jitter。这些是固定真人 Base Avatar 需要重点检查的地方。<a href="https://github.com/TMElyralab/MuseTalk/blob/0a89dec45a0192b824e3cf4daf96c239440c5ed8/README.md" rel="noopener noreferrer" target="_blank">S1</a></li>
+<li><strong>官方建议</strong>：可叠加 GFPGAN 等超分辨率模型。本文没有核验或引入该后处理；超分辨率不能被当作已解决身份一致性，也没有被计入当前部署和速度证据。<a href="https://github.com/TMElyralab/MuseTalk/blob/0a89dec45a0192b824e3cf4daf96c239440c5ed8/README.md" rel="noopener noreferrer" target="_blank">S1</a></li>
+<li><strong>版本区别</strong>：旧版 <code>bbox_shift</code> 的说明不能无差别套用到 1.5。两个推理入口在 <code>v15</code> 分支将 <code>bbox_shift</code> 固定为 0，另提供 <code>extra_margin</code>、<code>parsing_mode</code> 和脸颊范围等参数。<a href="https://github.com/TMElyralab/MuseTalk/blob/0a89dec45a0192b824e3cf4daf96c239440c5ed8/scripts/realtime_inference.py" rel="noopener noreferrer" target="_blank">S3</a></li>
+</ul>
+<h2 id="4-自托管推理训练和-avatar-缓存">4. 自托管推理、训练和 avatar 缓存</h2>
+<h3 id="41-换一个固定真人不要求先训练专属模型">4.1 换一个固定真人不要求先训练专属模型</h3>
+<p><strong>官方声明</strong>：模型可根据音频修改未见过的人脸，并提供预训练权重与直接推理入口。1.5 的两阶段训练是训练模型的流程，不是每次新建头像都必须执行的流程。<a href="https://github.com/TMElyralab/MuseTalk/blob/0a89dec45a0192b824e3cf4daf96c239440c5ed8/README.md" rel="noopener noreferrer" target="_blank">S1</a></p>
+<p><strong>代码事实</strong>：<code>Avatar</code> 的 preparation 执行源视频抽帧、脸部坐标计算、VAE 编码与融合 mask 准备，没有更新 UNet 参数的训练步骤。因此“准备 avatar 缓存”不应写成“训练真人分身”。<a href="https://github.com/TMElyralab/MuseTalk/blob/0a89dec45a0192b824e3cf4daf96c239440c5ed8/scripts/realtime_inference.py" rel="noopener noreferrer" target="_blank">S4</a></p>
+<h3 id="42-实时模式缓存内容与复用边界">4.2 实时模式缓存内容与复用边界</h3>
+<p><strong>官方声明</strong>：新 avatar 设置 <code>preparation: True</code>，再次为同一 avatar 生成其他音频时设为 <code>False</code>。<a href="https://github.com/TMElyralab/MuseTalk/blob/0a89dec45a0192b824e3cf4daf96c239440c5ed8/README.md" rel="noopener noreferrer" target="_blank">S1</a></p>
+<p><strong>代码事实</strong>：1.5 的默认缓存路径是 <code>./results/v15/avatars/&lt;avatar_id&gt;/</code>，含：<a href="https://github.com/TMElyralab/MuseTalk/blob/0a89dec45a0192b824e3cf4daf96c239440c5ed8/scripts/realtime_inference.py" rel="noopener noreferrer" target="_blank">S4</a></p>
+<ul>
+<li><code>full_imgs/</code>：源帧及构造后的循环帧。</li>
+<li><code>coords.pkl</code>：每帧脸部坐标。</li>
+<li><code>latents.pt</code>：预先编码的脸部 latent。</li>
+<li><code>mask/</code>、<code>mask_coords.pkl</code>：融合 mask 与位置。</li>
+<li><code>avator_info.json</code>：头像 ID、视频路径、<code>bbox_shift</code>、版本等信息，文件名按官方拼写保留。</li>
+</ul>
+<p>这些缓存可减少重复的人脸检测、分割与源脸编码；每条新音频仍需音频特征处理、UNet/VAE 推理、图像融合和视频封装。缓存既不是口播成片，也不是无需 GPU 的模式。<a href="https://github.com/TMElyralab/MuseTalk/blob/0a89dec45a0192b824e3cf4daf96c239440c5ed8/scripts/realtime_inference.py" rel="noopener noreferrer" target="_blank">S4</a></p>
+<p><strong>需在服务封装时落实的代码边界</strong>：<a href="https://github.com/TMElyralab/MuseTalk/blob/0a89dec45a0192b824e3cf4daf96c239440c5ed8/scripts/realtime_inference.py" rel="noopener noreferrer" target="_blank">S4</a></p>
+<ul>
+<li>实时脚本虽接收 <code>--result_dir</code>，<code>Avatar</code> 仍使用代码里的 <code>./results/.../avatars/</code> 路径；不能只更换该参数就认定文件已经隔离。容器工作目录、avatar ID 和实际落盘路径需要一起核对。</li>
+<li>现有复用检查并非完整的内容哈希缓存键；变更底板、模型或融合参数后，不能假定原缓存自动失效。重建分支可能删除既有 avatar 目录，应为不同版本使用独立目录/ID并保留旧产物。</li>
+<li>实时预处理对“文件”统一调用 <code>cv2.VideoCapture</code>，或读取帧目录，没有普通推理那样显式的单图分支。普通推理支持单图，不能据此承诺所有实时输入场景等价。</li>
+<li>缓存源帧、mask、latent 会增加磁盘与内存占用，随底板长度和画幅变化；官方没有在所核验页面提供本项目可直接采用的容量公式。</li>
+</ul>
+<h3 id="43-实时示例不是已验收的云端服务">4.3 实时示例不是已验收的云端服务</h3>
+<p><code>scripts/realtime_inference.py</code> 自述是模拟 online chatting，并按配置逐条处理 <code>audio_clips</code>；代码本身不是一个已带鉴权、队列、多租户、资源回收和监控的云端 HTTP 服务。自托管口播任务还需要外围服务封装，本文没有安装或验证这一层。<a href="https://github.com/TMElyralab/MuseTalk/blob/0a89dec45a0192b824e3cf4daf96c239440c5ed8/scripts/realtime_inference.py" rel="noopener noreferrer" target="_blank">S4</a></p>
+<p>普通单图路径还有一个静态可见的边界：<code>save_dir_full</code> 只在视频分支赋值，末尾却统一执行 <code>shutil.rmtree(save_dir_full)</code>。单图/帧目录首任务可能在输出后的清理阶段出现未定义变量错误，并被外层 <code>except</code> 打印；这是代码检查发现，<strong>没有本地复现，也不影响前述“单图不提供头动来源”的能力结论</strong>。<a href="https://github.com/TMElyralab/MuseTalk/blob/0a89dec45a0192b824e3cf4daf96c239440c5ed8/scripts/inference.py" rel="noopener noreferrer" target="_blank">S3</a></p>
+<h2 id="5-官方安装组合显存和速度证据">5. 官方安装组合、显存和速度证据</h2>
+<h3 id="51-安装组合">5.1 安装组合</h3>
+<p><strong>官方声明</strong>：README 推荐 Python 3.10、CUDA 11.7，但紧接着的 PyTorch 安装命令使用 <code>cu118</code> / <code>pytorch-cuda=11.8</code>。这是文档内部的版本不一致，不能写成“已验证任意 CUDA 11.x”。应固定一套可复现组合后再做云机安装验证。<a href="https://github.com/TMElyralab/MuseTalk/blob/0a89dec45a0192b824e3cf4daf96c239440c5ed8/README.md" rel="noopener noreferrer" target="_blank">S1</a></p>
+<p>官方列出的主要版本为：<a href="https://github.com/TMElyralab/MuseTalk/blob/0a89dec45a0192b824e3cf4daf96c239440c5ed8/inference.sh" rel="noopener noreferrer" target="_blank">S1</a><a href="https://github.com/TMElyralab/MuseTalk/blob/0a89dec45a0192b824e3cf4daf96c239440c5ed8/requirements.txt" rel="noopener noreferrer" target="_blank">S7</a></p>
+<ul>
+<li>Python 3.10。</li>
+<li>PyTorch 2.0.1、torchvision 0.15.2、torchaudio 2.0.2；示例 wheel/conda CUDA runtime 为 11.8。</li>
+<li>mmcv 2.0.1、mmdet 3.1.0、mmpose 1.1.0，以及 mmengine/openmim。</li>
+<li>requirements 中包括 diffusers 0.30.2、transformers 4.39.2、accelerate 0.28.0、NumPy 1.23.5、OpenCV 4.9.0.80、Gradio 5.24.0 等。</li>
+<li>FFmpeg 必须可执行；README 分别给出 Linux shell 入口和 Windows Python 入口。Linux 官方包装脚本 <code>inference.sh v1.5 normal|realtime</code> 会明确指定 1.5 权重、配置与 <code>--version v15</code>。</li>
+</ul>
+<p>这是安装指南，<strong>不是经过本项目验收的完整 OS/驱动/GPU 兼容矩阵</strong>。没有据此证明某家算力云、某张 RTX 卡、CUDA 12 环境或最新 PyTorch 可以直接无修改运行。</p>
+<h3 id="52-推理显存与时间">5.2 推理显存与时间</h3>
+<p><strong>官方声明一</strong>：README 宣称 NVIDIA Tesla V100 上可实现 30 fps 以上的推理/生成速度。没有在这些章节提供本项目素材、batch、输入分辨率及整条生产流程的复现实验明细。<a href="https://github.com/TMElyralab/MuseTalk/blob/0a89dec45a0192b824e3cf4daf96c239440c5ed8/README.md" rel="noopener noreferrer" target="_blank">S1</a></p>
+<p><strong>官方声明二</strong>：Gradio 章节写明曾在 Windows、RTX 3050 Ti Laptop、4 GB VRAM、fp16 下测试，生成 8 秒视频约 5 分钟。这是一个“低显存能运行但很慢”的案例，不是所有版本与所有素材的 4 GB 最低保证，也不是实时结果。<a href="https://github.com/TMElyralab/MuseTalk/blob/0a89dec45a0192b824e3cf4daf96c239440c5ed8/README.md" rel="noopener noreferrer" target="_blank">S1</a></p>
+<p><strong>代码事实</strong>：实时脚本把音频处理计时与后续帧生成计时分开；帧生成计时开始前已提取音频特征，结束后才进行 FFmpeg 封装/音视频合成。avatar preparation、模型启动和上传下载也不属于这个帧生成区间。使用 <code>--skip_save_images</code> 还会跳过图片保存及相应 MP4 输出，适合测算吞吐而不能当作交付成片的耗时。<a href="https://github.com/TMElyralab/MuseTalk/blob/0a89dec45a0192b824e3cf4daf96c239440c5ed8/scripts/realtime_inference.py" rel="noopener noreferrer" target="_blank">S4</a></p>
+<p>因此不能把“30 fps+”直接换算为本项目每分钟口播的最终云账单，也不能推断 RTX 4090/5090 等其他 GPU 的实际速度。本项目应分别记录冷启动、一次性准备、热态生成、封装和传输，再计算每条合格成片的耗时。</p>
+<h3 id="53-训练显存必须与推理分开">5.3 训练显存必须与推理分开</h3>
+<p>README 的训练显存数据来自 <strong>8 张 NVIDIA H20 的机器</strong>，数字为每卡占用：<a href="https://github.com/TMElyralab/MuseTalk/blob/0a89dec45a0192b824e3cf4daf96c239440c5ed8/README.md" rel="noopener noreferrer" target="_blank">S1</a></p>
+<ul>
+<li>第一阶段：batch 8/16/32、梯度累积 1 时，约 32/45/74 GB 每卡；默认推荐项为 batch 32。</li>
+<li>第二阶段：batch 1、梯度累积 8 时约 54 GB；batch 2、累积 2 时约 80 GB；batch 2、累积 8 时约 85 GB 每卡。</li>
+</ul>
+<p>这些不能拿来作为预训练权重推理的最低显存，也不能因准备固定真人 avatar 就默认采购多卡训练资源。当前目标可先围绕推理验证，不以训练为前置条件。</p>
+<h2 id="6-代码模型权重与依赖许可分别核验">6. 代码、模型权重与依赖许可分别核验</h2>
+<h3 id="61-musetalk-自身">6.1 MuseTalk 自身</h3>
+<ul>
+<li><strong>代码</strong>：GitHub LICENSE 是 MIT，包含保留版权及许可声明的要求；README 同时明确代码学术和商业用途均可。<a href="https://github.com/TMElyralab/MuseTalk/blob/0a89dec45a0192b824e3cf4daf96c239440c5ed8/README.md" rel="noopener noreferrer" target="_blank">S2</a></li>
+<li><strong>模型商业用途声明</strong>：GitHub README 写“trained model are available for any purpose, even commercially”。可引用为发布方的商用许可声明，但不是“全部文件都无条件 MIT”。<a href="https://github.com/TMElyralab/MuseTalk/blob/0a89dec45a0192b824e3cf4daf96c239440c5ed8/README.md" rel="noopener noreferrer" target="_blank">S1</a></li>
+<li><strong>模型仓库标签</strong>：官方 Hugging Face <code>TMElyralab/MuseTalk</code> 模型卡和文件页面当前标注 <code>creativeml-openrail-m</code>；同仓库有 1.5 权重，模型卡正文却仍保留旧版“训练代码 coming soon”等内容。模型卡与最新 GitHub 的版本说明不完全同步。<a href="https://huggingface.co/TMElyralab/MuseTalk/raw/main/README.md" rel="noopener noreferrer" target="_blank">S8</a></li>
+<li><strong>可据此得出的边界</strong>：代码 MIT 与权重仓库 OpenRAIL 标签是不同层次的信息，不能合并成一句“模型及所有依赖均 MIT”。本文未在权重根目录读到单独的 LICENSE 全文，也未取得对具体 1.5 权重条款的额外书面解释；实际部署记录应保留模型仓库 revision、文件来源与适用许可文本。这里没有认定不能商用，也没有宣称已完成全量许可证审计。</li>
+</ul>
+<h3 id="62-依赖代码与下载权重">6.2 依赖代码与下载权重</h3>
+<p>官方 LICENSE 的依赖清单不是全部权重的统一许可证。官方下载脚本列出的组件需逐项保留来源：<a href="https://github.com/TMElyralab/MuseTalk/blob/0a89dec45a0192b824e3cf4daf96c239440c5ed8/download_weights.sh" rel="noopener noreferrer" target="_blank">S2</a></p>
+<ul>
+<li><strong>sd-vae-ft-mse</strong>：MuseTalk LICENSE 列为 MIT；Stability AI 的对应官方模型卡也标注 MIT。<a href="https://huggingface.co/stabilityai/sd-vae-ft-mse/raw/main/README.md" rel="noopener noreferrer" target="_blank">S2</a></li>
+<li><strong>Whisper</strong>：OpenAI GitHub 明确其代码及模型权重以 MIT 发布；但 MuseTalk 下载的 <code>openai/whisper-tiny</code> Hugging Face 模型卡标注 Apache-2.0。两个官方入口的声明不同，本文逐项记录，不自行抹平为一个标签；采用 HF 格式文件时应同时保存该来源的许可元数据。<a href="https://huggingface.co/openai/whisper-tiny/raw/main/README.md" rel="noopener noreferrer" target="_blank">S12</a><a href="https://github.com/TMElyralab/MuseTalk/blob/0a89dec45a0192b824e3cf4daf96c239440c5ed8/download_weights.sh" rel="noopener noreferrer" target="_blank">S10</a></li>
+<li><strong>DWPose</strong>：MuseTalk LICENSE 与 <code>yzd-v/DWPose</code> 官方模型卡都标注 Apache-2.0。<a href="https://huggingface.co/yzd-v/DWPose/raw/main/README.md" rel="noopener noreferrer" target="_blank">S2</a></li>
+<li><strong>face-parsing.PyTorch / BiSeNet</strong>：MuseTalk LICENSE 列源项目代码为 MIT；实际安装清单还下载 <code>79999_iter.pth</code> 和 <code>resnet18-5c106cde.pth</code>。本轮没有得到这两个二进制权重各自独立的完整许可文本，不能只用“代码 MIT”替代权重来源核验。<a href="https://github.com/TMElyralab/MuseTalk/blob/0a89dec45a0192b824e3cf4daf96c239440c5ed8/download_weights.sh" rel="noopener noreferrer" target="_blank">S2</a></li>
+<li><strong>face-alignment / S3FD</strong>：MuseTalk LICENSE 将 face-alignment 列为 BSD 3-Clause；S3FD 条目只列开源项目链接，未给出明确条款。本轮不宣称其所有文件或预训练权重已全部清查。<a href="https://github.com/TMElyralab/MuseTalk/blob/0a89dec45a0192b824e3cf4daf96c239440c5ed8/LICENSE" rel="noopener noreferrer" target="_blank">S2</a></li>
+<li><strong>SyncNet / LatentSync</strong>：官方下载脚本从 <code>ByteDance/LatentSync</code> 获取 <code>latentsync_syncnet.pt</code>；该官方模型仓库标注 <code>openrail++</code>。这属于权重仓库标签，不能以 MuseTalk 代码 MIT 覆盖。核验的普通/实时推理入口未直接加载 SyncNet；官方统一下载清单不代表每项都用于纯推理。本文未进一步证明任何可选删减后的完整运行链路。<a href="https://huggingface.co/ByteDance/LatentSync/raw/main/README.md" rel="noopener noreferrer" target="_blank">S10</a><a href="https://github.com/TMElyralab/MuseTalk/blob/0a89dec45a0192b824e3cf4daf96c239440c5ed8/scripts/realtime_inference.py" rel="noopener noreferrer" target="_blank">S3</a></li>
+</ul>
+<p><strong>素材另算</strong>：MuseTalk README 明确互联网收集的 testdata 只供非商业研究。该限制不能误写成 MuseTalk 自有模型禁止商用，也不能把官方示例人物素材拿来作为本项目可商用 Base Avatar。本文未使用这些素材。<a href="https://github.com/TMElyralab/MuseTalk/blob/0a89dec45a0192b824e3cf4daf96c239440c5ed8/README.md" rel="noopener noreferrer" target="_blank">S1</a></p>
+<h2 id="7-对本项目后续验证的约束">7. 对本项目后续验证的约束</h2>
+<ol>
+<li><strong>能力门槛</strong>：保留固定真人 Base Avatar，使用其认可的动态底板时才具备已有头动、眨眼、姿态的来源；单图局部唇形结果不通过完整数字人验收。</li>
+<li><strong>质量门槛</strong>：同一真人的身份细节、中文嘴型、静音时嘴部、自然眨眼、转头时贴合、下巴/脖子接缝、动作与语气协调、底板循环重复感，均需由新生成的项目样片验证。</li>
+<li><strong>工程门槛</strong>：分别验证全新 avatar 和缓存复用；确认真正的输出路径、失败回执、长音频内存与磁盘、冷/热耗时。不能把普通脚本跑通等同于云端服务已稳定。</li>
+<li><strong>成本门槛</strong>：以选定 GPU 的真实合格成片速度与实际开机时长测算；官方 V100 fps、4 GB 慢速案例和训练显存各有范围，不得交叉替代。</li>
+<li><strong>结论状态</strong>：目前是官方资料和代码层面的可行性筛查，尚未形成“满足自然动作”“长期成本更低”或“可上线”的项目验收结论。</li>
+</ol>
+<h2 id="8-来源索引">8. 来源索引</h2>
+<p>以下来源均于 2026-09-21 核验。GitHub 使用固定提交；Hugging Face 的动态页面可能继续变化。</p>
+<ul>
+<li><a href="https://github.com/TMElyralab/MuseTalk/commit/0a89dec45a0192b824e3cf4daf96c239440c5ed8" rel="noopener noreferrer" target="_blank">S0：核验的 GitHub 提交与日期</a></li>
+<li><a href="https://github.com/TMElyralab/MuseTalk/blob/0a89dec45a0192b824e3cf4daf96c239440c5ed8/README.md" rel="noopener noreferrer" target="_blank">S1：MuseTalk README，版本、能力、安装、性能、训练、限制与许可声明</a></li>
+<li><a href="https://github.com/TMElyralab/MuseTalk/blob/0a89dec45a0192b824e3cf4daf96c239440c5ed8/LICENSE" rel="noopener noreferrer" target="_blank">S2：MuseTalk LICENSE，代码及列明的第三方依赖</a></li>
+<li><a href="https://github.com/TMElyralab/MuseTalk/blob/0a89dec45a0192b824e3cf4daf96c239440c5ed8/scripts/inference.py" rel="noopener noreferrer" target="_blank">S3：普通推理 scripts/inference.py</a></li>
+<li><a href="https://github.com/TMElyralab/MuseTalk/blob/0a89dec45a0192b824e3cf4daf96c239440c5ed8/scripts/realtime_inference.py" rel="noopener noreferrer" target="_blank">S4：实时推理 scripts/realtime_inference.py</a></li>
+<li><a href="https://github.com/TMElyralab/MuseTalk/blob/0a89dec45a0192b824e3cf4daf96c239440c5ed8/musetalk/utils/blending.py" rel="noopener noreferrer" target="_blank">S5：局部脸部融合 musetalk/utils/blending.py</a></li>
+<li><a href="https://github.com/TMElyralab/MuseTalk/blob/0a89dec45a0192b824e3cf4daf96c239440c5ed8/inference.sh" rel="noopener noreferrer" target="_blank">S6：官方版本/模式包装脚本 inference.sh</a></li>
+<li><a href="https://github.com/TMElyralab/MuseTalk/blob/0a89dec45a0192b824e3cf4daf96c239440c5ed8/requirements.txt" rel="noopener noreferrer" target="_blank">S7：依赖版本 requirements.txt</a></li>
+<li><a href="https://huggingface.co/TMElyralab/MuseTalk/tree/main/musetalkV15" rel="noopener noreferrer" target="_blank">S8：官方 MuseTalk 1.5 权重文件页面</a></li>
+<li><a href="https://huggingface.co/TMElyralab/MuseTalk/raw/main/README.md" rel="noopener noreferrer" target="_blank">S9：官方 MuseTalk 模型卡原文与许可证元数据</a></li>
+<li><a href="https://github.com/TMElyralab/MuseTalk/blob/0a89dec45a0192b824e3cf4daf96c239440c5ed8/download_weights.sh" rel="noopener noreferrer" target="_blank">S10：官方 Linux 权重下载清单 download_weights.sh</a></li>
+<li><a href="https://huggingface.co/stabilityai/sd-vae-ft-mse/raw/main/README.md" rel="noopener noreferrer" target="_blank">S11：Stability AI sd-vae-ft-mse 官方模型卡</a></li>
+<li><a href="https://github.com/openai/whisper#license" rel="noopener noreferrer" target="_blank">S12：OpenAI Whisper 官方 README 的 License 章节</a></li>
+<li><a href="https://huggingface.co/openai/whisper-tiny/raw/main/README.md" rel="noopener noreferrer" target="_blank">S13：openai/whisper-tiny 官方模型卡</a></li>
+<li><a href="https://huggingface.co/yzd-v/DWPose/raw/main/README.md" rel="noopener noreferrer" target="_blank">S14：yzd-v/DWPose 官方模型卡</a></li>
+<li><a href="https://huggingface.co/ByteDance/LatentSync/raw/main/README.md" rel="noopener noreferrer" target="_blank">S15：ByteDance/LatentSync 官方模型卡</a></li>
+</ul>
+</article>
+    <nav class="document-pager" aria-label="相邻文档"><a rel="prev" href="06-%E4%BA%BA%E7%89%A9B%E8%A1%A8%E6%83%85%E5%8A%A8%E4%BD%9C%E6%94%B9%E5%96%84%E5%AE%9E%E6%B5%8B.html"><span>上一篇</span>06-人物B表情动作改善实测</a><a rel="next" href="%E6%B5%8B%E8%AF%95%E7%B4%A0%E6%9D%90%E6%8E%A5%E5%8F%A3%E6%A0%B8%E9%AA%8C.html"><span>下一篇</span>测试素材接口核验</a></nav>
+    <footer class="page-footer">与同名 Markdown 对应的阅读版 · 可离线阅读与打印</footer>
+  </main>
+  <aside class="toc-panel" aria-label="本文章节"><p class="group-title">本页目录</p><nav id="toc"><a class="toc-h2" href="#1-%E8%AF%81%E6%8D%AE%E8%8C%83%E5%9B%B4%E4%B8%8E%E5%9B%BA%E5%AE%9A%E7%89%88%E6%9C%AC">1. 证据范围与固定版本</a><a class="toc-h2" href="#2-%E5%9B%BE%E7%89%87%E8%A7%86%E9%A2%91%E5%92%8C%E8%87%AA%E7%84%B6%E5%8A%A8%E4%BD%9C%E5%88%86%E5%88%AB%E8%83%BD%E8%AF%B4%E6%98%8E%E4%BB%80%E4%B9%88">2. 图片、视频和自然动作分别能说明什么</a><a class="toc-h3" href="#21-%E6%99%AE%E9%80%9A%E6%8E%A8%E7%90%86%E6%98%8E%E7%A1%AE%E6%94%AF%E6%8C%81%E5%8D%95%E5%9B%BE%E8%A7%86%E9%A2%91%E4%B8%8E%E5%B8%A7%E7%9B%AE%E5%BD%95">2.1 普通推理明确支持单图、视频与帧目录</a><a class="toc-h3" href="#22-%E5%8D%95%E5%9B%BE%E8%83%BD%E8%BF%90%E8%A1%8C%E5%94%87%E5%BD%A2%E6%8E%A8%E7%90%86%E4%B8%8D%E7%AD%89%E4%BA%8E%E8%83%BD%E7%94%9F%E6%88%90%E5%AE%8C%E6%95%B4%E8%87%AA%E7%84%B6%E5%8A%A8%E4%BD%9C">2.2 单图能运行唇形推理，不等于能生成完整自然动作</a><a class="toc-h3" href="#23-%E8%A7%86%E9%A2%91%E8%BE%93%E5%85%A5%E7%9A%84%E5%A4%B4%E5%8A%A8%E4%B8%BB%E8%A6%81%E6%9D%A5%E8%87%AA%E5%BA%95%E6%9D%BF">2.3 视频输入的头动主要来自底板</a><a class="toc-h2" href="#3-256-%E8%84%B8%E9%83%A8%E5%A4%84%E7%90%86%E7%94%BB%E5%B9%85%E4%B8%8E%E5%B7%B2%E7%9F%A5%E8%B4%A8%E9%87%8F%E9%99%90%E5%88%B6">3. 256 脸部处理、画幅与已知质量限制</a><a class="toc-h2" href="#4-%E8%87%AA%E6%89%98%E7%AE%A1%E6%8E%A8%E7%90%86%E8%AE%AD%E7%BB%83%E5%92%8C-avatar-%E7%BC%93%E5%AD%98">4. 自托管推理、训练和 avatar 缓存</a><a class="toc-h3" href="#41-%E6%8D%A2%E4%B8%80%E4%B8%AA%E5%9B%BA%E5%AE%9A%E7%9C%9F%E4%BA%BA%E4%B8%8D%E8%A6%81%E6%B1%82%E5%85%88%E8%AE%AD%E7%BB%83%E4%B8%93%E5%B1%9E%E6%A8%A1%E5%9E%8B">4.1 换一个固定真人不要求先训练专属模型</a><a class="toc-h3" href="#42-%E5%AE%9E%E6%97%B6%E6%A8%A1%E5%BC%8F%E7%BC%93%E5%AD%98%E5%86%85%E5%AE%B9%E4%B8%8E%E5%A4%8D%E7%94%A8%E8%BE%B9%E7%95%8C">4.2 实时模式缓存内容与复用边界</a><a class="toc-h3" href="#43-%E5%AE%9E%E6%97%B6%E7%A4%BA%E4%BE%8B%E4%B8%8D%E6%98%AF%E5%B7%B2%E9%AA%8C%E6%94%B6%E7%9A%84%E4%BA%91%E7%AB%AF%E6%9C%8D%E5%8A%A1">4.3 实时示例不是已验收的云端服务</a><a class="toc-h2" href="#5-%E5%AE%98%E6%96%B9%E5%AE%89%E8%A3%85%E7%BB%84%E5%90%88%E6%98%BE%E5%AD%98%E5%92%8C%E9%80%9F%E5%BA%A6%E8%AF%81%E6%8D%AE">5. 官方安装组合、显存和速度证据</a><a class="toc-h3" href="#51-%E5%AE%89%E8%A3%85%E7%BB%84%E5%90%88">5.1 安装组合</a><a class="toc-h3" href="#52-%E6%8E%A8%E7%90%86%E6%98%BE%E5%AD%98%E4%B8%8E%E6%97%B6%E9%97%B4">5.2 推理显存与时间</a><a class="toc-h3" href="#53-%E8%AE%AD%E7%BB%83%E6%98%BE%E5%AD%98%E5%BF%85%E9%A1%BB%E4%B8%8E%E6%8E%A8%E7%90%86%E5%88%86%E5%BC%80">5.3 训练显存必须与推理分开</a><a class="toc-h2" href="#6-%E4%BB%A3%E7%A0%81%E6%A8%A1%E5%9E%8B%E6%9D%83%E9%87%8D%E4%B8%8E%E4%BE%9D%E8%B5%96%E8%AE%B8%E5%8F%AF%E5%88%86%E5%88%AB%E6%A0%B8%E9%AA%8C">6. 代码、模型权重与依赖许可分别核验</a><a class="toc-h3" href="#61-musetalk-%E8%87%AA%E8%BA%AB">6.1 MuseTalk 自身</a><a class="toc-h3" href="#62-%E4%BE%9D%E8%B5%96%E4%BB%A3%E7%A0%81%E4%B8%8E%E4%B8%8B%E8%BD%BD%E6%9D%83%E9%87%8D">6.2 依赖代码与下载权重</a><a class="toc-h2" href="#7-%E5%AF%B9%E6%9C%AC%E9%A1%B9%E7%9B%AE%E5%90%8E%E7%BB%AD%E9%AA%8C%E8%AF%81%E7%9A%84%E7%BA%A6%E6%9D%9F">7. 对本项目后续验证的约束</a><a class="toc-h2" href="#8-%E6%9D%A5%E6%BA%90%E7%B4%A2%E5%BC%95">8. 来源索引</a></nav></aside>
+</div>
+<button type="button" class="sidebar-scrim" aria-label="关闭文档目录" hidden></button>
+<button type="button" class="back-top" aria-label="返回顶部">顶部</button>
+<script>(() => {
+  'use strict';
+
+  function initializeReader() {
+    const article = document.getElementById('document-body');
+    if (!article) return;
+    const root = document.documentElement;
+    const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
+    const scrollBehavior = () => reducedMotion.matches ? 'instant' : 'smooth';
+
+    // Local files and privacy settings can deny storage; controls remain usable.
+    const fontKey = 'document-reader-font-size';
+    let fontSize = 17;
+    try {
+      const savedSize = Number(localStorage.getItem(fontKey));
+      if (Number.isFinite(savedSize) && savedSize >= 14 && savedSize <= 22) fontSize = savedSize;
+    } catch (_) { /* Storage is optional. */ }
+    const smaller = document.querySelector('.font-smaller');
+    const reset = document.querySelector('.font-reset');
+    const larger = document.querySelector('.font-larger');
+    function setFontSize(value) {
+      fontSize = Math.max(14, Math.min(22, value));
+      root.style.setProperty('--reader-font-size', `${fontSize}px`);
+      if (smaller) smaller.disabled = fontSize === 14;
+      if (larger) larger.disabled = fontSize === 22;
+      if (reset) reset.title = `恢复默认字号（当前 ${fontSize}px）`;
+      try { localStorage.setItem(fontKey, String(fontSize)); } catch (_) { /* Optional. */ }
+    }
+    setFontSize(fontSize);
+    smaller?.addEventListener('click', () => setFontSize(fontSize - 1));
+    reset?.addEventListener('click', () => setFontSize(17));
+    larger?.addEventListener('click', () => setFontSize(fontSize + 1));
+    document.querySelector('.print-button')?.addEventListener('click', () => window.print());
+
+    const menu = document.querySelector('.mobile-menu');
+    const sidebar = document.getElementById('doc-sidebar');
+    const scrim = document.querySelector('.sidebar-scrim');
+    const mobileWidth = window.matchMedia('(max-width: 800px)');
+    function setMenu(open, returnFocus = false) {
+      const visible = open && mobileWidth.matches;
+      document.body.classList.toggle('menu-open', visible);
+      menu?.setAttribute('aria-expanded', String(visible));
+      if (scrim) scrim.hidden = !visible;
+      if (visible) {
+        sidebar?.querySelector('[aria-current="page"], a, button')?.focus();
+      } else if (returnFocus) menu?.focus();
+    }
+    menu?.addEventListener('click', () => setMenu(!document.body.classList.contains('menu-open')));
+    scrim?.addEventListener('click', () => setMenu(false, true));
+    sidebar?.addEventListener('click', (event) => {
+      if (event.target.closest('a')) setMenu(false);
+    });
+    mobileWidth.addEventListener('change', () => setMenu(false));
+    document.addEventListener('keydown', (event) => {
+      if (!document.body.classList.contains('menu-open')) return;
+      if (event.key === 'Escape') {
+        event.preventDefault();
+        setMenu(false, true);
+      }
+      if (event.key === 'Tab') {
+        const focusable = [menu, ...sidebar.querySelectorAll('a[href], button:not([disabled]), [tabindex="0"]')].filter(Boolean);
+        const first = focusable[0];
+        const last = focusable[focusable.length - 1];
+        if (event.shiftKey && document.activeElement === first) {
+          event.preventDefault();
+          last?.focus();
+        } else if (!event.shiftKey && document.activeElement === last) {
+          event.preventDefault();
+          first?.focus();
+        }
+      }
+    });
+    setMenu(false);
+
+    const searchForm = document.getElementById('search-form');
+    const searchInput = document.getElementById('search-input');
+    const searchNext = document.getElementById('search-next');
+    const searchClear = document.getElementById('search-clear');
+    const searchStatus = document.getElementById('search-status');
+    let searchResults = [];
+    let currentResult = -1;
+    let currentQuery = '';
+    let searchTimer;
+
+    function clearHighlights() {
+      article.querySelectorAll('mark.reader-match').forEach((mark) => {
+        const parent = mark.parentNode;
+        mark.replaceWith(document.createTextNode(mark.textContent));
+        parent.normalize();
+      });
+      article.querySelectorAll('.search-block-current').forEach((block) => block.classList.remove('search-block-current'));
+      searchResults = [];
+      currentResult = -1;
+    }
+
+    function showResult(index, shouldScroll) {
+      searchResults.forEach((result) => {
+        result.block.classList.remove('search-block-current');
+        result.marks.forEach((mark) => mark.classList.remove('is-current'));
+      });
+      currentResult = (index + searchResults.length) % searchResults.length;
+      const result = searchResults[currentResult];
+      result.block.classList.add('search-block-current');
+      result.marks.forEach((mark) => mark.classList.add('is-current'));
+      if (searchStatus) searchStatus.textContent = `第 ${currentResult + 1} / ${searchResults.length} 处匹配 · Enter 下一处`;
+      if (shouldScroll) {
+        let container = result.block.parentElement;
+        while (container && container !== article) {
+          if (container.tagName === 'DETAILS') container.open = true;
+          container = container.parentElement;
+        }
+        result.marks[0].scrollIntoView({ behavior: scrollBehavior(), block: 'center', inline: 'nearest' });
+      }
+    }
+
+    function runSearch(shouldScroll = false) {
+      clearTimeout(searchTimer);
+      clearHighlights();
+      const query = searchInput?.value.trim() || '';
+      currentQuery = query;
+      if (searchClear) searchClear.disabled = !query;
+      if (!query) {
+        if (searchStatus) searchStatus.textContent = '';
+        if (searchNext) searchNext.disabled = true;
+        return;
+      }
+      const queryLower = query.toLocaleLowerCase();
+      const blockResults = new Map();
+      // Walk original text nodes, preserving links, emphasis, tables and code.
+      const walker = document.createTreeWalker(article, NodeFilter.SHOW_TEXT, {
+        acceptNode(node) {
+          if (!node.nodeValue.trim()) return NodeFilter.FILTER_REJECT;
+          if (node.parentElement.closest('script, style, button, svg, mark, [aria-hidden="true"]')) return NodeFilter.FILTER_REJECT;
+          return node.nodeValue.toLocaleLowerCase().includes(queryLower) ? NodeFilter.FILTER_ACCEPT : NodeFilter.FILTER_REJECT;
+        }
+      });
+      const nodes = [];
+      while (walker.nextNode()) nodes.push(walker.currentNode);
+      nodes.forEach((node) => {
+        const original = node.nodeValue;
+        const normalized = original.toLocaleLowerCase();
+        const block = node.parentElement.closest('p, li, td, th, h2, h3, h4, h5, h6, pre, summary, figcaption') || node.parentElement;
+        let result = blockResults.get(block);
+        if (!result) {
+          result = { block, marks: [] };
+          blockResults.set(block, result);
+        }
+        const fragment = document.createDocumentFragment();
+        let position = 0;
+        let matchPosition;
+        while ((matchPosition = normalized.indexOf(queryLower, position)) !== -1) {
+          fragment.append(document.createTextNode(original.slice(position, matchPosition)));
+          const mark = document.createElement('mark');
+          mark.className = 'reader-match';
+          mark.textContent = original.slice(matchPosition, matchPosition + query.length);
+          fragment.append(mark);
+          result.marks.push(mark);
+          position = matchPosition + query.length;
+        }
+        fragment.append(document.createTextNode(original.slice(position)));
+        node.replaceWith(fragment);
+      });
+      searchResults = [...blockResults.values()];
+      if (searchNext) searchNext.disabled = !searchResults.length;
+      if (!searchResults.length) {
+        if (searchStatus) searchStatus.textContent = '未找到匹配内容';
+      } else showResult(0, shouldScroll);
+    }
+
+    searchInput?.addEventListener('input', (event) => {
+      if (event.isComposing) return;
+      clearTimeout(searchTimer);
+      searchTimer = setTimeout(() => runSearch(false), 180);
+    });
+    searchInput?.addEventListener('compositionend', () => {
+      clearTimeout(searchTimer);
+      searchTimer = setTimeout(() => runSearch(false), 180);
+    });
+    searchForm?.addEventListener('submit', (event) => {
+      event.preventDefault();
+      const queryChanged = currentQuery !== searchInput.value.trim();
+      if (queryChanged) runSearch(true);
+      else if (searchResults.length) showResult(currentResult + 1, true);
+    });
+    if (searchNext && searchNext.type !== 'submit') {
+      searchNext.addEventListener('click', () => {
+        if (currentQuery !== searchInput.value.trim()) runSearch(true);
+        else if (searchResults.length) showResult(currentResult + 1, true);
+      });
+    }
+    function resetSearch() {
+      clearTimeout(searchTimer);
+      if (searchInput) searchInput.value = '';
+      currentQuery = '';
+      clearHighlights();
+      if (searchStatus) searchStatus.textContent = '';
+      if (searchNext) searchNext.disabled = true;
+      if (searchClear) searchClear.disabled = true;
+    }
+    searchClear?.addEventListener('click', (event) => {
+      event.preventDefault();
+      resetSearch();
+      searchInput?.focus();
+    });
+    searchInput?.addEventListener('keydown', (event) => {
+      if (event.key === 'Escape' && !event.isComposing) {
+        event.preventDefault();
+        resetSearch();
+      }
+      if (event.key === 'Enter' && event.isComposing) event.preventDefault();
+    });
+    resetSearch();
+
+    async function copyText(text) {
+      try {
+        if (navigator.clipboard?.writeText) {
+          await navigator.clipboard.writeText(text);
+          return true;
+        }
+      } catch (_) { /* File URLs may reject the modern Clipboard API. */ }
+      const previousFocus = document.activeElement;
+      const selection = window.getSelection();
+      const savedRanges = selection ? Array.from({ length: selection.rangeCount }, (_, i) => selection.getRangeAt(i).cloneRange()) : [];
+      const field = document.createElement('textarea');
+      field.value = text;
+      field.readOnly = true;
+      field.style.cssText = 'position:fixed;left:-9999px;top:0;opacity:0;font-size:16px';
+      document.body.append(field);
+      field.select();
+      let copied = false;
+      try { copied = document.execCommand('copy'); } catch (_) { /* Show the failure state. */ }
+      field.remove();
+      if (selection) {
+        selection.removeAllRanges();
+        savedRanges.forEach((range) => selection.addRange(range));
+      }
+      previousFocus?.focus({ preventScroll: true });
+      return copied;
+    }
+
+    article.querySelectorAll('pre').forEach((pre) => {
+      const code = pre.querySelector('code');
+      if (!code || pre.querySelector('.copy-code')) return;
+      const button = document.createElement('button');
+      button.type = 'button';
+      button.className = 'copy-code';
+      button.textContent = '复制代码';
+      button.setAttribute('aria-label', '复制代码');
+      button.setAttribute('aria-live', 'polite');
+      pre.append(button);
+      let labelTimer;
+      button.addEventListener('click', async () => {
+        clearTimeout(labelTimer);
+        const copied = await copyText(code.textContent);
+        button.textContent = copied ? '已复制' : '请选中后复制';
+        labelTimer = setTimeout(() => { button.textContent = '复制代码'; }, 2200);
+      });
+    });
+
+    // Scroll-spy works without observers and avoids changing browser history.
+    const tocLinks = Array.from(document.querySelectorAll('#toc a[href^="#"]'));
+    const sections = tocLinks.map((link) => {
+      let id;
+      try { id = decodeURIComponent(link.getAttribute('href').slice(1)); } catch (_) { return null; }
+      const heading = document.getElementById(id);
+      return heading ? { link, heading } : null;
+    }).filter(Boolean);
+    let activeLink = null;
+    const backTop = document.querySelector('.back-top');
+    let framePending = false;
+    function updateScrollState() {
+      framePending = false;
+      if (backTop) backTop.hidden = window.scrollY < 480;
+      let active = sections[0];
+      const header = document.querySelector('.topbar');
+      const threshold = (header?.getBoundingClientRect().height || 76) + 38;
+      for (const section of sections) {
+        if (section.heading.getBoundingClientRect().top <= threshold) active = section;
+        else break;
+      }
+      if (!active || active.link === activeLink) return;
+      activeLink?.removeAttribute('aria-current');
+      activeLink?.classList.remove('is-active');
+      activeLink = active.link;
+      activeLink.setAttribute('aria-current', 'location');
+      activeLink.classList.add('is-active');
+      const panel = document.querySelector('.toc-panel');
+      if (panel && panel.clientHeight) {
+        const linkRect = activeLink.getBoundingClientRect();
+        const panelRect = panel.getBoundingClientRect();
+        if (linkRect.top < panelRect.top + 25 || linkRect.bottom > panelRect.bottom - 25) {
+          panel.scrollTop += linkRect.top - panelRect.top - panel.clientHeight / 3;
+        }
+      }
+    }
+    function queueScrollUpdate() {
+      if (!framePending) {
+        framePending = true;
+        requestAnimationFrame(updateScrollState);
+      }
+    }
+    window.addEventListener('scroll', queueScrollUpdate, { passive: true });
+    window.addEventListener('resize', queueScrollUpdate, { passive: true });
+    backTop?.addEventListener('click', () => window.scrollTo({ top: 0, behavior: scrollBehavior() }));
+    updateScrollState();
+  }
+
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', initializeReader, { once: true });
+  else initializeReader();
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,391 @@
+{
+  "purpose": "已选模型的非敏感接入规格；不是已实现应用的运行配置",
+  "decision_date": "2026-09-23",
+  "generation_enabled": false,
+  "generation_budget_cny": 0,
+  "automatic_billable_retry": false,
+  "models": {
+    "text": {
+      "provider": "deepseek_official",
+      "base_url": "https://api.deepseek.com",
+      "path": "/chat/completions",
+      "model": "deepseek-flash",
+      "intended_model_version": "DeepSeek-V4.1-Flash",
+      "api_key_env": "AVATAR_STUDIO_DEEPSEEK_API_KEY",
+      "selection_status": "SELECTED_BY_USER",
+      "acceptance_status": "PENDING_ACCEPTANCE"
+    },
+    "image": {
+      "provider": "openai_compatible_relay",
+      "base_url": "https://airelay.dog.airelay.buzz/v1",
+      "model": "gpt-image-2.5-sunburst",
+      "api_key_env": "AVATAR_STUDIO_IMAGE_API_KEY",
+      "credential_source_file": "C:\\Users\\22346\\Desktop\\密钥\\api_keys.md",
+      "credential_source_label": "gpt-image",
+      "protocol": "images_api_generation",
+      "protocol_candidates_to_verify": [
+        "images_generation_and_edits"
+      ],
+      "model_listing_verified": true,
+      "generation_verified": true,
+      "reference_edit_verified": false,
+      "selection_status": "SELECTED_BY_USER",
+      "acceptance_status": "PENDING_ACCEPTANCE",
+      "generation_contract_verified": false,
+      "generation_evidence": "AV-001: B941x1672 differs from1152x2048; C1152x2048 matches; reference edit unverified",
+      "base_identity_id": "av_base_b_v1"
+    },
+    "tts": {
+      "provider": "minimax_official",
+      "base_url": "https://api.minimax.cn",
+      "path": "/v1/t2a_v2",
+      "model": "speech-2.8-hd",
+      "api_key_env": "AVATAR_STUDIO_MINIMAX_API_KEY",
+      "voice_id": "Chinese (Mandarin)_Warm_Bestie",
+      "voice_selection_status": "SELECTED_BY_USER",
+      "subtitle_timestamps_verified": false,
+      "selection_status": "SELECTED_BY_USER",
+      "acceptance_status": "PENDING_ACCEPTANCE",
+      "synthesis_verified": true,
+      "voice_candidates": [
+        "danya_xuejie",
+        "Chinese (Mandarin)_Warm_Bestie"
+      ],
+      "voice_asset_id": "voice_minimax_warm_bestie_v1",
+      "voice_setting": {
+        "voice_id": "Chinese (Mandarin)_Warm_Bestie",
+        "speed": 1.0,
+        "vol": 1.0,
+        "pitch": 0,
+        "emotion": "calm"
+      },
+      "audio_setting": {
+        "sample_rate": 32000,
+        "format": "wav",
+        "channel": 1
+      },
+      "language_boost": "Chinese",
+      "stream": false,
+      "output_format": "hex",
+      "subtitle_enable": false
+    },
+    "talking_head": {
+      "provider": "musetalk_self_hosted",
+      "model": "MuseTalk-1.5",
+      "source_commit": "0a89dec45a0192b824e3cf4daf96c239440c5ed8",
+      "deployment": "existing_rented_cloud_gpu",
+      "remote_root": "/root/autodl-tmp/avatar-musetalk/MT-001",
+      "deployment_status": "SHORT_SAMPLE_INFERENCE_VERIFIED",
+      "selection_status": "SELECTED_BY_USER",
+      "acceptance_status": "PENDING_ACCEPTANCE",
+      "automatic_cloud_video_fallback": false
+    },
+    "motion_animation": {
+      "provider": "liveportrait_self_hosted",
+      "model": "LivePortrait",
+      "source_commit": "9b294b3d0536135442ea73cb01e6cb3ca7029dd3",
+      "deployment": "existing_rented_cloud_gpu",
+      "remote_root": "/root/autodl-tmp/avatar-motion/EXP-001",
+      "deployment_status": "SHORT_SAMPLE_INFERENCE_VERIFIED",
+      "selection_status": "SELECTED_BY_USER",
+      "acceptance_status": "PENDING_ACCEPTANCE",
+      "commercial_weights_clearance": "PENDING_INSIGHTFACE_LICENSE_OR_REPLACEMENT"
+    },
+    "cloud_avatar": {
+      "provider": "volcengine_visual",
+      "model": "OmniHuman-1.5",
+      "base_url": "https://visual.volcengineapi.com",
+      "req_key": "jimeng_realman_avatar_picture_omni_v15",
+      "api_version": "2022-08-31",
+      "submit_action": "CVSubmitTask",
+      "query_action": "CVGetResult",
+      "region": "cn-north-1",
+      "service": "cv",
+      "auth_protocol": "hmac_sha256",
+      "access_key_env": "AVATAR_STUDIO_VOLC_ACCESS_KEY",
+      "secret_key_env": "AVATAR_STUDIO_VOLC_SECRET_KEY",
+      "selection_status": "SELECTED_BY_USER",
+      "historical_short_sample_verified": true,
+      "acceptance_status": "PENDING_ACCEPTANCE",
+      "constraints_reference_date": "2026-09-21",
+      "constraints_require_revalidation": true,
+      "audio_duration_max_exclusive_seconds": 60,
+      "recommended_audio_duration_seconds": 15,
+      "prompt_max_characters": 300,
+      "output_resolution_options": [
+        720,
+        1080
+      ],
+      "current_price_verified": false,
+      "arbitrary_body_motion_guaranteed": false,
+      "new_submissions_enabled": false,
+      "required_for_mvp": true,
+      "price_source": "user_confirmed_rate",
+      "current_price_fen_per_generated_second": 100,
+      "actual_billing_verified": false,
+      "supports_external_audio_input": true,
+      "historical_input_audio_preservation_evidence": "TH-COMP-003: decoded audio offset 0ms, Pearson 0.99996223; sample only",
+      "current_avatar_body_motion_verified": false,
+      "requires_final_tts": true,
+      "pricing": {
+        "currency": "CNY",
+        "unit": "generated_second",
+        "unit_price_fen": 100,
+        "source": "user_confirmed_rate",
+        "quote_date": "2026-09-23",
+        "billing_verified": false,
+        "rounding_and_minimum_verified": false
+      }
+    }
+  },
+  "unselected": [
+    "embedding",
+    "reranker",
+    "asr_alignment",
+    "identity_quality_models",
+    "application_framework",
+    "database",
+    "queue",
+    "storage"
+  ],
+  "notes": [
+    "模型选择不表示图片、声音、长片或生产验收已通过",
+    "API密钥只通过指定环境变量注入；不把任何密钥写入此文件",
+    "MiniMax域名与账号区域在接入时匹配；不在失败后静默跨域发送凭据",
+    "图片/v1/models与生成接口已验证；尺寸一致性仍有问题，参考图编辑未测试",
+    "此文件是规格示例；现有实验脚本不会读取它或改变历史任务",
+    "人物B与音色3已确认并登记版本1；口型、身份变体、动作母版与60秒生产质量仍待验收。",
+    "用户已选四类子智能体：策划直接提示词写稿，不联网；质量保留内部历史查重；后期由代码执行。此为目标契约，既有 production 需迁移验证，不启用生产或付费调用。",
+    "OmniHuman1.5纳入MVP必验：固定人物＋最终确认TTS驱动表情、身体与口型，不再经过LivePortrait/MuseTalk。",
+    "M2保留为低成本本地选项；两路都使用同一人物与声音版本，不能失败后自动跨路线。",
+    "两路线均在视频合成前确认最终MiniMax音频；字幕按该音轨建立时间轴，输出音轨保持及口型另行审核。",
+    "用户确认豆包1元/生成秒；仅作当前估价，账单和取整另核，配置预算仍为0且未启用生成。",
+    "历史云短片不代表人物B身体动作或60秒衔接通过，任意肢体动作不能保证。",
+    "移除后期子智能体、S07 字幕与剪辑、M05 及搜索/抓取/后期 Agent 工具；字幕模型可由内部代码调用，不是新增 Agent。"
+  ],
+  "asset_selection_date": "2026-09-22",
+  "default_presenter": {
+    "identity_id": "av_base_b_v1",
+    "voice_asset_id": "voice_minimax_warm_bestie_v1",
+    "manifest_path": "assets/固定主播/主播B/版本1/角色档案.json",
+    "manifest_sha256": "153fd1e842c1d69cef55629b80dfc2d102a9cd8c91c1718fe10ab4aac8a3fbd7",
+    "selection_record_path": "experiments/人物与音色选型/AV-001/人物与音色定版.json",
+    "selection_status": "SELECTED_BY_USER",
+    "acceptance_status": "PENDING_ACCEPTANCE",
+    "voice_asset_scope": "MiniMax TTS used by OmniHuman and M2"
+  },
+  "talking_head_pipeline": {
+    "route_id": "OMNIHUMAN_1_5",
+    "name": "固定人物＋最终 MiniMax TTS → OmniHuman 1.5",
+    "stages": [
+      "tts",
+      "cloud_avatar",
+      "review_video_and_audio",
+      "postprocess"
+    ],
+    "selection_status": "SELECTED_BY_USER",
+    "selection_date": "2026-09-23",
+    "acceptance_status": "PENDING_ACCEPTANCE",
+    "required_for_mvp": true,
+    "automatic_route_fallback": false,
+    "requires_external_tts": true,
+    "requires_separate_lipsync": false,
+    "requires_user_audio_confirmation": true,
+    "requires_approved_final_audio": true,
+    "requires_budget_confirmation": true,
+    "production_enabled": false
+  },
+  "agent_orchestration": {
+    "framework": "deepagents",
+    "selection_status": "SELECTED_BY_USER",
+    "selection_date": "2026-09-23",
+    "acceptance_status": "PENDING_ACCEPTANCE",
+    "implementation_status": "BOUNDARY_MIGRATED_REAL_PIPELINE_PENDING",
+    "underlying_runtime": "langgraph",
+    "supervisor": "supervisor",
+    "subagents": [
+      "content",
+      "quality",
+      "avatar",
+      "audio"
+    ],
+    "dependency_gates_enforced_by": "business_service",
+    "gpu_heavy_job_concurrency": 1,
+    "skills_enabled_in_target_design": true,
+    "mcp_enabled_in_target_design": true,
+    "memory_layers": [
+      "task_checkpoints",
+      "immutable_presenter_assets",
+      "content_history",
+      "reviewed_experience"
+    ],
+    "persistent_backend_status": "UNSELECTED",
+    "design_document": "specs/0001-douyin-ai-studio/10-Agent编排选型与整体架构.md",
+    "business_skill_ids": [
+      "S01",
+      "S02",
+      "S03",
+      "S04",
+      "S05",
+      "S06",
+      "S08"
+    ],
+    "mcp_capability_groups": [
+      "M01",
+      "M02",
+      "M03",
+      "M04"
+    ],
+    "content_generation": {
+      "mode": "prompt_only",
+      "allow_web_search": false,
+      "allow_web_fetch": false,
+      "optional_user_materials": true,
+      "candidate_count": 3,
+      "history_check_owner": "quality",
+      "unsupported_factual_claims": "review_required"
+    },
+    "removed_agent_tools": [
+      "search_sources",
+      "fetch_source",
+      "draft_edit_plan",
+      "align_subtitles",
+      "render_video",
+      "build_publish_package"
+    ],
+    "postprocess": {
+      "executor_kind": "worker",
+      "worker_kind": "postprocess",
+      "triggered_by": "business_service",
+      "exposed_via_mcp": false,
+      "loads_skills": false,
+      "uses_agent_llm": false,
+      "stages": [
+        "align_subtitles",
+        "compose_video",
+        "enhance_video",
+        "render_subtitles",
+        "inspect_output",
+        "await_final_review",
+        "build_publish_package"
+      ],
+      "input_policy": "approved_effective_versions_only",
+      "style_source": "validated_user_options_and_versioned_presets",
+      "super_resolution_model": null,
+      "implementation_status": "INTERNAL_ENTRY_ONLY_REAL_PROCESSING_BLOCKED"
+    }
+  },
+  "production_target": {
+    "videos_per_day": 5,
+    "target_duration_seconds": 60,
+    "acceptance_status": "PENDING_ACCEPTANCE"
+  },
+  "optional_talking_head_routes": [
+    {
+      "route_id": "M2",
+      "name": "LivePortrait → MuseTalk 1.5",
+      "stages": [
+        "motion_animation",
+        "talking_head"
+      ],
+      "selection_status": "SELECTED_BY_USER",
+      "selection_date": "2026-09-22",
+      "selection_record_path": "experiments/表情动作改善/EXP-001/口播路线定版.json",
+      "acceptance_status": "PENDING_ACCEPTANCE",
+      "approved_motion_reference_asset_id": null,
+      "automatic_route_fallback": false,
+      "requires_user_audio_confirmation": true,
+      "requires_explicit_route_selection": true,
+      "requires_budget_confirmation": true,
+      "production_enabled": false,
+      "scope": "retained_low_cost_local_route",
+      "requires_external_tts": true,
+      "requires_approved_final_audio": true,
+      "requires_separate_lipsync": true
+    }
+  ],
+  "workbench": {
+    "single_user": true,
+    "implementation_status": "NOT_IMPLEMENTED",
+    "feature_navigation": [
+      "人物形象",
+      "口播稿生成",
+      "TTS 语音",
+      "视频合成",
+      "发布",
+      "指标监控",
+      "领域模型选择"
+    ],
+    "mvp_active_feature_target_count": 4,
+    "lip_sync_stage": "视频合成：OmniHuman按最终TTS内生驱动，M2由MuseTalk执行",
+    "user_selection_kinds": [
+      "avatar",
+      "script",
+      "voice",
+      "audio",
+      "route"
+    ],
+    "default_presenter_is_only_allowed_presenter": false,
+    "v1_output": "preview_and_download_package",
+    "future_features": [
+      "publication_and_reminders",
+      "platform_metrics",
+      "generic_model_settings"
+    ]
+  },
+  "historical_model_records": {
+    "grok_video": {
+      "provider": "xai_video_relay",
+      "base_url": "https://airelay.dog.airelay.buzz",
+      "model": "grok-imagine-video-1.5",
+      "api_key_env": "AVATAR_STUDIO_GROK_API_KEY",
+      "credential_source_file": "C:\\Users\\22346\\Desktop\\密钥\\api_keys.md",
+      "credential_source_label": "grok-imagine-video-1.5",
+      "selection_status": "WITHDRAWN_BY_USER",
+      "acceptance_status": "PENDING_ACCEPTANCE",
+      "model_listing_verified": true,
+      "listing_evidence": "specs/selection/02-已选模型/Grok中转只读核验.json",
+      "protocol_verified": false,
+      "submit_path": null,
+      "query_path_template": null,
+      "official_protocol_reference": {
+        "base_url": "https://api.x.ai",
+        "submit_path": "/v1/videos/generations",
+        "query_path_template": "/v1/videos/{request_id}",
+        "applies_to_relay_without_verification": false
+      },
+      "generation_verified": false,
+      "business_audio_mode": "native",
+      "required_inputs": [
+        "person_asset_id",
+        "script_segment_id",
+        "performance_plan_id",
+        "native_voice_profile_id"
+      ],
+      "external_tts_audio_required": false,
+      "native_voice_profile_id": null,
+      "preset_voice_supported_by_relay": null,
+      "custom_audio_reference_permission_verified": false,
+      "external_audio_exact_drive_verified": false,
+      "official_duration_range_seconds": [
+        1,
+        15
+      ],
+      "relay_duration_range_verified": false,
+      "native_1080p_official_i2v_supported": true,
+      "relay_output_spec_verified": false,
+      "pricing": {
+        "currency": "CNY",
+        "unit": "generated_second",
+        "unit_price_fen": 38,
+        "source": "user_quote",
+        "billing_verified": false,
+        "rounding_and_minimum_verified": false
+      },
+      "arbitrary_motion_or_verbatim_speech_guaranteed": false,
+      "production_enabled": false,
+      "new_submissions_enabled": false,
+      "withdrawal_reason": "用户选择专门的图与外部音频驱动数字人，以保持固定声音和口播内容"
+    }
+  }
+}

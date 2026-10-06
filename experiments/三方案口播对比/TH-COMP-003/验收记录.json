@@ -1,0 +1,44 @@
+{
+  "experiment": "TH-COMP-003",
+  "real_output_videos": 3,
+  "regression_tests_passed": 4,
+  "media_full_decode": [
+    "PASS",
+    "PASS",
+    "PASS"
+  ],
+  "browser": {
+    "desktop": [
+      1440,
+      1050
+    ],
+    "mobile": [
+      390,
+      844
+    ],
+    "horizontal_page_overflow": false,
+    "simultaneous_muted_play": true,
+    "half_speed": true,
+    "restore_single_play": true,
+    "videos_playable": 3,
+    "images_broken": 0
+  },
+  "local_links": {
+    "html_count": 25,
+    "local_links_checked": 906,
+    "broken_links": [],
+    "videos": 3,
+    "one_generation_submission": true,
+    "actual_cost_known": false
+  },
+  "generation_submissions": 1,
+  "poll_queries": 11,
+  "new_image_calls": 0,
+  "new_tts_calls": 0,
+  "new_musetalk_calls": 0,
+  "actual_bill_verified": false,
+  "full_human_audiovisual_review": "NOT_REVIEWED",
+  "selection": "UNSELECTED",
+  "old_evidence_preserved": true,
+  "cloud_instance_not_accessed_this_turn": true
+}

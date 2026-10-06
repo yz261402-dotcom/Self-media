@@ -1,0 +1,101 @@
+{
+  "scope": "离线文档浏览器核验；不是应用验收",
+  "browser": "isolated Chrome CDP",
+  "table_sha256": "3c941972537ab35be034f0af162518ca007ff3569fc753d72931f13e24e6f68c",
+  "checks": [
+    {
+      "test": "default_rows",
+      "value": 31
+    },
+    {
+      "test": "core_filter",
+      "value": 15
+    },
+    {
+      "test": "future_filter",
+      "ids": [
+        "F01",
+        "F02",
+        "F03"
+      ]
+    },
+    {
+      "test": "stage_filter",
+      "ids": [
+        "E07",
+        "E08",
+        "E09"
+      ]
+    },
+    {
+      "test": "search_and_empty",
+      "pass": true
+    },
+    {
+      "test": "details_and_print_action",
+      "pass": true,
+      "note": "验证按钮调用；未实际打印文件"
+    },
+    {
+      "test": "viewport",
+      "file": "specs/阅读器/评估指标总表.html",
+      "viewport": [
+        1440,
+        900
+      ],
+      "title": "各环节评估指标总表",
+      "width": 1440,
+      "scrollWidth": 1425,
+      "images": []
+    },
+    {
+      "test": "viewport",
+      "file": "specs/阅读器/评估指标总表.html",
+      "viewport": [
+        390,
+        844
+      ],
+      "title": "各环节评估指标总表",
+      "width": 390,
+      "scrollWidth": 375,
+      "images": []
+    },
+    {
+      "test": "viewport",
+      "file": "specs/0001-douyin-ai-studio/08-端到端技术流程与模型选型地图.html",
+      "viewport": [
+        1440,
+        900
+      ],
+      "title": "端到端数据流与技术流程 · AI 自媒体文档",
+      "width": 1440,
+      "scrollWidth": 1425,
+      "images": [
+        {
+          "loaded": true,
+          "width": 4320
+        }
+      ]
+    },
+    {
+      "test": "viewport",
+      "file": "specs/0001-douyin-ai-studio/08-端到端技术流程与模型选型地图.html",
+      "viewport": [
+        390,
+        844
+      ],
+      "title": "端到端数据流与技术流程 · AI 自媒体文档",
+      "width": 390,
+      "scrollWidth": 375,
+      "images": [
+        {
+          "loaded": true,
+          "width": 4320
+        }
+      ]
+    }
+  ],
+  "javascript_exceptions": [],
+  "visual_review": "passed",
+  "review_note": "已人工查看指标桌面/手机、数据流说明桌面截图及4320×2480数据流PNG；文字可读，页面无横向溢出；宽表在窄屏内滚动。仅文档显示与交互核验。"
+}

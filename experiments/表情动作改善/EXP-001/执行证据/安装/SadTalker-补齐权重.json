@@ -1,0 +1,26 @@
+[
+  {
+    "path": "gfpgan/weights/alignment_WFLW_4HG.pth",
+    "url": "https://github.com/xinntao/facexlib/releases/download/v0.1.0/alignment_WFLW_4HG.pth",
+    "returncode": 0,
+    "wall_seconds": 115.123,
+    "stderr": "",
+    "upstream_sha256_verified": false,
+    "bytes": 193670248,
+    "sha256": "bbfd137307a4c7debd5c283b9b0ce539466cee417ac0a155e184d857f9f2899c",
+    "verified_size": true,
+    "state": "DOWNLOADED"
+  },
+  {
+    "path": "gfpgan/weights/detection_Resnet50_Final.pth",
+    "url": "https://github.com/xinntao/facexlib/releases/download/v0.1.0/detection_Resnet50_Final.pth",
+    "returncode": 0,
+    "wall_seconds": 74.814,
+    "stderr": "",
+    "upstream_sha256_verified": false,
+    "bytes": 109497761,
+    "sha256": "6d1de9c2944f2ccddca5f5e010ea5ae64a39845a86311af6fdf30841b0a5a16d",
+    "verified_size": true,
+    "state": "DOWNLOADED"
+  }
+]

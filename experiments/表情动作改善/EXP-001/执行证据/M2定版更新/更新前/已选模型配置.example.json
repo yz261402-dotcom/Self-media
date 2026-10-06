@@ -1,0 +1,112 @@
+{
+  "purpose": "已选模型的非敏感接入规格；不是已实现应用的运行配置",
+  "decision_date": "2026-09-21",
+  "generation_enabled": false,
+  "generation_budget_cny": 0,
+  "automatic_billable_retry": false,
+  "models": {
+    "text": {
+      "provider": "deepseek_official",
+      "base_url": "https://api.deepseek.com",
+      "path": "/chat/completions",
+      "model": "deepseek-flash",
+      "intended_model_version": "DeepSeek-V4.1-Flash",
+      "api_key_env": "AVATAR_STUDIO_DEEPSEEK_API_KEY",
+      "selection_status": "SELECTED_BY_USER",
+      "acceptance_status": "PENDING_ACCEPTANCE"
+    },
+    "image": {
+      "provider": "openai_compatible_relay",
+      "base_url": "https://airelay.dog.airelay.buzz/v1",
+      "model": "gpt-image-2",
+      "api_key_env": "AVATAR_STUDIO_IMAGE_API_KEY",
+      "credential_source_file": "C:\\Users\\22346\\Desktop\\密钥\\api_keys.md",
+      "credential_source_label": "gpt-image",
+      "protocol": "images_api_generation",
+      "protocol_candidates_to_verify": [
+        "images_generation_and_edits"
+      ],
+      "model_listing_verified": true,
+      "generation_verified": true,
+      "reference_edit_verified": false,
+      "selection_status": "SELECTED_BY_USER",
+      "acceptance_status": "PENDING_ACCEPTANCE",
+      "generation_contract_verified": false,
+      "generation_evidence": "AV-001: B941x1672 differs from1152x2048; C1152x2048 matches; reference edit unverified",
+      "base_identity_id": "av_base_b_v1"
+    },
+    "tts": {
+      "provider": "minimax_official",
+      "base_url": "https://api.minimax.cn",
+      "path": "/v1/t2a_v2",
+      "model": "speech-2.8-hd",
+      "api_key_env": "AVATAR_STUDIO_MINIMAX_API_KEY",
+      "voice_id": "Chinese (Mandarin)_Warm_Bestie",
+      "voice_selection_status": "SELECTED_BY_USER",
+      "subtitle_timestamps_verified": false,
+      "selection_status": "SELECTED_BY_USER",
+      "acceptance_status": "PENDING_ACCEPTANCE",
+      "synthesis_verified": true,
+      "voice_candidates": [
+        "danya_xuejie",
+        "Chinese (Mandarin)_Warm_Bestie"
+      ],
+      "voice_asset_id": "voice_minimax_warm_bestie_v1",
+      "voice_setting": {
+        "voice_id": "Chinese (Mandarin)_Warm_Bestie",
+        "speed": 1.0,
+        "vol": 1.0,
+        "pitch": 0,
+        "emotion": "calm"
+      },
+      "audio_setting": {
+        "sample_rate": 32000,
+        "format": "wav",
+        "channel": 1
+      },
+      "language_boost": "Chinese",
+      "stream": false,
+      "output_format": "hex",
+      "subtitle_enable": false
+    },
+    "talking_head": {
+      "provider": "musetalk_self_hosted",
+      "model": "MuseTalk-1.5",
+      "source_commit": "0a89dec45a0192b824e3cf4daf96c239440c5ed8",
+      "deployment": "existing_rented_cloud_gpu",
+      "remote_root": "/root/autodl-tmp/avatar-musetalk/MT-001",
+      "deployment_status": "SHORT_SAMPLE_INFERENCE_VERIFIED",
+      "selection_status": "SELECTED_BY_USER",
+      "acceptance_status": "PENDING_ACCEPTANCE",
+      "automatic_cloud_video_fallback": false
+    }
+  },
+  "unselected": [
+    "embedding",
+    "reranker",
+    "asr_alignment",
+    "identity_quality_models",
+    "application_framework",
+    "database",
+    "queue",
+    "storage"
+  ],
+  "notes": [
+    "模型选择不表示图片、声音、长片或生产验收已通过",
+    "API密钥只通过指定环境变量注入；不把任何密钥写入此文件",
+    "MiniMax域名与账号区域在接入时匹配；不在失败后静默跨域发送凭据",
+    "图片/v1/models与生成接口已验证；尺寸一致性仍有问题，参考图编辑未测试",
+    "此文件是规格示例；现有实验脚本不会读取它或改变历史任务",
+    "人物B与音色3已确认并登记版本1；口型、身份变体、动作母版与60秒生产质量仍待验收。"
+  ],
+  "asset_selection_date": "2026-09-22",
+  "default_presenter": {
+    "identity_id": "av_base_b_v1",
+    "voice_asset_id": "voice_minimax_warm_bestie_v1",
+    "manifest_path": "assets/固定主播/主播B/版本1/角色档案.json",
+    "manifest_sha256": "153fd1e842c1d69cef55629b80dfc2d102a9cd8c91c1718fe10ab4aac8a3fbd7",
+    "selection_record_path": "experiments/人物与音色选型/AV-001/人物与音色定版.json",
+    "selection_status": "SELECTED_BY_USER",
+    "acceptance_status": "PENDING_ACCEPTANCE"
+  }
+}

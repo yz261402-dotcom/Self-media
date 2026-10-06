@@ -1,0 +1,656 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="light">
+<link rel="icon" href="data:,">
+<meta name="source-sha256" content="49e416e088d17bf6f390f2190a9332ef5293995ef716c97d5fe68ec5a82757d8">
+<title>OmniHuman1.5 开通后实测结果 · AI 自媒体文档</title>
+<style>:root {
+  color-scheme: light;
+  --paper: #ffffff;
+  --surface: #f7f7f8;
+  --ink: #202126;
+  --muted: #666970;
+  --line: #dedfe3;
+  --blue: #002fa7;
+  --reader-font-size: 17px;
+  --header-height: 76px;
+  font-family: "Helvetica Neue", Helvetica, Arial, "PingFang SC", "Microsoft YaHei", sans-serif;
+  font-synthesis: none;
+}
+
+* { box-sizing: border-box; }
+.sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; border: 0; }
+.source-notice { margin-top: 22px; padding: 12px 14px; border-left: 3px solid var(--blue); background: var(--surface); color: var(--muted); font-size: 13px; }
+html { scroll-padding-top: 104px; }
+body { margin: 0; min-width: 320px; color: var(--ink); background: var(--surface); font-size: 14px; line-height: 1.6; }
+body.menu-open { overflow: hidden; }
+a { color: var(--blue); text-underline-offset: 3px; }
+button, input { font: inherit; }
+button { color: inherit; cursor: pointer; }
+button, input[type="search"] { border: 1px solid var(--line); border-radius: 3px; background: var(--paper); }
+button { min-height: 36px; padding: 6px 11px; line-height: 1.4; }
+button:hover { border-color: var(--blue); color: var(--blue); }
+button:disabled { opacity: .42; cursor: default; }
+button:disabled:hover { color: inherit; border-color: var(--line); }
+:focus-visible { outline: 2px solid var(--blue); outline-offset: 3px; }
+[hidden] { display: none !important; }
+::selection { background: #dbe4ff; color: #151c32; }
+
+.skip-link { position: fixed; z-index: 100; top: -70px; left: 16px; padding: 10px 18px; background: var(--blue); color: white; }
+.skip-link:focus { top: 10px; }
+.topbar { position: sticky; z-index: 30; top: 0; min-height: var(--header-height); display: flex; align-items: center; gap: 24px; padding: 15px 32px; border-bottom: 1px solid var(--line); background: var(--paper); }
+.brand { min-width: 0; color: var(--ink); font-size: 17px; font-weight: 700; line-height: 1.35; letter-spacing: -.02em; text-decoration: none; }
+.brand small, .brand span { display: block; margin-top: 4px; font-size: 11px; font-weight: 400; letter-spacing: .08em; color: var(--muted); }
+.toolbar { display: flex; align-items: center; gap: 6px; margin-left: auto; flex-shrink: 0; }
+.toolbar .font-smaller, .toolbar .font-reset, .toolbar .font-larger { min-width: 36px; padding: 5px 8px; font-variant-numeric: tabular-nums; }
+.toolbar .print-button { margin-left: 8px; }
+.mobile-menu { display: none; }
+.layout { display: grid; grid-template-columns: 244px minmax(0, 1fr) 208px; max-width: 1536px; margin: 0 auto; align-items: start; background: var(--paper); }
+.sidebar { position: sticky; top: var(--header-height); height: calc(100dvh - var(--header-height)); overflow-y: auto; overscroll-behavior: contain; padding: 32px 20px 36px 24px; border-right: 1px solid var(--line); scrollbar-width: thin; background: var(--surface); }
+.nav-group + .nav-group { margin-top: 32px; padding-top: 26px; border-top: 1px solid var(--line); }
+.group-title { margin: 0 10px 12px; color: var(--muted); font-size: 11px; font-weight: 600; letter-spacing: .11em; }
+.doc-nav { display: flex; flex-direction: column; gap: 4px; }
+.doc-nav a { display: block; padding: 9px 10px; border-left: 2px solid transparent; color: #55575d; font-size: 13px; line-height: 1.65; text-decoration: none; overflow-wrap: anywhere; }
+.doc-nav a:hover { color: var(--blue); background: #eeeeef; }
+.doc-nav a[aria-current="page"] { border-left-color: var(--blue); background: #eaf0ff; color: var(--blue); font-weight: 600; }
+.doc-nav .doc-number { display: inline-block; min-width: 25px; color: var(--muted); font-variant-numeric: tabular-nums; }
+
+#main { min-width: 0; padding: 46px clamp(28px, 3.7vw, 60px) 56px; }
+.document-header { margin-bottom: 29px; }
+.eyebrow { margin: 0 0 18px; color: var(--blue); font-size: 12px; font-weight: 600; letter-spacing: .08em; }
+.document-header h1 { margin: 0 0 21px; font-size: clamp(30px, 2.8vw, 42px); font-weight: 700; letter-spacing: -.045em; line-height: 1.3; overflow-wrap: anywhere; }
+.doc-meta { display: flex; flex-wrap: wrap; align-items: baseline; gap: 6px 18px; color: var(--muted); font-size: 12px; }
+.doc-meta a { color: var(--muted); }
+.doc-meta a:hover { color: var(--blue); }
+.reader-tools { margin: 0 0 36px; padding: 16px 0; border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); }
+#search-form { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; }
+#search-input { flex: 1 1 160px; min-width: 100px; width: 0; height: 36px; padding: 6px 10px; color: var(--ink); }
+#search-input::placeholder { color: #777a82; }
+#search-next, #search-clear { flex: 0 0 auto; font-size: 12px; }
+#search-status { flex: 1 0 100%; color: var(--muted); font-size: 11px; line-height: 1.5; }
+#search-status:empty { display: none; }
+
+#document-body { font-size: var(--reader-font-size); line-height: 1.9; overflow-wrap: anywhere; }
+#document-body > :first-child { margin-top: 0; }
+#document-body h2, #document-body h3, #document-body h4, #document-body h5, #document-body h6 { scroll-margin-top: 106px; font-weight: 650; line-height: 1.45; color: #15171c; }
+#document-body h2 { margin: 2.8em 0 1.05em; padding-top: 1.25em; border-top: 1px solid var(--line); font-size: 1.5em; letter-spacing: -.035em; }
+#document-body h3 { margin: 2em 0 .85em; font-size: 1.18em; letter-spacing: -.025em; }
+#document-body h4 { margin: 1.65em 0 .7em; font-size: 1.03em; }
+#document-body h5, #document-body h6 { margin: 1.4em 0 .6em; font-size: 1em; }
+#document-body p { margin: .9em 0; }
+#document-body ul, #document-body ol { margin: 1em 0; padding-left: 1.55em; }
+#document-body li { margin: .38em 0; padding-left: .15em; }
+#document-body li > p { margin: .4em 0; }
+#document-body li > ul, #document-body li > ol { margin: .35em 0 .6em; }
+#document-body strong { color: #14161b; font-weight: 650; }
+#document-body hr { margin: 2.1em 0; border: 0; border-top: 1px solid var(--line); }
+#document-body blockquote { margin: 1.5em 0; padding: .25em 1.15em; border-left: 3px solid var(--blue); background: var(--surface); color: #4c4f57; }
+#document-body blockquote p { margin: .55em 0; }
+#document-body a { overflow-wrap: anywhere; }
+#document-body a:hover { text-decoration-thickness: 2px; }
+#document-body img { max-width: 100%; height: auto; }
+#document-body code { padding: .12em .32em; border: 1px solid #e7e7ea; border-radius: 3px; background: var(--surface); font-family: Consolas, "SFMono-Regular", "Liberation Mono", monospace; font-size: .82em; overflow-wrap: anywhere; }
+#document-body pre { position: relative; margin: 1.5em 0; padding: 44px 0 0; max-width: 100%; overflow: hidden; border: 1px solid var(--line); border-radius: 4px; background: var(--surface); line-height: 1.7; }
+#document-body pre > code { display: block; max-width: 100%; overflow-x: auto; padding: 0 19px 18px; border: 0; border-radius: 0; font-size: .79em; line-height: 1.75; white-space: pre; overflow-wrap: normal; tab-size: 2; }
+.copy-code { position: absolute; top: 7px; right: 8px; min-height: 28px; padding: 4px 9px; color: var(--muted); font-size: 11px; background: var(--paper); }
+.table-scroll { max-width: 100%; margin: 1.5em 0; overflow-x: auto; border: 1px solid var(--line); border-radius: 3px; scrollbar-width: thin; }
+#document-body table { width: 100%; min-width: 100%; border-collapse: collapse; font-size: .82em; line-height: 1.7; }
+#document-body th, #document-body td { min-width: 105px; padding: 12px 14px; border-right: 1px solid var(--line); border-bottom: 1px solid var(--line); text-align: left; vertical-align: top; }
+#document-body th { background: var(--surface); font-weight: 600; color: #30333a; }
+#document-body tr > :last-child { border-right: 0; }
+#document-body tbody tr:last-child td { border-bottom: 0; }
+#document-body tbody tr:hover { background: #fafafb; }
+#document-body th:first-child, #document-body td:first-child { min-width: 95px; }
+#document-body input[type="checkbox"] { width: 14px; height: 14px; margin: 0 7px 0 0; vertical-align: middle; accent-color: var(--blue); }
+#document-body details { margin: 1.15em 0; padding: 12px 16px; border: 1px solid var(--line); border-radius: 3px; }
+#document-body summary { color: var(--muted); font-size: .85em; cursor: pointer; }
+#document-body details[open] summary { margin-bottom: 12px; }
+.architecture { margin: 1.8em 0; }
+.diagram-viewport { max-width: 100%; overflow-x: auto; border: 1px solid var(--line); scrollbar-width: thin; }
+.diagram-viewport > svg { display: block; min-width: 720px; width: 100%; height: auto; background: var(--paper); }
+.architecture > svg { display: block; width: 100%; height: auto; max-width: 100%; border: 1px solid var(--line); background: var(--paper); }
+.architecture figcaption { margin-top: 8px; color: var(--muted); font-size: .75em; }
+.architecture details { font-size: .85em; }
+mark.reader-match { padding: 1px 0; background: #dbe4ff; color: inherit; border-radius: 2px; scroll-margin-top: 120px; }
+mark.reader-match.is-current { background: var(--blue); color: white; box-shadow: 0 0 0 2px var(--blue); }
+.search-block-current { outline: 1px solid #b2c5f9; outline-offset: 6px; }
+
+.toc-panel { position: sticky; top: var(--header-height); max-height: calc(100dvh - var(--header-height)); overflow-y: auto; padding: 38px 20px 30px 19px; border-left: 1px solid var(--line); scrollbar-width: thin; }
+.toc-panel > h2, #toc > h2, .toc-title { margin: 0 0 15px; color: var(--muted); font-size: 11px; font-weight: 600; letter-spacing: .08em; }
+#toc ul, #toc ol { list-style: none; margin: 0; padding: 0; }
+#toc a { display: block; margin: 2px 0; padding: 5px 0 5px 12px; border-left: 2px solid transparent; color: #6c6f78; font-size: 12px; line-height: 1.65; text-decoration: none; overflow-wrap: anywhere; }
+#toc a:hover { color: var(--blue); }
+#toc a[aria-current="location"], #toc a.is-active { color: var(--blue); border-left-color: var(--blue); }
+#toc a[data-level="3"], #toc .toc-h3 a, #toc a.toc-h3, #toc li.level-3 a { padding-left: 24px; font-size: 11px; }
+.document-pager { display: flex; justify-content: space-between; gap: 20px; margin-top: 60px; padding-top: 24px; border-top: 1px solid var(--line); }
+.document-pager a { flex: 1; min-width: 0; text-decoration: none; font-size: 14px; font-weight: 600; overflow-wrap: anywhere; }
+.document-pager a:last-child { text-align: right; }
+.document-pager a:only-child { text-align: left; }
+.document-pager small, .document-pager span { display: block; margin-bottom: 4px; font-size: 11px; font-weight: 400; color: var(--muted); }
+.page-footer { max-width: 1536px; margin: auto; padding: 22px 32px; border-top: 1px solid var(--line); color: var(--muted); font-size: 11px; background: var(--surface); }
+.back-top { position: fixed; right: 24px; bottom: 24px; z-index: 20; min-height: 40px; border-color: var(--line); background: var(--paper); font-size: 12px; }
+.sidebar-scrim { display: none; }
+
+@media (min-width: 1600px) {
+  .layout { border-left: 1px solid var(--line); border-right: 1px solid var(--line); }
+  .topbar { padding-left: max(32px, calc((100vw - 1472px) / 2)); padding-right: max(32px, calc((100vw - 1472px) / 2)); }
+}
+@media (max-width: 1190px) {
+  .layout { grid-template-columns: 225px minmax(0, 1fr); }
+  .toc-panel { display: none; }
+  #main { padding-left: 42px; padding-right: 42px; }
+}
+@media (max-width: 800px) {
+  :root { --header-height: 68px; }
+  .topbar { gap: 12px; padding: 13px 18px; }
+  .brand { font-size: 15px; }
+  .brand small, .brand span { font-size: 9px; }
+  .mobile-menu { display: inline-flex; align-items: center; justify-content: center; flex-shrink: 0; min-height: 34px; padding: 6px 9px; font-size: 12px; }
+  .layout { display: block; }
+  .sidebar { position: fixed; z-index: 50; left: 0; top: var(--header-height); bottom: 0; width: min(300px, calc(100vw - 44px)); height: calc(100dvh - var(--header-height)); padding: 24px 18px; transform: translateX(-101%); visibility: hidden; transition: transform .18s ease, visibility .18s; border-right: 1px solid var(--line); }
+  .menu-open .sidebar { transform: translateX(0); visibility: visible; }
+  .sidebar-scrim:not([hidden]) { display: block; position: fixed; z-index: 40; inset: var(--header-height) 0 0; background: rgb(18 21 30 / 28%); }
+  .toolbar { gap: 3px; }
+  .toolbar .font-smaller, .toolbar .font-reset, .toolbar .font-larger { min-width: 29px; min-height: 32px; padding: 4px 5px; font-size: 12px; }
+  .toolbar .print-button { display: none; }
+  #main { padding: 33px 28px 40px; }
+  .document-header h1 { font-size: 32px; }
+  .eyebrow { margin-bottom: 13px; }
+  #document-body { line-height: 1.9; }
+  #document-body h2 { margin-top: 2.3em; font-size: 1.4em; }
+  .page-footer { padding: 18px 28px; }
+  .back-top { right: 16px; bottom: 16px; }
+}
+@media (max-width: 460px) {
+  .topbar { gap: 8px; padding-left: 12px; padding-right: 12px; }
+  .brand { font-size: 13px; letter-spacing: -.035em; }
+  .brand small, .brand span { max-width: 125px; overflow: hidden; white-space: nowrap; text-overflow: ellipsis; }
+  .mobile-menu { padding: 5px 7px; font-size: 11px; }
+  #main { padding: 29px 20px 36px; }
+  .document-header h1 { font-size: 28px; }
+  .doc-meta { gap: 4px 12px; font-size: 11px; }
+  .reader-tools { margin-bottom: 28px; }
+  #search-input { flex-basis: 110px; font-size: 12px; }
+  #search-next, #search-clear { padding-left: 8px; padding-right: 8px; }
+  #document-body { font-size: calc(var(--reader-font-size) - 1px); }
+  #document-body pre > code { padding-left: 13px; padding-right: 13px; }
+  #document-body th, #document-body td { padding: 10px 12px; }
+  .document-pager { gap: 18px; margin-top: 40px; }
+  .document-pager a { font-size: 12px; }
+  .page-footer { padding-left: 20px; padding-right: 20px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { scroll-behavior: auto !important; transition: none !important; }
+}
+@media print {
+  @page { margin: 18mm 16mm; }
+  :root { --reader-font-size: 10.5pt !important; }
+  body { min-width: 0; background: white; color: black; }
+  .topbar, .sidebar, .toc-panel, .reader-tools, .document-pager, .back-top, .sidebar-scrim, .skip-link, .copy-code { display: none !important; }
+  .layout { display: block; max-width: none; border: 0; }
+  #main { padding: 0; }
+  .document-header h1 { font-size: 24pt; }
+  .document-header { margin-bottom: 24pt; }
+  .doc-meta { font-size: 8pt; }
+  #document-body { font-size: 10.5pt; line-height: 1.65; }
+  #document-body h2, #document-body h3, #document-body h4 { break-after: avoid; }
+  #document-body h2 { margin-top: 20pt; padding-top: 12pt; font-size: 15pt; }
+  #document-body a { color: inherit; text-decoration: underline; }
+  #document-body pre { padding: 9pt; overflow: visible; background: #f7f7f8; }
+  #document-body pre > code { padding: 0; overflow: visible; white-space: pre-wrap; overflow-wrap: anywhere; font-size: 8pt; }
+  .table-scroll { overflow: visible; border-radius: 0; }
+  #document-body table { table-layout: fixed; font-size: 7.5pt; }
+  #document-body th, #document-body td, #document-body th:first-child, #document-body td:first-child { min-width: 0; padding: 5pt; overflow-wrap: anywhere; }
+  #document-body thead { display: table-header-group; }
+  #document-body tr, .architecture { break-inside: avoid; }
+  #document-body details:not([open]) { display: none; }
+  .architecture > svg { max-height: 230mm; }
+  mark.reader-match, mark.reader-match.is-current { color: inherit; background: transparent; box-shadow: none; }
+  .search-block-current { outline: none; }
+  .page-footer { margin-top: 24pt; padding: 10pt 0 0; font-size: 8pt; background: white; }
+}
+</style>
+</head>
+<body>
+<a class="skip-link" href="#main">跳到正文</a>
+<header class="topbar">
+  <button type="button" class="mobile-menu" aria-controls="doc-sidebar" aria-expanded="false">文档目录</button>
+  <a class="brand" href="../../0001-douyin-ai-studio/00-%E6%96%87%E6%A1%A3%E5%AF%BC%E8%88%AA.html">AI 自媒体<span>开发文档与调研</span></a>
+  <div class="toolbar" aria-label="阅读设置">
+    <button type="button" class="font-smaller" aria-label="缩小正文字号" title="缩小字号">A−</button>
+    <button type="button" class="font-reset" aria-label="恢复默认正文字号" title="恢复字号">默认</button>
+    <button type="button" class="font-larger" aria-label="放大正文字号" title="放大字号">A+</button>
+    <button type="button" class="print-button">打印</button>
+  </div>
+</header>
+<div class="layout">
+  <aside id="doc-sidebar" class="sidebar" aria-label="全部文档"><section class="nav-group"><h2 class="group-title">开发文档</h2><nav class="doc-nav" aria-label="开发文档"><a data-document href="../../0001-douyin-ai-studio/00-%E6%96%87%E6%A1%A3%E5%AF%BC%E8%88%AA.html">00 文档导航</a><a data-document href="../../0001-douyin-ai-studio/01-%E4%BA%A7%E5%93%81%E9%9C%80%E6%B1%82%E6%96%87%E6%A1%A3.html">01 产品需求文档</a><a data-document href="../../0001-douyin-ai-studio/02-%E6%8A%80%E6%9C%AF%E9%80%89%E5%9E%8B%E5%AF%B9%E6%AF%94.html">02 技术选型对比</a><a data-document href="../../0001-douyin-ai-studio/03-%E6%80%BB%E4%BD%93%E6%8A%80%E6%9C%AF%E6%96%B9%E6%A1%88.html">03 总体技术方案</a><a data-document href="../../0001-douyin-ai-studio/04-%E6%8E%A5%E5%8F%A3%E5%A5%91%E7%BA%A6%E4%B8%8E%E6%95%B0%E6%8D%AE%E5%AD%97%E5%85%B8.html">04 接口契约与数据字典</a><a data-document href="../../0001-douyin-ai-studio/05-%E5%BC%80%E5%8F%91%E5%AE%9E%E6%96%BD%E8%AE%A1%E5%88%92.html">05 开发实施计划</a><a data-document href="../../0001-douyin-ai-studio/06-%E9%AA%8C%E6%94%B6%E6%A0%87%E5%87%86%E4%B8%8E%E6%B5%8B%E8%AF%95%E6%96%B9%E6%A1%88.html">06 验收标准与测试方案</a><a data-document href="../../0001-douyin-ai-studio/07-%E6%8A%80%E6%9C%AF%E9%80%89%E5%9E%8B%E4%B8%8E%E5%AE%9E%E6%B5%8B%E6%B5%81%E7%A8%8B.html">07 技术选型与实测流程</a><a data-document href="../../0001-douyin-ai-studio/08-%E7%AB%AF%E5%88%B0%E7%AB%AF%E6%8A%80%E6%9C%AF%E6%B5%81%E7%A8%8B%E4%B8%8E%E6%A8%A1%E5%9E%8B%E9%80%89%E5%9E%8B%E5%9C%B0%E5%9B%BE.html">08 端到端技术流程与模型选型地图</a><a data-document href="../../0001-douyin-ai-studio/09-%E6%A8%A1%E5%9E%8B%E9%80%89%E5%9E%8B%E5%86%B3%E7%AD%96%E4%B8%8E%E6%8E%A5%E5%85%A5%E6%96%B9%E6%A1%88.html">09 模型选型决策与接入方案</a><a data-document href="../../0001-douyin-ai-studio/10-Agent%E7%BC%96%E6%8E%92%E9%80%89%E5%9E%8B%E4%B8%8E%E6%95%B4%E4%BD%93%E6%9E%B6%E6%9E%84.html">10 Agent编排选型与整体架构</a></nav></section><section class="nav-group"><h2 class="group-title">本轮选型试验</h2><nav class="doc-nav" aria-label="本轮选型试验"><a data-document href="01-%E9%80%89%E5%9E%8B%E8%AF%95%E9%AA%8C%E6%96%B9%E6%A1%88.html">01 选型试验方案</a><a data-document href="02-%E9%A6%96%E8%BD%AE%E5%AE%9E%E6%B5%8B%E7%BB%93%E6%9E%9C.html">02 首轮实测结果</a><a data-document href="03-MuseTalk%E4%BA%91%E7%AB%AF%E9%83%A8%E7%BD%B2%E4%B8%8E%E8%AF%95%E9%AA%8C%E6%96%B9%E6%A1%88.html">03 MuseTalk云端部署与试验方案</a><a data-document href="04-MuseTalk%E9%83%A8%E7%BD%B2%E4%B8%8E%E9%A6%96%E6%B5%8B%E7%BB%93%E6%9E%9C.html">04 MuseTalk部署与首测结果</a><a data-document href="05-OmniHuman%E5%BC%80%E9%80%9A%E5%90%8E%E5%AE%9E%E6%B5%8B%E7%BB%93%E6%9E%9C.html" aria-current="page">05 OmniHuman开通后实测结果</a><a data-document href="06-%E4%BA%BA%E7%89%A9B%E8%A1%A8%E6%83%85%E5%8A%A8%E4%BD%9C%E6%94%B9%E5%96%84%E5%AE%9E%E6%B5%8B.html">06 人物B表情动作改善实测</a><a data-document href="MuseTalk%E5%AE%98%E6%96%B9%E8%83%BD%E5%8A%9B%E6%A0%B8%E9%AA%8C.html">MuseTalk官方能力核验</a><a data-document href="%E6%B5%8B%E8%AF%95%E7%B4%A0%E6%9D%90%E6%8E%A5%E5%8F%A3%E6%A0%B8%E9%AA%8C.html">测试素材接口核验</a><a data-document href="%E7%81%AB%E5%B1%B1%E5%80%99%E9%80%89%E6%A0%B8%E9%AA%8C.html">火山候选核验</a><a data-document href="%E9%98%BF%E9%87%8C%E5%80%99%E9%80%89%E6%A0%B8%E9%AA%8C.html">阿里候选核验</a></nav></section><section class="nav-group"><h2 class="group-title">已选模型接入核验</h2><nav class="doc-nav" aria-label="已选模型接入核验"><a data-document href="../02-%E5%B7%B2%E9%80%89%E6%A8%A1%E5%9E%8B/%E5%AE%98%E6%96%B9%E6%96%87%E6%9C%AC%E4%B8%8E%E8%AF%AD%E9%9F%B3%E6%8E%A5%E5%8F%A3%E6%A0%B8%E9%AA%8C.html">官方文本与语音接口核验</a></nav></section><section class="nav-group"><h2 class="group-title">人物与音色候选</h2><nav class="doc-nav" aria-label="人物与音色候选"><a data-document href="../03-%E4%BA%BA%E7%89%A9%E4%B8%8E%E9%9F%B3%E8%89%B2/01-%E9%A6%96%E8%BD%AE%E5%80%99%E9%80%89%E4%B8%8E%E9%80%89%E6%8B%A9%E8%AF%B4%E6%98%8E.html">01 首轮候选与选择说明</a><a data-document href="../03-%E4%BA%BA%E7%89%A9%E4%B8%8E%E9%9F%B3%E8%89%B2/02-%E4%BA%BA%E7%89%A9B%E4%B8%8E%E9%9F%B3%E8%89%B23%E5%AE%9A%E7%89%88%E8%AE%B0%E5%BD%95.html">02 人物B与音色3定版记录</a></nav></section><section class="nav-group"><h2 class="group-title">调研资料</h2><nav class="doc-nav" aria-label="调研资料"><a data-document href="../../research/01-%E4%BA%A7%E5%93%81%E5%BD%A2%E6%80%81%E4%B8%8E%E6%8A%96%E9%9F%B3%E7%94%9F%E6%80%81.html">01 产品形态与抖音生态</a><a data-document href="../../research/02-%E4%BA%BA%E7%89%A9%E4%B8%80%E8%87%B4%E6%80%A7%E7%94%9F%E6%88%90.html">02 人物一致性生成</a><a data-document href="../../research/03-%E6%95%B0%E5%AD%97%E4%BA%BA%E5%8F%A3%E6%92%AD%E9%80%89%E5%9E%8B.html">03 数字人口播选型</a><a data-document href="../../research/04-TTS%E9%9F%B3%E8%89%B2%E4%B8%8E%E5%86%85%E5%AE%B9%E7%94%9F%E6%88%90%E8%B4%A8%E6%A3%80.html">04 TTS音色与内容生成质检</a><a data-document href="../../research/05-%E8%A7%86%E9%A2%91%E5%90%8E%E5%A4%84%E7%90%86%E5%8F%91%E5%B8%83%E4%B8%8E%E5%90%88%E8%A7%84.html">05 视频后处理发布与合规</a><a data-document href="../../research/06-%E5%86%B3%E7%AD%96%E6%B1%87%E6%80%BB.html">06 决策汇总</a></nav></section>
+    <p class="sidebar-note">11 份开发文档<br>10 份本轮选型试验<br>1 份已选模型接入核验<br>2 份人物与音色候选<br>6 份调研资料</p>
+  </aside>
+  <main id="main" tabindex="-1">
+    <header class="document-header">
+      <p class="eyebrow">本轮选型试验 / 05</p>
+      <h1>OmniHuman1.5 开通后实测结果</h1>
+      <div class="doc-meta"><span>2026-09-21 核验记录</span><span>5 个章节</span><a href="05-OmniHuman%E5%BC%80%E9%80%9A%E5%90%8E%E5%AE%9E%E6%B5%8B%E7%BB%93%E6%9E%9C.md">Markdown 原文</a></div>
+      
+    </header>
+    <div class="reader-tools">
+      <form id="search-form" role="search">
+        <label class="sr-only" for="search-input">搜索本文</label>
+        <input id="search-input" type="search" placeholder="搜索本文，按 Enter 跳转" autocomplete="off">
+        <button id="search-next" type="submit">下一处</button>
+        <button id="search-clear" type="button">清除</button>
+        <span id="search-status" role="status" aria-live="polite"></span>
+      </form>
+    </div>
+    <article id="document-body">
+<p>日期：2026-09-21 · 实验：TH-COMP-003 · 技术选择：<strong>UNSELECTED</strong>。</p>
+<p>用户开通 OmniHuman1.5 后，同一人物图、同一音频和相同参数的新请求已生成真实原片。之前两轮权限失败证据保留。本次仅新增一个火山生成任务，没有重新生图、合成 TTS、生成阿里/MuseTalk 视频或向抖音发布。</p>
+<ul>
+<li><a href="../../../experiments/%E4%B8%89%E6%96%B9%E6%A1%88%E5%8F%A3%E6%92%AD%E5%AF%B9%E6%AF%94/TH-COMP-003/%E4%B8%89%E6%96%B9%E6%A1%88%E6%95%B0%E5%AD%97%E4%BA%BA%E5%8F%A3%E6%92%AD%E5%AF%B9%E6%AF%94%E6%8A%A5%E5%91%8A.html">三方案可播放对比报告</a></li>
+<li><a href="../../../experiments/%E4%B8%89%E6%96%B9%E6%A1%88%E5%8F%A3%E6%92%AD%E5%AF%B9%E6%AF%94/TH-COMP-003/%E7%81%AB%E5%B1%B1%E5%8F%A3%E6%92%AD%E5%8E%9F%E7%89%87.mp4">火山原片</a></li>
+<li><a href="../../../experiments/%E4%B8%89%E6%96%B9%E6%A1%88%E5%8F%A3%E6%92%AD%E5%AF%B9%E6%AF%94/TH-COMP-003/%E7%94%9F%E6%88%90%E7%BB%93%E6%9E%9C.json">生成结果与时间记录</a></li>
+<li><a href="../../../experiments/%E4%B8%89%E6%96%B9%E6%A1%88%E5%8F%A3%E6%92%AD%E5%AF%B9%E6%AF%94/TH-COMP-003/%E7%81%AB%E5%B1%B1%E5%AA%92%E4%BD%93%E6%B5%8B%E9%87%8F.json">媒体测量与音轨核验</a></li>
+</ul>
+<h2 id="1-权限变化与调用证据">1. 权限变化与调用证据</h2>
+<p>开通前 TH-COMP-002 返回 HTTP401/code50400，无任务 ID。用户随后明确告知“刚刚开通了OmniHuman1.5”；本次新请求返回 HTTP200/code10000，取得任务 ID，最终 CVGetResult 返回 <code>done</code> 及原片 URL。</p>
+<p>程序没有修改凭据；新旧请求摘要相同。这支持“本次接口访问在开通具体服务后恢复”的判断，不需要再把错误笼统归因于密钥填错。不能仅据此推导账号所有火山产品权限均已具备。</p>
+<ul>
+<li>req_key：<code>jimeng_realman_avatar_picture_omni_v15</code>。</li>
+<li>参数：<code>output_resolution=720</code>、<code>pe_fast_mode=true</code>、<code>seed=20260921</code>。</li>
+<li>任务 ID：<code>eec24b86b5c211f197771c34da482ebc</code>。</li>
+<li>提交 request_id：<code>20260921214703E552A5181B29561D4D7A</code>。</li>
+<li>最终查询 request_id：<code>202609212150235B37B0CEDEDBC7D69B03</code>。</li>
+<li>生成提交 1 次，查询 11 次，无自动重复提交。</li>
+</ul>
+<p>原图/音频 URL 再次下载后与冻结输入摘要一致。查询返回的 HTTPS 媒体主机为 <code>v26-aiop.aigc-cloud.com</code>，旧下载白名单未覆盖。仅对本次成功回执中的精确 URL 放行下载，保留公网地址检查、TLS 校验、下载大小限制和文件摘要；没有放开任意域名，也没有修改旧轮白名单。见 <a href="../../../experiments/%E4%B8%89%E6%96%B9%E6%A1%88%E5%8F%A3%E6%92%AD%E5%AF%B9%E6%AF%94/TH-COMP-003/%E7%81%AB%E5%B1%B1%E5%8E%9F%E7%89%87%E6%9D%A5%E6%BA%90.json">下载来源记录</a>。</p>
+<h2 id="2-实际规格">2. 实际规格</h2>
+<div aria-label="可横向滚动的表格" class="table-scroll" tabindex="0"><table>
+<thead>
+<tr>
+<th>指标</th>
+<th>实测结果</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>输入人物</td>
+<td>原 PNG 1080×1920，SHA256 <code>6531d41f561927836d496c169e8c53751c93243aad9fb0d8e624ad4c73e4f135</code></td>
+</tr>
+<tr>
+<td>输入 TTS</td>
+<td>原 WAV 9.36 秒、24kHz 单声道，SHA256 <code>3aa5637692cfb333e0594d949bae2522cd44f698fe40c87718c96163408411ba</code></td>
+</tr>
+<tr>
+<td>请求档位</td>
+<td>720P 快速模式</td>
+</tr>
+<tr>
+<td>实际尺寸</td>
+<td><strong>704×1248</strong>；不能写成 720×1280，也不是最终 1080×1920 成片</td>
+</tr>
+<tr>
+<td>视频</td>
+<td>H.264，25 fps，237 帧，视频轨 9.48 秒</td>
+</tr>
+<tr>
+<td>音频</td>
+<td>AAC，音频轨 9.36 秒</td>
+</tr>
+<tr>
+<td>完整解码</td>
+<td>FFmpeg <code>-xerror</code> 返回 0，无错误输出</td>
+</tr>
+<tr>
+<td>帧时间戳</td>
+<td>237 帧，从 0.00 到 9.44 秒，帧间隔约 0.04 秒</td>
+</tr>
+<tr>
+<td>原片 SHA256</td>
+<td><code>7119a042efac8d7c73cb387ed2cb499de187745b67eac2f928a18d501b52f80b</code></td>
+</tr>
+</tbody>
+</table></div>
+<p>原始视频未做增强、重编码、字幕合成或音轨替换。9.48 秒画面比 9.36 秒音轨长 120 毫秒，这是轨道时长差，<strong>不等于嘴型误差</strong>。</p>
+<h2 id="3-耗时与估算费用">3. 耗时与估算费用</h2>
+<ul>
+<li>客户端提交开始：北京时间 21:46:59.971。</li>
+<li>首次查询到成功：北京时间 21:50:21.417。</li>
+<li>观测提交至成功：<strong>201.44559 秒</strong>，不含下载与测量。</li>
+<li>上一次未完成查询开始到成功查询结束的间隔为 <strong>17.052141 秒</strong>；完成时点在本地观测下约落于提交后 184.393449～201.44559 秒。接口没有返回服务端完成时间，不能把 201.45 秒称为纯模型推理时长。</li>
+</ul>
+<p>公开参考价为 1 元/生成秒，本次接口回执没有计费用量字段。按实测视频轨 <code>9.48 × 1</code> 得到名义估算 <strong>9.48 元</strong>；实际计费粒度、折扣及账单未知。新账本预留 20 元，<strong>预留不是扣费</strong>，没有挪用或重置此前实验账本。</p>
+<p>三方案计时边界不同：阿里 163.388 秒来自服务端提交至完成；MuseTalk 99 秒是加载、推理、融合、编码的整个进程；火山 201.45 秒是客户端提交至成功查询。比较报告逐项标注，不将其称为统一硬件/统一过程的性能排名。</p>
+<h2 id="4-画面与音轨观察">4. 画面与音轨观察</h2>
+<p><img alt="火山原图和五个真实关键帧" src="../../../experiments/%E4%B8%89%E6%96%B9%E6%A1%88%E5%8F%A3%E6%92%AD%E5%AF%B9%E6%AF%94/TH-COMP-003/%E7%81%AB%E5%B1%B1%E5%85%B3%E9%94%AE%E5%B8%A7%E5%AF%B9%E7%85%A7.jpg"/></p>
+<p>关键帧位于 0.948、2.844、4.740、6.636、8.532 秒。人物的黑色齐肩发、深蓝西装、浅灰背景与脸部外观总体接近原图，可见嘴部、表情和轻微头部姿态变化。脸部皮肤更平滑；五帧未见新增主体或明显缺肢，但不能证明全片身份、牙齿和唇缘都无瞬时伪影。</p>
+<p>将输入与输出音轨解码成 24kHz 单声道 PCM 后，全波形最佳对齐为 <strong>0 ms</strong>，重叠区 Pearson 相关系数 <strong>0.99996223</strong>，未发现参考音频首尾未覆盖。AAC 解码样本可能含编码填充；此测量是音轨保持证据，不能替代完整试听，也不是嘴型同步测量。</p>
+<p>详细观察见 <a href="../../../experiments/%E4%B8%89%E6%96%B9%E6%A1%88%E5%8F%A3%E6%92%AD%E5%AF%B9%E6%AF%94/TH-COMP-003/%E7%81%AB%E5%B1%B1%E8%B4%A8%E9%87%8F%E8%A7%82%E5%AF%9F.json">火山质量观察</a>。完整人类视听评审尚未进行，质量状态仍为 NOT_REVIEWED / NOT_ACCEPTED。</p>
+<h2 id="5-对选型的影响">5. 对选型的影响</h2>
+<p>三家目前都有同图同音频的真实短片，可以开始三路效果对照。火山接入阻塞在本次任务中已经解除，所有生产选型仍保持 UNSELECTED。</p>
+<p>需继续比较口型音素、牙齿/唇缘、身份、自然表情动作、声音完整性和每条合格视频成本；之后再决定长稿与变体实验。当前 MuseTalk 单图动作不足，动作母版组合单列，不混入同图基线。</p>
+<p>供应商回执 <code>aigc_meta_tagged=false</code> 原样留存，未删除或加工原片元数据；这不能据以宣称抖音标识要求已满足。最终发布包及平台标识另行验收。</p>
+</article>
+    <nav class="document-pager" aria-label="相邻文档"><a rel="prev" href="04-MuseTalk%E9%83%A8%E7%BD%B2%E4%B8%8E%E9%A6%96%E6%B5%8B%E7%BB%93%E6%9E%9C.html"><span>上一篇</span>04-MuseTalk部署与首测结果</a><a rel="next" href="06-%E4%BA%BA%E7%89%A9B%E8%A1%A8%E6%83%85%E5%8A%A8%E4%BD%9C%E6%94%B9%E5%96%84%E5%AE%9E%E6%B5%8B.html"><span>下一篇</span>06-人物B表情动作改善实测</a></nav>
+    <footer class="page-footer">与同名 Markdown 对应的阅读版 · 可离线阅读与打印</footer>
+  </main>
+  <aside class="toc-panel" aria-label="本文章节"><p class="group-title">本页目录</p><nav id="toc"><a class="toc-h2" href="#1-%E6%9D%83%E9%99%90%E5%8F%98%E5%8C%96%E4%B8%8E%E8%B0%83%E7%94%A8%E8%AF%81%E6%8D%AE">1. 权限变化与调用证据</a><a class="toc-h2" href="#2-%E5%AE%9E%E9%99%85%E8%A7%84%E6%A0%BC">2. 实际规格</a><a class="toc-h2" href="#3-%E8%80%97%E6%97%B6%E4%B8%8E%E4%BC%B0%E7%AE%97%E8%B4%B9%E7%94%A8">3. 耗时与估算费用</a><a class="toc-h2" href="#4-%E7%94%BB%E9%9D%A2%E4%B8%8E%E9%9F%B3%E8%BD%A8%E8%A7%82%E5%AF%9F">4. 画面与音轨观察</a><a class="toc-h2" href="#5-%E5%AF%B9%E9%80%89%E5%9E%8B%E7%9A%84%E5%BD%B1%E5%93%8D">5. 对选型的影响</a></nav></aside>
+</div>
+<button type="button" class="sidebar-scrim" aria-label="关闭文档目录" hidden></button>
+<button type="button" class="back-top" aria-label="返回顶部">顶部</button>
+<script>(() => {
+  'use strict';
+
+  function initializeReader() {
+    const article = document.getElementById('document-body');
+    if (!article) return;
+    const root = document.documentElement;
+    const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
+    const scrollBehavior = () => reducedMotion.matches ? 'instant' : 'smooth';
+
+    // Local files and privacy settings can deny storage; controls remain usable.
+    const fontKey = 'document-reader-font-size';
+    let fontSize = 17;
+    try {
+      const savedSize = Number(localStorage.getItem(fontKey));
+      if (Number.isFinite(savedSize) && savedSize >= 14 && savedSize <= 22) fontSize = savedSize;
+    } catch (_) { /* Storage is optional. */ }
+    const smaller = document.querySelector('.font-smaller');
+    const reset = document.querySelector('.font-reset');
+    const larger = document.querySelector('.font-larger');
+    function setFontSize(value) {
+      fontSize = Math.max(14, Math.min(22, value));
+      root.style.setProperty('--reader-font-size', `${fontSize}px`);
+      if (smaller) smaller.disabled = fontSize === 14;
+      if (larger) larger.disabled = fontSize === 22;
+      if (reset) reset.title = `恢复默认字号（当前 ${fontSize}px）`;
+      try { localStorage.setItem(fontKey, String(fontSize)); } catch (_) { /* Optional. */ }
+    }
+    setFontSize(fontSize);
+    smaller?.addEventListener('click', () => setFontSize(fontSize - 1));
+    reset?.addEventListener('click', () => setFontSize(17));
+    larger?.addEventListener('click', () => setFontSize(fontSize + 1));
+    document.querySelector('.print-button')?.addEventListener('click', () => window.print());
+
+    const menu = document.querySelector('.mobile-menu');
+    const sidebar = document.getElementById('doc-sidebar');
+    const scrim = document.querySelector('.sidebar-scrim');
+    const mobileWidth = window.matchMedia('(max-width: 800px)');
+    function setMenu(open, returnFocus = false) {
+      const visible = open && mobileWidth.matches;
+      document.body.classList.toggle('menu-open', visible);
+      menu?.setAttribute('aria-expanded', String(visible));
+      if (scrim) scrim.hidden = !visible;
+      if (visible) {
+        sidebar?.querySelector('[aria-current="page"], a, button')?.focus();
+      } else if (returnFocus) menu?.focus();
+    }
+    menu?.addEventListener('click', () => setMenu(!document.body.classList.contains('menu-open')));
+    scrim?.addEventListener('click', () => setMenu(false, true));
+    sidebar?.addEventListener('click', (event) => {
+      if (event.target.closest('a')) setMenu(false);
+    });
+    mobileWidth.addEventListener('change', () => setMenu(false));
+    document.addEventListener('keydown', (event) => {
+      if (!document.body.classList.contains('menu-open')) return;
+      if (event.key === 'Escape') {
+        event.preventDefault();
+        setMenu(false, true);
+      }
+      if (event.key === 'Tab') {
+        const focusable = [menu, ...sidebar.querySelectorAll('a[href], button:not([disabled]), [tabindex="0"]')].filter(Boolean);
+        const first = focusable[0];
+        const last = focusable[focusable.length - 1];
+        if (event.shiftKey && document.activeElement === first) {
+          event.preventDefault();
+          last?.focus();
+        } else if (!event.shiftKey && document.activeElement === last) {
+          event.preventDefault();
+          first?.focus();
+        }
+      }
+    });
+    setMenu(false);
+
+    const searchForm = document.getElementById('search-form');
+    const searchInput = document.getElementById('search-input');
+    const searchNext = document.getElementById('search-next');
+    const searchClear = document.getElementById('search-clear');
+    const searchStatus = document.getElementById('search-status');
+    let searchResults = [];
+    let currentResult = -1;
+    let currentQuery = '';
+    let searchTimer;
+
+    function clearHighlights() {
+      article.querySelectorAll('mark.reader-match').forEach((mark) => {
+        const parent = mark.parentNode;
+        mark.replaceWith(document.createTextNode(mark.textContent));
+        parent.normalize();
+      });
+      article.querySelectorAll('.search-block-current').forEach((block) => block.classList.remove('search-block-current'));
+      searchResults = [];
+      currentResult = -1;
+    }
+
+    function showResult(index, shouldScroll) {
+      searchResults.forEach((result) => {
+        result.block.classList.remove('search-block-current');
+        result.marks.forEach((mark) => mark.classList.remove('is-current'));
+      });
+      currentResult = (index + searchResults.length) % searchResults.length;
+      const result = searchResults[currentResult];
+      result.block.classList.add('search-block-current');
+      result.marks.forEach((mark) => mark.classList.add('is-current'));
+      if (searchStatus) searchStatus.textContent = `第 ${currentResult + 1} / ${searchResults.length} 处匹配 · Enter 下一处`;
+      if (shouldScroll) {
+        let container = result.block.parentElement;
+        while (container && container !== article) {
+          if (container.tagName === 'DETAILS') container.open = true;
+          container = container.parentElement;
+        }
+        result.marks[0].scrollIntoView({ behavior: scrollBehavior(), block: 'center', inline: 'nearest' });
+      }
+    }
+
+    function runSearch(shouldScroll = false) {
+      clearTimeout(searchTimer);
+      clearHighlights();
+      const query = searchInput?.value.trim() || '';
+      currentQuery = query;
+      if (searchClear) searchClear.disabled = !query;
+      if (!query) {
+        if (searchStatus) searchStatus.textContent = '';
+        if (searchNext) searchNext.disabled = true;
+        return;
+      }
+      const queryLower = query.toLocaleLowerCase();
+      const blockResults = new Map();
+      // Walk original text nodes, preserving links, emphasis, tables and code.
+      const walker = document.createTreeWalker(article, NodeFilter.SHOW_TEXT, {
+        acceptNode(node) {
+          if (!node.nodeValue.trim()) return NodeFilter.FILTER_REJECT;
+          if (node.parentElement.closest('script, style, button, svg, mark, [aria-hidden="true"]')) return NodeFilter.FILTER_REJECT;
+          return node.nodeValue.toLocaleLowerCase().includes(queryLower) ? NodeFilter.FILTER_ACCEPT : NodeFilter.FILTER_REJECT;
+        }
+      });
+      const nodes = [];
+      while (walker.nextNode()) nodes.push(walker.currentNode);
+      nodes.forEach((node) => {
+        const original = node.nodeValue;
+        const normalized = original.toLocaleLowerCase();
+        const block = node.parentElement.closest('p, li, td, th, h2, h3, h4, h5, h6, pre, summary, figcaption') || node.parentElement;
+        let result = blockResults.get(block);
+        if (!result) {
+          result = { block, marks: [] };
+          blockResults.set(block, result);
+        }
+        const fragment = document.createDocumentFragment();
+        let position = 0;
+        let matchPosition;
+        while ((matchPosition = normalized.indexOf(queryLower, position)) !== -1) {
+          fragment.append(document.createTextNode(original.slice(position, matchPosition)));
+          const mark = document.createElement('mark');
+          mark.className = 'reader-match';
+          mark.textContent = original.slice(matchPosition, matchPosition + query.length);
+          fragment.append(mark);
+          result.marks.push(mark);
+          position = matchPosition + query.length;
+        }
+        fragment.append(document.createTextNode(original.slice(position)));
+        node.replaceWith(fragment);
+      });
+      searchResults = [...blockResults.values()];
+      if (searchNext) searchNext.disabled = !searchResults.length;
+      if (!searchResults.length) {
+        if (searchStatus) searchStatus.textContent = '未找到匹配内容';
+      } else showResult(0, shouldScroll);
+    }
+
+    searchInput?.addEventListener('input', (event) => {
+      if (event.isComposing) return;
+      clearTimeout(searchTimer);
+      searchTimer = setTimeout(() => runSearch(false), 180);
+    });
+    searchInput?.addEventListener('compositionend', () => {
+      clearTimeout(searchTimer);
+      searchTimer = setTimeout(() => runSearch(false), 180);
+    });
+    searchForm?.addEventListener('submit', (event) => {
+      event.preventDefault();
+      const queryChanged = currentQuery !== searchInput.value.trim();
+      if (queryChanged) runSearch(true);
+      else if (searchResults.length) showResult(currentResult + 1, true);
+    });
+    if (searchNext && searchNext.type !== 'submit') {
+      searchNext.addEventListener('click', () => {
+        if (currentQuery !== searchInput.value.trim()) runSearch(true);
+        else if (searchResults.length) showResult(currentResult + 1, true);
+      });
+    }
+    function resetSearch() {
+      clearTimeout(searchTimer);
+      if (searchInput) searchInput.value = '';
+      currentQuery = '';
+      clearHighlights();
+      if (searchStatus) searchStatus.textContent = '';
+      if (searchNext) searchNext.disabled = true;
+      if (searchClear) searchClear.disabled = true;
+    }
+    searchClear?.addEventListener('click', (event) => {
+      event.preventDefault();
+      resetSearch();
+      searchInput?.focus();
+    });
+    searchInput?.addEventListener('keydown', (event) => {
+      if (event.key === 'Escape' && !event.isComposing) {
+        event.preventDefault();
+        resetSearch();
+      }
+      if (event.key === 'Enter' && event.isComposing) event.preventDefault();
+    });
+    resetSearch();
+
+    async function copyText(text) {
+      try {
+        if (navigator.clipboard?.writeText) {
+          await navigator.clipboard.writeText(text);
+          return true;
+        }
+      } catch (_) { /* File URLs may reject the modern Clipboard API. */ }
+      const previousFocus = document.activeElement;
+      const selection = window.getSelection();
+      const savedRanges = selection ? Array.from({ length: selection.rangeCount }, (_, i) => selection.getRangeAt(i).cloneRange()) : [];
+      const field = document.createElement('textarea');
+      field.value = text;
+      field.readOnly = true;
+      field.style.cssText = 'position:fixed;left:-9999px;top:0;opacity:0;font-size:16px';
+      document.body.append(field);
+      field.select();
+      let copied = false;
+      try { copied = document.execCommand('copy'); } catch (_) { /* Show the failure state. */ }
+      field.remove();
+      if (selection) {
+        selection.removeAllRanges();
+        savedRanges.forEach((range) => selection.addRange(range));
+      }
+      previousFocus?.focus({ preventScroll: true });
+      return copied;
+    }
+
+    article.querySelectorAll('pre').forEach((pre) => {
+      const code = pre.querySelector('code');
+      if (!code || pre.querySelector('.copy-code')) return;
+      const button = document.createElement('button');
+      button.type = 'button';
+      button.className = 'copy-code';
+      button.textContent = '复制代码';
+      button.setAttribute('aria-label', '复制代码');
+      button.setAttribute('aria-live', 'polite');
+      pre.append(button);
+      let labelTimer;
+      button.addEventListener('click', async () => {
+        clearTimeout(labelTimer);
+        const copied = await copyText(code.textContent);
+        button.textContent = copied ? '已复制' : '请选中后复制';
+        labelTimer = setTimeout(() => { button.textContent = '复制代码'; }, 2200);
+      });
+    });
+
+    // Scroll-spy works without observers and avoids changing browser history.
+    const tocLinks = Array.from(document.querySelectorAll('#toc a[href^="#"]'));
+    const sections = tocLinks.map((link) => {
+      let id;
+      try { id = decodeURIComponent(link.getAttribute('href').slice(1)); } catch (_) { return null; }
+      const heading = document.getElementById(id);
+      return heading ? { link, heading } : null;
+    }).filter(Boolean);
+    let activeLink = null;
+    const backTop = document.querySelector('.back-top');
+    let framePending = false;
+    function updateScrollState() {
+      framePending = false;
+      if (backTop) backTop.hidden = window.scrollY < 480;
+      let active = sections[0];
+      const header = document.querySelector('.topbar');
+      const threshold = (header?.getBoundingClientRect().height || 76) + 38;
+      for (const section of sections) {
+        if (section.heading.getBoundingClientRect().top <= threshold) active = section;
+        else break;
+      }
+      if (!active || active.link === activeLink) return;
+      activeLink?.removeAttribute('aria-current');
+      activeLink?.classList.remove('is-active');
+      activeLink = active.link;
+      activeLink.setAttribute('aria-current', 'location');
+      activeLink.classList.add('is-active');
+      const panel = document.querySelector('.toc-panel');
+      if (panel && panel.clientHeight) {
+        const linkRect = activeLink.getBoundingClientRect();
+        const panelRect = panel.getBoundingClientRect();
+        if (linkRect.top < panelRect.top + 25 || linkRect.bottom > panelRect.bottom - 25) {
+          panel.scrollTop += linkRect.top - panelRect.top - panel.clientHeight / 3;
+        }
+      }
+    }
+    function queueScrollUpdate() {
+      if (!framePending) {
+        framePending = true;
+        requestAnimationFrame(updateScrollState);
+      }
+    }
+    window.addEventListener('scroll', queueScrollUpdate, { passive: true });
+    window.addEventListener('resize', queueScrollUpdate, { passive: true });
+    backTop?.addEventListener('click', () => window.scrollTo({ top: 0, behavior: scrollBehavior() }));
+    updateScrollState();
+  }
+
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', initializeReader, { once: true });
+  else initializeReader();
+})();
+</script>
+</body>
+</html>

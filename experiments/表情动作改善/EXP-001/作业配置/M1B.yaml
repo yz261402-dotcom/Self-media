@@ -1,0 +1,8 @@
+{
+  "EXP001_M1": {
+    "video_path": "/root/autodl-tmp/avatar-motion/EXP-001/inputs/person_B_even.png",
+    "audio_path": "/root/autodl-tmp/avatar-motion/EXP-001/inputs/voice3.wav",
+    "result_name": "M1B_original.mp4",
+    "bbox_shift": 0
+  }
+}

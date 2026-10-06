@@ -1,0 +1,93 @@
+{
+  "checked_at": "2026-09-22T02:15:34.845080+00:00",
+  "route": "M2",
+  "selection_status": "SELECTED_BY_USER",
+  "production_acceptance": "PENDING_ACCEPTANCE",
+  "report_tests_passed": 4,
+  "sample_hash_verified": true,
+  "original_metrics_unchanged": true,
+  "fixed_presenter_manifest_unchanged": true,
+  "html_pages_checked": 30,
+  "local_references_checked": 1262,
+  "new_broken_links": [],
+  "existing_missing_early_experiment_references": [
+    [
+      "specs\\0001-douyin-ai-studio\\08-端到端技术流程与模型选型地图.html",
+      "../../experiments/%E6%95%B0%E5%AD%97%E4%BA%BA%E5%8F%A3%E6%92%AD%E9%80%89%E5%9E%8B/inputs/%E6%B5%8B%E8%AF%95%E4%BA%BA%E7%89%A9.png"
+    ],
+    [
+      "specs\\0001-douyin-ai-studio\\08-端到端技术流程与模型选型地图.html",
+      "../../experiments/%E6%95%B0%E5%AD%97%E4%BA%BA%E5%8F%A3%E6%92%AD%E9%80%89%E5%9E%8B/runs/TH-AB-001/image/request.json"
+    ],
+    [
+      "specs\\selection\\01-数字人口播\\01-选型试验方案.html",
+      "../../../experiments/%E6%95%B0%E5%AD%97%E4%BA%BA%E5%8F%A3%E6%92%AD%E9%80%89%E5%9E%8B/%E5%87%86%E5%A4%87%E6%A3%80%E6%9F%A5.py"
+    ],
+    [
+      "specs\\selection\\01-数字人口播\\01-选型试验方案.html",
+      "../../../experiments/%E6%95%B0%E5%AD%97%E4%BA%BA%E5%8F%A3%E6%92%AD%E9%80%89%E5%9E%8B/%E6%9C%AC%E8%BD%AE%E6%8E%88%E6%9D%83.json"
+    ],
+    [
+      "specs\\selection\\01-数字人口播\\01-选型试验方案.html",
+      "../../../experiments/%E6%95%B0%E5%AD%97%E4%BA%BA%E5%8F%A3%E6%92%AD%E9%80%89%E5%9E%8B/runs/TH-AB-001/B/%E5%8E%9F%E7%89%87.mp4"
+    ],
+    [
+      "specs\\selection\\01-数字人口播\\02-首轮实测结果.html",
+      "../../../experiments/%E6%95%B0%E5%AD%97%E4%BA%BA%E5%8F%A3%E6%92%AD%E9%80%89%E5%9E%8B/runs/TH-AB-001/%E6%A0%B7%E7%89%87%E9%A2%84%E8%A7%88.html"
+    ],
+    [
+      "specs\\selection\\01-数字人口播\\02-首轮实测结果.html",
+      "../../../experiments/%E6%95%B0%E5%AD%97%E4%BA%BA%E5%8F%A3%E6%92%AD%E9%80%89%E5%9E%8B/runs/TH-AB-001/B/%E5%8E%9F%E7%89%87.mp4"
+    ],
+    [
+      "specs\\selection\\01-数字人口播\\02-首轮实测结果.html",
+      "../../../experiments/%E6%95%B0%E5%AD%97%E4%BA%BA%E5%8F%A3%E6%92%AD%E9%80%89%E5%9E%8B/inputs/%E6%B5%8B%E8%AF%95%E4%BA%BA%E7%89%A9.png"
+    ],
+    [
+      "specs\\selection\\01-数字人口播\\02-首轮实测结果.html",
+      "../../../experiments/%E6%95%B0%E5%AD%97%E4%BA%BA%E5%8F%A3%E6%92%AD%E9%80%89%E5%9E%8B/inputs/%E6%B5%8B%E8%AF%95%E5%8F%A3%E6%92%AD.wav"
+    ],
+    [
+      "specs\\selection\\01-数字人口播\\02-首轮实测结果.html",
+      "../../../experiments/%E6%95%B0%E5%AD%97%E4%BA%BA%E5%8F%A3%E6%92%AD%E9%80%89%E5%9E%8B/runs/TH-AB-001/%E8%BE%93%E5%85%A5%E6%B8%85%E5%8D%95.json"
+    ],
+    [
+      "specs\\selection\\01-数字人口播\\02-首轮实测结果.html",
+      "../../../experiments/%E6%95%B0%E5%AD%97%E4%BA%BA%E5%8F%A3%E6%92%AD%E9%80%89%E5%9E%8B/runs/TH-AB-001/B/%E5%8F%82%E8%80%83%E5%9B%BE%E4%B8%8E%E5%85%B3%E9%94%AE%E5%B8%A7.jpg"
+    ],
+    [
+      "specs\\selection\\01-数字人口播\\02-首轮实测结果.html",
+      "../../../experiments/%E6%95%B0%E5%AD%97%E4%BA%BA%E5%8F%A3%E6%92%AD%E9%80%89%E5%9E%8B/runs/20260921T084928Z_238b5c_measure_B/%E5%AA%92%E4%BD%93%E6%B5%8B%E9%87%8F.json"
+    ],
+    [
+      "specs\\selection\\01-数字人口播\\02-首轮实测结果.html",
+      "../../../experiments/%E6%95%B0%E5%AD%97%E4%BA%BA%E5%8F%A3%E6%92%AD%E9%80%89%E5%9E%8B/runs/TH-AB-001/B/%E8%A1%A5%E5%85%85%E6%B5%8B%E9%87%8F.json"
+    ],
+    [
+      "specs\\selection\\01-数字人口播\\02-首轮实测结果.html",
+      "../../../experiments/%E6%95%B0%E5%AD%97%E4%BA%BA%E5%8F%A3%E6%92%AD%E9%80%89%E5%9E%8B/runs/TH-AB-001/B/%E4%B8%8B%E8%BD%BD%E4%B8%8E%E6%9D%A5%E6%BA%90.json"
+    ],
+    [
+      "specs\\selection\\01-数字人口播\\02-首轮实测结果.html",
+      "../../../experiments/%E6%95%B0%E5%AD%97%E4%BA%BA%E5%8F%A3%E6%92%AD%E9%80%89%E5%9E%8B/runs/TH-AB-001/ledger.json"
+    ],
+    [
+      "specs\\selection\\01-数字人口播\\03-MuseTalk云端部署与试验方案.html",
+      "../../../experiments/%E6%95%B0%E5%AD%97%E4%BA%BA%E5%8F%A3%E6%92%AD%E9%80%89%E5%9E%8B/inputs/%E6%B5%8B%E8%AF%95%E4%BA%BA%E7%89%A9.png"
+    ],
+    [
+      "specs\\selection\\01-数字人口播\\03-MuseTalk云端部署与试验方案.html",
+      "../../../experiments/%E6%95%B0%E5%AD%97%E4%BA%BA%E5%8F%A3%E6%92%AD%E9%80%89%E5%9E%8B/inputs/%E6%B5%8B%E8%AF%95%E5%8F%A3%E6%92%AD.wav"
+    ],
+    [
+      "specs\\selection\\01-数字人口播\\03-MuseTalk云端部署与试验方案.html",
+      "../../../experiments/%E6%95%B0%E5%AD%97%E4%BA%BA%E5%8F%A3%E6%92%AD%E9%80%89%E5%9E%8B/runs/TH-AB-001/%E8%BE%93%E5%85%A5%E6%B8%85%E5%8D%95.json"
+    ],
+    [
+      "specs\\selection\\01-数字人口播\\03-MuseTalk云端部署与试验方案.html",
+      "../../../experiments/%E6%95%B0%E5%AD%97%E4%BA%BA%E5%8F%A3%E6%92%AD%E9%80%89%E5%9E%8B/runs/TH-AB-001/B/%E5%8E%9F%E7%89%87.mp4"
+    ]
+  ],
+  "note": "全量扫描发现旧数字人口播选型实验目录的历史引用不可用；修改文件中的相关引用已与更新前备份核对为既存，本次新增M2引用有效。",
+  "new_model_inference": false
+}

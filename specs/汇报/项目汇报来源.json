@@ -1,0 +1,88 @@
+{
+  "purpose": "项目方案汇报，非运行中的生产应用",
+  "style_reference": "C:\\Users\\22346\\Downloads\\project-blueprint-v2.html",
+  "style_reference_sha256": "6f1125f2a925f6650c5b4acb1adc27f15a58007e11998afc1a97d31f3eaa6b09",
+  "visual_direction": "原创白底、深色文字、蓝色强调；参考文件仅用于信息组织与交互参考",
+  "generated_at": "2026-09-23T12:27:18",
+  "sources": [
+    {
+      "path": "0001-douyin-ai-studio\\00-文档导航.md",
+      "sha256": "bffab228b6815b7b07694629b2e0b228caab853ab319be4df4ce1f97ee317a1f"
+    },
+    {
+      "path": "0001-douyin-ai-studio\\03-总体技术方案.md",
+      "sha256": "41d0306df9979133df33a6e69b9d12a945278342235cb56912c8434f0bb49b0b"
+    },
+    {
+      "path": "0001-douyin-ai-studio\\04-接口契约与数据字典.md",
+      "sha256": "3a936814b2187159d1eafe484fffc87bc7d08060efeea33d05af8cdea11fedce"
+    },
+    {
+      "path": "0001-douyin-ai-studio\\05-开发实施计划.md",
+      "sha256": "0f371387bbe918da4b9d77464c2f3d7a3ddc0b83e994d06e3b5f83a8e2b8ffad"
+    },
+    {
+      "path": "0001-douyin-ai-studio\\06-验收标准与测试方案.md",
+      "sha256": "63d9e71a031439fa7947e1415cce997c5d010b3843bfc4cef9f657e29e1f0541"
+    },
+    {
+      "path": "0001-douyin-ai-studio\\08-端到端技术流程与模型选型地图.md",
+      "sha256": "d3a428a5f0efac36aa51d99216fbd9bb9dd06fa78fdf94e171fd7f98fcc5957c"
+    },
+    {
+      "path": "0001-douyin-ai-studio\\09-模型选型决策与接入方案.md",
+      "sha256": "1167042dcb900e57c3d57e8438a0574796556477ede743e18b21ea41bb442a8b"
+    },
+    {
+      "path": "0001-douyin-ai-studio\\10-Agent编排选型与整体架构.md",
+      "sha256": "dd6b7e8726e194290911e139684a3a0fae9ba4187a9501b9a018d2e2a41db538"
+    },
+    {
+      "path": "汇报\\整体分层架构.html",
+      "sha256": "f51445cd7c5a3ecdae219f841bb6f8e38f1a1cfc037bc917d9bc0bbb960c9d0d"
+    },
+    {
+      "path": "汇报\\整体分层架构.json",
+      "sha256": "303e98b6e5ef8334834c25f4da4bc74da20aa426bbb931bc2a34407a7757c282"
+    },
+    {
+      "path": "汇报\\Agent协作框架.html",
+      "sha256": "641c07786d8cd059b593726ff1daf7e7d607b24dcd5c5c555a89d7592b344485"
+    },
+    {
+      "path": "汇报\\Agent协作框架.json",
+      "sha256": "1ec51833ded76670a40ad9b763ba7d173e93e720b1ffafbc86b3535cc58a8e8f"
+    },
+    {
+      "path": "架构图\\作品生产数据流.html",
+      "sha256": "84270856a5b14f2389a774fc335279613dbf72e8bd675b106bf5c2ed31415a12"
+    },
+    {
+      "path": "架构图\\作品生产数据流.json",
+      "sha256": "ea9448d4c0355a195e1adbf14da96799bf12a9f845e1c80ca91ccc70fde019ed"
+    }
+  ],
+  "metric_ids": [
+    "E02",
+    "E04",
+    "E06",
+    "E07",
+    "E08",
+    "E10",
+    "E14",
+    "E15",
+    "E16",
+    "E25",
+    "E27"
+  ],
+  "full_metric_count": 31,
+  "views": [
+    "system",
+    "flow",
+    "agents",
+    "stack",
+    "quality",
+    "progress"
+  ],
+  "output_sha256": "ead63d550bd90394a45621cb76b91eb8144df9d4789043b49fb8a718705801f5"
+}

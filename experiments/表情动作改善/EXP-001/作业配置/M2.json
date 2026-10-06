@@ -1,0 +1,43 @@
+{
+  "job_dir": "/root/autodl-tmp/avatar-motion/EXP-001/jobs/M2",
+  "cwd": "/root/autodl-tmp/avatar-musetalk/MT-001/source",
+  "command": [
+    "/root/autodl-tmp/avatar-musetalk/MT-001/env/bin/python",
+    "-m",
+    "scripts.inference_mt001",
+    "--inference_config",
+    "/root/autodl-tmp/avatar-motion/EXP-001/specs/M2.yaml",
+    "--result_dir",
+    "/root/autodl-tmp/avatar-motion/EXP-001/results/M2",
+    "--unet_model_path",
+    "models/musetalkV15/unet.pth",
+    "--unet_config",
+    "models/musetalkV15/musetalk.json",
+    "--version",
+    "v15",
+    "--fps",
+    "25",
+    "--batch_size",
+    "4",
+    "--use_float16"
+  ],
+  "environment": {
+    "OMP_NUM_THREADS": "8",
+    "MKL_NUM_THREADS": "8",
+    "HF_HUB_OFFLINE": "1",
+    "TRANSFORMERS_OFFLINE": "1",
+    "TORCH_HOME": "/root/autodl-tmp/avatar-musetalk/MT-001/torch-cache"
+  },
+  "outputs": [
+    "/root/autodl-tmp/avatar-motion/EXP-001/results/M2/v15/M2_original.mp4"
+  ],
+  "inputs": {
+    "/root/autodl-tmp/avatar-motion/EXP-001/inputs/person_B.png": "b66feb11d62559a632def9f86e0915645a70fa4dbb38c6a2cd2f7cb50b607b48",
+    "/root/autodl-tmp/avatar-motion/EXP-001/inputs/voice3.wav": "a6945eac9e317ea3643151e039f3de1a929277aceb605a2d13dee708f815fc81",
+    "/root/autodl-tmp/avatar-motion/EXP-001/inputs/person_B_even.png": "a616738fc3517047da733efb5558256884292f6a2b84bb9e4a4f620e127260fa",
+    "/root/autodl-tmp/avatar-motion/EXP-001/results/LP1/person_B_even--ali_motion_loop25.mp4": "f32a8885034da70f3c37be4c387d8beb7668aab386a1c3b256f4ee6414b09d14"
+  },
+  "timeout_seconds": 1800,
+  "sample_gpu": true,
+  "hourly_cny": 1.58
+}

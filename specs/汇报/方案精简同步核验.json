@@ -1,0 +1,215 @@
+{
+  "scope": "v2.4 提示词写稿、四子智能体与内部代码后期",
+  "documents": [
+    {
+      "path": "0001-douyin-ai-studio\\00-文档导航.md",
+      "sha256": "bffab228b6815b7b07694629b2e0b228caab853ab319be4df4ce1f97ee317a1f"
+    },
+    {
+      "path": "0001-douyin-ai-studio\\01-产品需求文档.md",
+      "sha256": "52bd82073b5995628c1d7208f1364e1dd90925f4dea918411d71a0f512f5a19d"
+    },
+    {
+      "path": "0001-douyin-ai-studio\\02-技术选型对比.md",
+      "sha256": "f15aeb424a9c8156a3411531cbabca060e56bbee0af6a03b8220c86e3304145a"
+    },
+    {
+      "path": "0001-douyin-ai-studio\\03-总体技术方案.md",
+      "sha256": "41d0306df9979133df33a6e69b9d12a945278342235cb56912c8434f0bb49b0b"
+    },
+    {
+      "path": "0001-douyin-ai-studio\\04-接口契约与数据字典.md",
+      "sha256": "3a936814b2187159d1eafe484fffc87bc7d08060efeea33d05af8cdea11fedce"
+    },
+    {
+      "path": "0001-douyin-ai-studio\\05-开发实施计划.md",
+      "sha256": "0f371387bbe918da4b9d77464c2f3d7a3ddc0b83e994d06e3b5f83a8e2b8ffad"
+    },
+    {
+      "path": "0001-douyin-ai-studio\\06-验收标准与测试方案.md",
+      "sha256": "63d9e71a031439fa7947e1415cce997c5d010b3843bfc4cef9f657e29e1f0541"
+    },
+    {
+      "path": "0001-douyin-ai-studio\\07-技术选型与实测流程.md",
+      "sha256": "c4a2e815be2c126a2e95764d9c290f0d48d84a6c0e5a8db14be93e9e8189b24e"
+    },
+    {
+      "path": "0001-douyin-ai-studio\\08-端到端技术流程与模型选型地图.md",
+      "sha256": "d3a428a5f0efac36aa51d99216fbd9bb9dd06fa78fdf94e171fd7f98fcc5957c"
+    },
+    {
+      "path": "0001-douyin-ai-studio\\09-模型选型决策与接入方案.md",
+      "sha256": "1167042dcb900e57c3d57e8438a0574796556477ede743e18b21ea41bb442a8b"
+    },
+    {
+      "path": "0001-douyin-ai-studio\\10-Agent编排选型与整体架构.md",
+      "sha256": "dd6b7e8726e194290911e139684a3a0fae9ba4187a9501b9a018d2e2a41db538"
+    }
+  ],
+  "local_links_checked": 788,
+  "anchors_checked": 240,
+  "subagents": 4,
+  "skills": 7,
+  "mcp_groups": 4,
+  "core_metrics": 11,
+  "full_metrics": 31,
+  "acceptance_cases": 69,
+  "backend_tests": {
+    "passed": 266,
+    "warnings": 1,
+    "real_generation": false
+  },
+  "frontend_build": "passed",
+  "frontend_typecheck": {
+    "status": "failed",
+    "pre_existing_issues": [
+      "ImportMeta.env 类型",
+      "Mock Work 缺 script_version_id",
+      "路由联合类型",
+      "ScriptVersion 缺导入",
+      "node:url 类型声明"
+    ]
+  },
+  "errors": [],
+  "production_scope": "角色/Skill/工具注册、内部 Worker 入口与阻断逻辑；真实媒体后期待实现",
+  "spa_routes_checked": 2,
+  "spa_routes_browser_confirmed": true,
+  "graph_count": 5,
+  "report_sha256": "ead63d550bd90394a45621cb76b91eb8144df9d4789043b49fb8a718705801f5",
+  "runtime_changes": [
+    {
+      "path": "production\\README.md",
+      "change": "modified",
+      "sha256": "396c73758788cb898301b2152bd74b0c79d692a6e93aca905e78f60b07c36b7c"
+    },
+    {
+      "path": "production\\backend\\app\\mcp.py",
+      "change": "modified",
+      "sha256": "619069cafc24e601d7ad2a8dd7b3456ea6f2a4c7b7e0c9f922e3fa39abc27edc"
+    },
+    {
+      "path": "production\\backend\\tests\\conftest.py",
+      "change": "modified",
+      "sha256": "b1999b7187751215d7ecaa290447a395d82209772913f19f6a4ff1b30df41b14"
+    },
+    {
+      "path": "production\\backend\\tests\\test_agent_framework.py",
+      "change": "modified",
+      "sha256": "9d2af65ea6f9b8159eaeb9d527ac3f94f44209bb3564d22f22f004a4f3e05799"
+    },
+    {
+      "path": "production\\backend\\tests\\test_agent_orchestration.py",
+      "change": "modified",
+      "sha256": "f5f7b2f1419104fd47b8fb2585722fe3ac63b5093c2b40661095fc4ea842c5ae"
+    },
+    {
+      "path": "production\\backend\\app\\agents\\contracts.py",
+      "change": "modified",
+      "sha256": "c981c5aaa76f09313c271764f710d210830f6c2b85f8dcc35c4bcdf6df43535c"
+    },
+    {
+      "path": "production\\backend\\app\\agents\\framework.py",
+      "change": "modified",
+      "sha256": "0807c151ad66449006872f24f9e360284930f73776baa98635d147eecad0f831"
+    },
+    {
+      "path": "production\\backend\\app\\agents\\models.py",
+      "change": "modified",
+      "sha256": "dd7918ef9950395d209cb285eaa322e82c6d253226325fe429482c1b8b32e0ea"
+    },
+    {
+      "path": "production\\backend\\app\\agents\\roles.py",
+      "change": "modified",
+      "sha256": "233b48d12e6e1326eac6135326357c73979703a868ede457daf91f932b5e4de7"
+    },
+    {
+      "path": "production\\backend\\app\\agents\\supervisor.py",
+      "change": "modified",
+      "sha256": "d62d20fc06675bb2d7c82abb68611ebe8a95e2933c270001962d8a787082af47"
+    },
+    {
+      "path": "production\\backend\\app\\agents\\tools.py",
+      "change": "modified",
+      "sha256": "b67ee313342edf60e2fa902a98ab161ad34688021767b23074b45d9d0756d621"
+    },
+    {
+      "path": "production\\backend\\app\\avatar\\compose.py",
+      "change": "modified",
+      "sha256": "7814aee42d153e870b5b1eda7f06d8ef46902e584622d5b54d64f1800843ea0a"
+    },
+    {
+      "path": "production\\backend\\tests\\avatar\\test_compose.py",
+      "change": "modified",
+      "sha256": "c8cef96f65c694d08ab8e7c5eb4e4187c82f30adbc4b80c256d715ec22e53f33"
+    },
+    {
+      "path": "production\\backend\\tests\\contract\\test_configuration.py",
+      "change": "modified",
+      "sha256": "95b296626e15a50e4f73412e211aa9d521eaee6656c8100546de14dbe5a18aa8"
+    },
+    {
+      "path": "production\\backend\\tests\\pipeline\\test_mcp_permissions.py",
+      "change": "modified",
+      "sha256": "e1577fdf1e7049ba0ec27272dfc07d7651c4411225813a3aea81ca854314ad5b"
+    },
+    {
+      "path": "production\\frontend\\src\\stores\\studio.ts",
+      "change": "modified",
+      "sha256": "ab900cfa064d8094c9150cd7db134d7f4e4dea218254c518e2f4f6b010457772"
+    },
+    {
+      "path": "production\\skills\\事实与重复审核\\SKILL.md",
+      "change": "modified",
+      "sha256": "c9fd7ddc2146364c64e734932414e962a2871724253538ac027055d0e2742d0a"
+    },
+    {
+      "path": "production\\skills\\分阶段媒体质量验收\\SKILL.md",
+      "change": "modified",
+      "sha256": "b01e3e205cea549fb92322f6b3bc900537c8d3978424ceb513bdfd90d9aa67ec"
+    },
+    {
+      "path": "production\\skills\\动作表情匹配\\SKILL.md",
+      "change": "modified",
+      "sha256": "9c73c3269e19c6f2c162c53a5d417a04977156f16adfcba364ed8b8eade3c3f0"
+    },
+    {
+      "path": "production\\skills\\口播写作\\SKILL.md",
+      "change": "modified",
+      "sha256": "c520badfbda6cda9ebb6be0b582600dbb4e79f6919b56fdfc75cd8be3036895f"
+    },
+    {
+      "path": "production\\skills\\固定人物与衣景\\SKILL.md",
+      "change": "modified",
+      "sha256": "6d02f81d1bca5490545a5f32192fce75ea23837f1c2e75404aed157c1693f89b"
+    },
+    {
+      "path": "production\\skills\\固定声音与情绪\\SKILL.md",
+      "change": "modified",
+      "sha256": "9ffb859ac91f21a859de801e0fb65b53fd6ac49f87dd5dbed79f3d9ce8656148"
+    },
+    {
+      "path": "production\\skills\\字幕与剪辑\\SKILL.md",
+      "change": "removed"
+    },
+    {
+      "path": "production\\skills\\选题与新意\\SKILL.md",
+      "change": "modified",
+      "sha256": "6c61202d3a4a99aa5fbdfd84c551ae17ad1fda9ef40927c69efa9ac4841da7c9"
+    },
+    {
+      "path": "production/backend/app/postprocess_worker.py",
+      "change": "added",
+      "sha256": "91e66833f68feec8f26ef5090de8c3eeee39d648eb7b98d9dfd3e832442fde5d"
+    },
+    {
+      "path": "production/backend/tests/test_v24_agent_boundaries.py",
+      "change": "added",
+      "sha256": "02bbab4f905db6217415f93bab5e08b773083f178b39252af10628b50720d6e0"
+    },
+    {
+      "path": "production/backend/tests/test_postprocess_worker.py",
+      "change": "added",
+      "sha256": "ae572f71ad0d9771cde287c9a8f9fa00cd3fb7d8f740b1722ec78a57a97eddda"
+    }
+  ]
+}

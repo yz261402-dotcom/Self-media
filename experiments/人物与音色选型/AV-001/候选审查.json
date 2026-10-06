@@ -1,0 +1,52 @@
+{
+  "direction": "22岁左右明确成年女性，专业温柔，长期中文AI知识主播",
+  "visual_review_scope": "Assistant visual inspection of full still images; not a human likeness guarantee or talking-head video acceptance",
+  "image_B": {
+    "available": true,
+    "observations": "长黑发、米白外套和浅蓝上衣；正面闭唇微笑、年轻温柔；肤质较平滑，胸像清晰；双肩外缘略靠近画面边缘。",
+    "requested_size": [
+      1152,
+      2048
+    ],
+    "actual_size": [
+      941,
+      1672
+    ],
+    "resolution_match": false,
+    "identity_approval": "PENDING_USER_SELECTION"
+  },
+  "image_C": {
+    "available": true,
+    "observations": "低马尾、面部无遮挡、正面闭唇；米白外套和浅蓝上衣与统一设定吻合；专业温柔，皮肤仍有生成后的平滑感。",
+    "requested_size": [
+      1152,
+      2048
+    ],
+    "actual_size": [
+      1152,
+      2048
+    ],
+    "resolution_match": true,
+    "identity_approval": "PENDING_USER_SELECTION"
+  },
+  "visual_recommendation": "C：低马尾和清晰面部轮廓更便于长期知识讲解，仍需用户确认审美与正式角色身份",
+  "voice_review": "Technical decode and metadata only; human listening and voice approval pending",
+  "successful_voice_ids": [
+    "danya_xuejie",
+    "Chinese (Mandarin)_Warm_Bestie"
+  ],
+  "failed_candidates": [
+    "image_A",
+    "voice_1"
+  ],
+  "generation_attempts_total": 6,
+  "automatic_retry": false,
+  "new_video_calls": 0,
+  "tts_known_usage_characters": 296,
+  "tts_estimated_successful_cny": 0.1036,
+  "tts_actual_bill": null,
+  "image_cost": null,
+  "image_cost_note": "relay price unverified; image_B model field absent, image_C zero usage fields cannot be interpreted as free",
+  "failed_attempt_billing": "UNKNOWN",
+  "selection_status": "AWAITING_USER_SELECTION"
+}

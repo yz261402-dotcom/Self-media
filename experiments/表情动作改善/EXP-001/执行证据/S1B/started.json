@@ -1,0 +1,42 @@
+{
+  "started_at": "2026-09-22T01:30:26.919085+00:00",
+  "spec": {
+    "job_dir": "/root/autodl-tmp/avatar-motion/EXP-001/jobs/S1B",
+    "cwd": "/root/autodl-tmp/avatar-motion/EXP-001/SadTalker",
+    "command": [
+      "/root/autodl-tmp/avatar-motion/EXP-001/env-sadtalker/bin/python",
+      "/root/autodl-tmp/avatar-motion/EXP-001/run_sadtalker.py"
+    ],
+    "environment": {
+      "OMP_NUM_THREADS": "8",
+      "MKL_NUM_THREADS": "8",
+      "PYTHONNOUSERSITE": "1",
+      "TORCH_HOME": "/root/autodl-tmp/avatar-motion/EXP-001/cache/sadtalker/torch"
+    },
+    "outputs": [
+      "/root/autodl-tmp/avatar-motion/EXP-001/results/S1/S1_original.mp4"
+    ],
+    "inputs": {
+      "/root/autodl-tmp/avatar-motion/EXP-001/inputs/person_B_even.png": "a616738fc3517047da733efb5558256884292f6a2b84bb9e4a4f620e127260fa",
+      "/root/autodl-tmp/avatar-motion/EXP-001/inputs/voice3.wav": "a6945eac9e317ea3643151e039f3de1a929277aceb605a2d13dee708f815fc81",
+      "/root/autodl-tmp/avatar-motion/EXP-001/SadTalker/checkpoints/SadTalker_V0.0.2_512.safetensors": "0e063f7ff5258240bdb0f7690783a7b1374e6a4a81ce8fa33456f4cd49694340",
+      "/root/autodl-tmp/avatar-motion/EXP-001/SadTalker/checkpoints/mapping_00109-model.pth.tar": "84a8642468a3fcfdd9ab6be955267043116c2bec2284686a5262f1eaf017f64c",
+      "/root/autodl-tmp/avatar-motion/EXP-001/SadTalker/gfpgan/weights/alignment_WFLW_4HG.pth": "bbfd137307a4c7debd5c283b9b0ce539466cee417ac0a155e184d857f9f2899c",
+      "/root/autodl-tmp/avatar-motion/EXP-001/SadTalker/gfpgan/weights/detection_Resnet50_Final.pth": "6d1de9c2944f2ccddca5f5e010ea5ae64a39845a86311af6fdf30841b0a5a16d"
+    },
+    "timeout_seconds": 1800,
+    "sample_gpu": true,
+    "hourly_cny": 1.58,
+    "seed": 20260922,
+    "parameters": {
+      "size": 512,
+      "preprocess": "full",
+      "still": false,
+      "enhancer": null,
+      "pose_style": 0,
+      "expression_scale": 1.0
+    },
+    "previous_attempt": "S1; malformed 65-character renderer digest in local specification; no inference launched"
+  },
+  "automatic_retry": false
+}

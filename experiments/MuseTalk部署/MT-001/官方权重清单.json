@@ -1,0 +1,82 @@
+[
+  {
+    "repo": "TMElyralab/MuseTalk",
+    "revision": "3ef28bc5cff08c90ad8178a25f1b570cd800170f",
+    "file": "musetalkV15/musetalk.json",
+    "destination": "models/musetalkV15/musetalk.json",
+    "bytes": 748,
+    "sha256_expected": null,
+    "git_blob_id": "b822db87e503a283fbbee73617f89dcd294cb91c",
+    "url": "https://huggingface.co/TMElyralab/MuseTalk/resolve/3ef28bc5cff08c90ad8178a25f1b570cd800170f/musetalkV15/musetalk.json"
+  },
+  {
+    "repo": "TMElyralab/MuseTalk",
+    "revision": "3ef28bc5cff08c90ad8178a25f1b570cd800170f",
+    "file": "musetalkV15/unet.pth",
+    "destination": "models/musetalkV15/unet.pth",
+    "bytes": 3400074924,
+    "sha256_expected": "7ebf6c98c181e20838e4c0054e96e944ac60d5d692cc01db42839fe11b787007",
+    "git_blob_id": "ad33c410815bf12300e8cac58b10255df3e61d88",
+    "url": "https://huggingface.co/TMElyralab/MuseTalk/resolve/3ef28bc5cff08c90ad8178a25f1b570cd800170f/musetalkV15/unet.pth"
+  },
+  {
+    "repo": "stabilityai/sd-vae-ft-mse",
+    "revision": "31f26fdeee1355a5c34592e401dd41e45d25a493",
+    "file": "config.json",
+    "destination": "models/sd-vae/config.json",
+    "bytes": 547,
+    "sha256_expected": null,
+    "git_blob_id": "0db26717579be63eb0ddbf15b43faa43700dfe5a",
+    "url": "https://huggingface.co/stabilityai/sd-vae-ft-mse/resolve/31f26fdeee1355a5c34592e401dd41e45d25a493/config.json"
+  },
+  {
+    "repo": "stabilityai/sd-vae-ft-mse",
+    "revision": "31f26fdeee1355a5c34592e401dd41e45d25a493",
+    "file": "diffusion_pytorch_model.bin",
+    "destination": "models/sd-vae/diffusion_pytorch_model.bin",
+    "bytes": 334707217,
+    "sha256_expected": "1b4889b6b1d4ce7ae320a02dedaeff1780ad77d415ea0d744b476155c6377ddc",
+    "git_blob_id": "ba36f34d64ad3be997b7cab94b0b9acd61272851",
+    "url": "https://huggingface.co/stabilityai/sd-vae-ft-mse/resolve/31f26fdeee1355a5c34592e401dd41e45d25a493/diffusion_pytorch_model.bin"
+  },
+  {
+    "repo": "openai/whisper-tiny",
+    "revision": "169d4a4341b33bc18d8881c4b69c2e104e1cc0af",
+    "file": "config.json",
+    "destination": "models/whisper/config.json",
+    "bytes": 1983,
+    "sha256_expected": null,
+    "git_blob_id": "417aa9de49a132dd3eb6a56d3be2718b15f08917",
+    "url": "https://huggingface.co/openai/whisper-tiny/resolve/169d4a4341b33bc18d8881c4b69c2e104e1cc0af/config.json"
+  },
+  {
+    "repo": "openai/whisper-tiny",
+    "revision": "169d4a4341b33bc18d8881c4b69c2e104e1cc0af",
+    "file": "pytorch_model.bin",
+    "destination": "models/whisper/pytorch_model.bin",
+    "bytes": 151095027,
+    "sha256_expected": "9607f98a2b22d9e229ae43c52ecea79dcede9e0c5cfae67e8da6eda86d8aac1d",
+    "git_blob_id": "12d457f94da296f66fc3f07657abb6bc3665c48c",
+    "url": "https://huggingface.co/openai/whisper-tiny/resolve/169d4a4341b33bc18d8881c4b69c2e104e1cc0af/pytorch_model.bin"
+  },
+  {
+    "repo": "openai/whisper-tiny",
+    "revision": "169d4a4341b33bc18d8881c4b69c2e104e1cc0af",
+    "file": "preprocessor_config.json",
+    "destination": "models/whisper/preprocessor_config.json",
+    "bytes": 184990,
+    "sha256_expected": null,
+    "git_blob_id": "c2048dfa9fd94a052e62e908d2c4dfb18534b4d2",
+    "url": "https://huggingface.co/openai/whisper-tiny/resolve/169d4a4341b33bc18d8881c4b69c2e104e1cc0af/preprocessor_config.json"
+  },
+  {
+    "repo": "yzd-v/DWPose",
+    "revision": "1a7144101628d69ee7a3768d1ee3a094070dc388",
+    "file": "dw-ll_ucoco_384.pth",
+    "destination": "models/dwpose/dw-ll_ucoco_384.pth",
+    "bytes": 406878486,
+    "sha256_expected": "0d9408b13cd863c4e95a149dd31232f88f2a12aa6cf8964ed74d7d97748c7a07",
+    "git_blob_id": "c49c36077e9022019db86ae591ae20003689e99d",
+    "url": "https://huggingface.co/yzd-v/DWPose/resolve/1a7144101628d69ee7a3768d1ee3a094070dc388/dw-ll_ucoco_384.pth"
+  }
+]

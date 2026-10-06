@@ -1,0 +1,82 @@
+{
+  "checks": [
+    {
+      "width": 1440,
+      "view": "system",
+      "passed": true
+    },
+    {
+      "width": 1440,
+      "view": "flow",
+      "passed": true
+    },
+    {
+      "width": 1440,
+      "view": "agents",
+      "passed": true
+    },
+    {
+      "width": 1440,
+      "view": "stack",
+      "passed": true
+    },
+    {
+      "width": 1440,
+      "view": "quality",
+      "passed": true
+    },
+    {
+      "width": 1440,
+      "view": "progress",
+      "passed": true
+    },
+    {
+      "width": 390,
+      "view": "system",
+      "passed": true
+    },
+    {
+      "width": 390,
+      "view": "flow",
+      "passed": true
+    },
+    {
+      "width": 390,
+      "view": "agents",
+      "passed": true
+    },
+    {
+      "width": 390,
+      "view": "stack",
+      "passed": true
+    },
+    {
+      "width": 390,
+      "view": "quality",
+      "passed": true
+    },
+    {
+      "width": 390,
+      "view": "progress",
+      "passed": true
+    }
+  ],
+  "errors": [],
+  "views": [
+    "system",
+    "flow",
+    "agents",
+    "stack",
+    "quality",
+    "progress"
+  ],
+  "roles": [
+    "supervisor",
+    "content",
+    "quality",
+    "avatar",
+    "audio"
+  ],
+  "skills": 7,
+  "mcpGroups": 4
+}

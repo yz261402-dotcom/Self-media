@@ -1,0 +1,43 @@
+{
+  "html_pages_checked": 28,
+  "local_links_checked": 1086,
+  "broken_links": [],
+  "secret_leaks": [],
+  "tests_passed": 4,
+  "media": {
+    "images": 2,
+    "voices": 2,
+    "voice_decode": "PASS",
+    "image_B_actual_size": [
+      941,
+      1672
+    ],
+    "image_C_actual_size": [
+      1152,
+      2048
+    ]
+  },
+  "browser": {
+    "desktop": [
+      1440,
+      1150
+    ],
+    "mobile": [
+      390,
+      844
+    ],
+    "overflow": false,
+    "audio_playback": true,
+    "mutual_exclusion": true,
+    "portrait_modal": true,
+    "selection_combination": true,
+    "selection_export_state": "PENDING_USER_CONFIRMATION",
+    "no_default_selection": true
+  },
+  "generation_attempts": 6,
+  "successes": 4,
+  "unknown_or_failed": 2,
+  "automatic_retry": false,
+  "user_final_selection": "NOT_RECEIVED",
+  "new_gpu_inference": false
+}

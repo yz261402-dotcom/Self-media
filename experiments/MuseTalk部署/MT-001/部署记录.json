@@ -1,0 +1,80 @@
+{
+  "experiment": "MT-001",
+  "started_at": "2026-09-21T11:40:01.265050+00:00",
+  "remote_root": "/root/autodl-tmp/avatar-musetalk/MT-001",
+  "reported_gpu": "NVIDIA GeForce RTX 4080",
+  "vram_mib": 32760,
+  "driver": "595.71.05",
+  "os": "Ubuntu22.04.5",
+  "container_memory_limit_bytes": 66571993088,
+  "cpu_quota_cores": 16,
+  "hourly_cny_user_reported": 1.58,
+  "scope": "User-rented instance; isolated MuseTalk1.5 deployment and agreed sample tests",
+  "cost_limit_proposal_cny": 30,
+  "time_limit_hours": 3,
+  "source_commit": "0a89dec45a0192b824e3cf4daf96c239440c5ed8",
+  "status": "DEPLOYED_INFERENCE_VERIFIED",
+  "billing_verified": false,
+  "password_saved": false,
+  "previous_artifacts_preserved": true,
+  "dependencies": "Python3.10 torch2.0.1+cu118; minimal CLI packages, omitted training/UI dependencies",
+  "source_cleanup_patch": "普通推理清理补丁.py; 4 offline regression tests passed",
+  "weights_transport": "Official HF revisions/hashes; MuseTalk UNet downloaded via ModelScope mirror with identical official SHA256; other official CDN URLs resolved on local host",
+  "import_checks": {
+    "pip_check": "PASS",
+    "cuda": "PASS",
+    "mmcv_gpu_nms": "PASS",
+    "preprocessing_import": "PASS",
+    "original_audio_soundfile_seconds": 9.36,
+    "original_audio_librosa_seconds": 9.36
+  },
+  "versions": {
+    "python": "3.10",
+    "torch": "2.0.1+cu118",
+    "numpy": "1.23.5",
+    "mmcv": "2.0.1",
+    "mmdet": "3.1.0",
+    "mmpose": "1.1.0",
+    "mmengine": "0.10.7"
+  },
+  "m1": {
+    "wall_seconds": 99,
+    "sampled_gpu_peak_mib": 7489,
+    "video_seconds": 9.36,
+    "audio_seconds": 9.36,
+    "output": "单图口播原片.mp4"
+  },
+  "selection": "UNSELECTED",
+  "quality": "NOT_ACCEPTED",
+  "m234": {
+    "wall_seconds": 197,
+    "preparation_seconds": 106.013629,
+    "clip_seconds": {
+      "M2": 25.713394,
+      "M3": 22.840906,
+      "M4": 24.252464
+    },
+    "sampled_gpu_peak_mib": 7477,
+    "output_video_vs_audio_seconds": {
+      "M2": [
+        9.32,
+        9.36
+      ],
+      "M3": [
+        9.32,
+        9.36
+      ],
+      "M4": [
+        9.8,
+        9.86
+      ]
+    }
+  },
+  "cloud_instance": "RUNNING_IDLE_NOT_SHUT_DOWN",
+  "runtime_jobs": "NONE",
+  "observed_interval_cny_estimate": 1.577273,
+  "actual_bill": "NOT_RECONCILED",
+  "offline_regression_tests_passed": 7,
+  "future_realtime_entry": "scripts.realtime_inference_mt001_fixed",
+  "frame_count_fix_validation": "OFFLINE_PASS; GPU_RERUN_NOT_PERFORMED"
+}

@@ -1,0 +1,8 @@
+{
+  "stage": "image_A",
+  "state": "UNKNOWN_OR_FAILED",
+  "error_type": "TimeoutError",
+  "elapsed_seconds": 0.0,
+  "finished_at": "2026-09-21T15:32:27.551176+00:00",
+  "automatic_retry": false
+}

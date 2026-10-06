@@ -1,0 +1,7 @@
+{
+  "sha256": "7119a042efac8d7c73cb387ed2cb499de187745b67eac2f928a18d501b52f80b",
+  "url_sha256": "9c9548ac8144c9adbe31e24f889cdb9a459b82508a1d1f4a451eb56059fc64fc",
+  "host": "v26-aiop.aigc-cloud.com",
+  "source": "authenticated CVGetResult success response for this task; exact returned HTTPS URL allowlisted; public DNS and TLS validation retained",
+  "downloaded_at": "2026-09-21T13:51:30.527980+00:00"
+}

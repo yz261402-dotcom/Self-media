@@ -1,0 +1,12 @@
+{
+  "generated_html_count": 26,
+  "checked_local_links": 1000,
+  "broken_links": [],
+  "configuration_mapping": "PASS",
+  "known_secret_leaks": [],
+  "billable_generation_calls_this_update": 0,
+  "image_models_readonly_http_status": 200,
+  "acceptance": "PENDING_ACCEPTANCE",
+  "independent_review": "PASS_AFTER_OLD_CONFIG_FIX",
+  "desktop_and_mobile_render": "PASS"
+}

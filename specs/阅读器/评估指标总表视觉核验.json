@@ -1,0 +1,24 @@
+{
+  "source_sha256": "f125da755bac6e1c02054ae1899ae1e961007240762955feafe048085cd188cf",
+  "table_count": 1,
+  "row_count": 28,
+  "core_count": 14,
+  "width": 390,
+  "scrollWidth": 390,
+  "desktop": {
+    "width": 1440,
+    "height": 1000,
+    "scrollWidth": 1440
+  },
+  "mobile": {
+    "width": 390,
+    "height": 844,
+    "scrollWidth": 390
+  },
+  "screenshots": [
+    "评估指标总表-桌面预览.png",
+    "评估指标总表-手机预览.png"
+  ],
+  "visual_review": "已查看桌面及手机截图，单表与核心高亮可读，手机可横向滚动，页面无溢出。",
+  "scope": "评估标准阅读版；尚无真实评测成绩"
+}

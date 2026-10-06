@@ -1,0 +1,13 @@
+{
+  "started_at": "2026-09-21T13:10:29.024742+00:00",
+  "request": {
+    "req_key": "jimeng_realman_avatar_picture_omni_v15",
+    "image_url": "https://dashscope-0484.oss-accelerate.aliyuncs.com/7d/f6/20260921/71e29776/44d1a682-7d35-4542-a075-47798d75d8e3.png",
+    "audio_url": "http://dashscope-result-bj.oss-cn-beijing.aliyuncs.com/prod/qwen3-tts/20260921/1955580571132236/0ee203bb-b78d-99d8-8ec9-1efcb798effe.wav",
+    "seed": 20260921,
+    "output_resolution": 720,
+    "pe_fast_mode": true
+  },
+  "request_digest": "78c51f18cf18995e1f448eea97bc0bc27e24a4cbc42d24a89903b127570d8b52",
+  "automatic_retry": false
+}

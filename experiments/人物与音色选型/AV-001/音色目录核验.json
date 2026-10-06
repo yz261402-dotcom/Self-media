@@ -1,0 +1,10 @@
+{
+  "checked_at": "2026-09-21T15:24:13.584136+00:00",
+  "endpoint": "https://api.minimaxi.com/v1/get_voice",
+  "operation": "read-only system voice catalogue",
+  "billable_generation_calls": 0,
+  "http_status": 200,
+  "business_code": 0,
+  "message": "success",
+  "voice_count": 303
+}

@@ -1,0 +1,26 @@
+{
+  "repo": "camenduru/MuseTalk",
+  "sha": "5cfe77e50e1dc10ac599e5340d610d69a5086af2",
+  "files": [
+    {
+      "rfilename": "face-parse-bisent/79999_iter.pth",
+      "blobId": "ca57f3257ca7715bc340d065764bc249d985c287",
+      "size": 53289463,
+      "lfs": {
+        "sha256": "468e13ca13a9b43cc0881a9f99083a430e9c0a38abd935431d1c28ee94b26567",
+        "size": 53289463,
+        "pointerSize": 133
+      }
+    },
+    {
+      "rfilename": "face-parse-bisent/resnet18-5c106cde.pth",
+      "blobId": "f432c3ad51f84df5837f2f38ac7972e6c2a15503",
+      "size": 46827520,
+      "lfs": {
+        "sha256": "5c106cde386e87d4033832f2996f5493238eda96ccf559d1d62760c4de0613f8",
+        "size": 46827520,
+        "pointerSize": 133
+      }
+    }
+  ]
+}

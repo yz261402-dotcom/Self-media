@@ -1,0 +1,126 @@
+<section class="chapter" id="overview">
+  <header class="chapter-head"><span class="chapter-no">01</span><div><p class="eyebrow">对应原汇报第 1 块 · 结论与边界</p><h2>我们到底在做一个什么项目？</h2><p class="lead">这是一个数字人口播视频制作工作台，把从选题到交付的工作组织起来。</p></div></header>
+  <p>你提供主题，选择人物和声音；系统协助写稿、生成配音、制作数字人视频、添加字幕和封面，最后产出可下载、可用于发布的成品包。项目采用的是<strong>“AI 生成 + 程序检查 + 关键步骤人工确认”</strong>的工作方式。</p>
+  <div class="example"><span class="badge example-tag">贯穿全文的假设示例</span><h3>制作一条 45 秒的办公效率技巧视频</h3><p>由固定女主播讲解，使用固定音色，带字幕和封面。后面的每个模块、每一步流程，都围绕这条作品解释。这里的时长和内容用于帮助理解，不代表已经完成了这条作品。</p></div>
+  <h3>“能做出视频”和“能长期稳定生产”，是两个阶段</h3>
+  <div class="explain-grid">
+    <article class="concept"><h4>工作台阶段</h4><p>你自己使用，打开页面，选择素材，生成和审核作品。遇到问题可以人工处理。重点是把制作能力和操作流程接起来。</p></article>
+    <article class="concept"><h4>生产系统阶段</h4><p>任务多了能够排队；断网后能确认原任务结果；服务重启后能找回任务；费用有记录，文件可恢复，不同用户的数据能够隔离。</p></article>
+  </div>
+  <p>“工业级”主要强调后面这些可靠性要求。技术组件的数量不能直接说明系统已经达到工业级。</p>
+  <div class="fact"><span class="badge current">当前实现</span><p>目前实际组合是：<strong>Windows 电脑上的工作台 + 租用的云端 GPU + 外部模型服务。</strong>已经存在可操作的制作工作台，仍需继续补齐长期运行和多人使用所需的能力。</p></div>
+  <h3>原汇报首页的四个数字，应该怎样读？</h3>
+  <ul>
+    <li><strong>6 层：</strong>六类架构职责，不是已经部署了六台服务器。</li>
+    <li><strong>11 步：</strong>从建立作品到预览下载的用户生产过程。</li>
+    <li><strong>69 项：</strong>验收清单有 69 个检查条目，不能理解为 69 项已经全部通过。</li>
+    <li><strong>18/20：</strong>建议在 20 个真实生产任务中，至少 18 个形成合格交付包。这是验收目标，需要真实执行后才能给出成绩。</li>
+  </ul>
+  <p>后面还有 D01—D12 编号。它们描述的是数据交接步骤，D12 包含经验回流，与首页“11 步”的统计口径不同。</p>
+  <div class="note"><strong>阅读整份汇报时，始终分清三种信息：</strong><p><span class="badge current">当前实现</span> 描述已有代码和运行方式；<span class="badge planned">建设目标</span> 描述后续计划和验收要求；<span class="badge example-tag">假设示例</span> 只用于解释原理。功能已经实现、服务目前健康、真实成片已经合格，也需要分别验证。</p></div>
+  <aside class="say"><strong>汇报时可以这样说</strong><p>我们在建设一个数字人口播制作工作台，把内容、人物、声音、视频和后期交付组织成可追溯的流程。当前重点是把真实制作链路跑稳，再逐步完善生产可靠性和多用户能力。</p></aside>
+</section>
+
+<section class="chapter" id="architecture">
+  <header class="chapter-head"><span class="chapter-no">02</span><div><p class="eyebrow">对应原汇报第 2 块 · 总体架构</p><h2>系统里的每一层，都负责什么？</h2><p class="lead">架构图回答的是：为了完成一条视频，谁接收操作、谁安排工作、谁执行、谁保存结果。</p></div></header>
+  <div class="fact"><p><strong>工作台接收你的操作 → Agent 协调工作 → 业务程序检查条件 → 模型和 Worker 执行任务 → 数据库与文件保存结果。</strong></p></div>
+  <h3>第一层：工作台 / API——你操作系统的入口</h3>
+  <p>工作台就是你看见的网页：选人物、看三篇稿件、试听、生成视频、查看进度、下载。<a class="term" href="#glossary">API</a> 可以理解成网页与后台之间的办事窗口。</p>
+  <p>例如点击“生成配音”，网页会向后台提出请求：“请给这篇已经选定的稿件，使用这个音色生成配音。”网页负责展示和交互；后台负责检查条件、调用模型和保存结果。</p>
+  <h3>第二层：Agent 协作——把制作工作分成不同职责</h3>
+  <p>项目定义了一个总控和四个专家角色。<a class="term" href="#glossary">Agent</a> 可以先理解为“带有职责和可用工具的软件角色”。</p>
+  <ul>
+    <li><strong>总控 supervisor：</strong>安排步骤、检查依赖，知道现在应该做什么、哪里需要等你确认。</li>
+    <li><strong>文案 content：</strong>提出三个角度，生成候选稿和表达意图。</li>
+    <li><strong>质量 quality：</strong>组织检查，登记问题和审核结论。</li>
+    <li><strong>人物 avatar：</strong>处理人物、动作参考和数字人视频相关任务。</li>
+    <li><strong>声音 audio：</strong>处理朗读表达、配音和音频检查。</li>
+  </ul>
+  <p>这些角色体现软件职责分工，不要求每个角色各占一台服务器或各用一个不同的大模型。</p>
+  <div class="note"><span class="badge current">当前实现边界</span><p>代码默认采用<strong>规则驱动的调度方式</strong>，内容工具可以另外调用真实模型。不能把这张图理解成“五个大模型已经能完全自主地把任何视频做完”。例如，当前视频原片的视觉审核明确需要人工参与；存在 quality 角色，并不代表系统已经能自动看懂所有画面问题。</p></div>
+  <h3>第三层：业务执行与门禁——决定现在能不能做</h3>
+  <p>“门禁”就是前置条件检查。生成数字人视频前，要检查人物是否确认、稿件是不是当前版本、配音有没有试听确认、视频路线是否选好，以及费用是否在允许范围内。</p>
+  <p>这些检查由程序执行。即使 Agent 说“准备好了”，也要满足实际条件，才能进入后续执行。</p>
+  <div class="explain-grid">
+    <article class="concept"><h4>状态机</h4><p>规定任务有哪些状态，以及怎样变化，例如排队、处理中、等待确认、成功、失败。没有视频文件时，任务不能直接成为“成功”。</p></article>
+    <article class="concept"><h4>幂等</h4><p>尽量识别同一件事的重复请求。例如连续点击两次生成，应该复用同一次任务，避免重复生成和重复计费。</p></article>
+    <article class="concept"><h4>预算预留</h4><p>提交前先确认额度，并为这次调用登记预算，避免多个并行任务同时花掉同一笔额度。最终还需要按真实结果核对费用。</p></article>
+    <article class="concept"><h4>unknown 对账</h4><p>请求发出后连接断开，可能无法确定远端有没有收到、有没有完成。应先查询原任务，再决定下一步。</p></article>
+  </div>
+  <div class="example"><h4>对应你之前遇到的错误</h4><p>“作业结果尚未确认，请先查询原作业”表达的是：<strong>不能只凭通信失败，就判断远端没有执行。</strong>某一次请求到底有没有提交，需要结合它的作业编号和日志判断。这个机制的目的是避免不确定时重复提交。</p></div>
+  <h3>第四层：Skill / MCP / 记忆——规定怎么做、能用什么工具、记住什么</h3>
+  <ul>
+    <li><strong>Skill：</strong>业务操作规范，例如怎么写口播稿、怎么检查人物。</li>
+    <li><strong>MCP / 工具通道：</strong>让 Agent 通过约定接口使用能力。</li>
+    <li><strong>工具白名单：</strong>只开放角色需要的操作，例如文案角色不能任意更改发布状态。</li>
+    <li><strong>记忆：</strong>保存人物设定、历史内容和经过审核的经验，方便下次检索与复用。</li>
+    <li><strong>checkpointer：</strong>记录执行到哪一步，为流程恢复提供依据。</li>
+  </ul>
+  <p>这里的“记忆”主要是存储和检索记录，不代表每次使用都会重新训练一个模型。记录流程进度也不自动等于所有外部作业都能够恢复；后者还需要持久化作业状态和结果核对机制。</p>
+  <h3>第五层：Provider / Worker——真正执行具体任务</h3>
+  <p><a class="term" href="#glossary">Provider</a> 是外部能力供应商，例如 DeepSeek、MiniMax、OmniHuman。<a class="term" href="#glossary">Worker</a> 是接收任务并执行的程序，例如云端 Worker 接到字幕任务，调用对应模型生成识别结果和时间轴。</p>
+  <p>Worker 会组织模型运行、接单和返回结果。它不等于大模型，也不等于 GPU；GPU 是它执行某些计算时使用的硬件资源。</p>
+  <h3>第六层：数据与媒体——保存正式记录和实际文件</h3>
+  <p>系统保存两类东西：一类是<strong>业务记录</strong>，包括作品信息、选定稿件、任务状态和审核结论；另一类是<strong>媒体文件</strong>，包括人物图片、音频、原片、字幕、封面和最终视频。</p>
+  <p>文档中的“证据”，指实际文件、检测报告、供应商任务编号、审核记录等可核验材料。它们用于证明任务实际产生了什么结果。</p>
+  <details class="deep-dive"><summary>再理解一步：为什么资产要保留版本和父链？</summary><p>它要回答：“这条成片使用了哪张人物图、哪版稿件、哪段配音？”假如把第一版稿件改成第二版，旧配音和旧字幕可能已经不适用。记录每个产物从哪些输入生成，有助于识别哪些结果已经过期，避免把不同版本混成一个交付包。“资产不可变”强调保留历史版本，产生新版本时不要悄悄覆盖旧版本。</p></details>
+  <aside class="say"><strong>汇报时可以这样说</strong><p>我们把职责分成入口、协作、业务检查、工具与记忆、执行能力、数据资产六部分。AI 负责适合生成与判断的工作，程序负责状态、预算和前置条件，关键质量环节由人工确认。</p></aside>
+</section>
+
+<section class="chapter" id="dataflow">
+  <header class="chapter-head"><span class="chapter-no">03</span><div><p class="eyebrow">对应原汇报第 3 块 · 数据流与路线</p><h2>一条 45 秒视频，是怎样一步步做出来的？</h2><p class="lead">沿着一次制作过程看数据流，比先记住所有技术名称更容易。每一步都要知道输入、结果和下一步的依赖。</p></div></header>
+  <ol class="timeline">
+    <li><span class="step-id">D01</span><div><h3>建立作品，确定人物</h3><p>填写主题、受众、时长等要求，系统建立作品记录，再关联这次使用的固定人物。我们的例子是“45 秒办公效率技巧，固定女主播讲解”。</p><p><code>Work</code> 是这一期作品的总档案；<code>Task</code> 是围绕作品执行的一次制作任务；<code>AgentWorkItem</code> 是分给某个角色的一项具体工作；<code>AvatarIdentity</code> 是固定人物的身份档案。这些记录把后面的稿件、配音和视频关联在一起。</p></div></li>
+    <li><span class="step-id">D02—D04</span><div><h3>准备内容，三稿选一稿</h3><p>系统根据主题、关键词和可选资料，生成三个角度的候选稿，再检查重复、表达和事实风险，由你决定采用哪一篇。</p><div class="note"><span class="badge current">当前实现边界</span><p>当前内容流程主要使用你提供的资料和内部历史，不具备自动搜索全网资料的能力。涉及产品参数、统计数字等具体事实时，需要有可核对的资料。</p></div></div></li>
+    <li><span class="step-id">D05—D06</span><div><h3>准备人物与最终配音</h3><p>人物侧准备衣服、背景和动作参考；声音侧生成配音。<a class="term" href="#glossary">TTS</a> 就是“文字转语音”，项目中主要由 MiniMax 承担。</p><p>你要试听并确认最终配音，因为数字人的嘴型和字幕出现时间都会依赖它。如果重做某句话，让停顿变长，旧嘴型视频、旧字幕时间轴就可能需要重新生成。这就是“最终音频确认并冻结”的含义。</p></div></li>
+    <li><span class="step-id">D07</span><div><h3>选择数字人视频生成路线</h3><p>两条路线的共同目标是：让选定的人物讲出已经确认的配音。选择路线决定具体由谁执行、需要什么输入，以及费用和运维方式。</p>
+      <div class="explain-grid">
+        <article class="concept"><h4>路线一 · OmniHuman</h4><p>将人物图片和配音交给外部视频服务，得到音频驱动的人物视频。可以理解为：“把选定的人物和录好的声音交给供应商，请它制作说话视频。”</p><p>项目负责素材上传、费用确认、任务查询和结果下载。</p><div class="note"><span class="badge current">当前限制</span><p>当前接入要求<strong>输入音频严格小于 60 秒</strong>，达到或超过 60 秒会在提交入口阻断。当前流程不会自动把长音频拆段生成。长内容分段、拼接与质量验收，需要单独落实后才能作为可用能力汇报。</p></div></article>
+        <article class="concept"><h4>路线二 · M2</h4><p><strong>LivePortrait</strong> 根据人物图和动作参考，生成表情、头部运动等动作底片；<strong>MuseTalk</strong> 根据确认后的配音，调整底片中的嘴型。</p><p><strong>人物图 + 动作参考 → 动作底片 → 配音驱动嘴型 → 口播原片。</strong></p><p>原汇报所说的“本地 GPU”，更准确地理解为“我们自己管理模型的 GPU 路线”。当前实际 GPU 位于算力云。</p><p>它的能力受模型与动作参考限制，不能理解成输入任意身体动作描述，就一定可以生成。</p></article>
+      </div>
+      <details class="deep-dive"><summary>为什么源码里还能看到 OmniHuman 分段函数？</summary><p>代码仍保留对历史分段台账的兼容逻辑，但当前提交入口统一检查整轨时长，并按单段提交。函数存在不等于当前产品已经开放长视频自动分段；阅读实现时需要顺着当前入口和实际调用路径判断。</p></details>
+    </div></li>
+    <li><span class="step-id">D08—D09</span><div><h3>生成字幕时间轴，审核原片</h3><p><a class="term" href="#glossary">ASR</a> 是语音识别，回答“这段声音说了什么”；<a class="term" href="#glossary">Forced Alignment</a> 是强制对齐，在已经知道正文的情况下，回答“这些字分别在声音的什么时间出现”。</p><div class="example"><p>例如正文是“今天分享三个技巧”，对齐结果要告诉系统：这句话从第几秒开始、到第几秒结束。这样后期才能在合适的时间显示文字。</p></div><p>项目使用 Qwen3-ASR 和 Qwen3-ForcedAligner 处理这些工作。原片审核还要检查人物是否一致、嘴型是否对上声音、表情动作有无异常，以及音轨是否保持为确认过的那一条。当前视觉质量需要人工审核；若以后引入分段流程，还需要检查段间跳脸、断音等问题。</p><p>字幕处理与视频生成，在输入条件满足时可以并行。最后的后期制作要等两边都准备好。</p></div></li>
+    <li><span class="step-id">D10</span><div><h3>后期制作，把原片变成正式成片</h3><p>有了原片、配音和字幕时间轴，还要处理字幕排版、画面规格、音量、封面和编码。这里主要使用 FFmpeg 等媒体工具。</p><p>“确定性 Worker”强调这些操作由明确程序流程控制，例如按指定分辨率输出、按时间轴加字幕。它不意味着所有 AI 模型每次都会产生完全相同的结果。</p></div></li>
+    <li><span class="step-id">D11</span><div><h3>形成交付包</h3><p>交付包包含最终视频、字幕文件、封面、标题简介标签等作品信息、质量报告，以及文件清单 <code>manifest</code>。</p><p><code>manifest</code> 类似装箱单，说明包里有哪些文件；<code>SHA-256 / hash</code> 类似文件指纹，用来检查文件是否发生变化。文件指纹能帮助确认“是不是同一份文件”，不能证明“内容质量一定好”。</p></div></li>
+    <li><span class="step-id">D12</span><div><h3>保存经过审核的经验</h3><p>例如某种字幕字号在手机上更清楚，某个动作参考容易出现异常，可以形成经验记录，为下次制作提供参考。失败输出和未经验证的判断，不能直接变成以后都相信的规则。</p></div></li>
+  </ol>
+  <div class="note"><strong>交付完成和抖音发布，是两件事。</strong><p>当前发布使用专用 Chrome 和浏览器适配器，并需要你确认。提交到平台后，还要分别核验平台受理、审核和公开状态；本地出现“上传完成”，不能直接代表已经公开发布。</p></div>
+  <aside class="say"><strong>汇报时可以这样说</strong><p>一条作品从人物和文案开始，确认最终配音后进入视频与字幕制作，再经过原片审核和后期包装形成交付包。每一步保留输入和结果关联，关键输入一旦变化，就重新检查下游产物是否仍然有效。</p></aside>
+</section>
+
+<section class="chapter" id="stack">
+  <header class="chapter-head"><span class="chapter-no">04</span><div><p class="eyebrow">对应原汇报第 4 块 · 技术栈</p><h2>这么多技术名称，分别是在干什么？</h2><p class="lead">技术栈就是每一类工作选用了什么工具。先记住职责，再逐步熟悉名称和实现细节。</p></div></header>
+  <div class="table-wrap"><table><thead><tr><th scope="col">工作类别</th><th scope="col">相关工具</th><th scope="col">白话解释</th><th scope="col">当前与计划</th></tr></thead><tbody>
+    <tr><th scope="row">网页与交互</th><td>Vue、TypeScript、Pinia、Vite</td><td>构建页面，响应操作，管理页面状态，进行开发与打包。</td><td><span class="badge current">当前实现</span></td></tr>
+    <tr><th scope="row">后台业务与接口</th><td>Python、FastAPI、Pydantic</td><td>接收请求，检查数据格式，执行业务规则，调用模型与媒体工具。</td><td><span class="badge current">当前实现</span></td></tr>
+    <tr><th scope="row">角色与流程编排</th><td>DeepAgents、LangGraph</td><td>组织角色、工具调用和执行过程；具体生成能力来自模型或媒体工具。</td><td><span class="badge current">当前实现</span><br>默认采用规则调度</td></tr>
+    <tr><th scope="row">业务数据库</th><td>SQLite → PostgreSQL</td><td>保存作品、输入选择、任务进度、审核结论等正式记录。</td><td><span class="badge current">当前 SQLite</span><br><span class="badge planned">目标 PostgreSQL</span></td></tr>
+    <tr><th scope="row">数据访问与相似检索</th><td>SQLAlchemy、pgvector</td><td>前者是代码访问数据库的工具；后者是 PostgreSQL 上进行相似内容检索的可选扩展。</td><td><span class="badge planned">生产建设选型</span></td></tr>
+    <tr><th scope="row">队列与共享协调</th><td>Redis 等组件</td><td>协助安排任务排队、共享锁和缓存，控制多个服务如何协同。</td><td><span class="badge planned">建设目标</span></td></tr>
+    <tr><th scope="row">文字、声音与数字人</th><td>DeepSeek、MiniMax、OmniHuman；LivePortrait、MuseTalk、Qwen3 系列</td><td>分别承担内容生成、配音、人物视频、动作与嘴型、语音识别与对齐等能力。</td><td><span class="badge current">已有接入</span><br>真实质量需分项验收</td></tr>
+    <tr><th scope="row">媒体处理</th><td>FFmpeg、FFprobe、libass、Pillow</td><td>处理音视频，读取媒体参数，渲染字幕，制作图片与封面。</td><td><span class="badge current">当前实现</span></td></tr>
+    <tr><th scope="row">大文件存储</th><td>本机目录、TOS；S3 / MinIO 等方案</td><td>保存媒体，并在需要时让云端服务或多台机器读取指定文件。</td><td><span class="badge current">本机 + 部分 TOS 接入</span><br><span class="badge planned">统一媒体对象存储</span></td></tr>
+    <tr><th scope="row">监控与问题定位</th><td>Prometheus、Grafana、Loki、OpenTelemetry</td><td>收集指标、显示图表、查询日志、串起跨服务任务经过。</td><td><span class="badge planned">建设目标</span></td></tr>
+  </tbody></table></div>
+  <h3>网页状态与正式记录，为什么要分开？</h3>
+  <p>Vue 构建你看到的页面；TypeScript 帮助开发者提前发现数据类型和代码错误；Pinia 管理当前页面正在使用的状态，例如选中了哪个人物；Vite 用于运行开发页面和前端打包。</p>
+  <p>页面状态不能替代数据库记录。要让刷新页面后仍能找回选定人物和稿件，就需要后端保存正式记录。</p>
+  <h3>后台为什么同时提到 Python、FastAPI 和 Pydantic？</h3>
+  <p>它们是不同层次的工具：Python 是后台主要编程语言；FastAPI 提供接收操作请求的接口；Pydantic 检查请求和数据是否符合规定格式。例如某个输入必须是有效任务编号、时长必须是数字，可以通过明确规则检查。</p>
+  <h3>数据库、队列、对象存储，为什么不能只选一个？</h3>
+  <p><strong>数据库保存正式业务记录</strong>：这是谁的作品、到了什么状态。SQLite 是本地数据库文件，适合当前单用户形态；PostgreSQL 更适合数据库独立部署、多个服务共同访问，以及更复杂的并发和运维需求。</p>
+  <p><strong>队列安排谁先执行</strong>：多项任务竞争 GPU 时，需要排队、领取和重试。Redis 可以参与队列、锁和缓存，但不能单独替代完整业务账本，也不会安装后就自动解决任务恢复。</p>
+  <p><strong>对象存储保存大文件</strong>：它相当于供多台机器使用的媒体仓库。项目已接入向火山 TOS 上传 OmniHuman 输入素材的能力；整套媒体资产统一迁移到对象存储，仍属于后续改造。</p>
+  <h3>媒体工具分工很具体</h3>
+  <ul>
+    <li><strong>FFmpeg：</strong>处理、合成、转换音视频。</li>
+    <li><strong>FFprobe：</strong>读取分辨率、时长、编码等媒体信息。</li>
+    <li><strong>libass：</strong>按照字幕样式渲染文字。</li>
+    <li><strong>Pillow：</strong>处理图片和封面。</li>
+  </ul>
+  <h3>监控系统回答：“出了问题，怎么知道卡在哪里？”</h3>
+  <p>Prometheus 收集失败数量、队列长度等数字；Grafana 把它们显示成图表；Loki 汇集和查询日志；OpenTelemetry 帮助串起一次任务经过多个服务的过程。</p>
+  <div class="note"><strong>选型表不等于安装清单。</strong><p>这些监控工具和部分数据组件属于生产建设目标。汇报里出现名称，不能直接解释为已经全部安装，也不能代表已经完成正式压测。</p></div>
+  <aside class="say"><strong>汇报时可以这样说</strong><p>前端负责操作体验，Python 后端承接业务规则，外部模型和云端 GPU 负责生成，媒体工具完成后期。当前以 SQLite 和本机文件为基础，后续按并发与可靠性需要引入独立数据库、队列、统一对象存储和监控。</p></aside>
+</section>

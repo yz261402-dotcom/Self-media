@@ -1,0 +1,318 @@
+{
+  "url": "https://creator.douyin.com/creator-micro/content/post/video",
+  "title": "抖音创作者中心",
+  "phase": "ready_to_confirm",
+  "network_issues": [
+    {
+      "host": "1e10adc3949ba59abqzl44laq2vhsaueuasgpoafofu.wmzfylgdsz.com",
+      "error": "net::ERR_CONNECTION_CLOSED"
+    },
+    {
+      "host": "1e10adc3949ba59ab6ckpbjyoxwdpghjhstce2os5rm.wmzfylgdsz.com",
+      "error": "net::ERR_CONNECTION_CLOSED"
+    },
+    {
+      "host": "aiakae5hraj243jh.0kkkkkt.com",
+      "error": "net::ERR_TIMED_OUT"
+    },
+    {
+      "host": "security.zijieapi.com",
+      "error": "net::ERR_ABORTED"
+    },
+    {
+      "host": "1e10adc3949ba59abri7km2o4uxyjpy5de6brxsw5eq.wmzfylgdsz.com",
+      "error": "net::ERR_TIMED_OUT"
+    },
+    {
+      "host": "security.zijieapi.com",
+      "error": "net::ERR_ABORTED"
+    },
+    {
+      "host": "security.zijieapi.com",
+      "error": "net::ERR_ABORTED"
+    },
+    {
+      "host": "security.zijieapi.com",
+      "error": "net::ERR_ABORTED"
+    },
+    {
+      "host": "security.zijieapi.com",
+      "error": "net::ERR_ABORTED"
+    },
+    {
+      "host": "security.zijieapi.com",
+      "error": "net::ERR_ABORTED"
+    },
+    {
+      "host": "security.zijieapi.com",
+      "error": "net::ERR_ABORTED"
+    },
+    {
+      "host": "security.zijieapi.com",
+      "error": "net::ERR_ABORTED"
+    },
+    {
+      "host": "security.zijieapi.com",
+      "error": "net::ERR_ABORTED"
+    },
+    {
+      "host": "security.zijieapi.com",
+      "error": "net::ERR_ABORTED"
+    },
+    {
+      "host": "security.zijieapi.com",
+      "error": "net::ERR_ABORTED"
+    }
+  ],
+  "interface_text": "作品发布\n首页\n内容管理\n收入变现\n创作服务\n首页\nAI分身\n随变\n世界书\nAI工坊\n基础信息\n作品描述\n14\n/\n30\n#添加话题\n@好友\n72 / 1000\n推荐\n#\n职业照\n#\n车展模特\n#\n粉墨团\n#\n绝美\n#\n转手绘\n#\n个人\n+\n14\n官方活动\n我的长长长假\n热度：1.1k\n寡门门主脱单卡池\n热度：276\n秦昊Jeff邀你定格光阴的模样\n热度：361\n设置封面\n封面不佳\n竖封面3:4\n封面不佳\n横封面4:3\n封面存在2个问题，\n会导致作品流量减少\n详情\n封面存在封面边框面积过大等问题\n好封面会吸引更多人浏览作品\n优质封面示例\n添加合集\n合集\n请选择合集\n自主声明\n内容由AI生成\n扩展信息\n添加标签\n位置\n输入地理位置\n关联热点\n点击输入热点词\n发布设置\n同时发布\n不同时发布\n同时发布到\n谁可以看\n公开\n好友可见\n仅自己可见\n保存权限\n允许\n不允许\n发布时间\n立即发布\n定时发布\n快速填写\n发布\n暂存离开\n预览视频\n预览封面/标题\n它不只是会聊天，它开始动手了\n张口吃掉一只杨\n0\n************************\n***\n0\n************************\n***\n0\n************************\n***\n0\n************************\n***\n0\n************************\n***\n0\n横封面\n竖封面\n添加音乐\n重新上传\n发文助手\n快速检测\n检测中73%\n封面优化建议\n共2条\n你的作品封面可能存在以下问题，会影响作品的流量，建议尽快修改\n详情\n横封面\n封面边框面积过大\n竖封面\n封面边框面积过大",
+  "inputs": [
+    {
+      "type": "text",
+      "placeholder": "填写作品标题，为作品获得更多流量",
+      "accept": "",
+      "aria_label": "",
+      "class_name": "semi-input semi-input-default"
+    },
+    {
+      "type": "checkbox",
+      "placeholder": "",
+      "accept": "",
+      "aria_label": "",
+      "class_name": "semi-switch-native-control"
+    },
+    {
+      "type": "text",
+      "placeholder": "请输入视频售价",
+      "accept": "",
+      "aria_label": "",
+      "class_name": "semi-input semi-input-default"
+    },
+    {
+      "type": "text",
+      "placeholder": "请输入付费场景下的视频标题",
+      "accept": "",
+      "aria_label": "",
+      "class_name": "semi-input semi-input-default"
+    },
+    {
+      "type": "radio",
+      "placeholder": "",
+      "accept": "",
+      "aria_label": "",
+      "class_name": ""
+    },
+    {
+      "type": "radio",
+      "placeholder": "",
+      "accept": "",
+      "aria_label": "",
+      "class_name": ""
+    },
+    {
+      "type": "file",
+      "placeholder": "",
+      "accept": "image/png,image/jpeg,image/jpg",
+      "aria_label": "",
+      "class_name": "upload-btn-input-UY_qeY"
+    },
+    {
+      "type": "radio",
+      "placeholder": "",
+      "accept": "",
+      "aria_label": "",
+      "class_name": ""
+    },
+    {
+      "type": "radio",
+      "placeholder": "",
+      "accept": "",
+      "aria_label": "",
+      "class_name": ""
+    },
+    {
+      "type": "checkbox",
+      "placeholder": "",
+      "accept": "",
+      "aria_label": "",
+      "class_name": "dy-creator-content-switch-native-control"
+    },
+    {
+      "type": "checkbox",
+      "placeholder": "",
+      "accept": "",
+      "aria_label": "",
+      "class_name": "radio-native-p6VBGt"
+    },
+    {
+      "type": "checkbox",
+      "placeholder": "",
+      "accept": "",
+      "aria_label": "",
+      "class_name": "radio-native-p6VBGt"
+    },
+    {
+      "type": "checkbox",
+      "placeholder": "",
+      "accept": "",
+      "aria_label": "",
+      "class_name": "radio-native-p6VBGt"
+    },
+    {
+      "type": "checkbox",
+      "placeholder": "",
+      "accept": "",
+      "aria_label": "",
+      "class_name": "radio-native-p6VBGt"
+    },
+    {
+      "type": "checkbox",
+      "placeholder": "",
+      "accept": "",
+      "aria_label": "",
+      "class_name": "radio-native-p6VBGt"
+    },
+    {
+      "type": "checkbox",
+      "placeholder": "",
+      "accept": "",
+      "aria_label": "",
+      "class_name": "radio-native-p6VBGt"
+    },
+    {
+      "type": "checkbox",
+      "placeholder": "",
+      "accept": "",
+      "aria_label": "",
+      "class_name": "radio-native-p6VBGt"
+    },
+    {
+      "type": "checkbox",
+      "placeholder": "",
+      "accept": "",
+      "aria_label": "",
+      "class_name": "radio-native-p6VBGt"
+    },
+    {
+      "type": "checkbox",
+      "placeholder": "",
+      "accept": "",
+      "aria_label": "",
+      "class_name": "radio-native-p6VBGt"
+    },
+    {
+      "type": "file",
+      "placeholder": "",
+      "accept": "video/mp4,video/x-m4v,video/x-flv,.flv,.avi,.wmv,.ts,.mp4,.mpeg4,.mov,.m4v,.mpg,.mkv,.m4,video/*",
+      "aria_label": "",
+      "class_name": "upload-btn-input-UY_qeY"
+    }
+  ],
+  "editors": [
+    {
+      "tag": "DIV",
+      "role": null,
+      "placeholder": null,
+      "class_name": "zone-container editor-kit-container editor editor-comp-publish notranslate chrome window chrome88"
+    }
+  ],
+  "buttons": [
+    "作品发布",
+    "首页",
+    "AI分身",
+    "随变",
+    "世界书",
+    "AI工坊",
+    "发布",
+    "暂存离开",
+    ""
+  ],
+  "dialogs": [],
+  "image_controls": [
+    {
+      "alt": "",
+      "class_name": "logo-ShG9Pe logo-full-iF13rv",
+      "parent_class": "logo-picture-aNcNkK"
+    },
+    {
+      "alt": "",
+      "class_name": "logo-ShG9Pe logo-mini-Nn8Zt8",
+      "parent_class": "logo-picture-aNcNkK"
+    },
+    {
+      "alt": "",
+      "class_name": "",
+      "parent_class": "background-OpVteV"
+    },
+    {
+      "alt": "",
+      "class_name": "",
+      "parent_class": "background-OpVteV"
+    },
+    {
+      "alt": "",
+      "class_name": "",
+      "parent_class": "img-container-uK62Va"
+    },
+    {
+      "alt": "",
+      "class_name": "chevron-euwXR1",
+      "parent_class": "chevron-euwXR1"
+    },
+    {
+      "alt": "",
+      "class_name": "",
+      "parent_class": "coverWrapper-Tlkz8L"
+    },
+    {
+      "alt": "",
+      "class_name": "titleTag-k_qTfK",
+      "parent_class": "titleContent-VvVeSk"
+    },
+    {
+      "alt": "",
+      "class_name": "preview-cover-bg-Awn6kb",
+      "parent_class": "preview-container-Ukt3Ze"
+    },
+    {
+      "alt": "",
+      "class_name": "",
+      "parent_class": "cover-HHMY3Z"
+    },
+    {
+      "alt": "",
+      "class_name": "",
+      "parent_class": "avatar-Tfp2gn"
+    },
+    {
+      "alt": "",
+      "class_name": "",
+      "parent_class": "user-like-G9qlu_"
+    },
+    {
+      "alt": "",
+      "class_name": "",
+      "parent_class": "user-like-G9qlu_"
+    },
+    {
+      "alt": "",
+      "class_name": "",
+      "parent_class": "user-like-G9qlu_"
+    },
+    {
+      "alt": "",
+      "class_name": "",
+      "parent_class": "user-like-G9qlu_"
+    },
+    {
+      "alt": "",
+      "class_name": "",
+      "parent_class": "user-like-G9qlu_"
+    },
+    {
+      "alt": "",
+      "class_name": "",
+      "parent_class": "user-like-G9qlu_"
+    }
+  ],
+  "last_error": null
+}

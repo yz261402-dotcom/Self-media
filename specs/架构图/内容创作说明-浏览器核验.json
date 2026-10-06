@@ -1,0 +1,33 @@
+{
+  "artifact": "内容创作DeepAgents说明.html",
+  "date": "2026-09-30",
+  "method": "Playwright local HTTP preview and screenshot inspection",
+  "viewports": [
+    {"width": 1440, "height": 900, "document_scroll_width": 1440, "overflow_elements": []},
+    {"width": 1600, "height": 1000, "document_scroll_width": 1600, "overflow_elements": []},
+    {"width": 1920, "height": 1080, "document_scroll_width": 1920, "overflow_elements": []},
+    {"width": 2048, "height": 1320, "document_scroll_width": 2048, "overflow_elements": []},
+    {"width": 768, "height": 1024, "document_scroll_width": 768, "overflow_elements": []},
+    {"width": 390, "height": 844, "document_scroll_width": 390, "overflow_elements": []}
+  ],
+  "interaction_checks": {
+    "story_tab_shows_story_panel": true,
+    "story_tab_hides_talking_panel": true,
+    "arrow_key_switches_tabs": true,
+    "three_passed_gate_message": "展示三份候选，用户可以选择其中一份。",
+    "edited_after_review_message": "旧审核已失效，更新审核后才能展示和采用。",
+    "print_css_displays_both_route_panels": true
+  },
+  "javascript_errors_after_reload": [],
+  "http_errors_after_reload": [],
+  "visual_review": "passed",
+  "screenshots": [
+    "内容创作说明-桌面核验.png",
+    "内容创作说明-手机核验.png",
+    "内容创作说明-架构核验.png",
+    "内容创作说明-Agent核验.png",
+    "内容创作说明-分镜核验.png"
+  ],
+  "final_mobile_stat_heights": [29.890625, 29.890625, 29.890625],
+  "scope": "Document layout and interactions only; no production or paid-provider acceptance performed."
+}

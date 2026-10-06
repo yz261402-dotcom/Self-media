@@ -1,0 +1,29 @@
+{
+  "schema_version": 1,
+  "decision_id": "av001_b3_selection_v1",
+  "recorded_at": "2026-09-22T00:10:58.757764+00:00",
+  "decision_source": "用户在本会话明确选择",
+  "user_statement": "人物B+音色3",
+  "selection_status": "SELECTED_BY_USER",
+  "approval_scope": "identity_and_voice_selection_only",
+  "selection": {
+    "image": "B",
+    "voice": "3"
+  },
+  "avatar": {
+    "identity_id": "av_base_b_v1",
+    "sha256": "b66feb11d62559a632def9f86e0915645a70fa4dbb38c6a2cd2f7cb50b607b48"
+  },
+  "voice": {
+    "voice_profile_id": "voice_minimax_warm_bestie_v1",
+    "voice_id": "Chinese (Mandarin)_Warm_Bestie",
+    "sha256": "a6945eac9e317ea3643151e039f3de1a929277aceb605a2d13dee708f815fc81"
+  },
+  "production_acceptance": "PENDING_ACCEPTANCE",
+  "production_enabled": false,
+  "manifest_path": "assets/固定主播/主播B/版本1/角色档案.json",
+  "notes": [
+    "用户确认的是人物与声音选择，不代表真人口播、换装一致性或生产验收通过。",
+    "本记录优先于浏览器临时选择；不从 localStorage 或测试导出文件推断用户决定。"
+  ]
+}

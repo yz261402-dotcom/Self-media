@@ -1,0 +1,20 @@
+{
+  "checked_at": "2026-09-22T01:42:58.065296+00:00",
+  "real_routes_generated": 3,
+  "original_video_hashes": "PASS",
+  "three_originals_full_decode": "PASS",
+  "browser_compatible_copy_full_decode": "PASS",
+  "original_B_and_voice3_unchanged": "PASS",
+  "browser_playback_all_three": "PASS",
+  "mutually_exclusive_playback": "PASS",
+  "desktop_1440px_overflow": false,
+  "mobile_390px_overflow": false,
+  "html_pages_checked": 30,
+  "local_links_checked": 1235,
+  "broken_links": 0,
+  "offline_job_guard_tests_passed": 3,
+  "visual_review_scope": "代表帧与眼部采样；全片人类视听及60秒仍未验收",
+  "production_acceptance": "PENDING_ACCEPTANCE",
+  "gpu_jobs_finished": true,
+  "instance_shutdown": false
+}

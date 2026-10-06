@@ -1,0 +1,19 @@
+{
+  "state": "PROCESS_SUCCEEDED",
+  "reason": null,
+  "pid": 3162,
+  "returncode": 0,
+  "gpu_peak_total_mib_sampled": 7489,
+  "outputs": [
+    {
+      "path": "/root/autodl-tmp/avatar-motion/EXP-001/results/M1B/v15/M1B_original.mp4",
+      "bytes": 763018,
+      "sha256": "0ff49ac8db2ec7d12b7c40afea5b5929f76c37c09f4bcecb5a67e860b512b482"
+    }
+  ],
+  "quality": "NOT_REVIEWED",
+  "finished_at": "2026-09-22T00:56:53.678152+00:00",
+  "wall_seconds": 111.684,
+  "estimated_job_gpu_cny": 0.049017,
+  "cost_scope": "job_wall_clock_only; excludes installation, idle time and all previous costs"
+}

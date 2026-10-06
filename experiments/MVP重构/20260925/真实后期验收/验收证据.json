@@ -1,0 +1,108 @@
+{
+  "status": "succeeded",
+  "scope": "existing_real_media_local_rerender",
+  "new_asr_calls": 0,
+  "new_gpu_calls": 0,
+  "production_db_used": false,
+  "human_visual_review": "not_run",
+  "limits": [
+    "复用 MW-001 已记录的真实时间轴，本次未重新识别或对齐。",
+    "编码、解码和响度检测不代表人物身份、口型、动作、表情经人工验收。",
+    "缩放、去噪、锐化为固定 FFmpeg 参数，不宣称真实超分。"
+  ],
+  "source_evidence": {
+    "path": "C:\\Users\\22346\\Desktop\\自媒体视频生成\\experiments\\M2-Worker链路\\MW-001\\后期证据.json",
+    "sha256": "ab61a0c33dab8e226f0935dd6a9d13c32f461083d60f269a2f78617e86a6d922",
+    "asr_job": "dfa7ed2ef6bf4e68",
+    "align_job": "a77fc513bf794d4d"
+  },
+  "inputs": {
+    "video": {
+      "path": "C:/Users/22346/Desktop/自媒体视频生成/experiments/M2-Worker链路/MW-001/成片.mp4",
+      "sha256": "648f97125f7d26fd9dd41938c85346cdd0f92767e1698fd4c4476f709f240879"
+    },
+    "audio": {
+      "path": "C:/Users/22346/Desktop/自媒体视频生成/production/backend\\runtime/audio/wreal_2146ef1ce27d/audio_daefb8c42e08.wav",
+      "sha256": "4e22377e86c280a1c142218d8be0bf6eb5ee9a0947adfa2135b41f84d531112c"
+    }
+  },
+  "source_transcript": "你有没有发现，越是想写好开头，越容易卡住？其实开头不需要惊艳，只需要具体，给听众一个真实的场景，比十个华丽的形容词更有用。这条音频是一次真实的链路验证，从稿件到冻结计划，再到真实语音合成。如果你能听到这句话，说明从文字到声音的整条链路已经打通。",
+  "subtitle_text": "你有没有发现，越是想写好开头，越容易卡住？其实开头不需要惊艳，只需要具体。给听众一个真实的场景，比十个华丽的形容词更有用。这条音频是一次真实的链路验证：从稿件到冻结计划，再到真实语音合成。如果你能听到这句话，说明从文字到声音的整条链路已经打通。",
+  "subtitle_checks": {
+    "cue_count": "11",
+    "coverage_chars": "122"
+  },
+  "render": {
+    "loudness_input_pass1": {
+      "input_i": -30.57,
+      "input_tp": -13.51,
+      "input_lra": 2.8,
+      "input_thresh": -40.72,
+      "target_offset": 0.38
+    },
+    "video_filters": "scale=1080:1920:force_original_aspect_ratio=decrease,pad=1080:1920:(ow-iw)/2:(oh-ih)/2:black,setsar=1,hqdn3d=1.5:1.5:3:3,unsharp=5:5:0.35:5:5:0,fps=30,ass=filename='C\\:/Users/22346/Desktop/自媒体视频生成/experiments/MVP重构/20260925/真实后期验收/字幕.ass':fontsdir='C\\:/Windows/Fonts',drawtext=fontfile='C\\:/Windows/Fonts/msyh.ttc':text='AI 生成内容':fontsize=34:fontcolor=white@0.9:box=1:boxcolor=black@0.45:boxborderw=12:x=w-tw-40:y=h-th-40",
+    "audio_filter": "loudnorm=I=-14.0:TP=-2.5:LRA=11:measured_I=-30.57:measured_TP=-13.51:measured_LRA=2.8:measured_thresh=-40.72:linear=true:offset=0.38",
+    "cvs_flag": "-vsync"
+  },
+  "verify": {
+    "probe": {
+      "width": 1080,
+      "height": 1920,
+      "codec": "h264",
+      "pix_fmt": "yuv420p",
+      "fps": "30/1",
+      "nb_frames": 695,
+      "audio_codec": "aac",
+      "sample_rate": "48000",
+      "duration": 23.166667
+    },
+    "loudness_measured": {
+      "input_i": -14.55,
+      "input_tp": -2.49,
+      "input_lra": 1.8,
+      "input_thresh": -24.7,
+      "target_offset": -0.12
+    },
+    "black_freeze_events": {
+      "black_events": [],
+      "freeze_events": []
+    },
+    "audio_sample_rate": 48000
+  },
+  "final_subtitle_checks": {
+    "cue_count": "11",
+    "coverage_chars": "122"
+  },
+  "cover": {
+    "cover_path": "C:\\Users\\22346\\Desktop\\自媒体视频生成\\experiments\\MVP重构\\20260925\\真实后期验收\\封面.jpg",
+    "title": "真实口播链路验证"
+  },
+  "outputs": [
+    {
+      "path": "C:\\Users\\22346\\Desktop\\自媒体视频生成\\experiments\\MVP重构\\20260925\\真实后期验收\\成片.mp4",
+      "sha256": "1e9c91c106afda787141214d78e172a1b82eabf3c7e34807d678b5276e124b55",
+      "bytes": 5037302
+    },
+    {
+      "path": "C:\\Users\\22346\\Desktop\\自媒体视频生成\\experiments\\MVP重构\\20260925\\真实后期验收\\字幕.ass",
+      "sha256": "2e7860606ed889f52ed6cb23be7def0c690cd3bc43b3039630d22762809f95de",
+      "bytes": 1544
+    },
+    {
+      "path": "C:\\Users\\22346\\Desktop\\自媒体视频生成\\experiments\\MVP重构\\20260925\\真实后期验收\\字幕.srt",
+      "sha256": "ee82225908e4842fb042894f8c3eba8f61a94f492073be4a655934c31b51b452",
+      "bytes": 784
+    },
+    {
+      "path": "C:\\Users\\22346\\Desktop\\自媒体视频生成\\experiments\\MVP重构\\20260925\\真实后期验收\\封面.jpg",
+      "sha256": "327ccba1f82be3bcc57cc77fb235ed3b5514b6fc94a81be5af21fdb6a91d1fbe",
+      "bytes": 156480
+    },
+    {
+      "path": "C:\\Users\\22346\\Desktop\\自媒体视频生成\\experiments\\MVP重构\\20260925\\真实后期验收\\关键帧.png",
+      "sha256": "ac3a53465a182f2b55101e4103c4ebff73af551b7270a110b252f674687c2c81",
+      "bytes": 1122448
+    }
+  ],
+  "elapsed_seconds": 33.658
+}

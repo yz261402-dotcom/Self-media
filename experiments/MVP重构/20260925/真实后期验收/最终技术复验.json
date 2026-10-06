@@ -1,0 +1,25 @@
+{
+  "probe": {
+    "width": 1080,
+    "height": 1920,
+    "codec": "h264",
+    "pix_fmt": "yuv420p",
+    "fps": "30/1",
+    "nb_frames": 695,
+    "audio_codec": "aac",
+    "sample_rate": "48000",
+    "duration": 23.166667
+  },
+  "loudness_measured": {
+    "input_i": -14.55,
+    "input_tp": -2.49,
+    "input_lra": 1.8,
+    "input_thresh": -24.7,
+    "target_offset": -0.12
+  },
+  "black_freeze_events": {
+    "black_events": [],
+    "freeze_events": []
+  },
+  "audio_sample_rate": 48000
+}

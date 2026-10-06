@@ -1,0 +1,105 @@
+{
+  "revision": "v2.4-终审后打包",
+  "scope": "字幕可并行；合格原片＋字幕→代码后期→quality终审→内部打包",
+  "artifacts": [
+    {
+      "file": "specs\\汇报\\整体分层架构.html",
+      "artifact_sha256": "f51445cd7c5a3ecdae219f841bb6f8e38f1a1cfc037bc917d9bc0bbb960c9d0d",
+      "showcase": "9/9",
+      "errors": 0,
+      "warnings": 0,
+      "containment": "4/4",
+      "visual_review": "passed",
+      "inspected": [
+        "2048x1320.light"
+      ]
+    },
+    {
+      "file": "specs\\汇报\\Agent协作框架.html",
+      "artifact_sha256": "641c07786d8cd059b593726ff1daf7e7d607b24dcd5c5c555a89d7592b344485",
+      "showcase": "9/9",
+      "errors": 0,
+      "warnings": 0,
+      "containment": "4/4",
+      "visual_review": "passed",
+      "inspected": [
+        "2048x1320.light"
+      ]
+    },
+    {
+      "file": "specs\\架构图\\DeepAgents多智能体架构.html",
+      "artifact_sha256": "db6f14ac0a9fbff02bd426a7c8ec8756bbedacd348b00c38a669f5ed9bc420bc",
+      "showcase": "9/9",
+      "errors": 0,
+      "warnings": 0,
+      "containment": "4/4",
+      "visual_review": "passed",
+      "inspected": [
+        "2048x1320.light"
+      ],
+      "png": {
+        "file": "specs\\架构图\\DeepAgents多智能体架构.png",
+        "size": [
+          4920,
+          2340
+        ],
+        "sha256": "0face5dc16269368e332b2c6bf18ecf140e2aee7fd547c6063d16dc49f3a7677"
+      }
+    },
+    {
+      "file": "specs\\汇报\\项目汇报架构.html",
+      "artifact_sha256": "6dae19bda16a00367f0fb48b1a62c7fda9d07a49647fc417569d8a1138ca72ff",
+      "showcase": "9/9",
+      "errors": 0,
+      "warnings": 0,
+      "containment": "4/4",
+      "visual_review": "passed",
+      "inspected": [
+        "2048x1320.light"
+      ]
+    },
+    {
+      "file": "specs\\架构图\\作品生产数据流.html",
+      "artifact_sha256": "84270856a5b14f2389a774fc335279613dbf72e8bd675b106bf5c2ed31415a12",
+      "showcase": "9/9",
+      "errors": 0,
+      "warnings": 0,
+      "containment": "4/4",
+      "visual_review": "passed",
+      "inspected": [
+        "2048x1320.light"
+      ],
+      "png": {
+        "file": "specs\\架构图\\作品生产数据流.png",
+        "size": [
+          4320,
+          2480
+        ],
+        "sha256": "76aa4016e7abd54dfaf14ea94e51519d173f0cd4cdbaa1f78b6a4d2928fa1f9c"
+      }
+    }
+  ],
+  "report_source_validation": {
+    "syntax": "passed",
+    "read_only_dry_run": "passed",
+    "agent_roles": 5,
+    "business_skills": 7,
+    "mcp_groups": 4,
+    "final_report_written": false,
+    "existing_report_sha256": "f2a4471853cb873ef43d926185f0747b81a5c2590b2fd008ca8b400c99324efc",
+    "当前汇报": {
+      "file": "specs\\汇报\\v24-当前汇报-浏览器核验.json",
+      "checks": 53,
+      "failures": 0,
+      "javascript_errors": 0,
+      "sha256": "8d421797b0a2c8e536a1e2c6267846e473e26bfb2d1b4dd8471326dd3c993609"
+    },
+    "生成器候选": {
+      "file": "specs\\汇报\\v24-生成器候选-浏览器核验.json",
+      "checks": 53,
+      "failures": 0,
+      "javascript_errors": 0,
+      "sha256": "9f9fca8b5c0f1b544ffb59898e881308f125e9f31b46087e43995ebbbcff2a31"
+    }
+  }
+}

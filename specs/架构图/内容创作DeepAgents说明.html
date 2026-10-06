@@ -1,0 +1,209 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="light">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' fill='%23002fa7'/%3E%3Cpath d='M9 9h14v3H9zm0 6h14v3H9zm0 6h9v3H9z' fill='white'/%3E%3C/svg%3E">
+<title>内容创作 · Deep Agents 架构说明</title>
+<style>
+:root{--bg:#f7f7f8;--paper:#fff;--ink:#202126;--muted:#646770;--line:#dadce2;--blue:#002fa7;--tint:#eef2ff;--soft:#f0f1f4;--nav:230px}
+*{box-sizing:border-box}html{scroll-behavior:smooth;scroll-padding-top:28px}body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.8 "Helvetica Neue",Arial,"Microsoft YaHei",sans-serif}a{color:var(--blue);text-underline-offset:4px}button,a{touch-action:manipulation}button{font:inherit;cursor:pointer}button:focus-visible,a:focus-visible,summary:focus-visible{outline:3px solid var(--blue);outline-offset:4px}button:disabled{cursor:default}h1,h2,h3,p,ul,ol,dl,figure{margin:0}h1,h2,h3{line-height:1.35;font-weight:700}h1{font-size:clamp(32px,4.1vw,54px);letter-spacing:-1.5px}h2{font-size:28px;letter-spacing:-.5px}h3{font-size:19px}p+p{margin-top:12px}ul,ol{padding-left:22px}code{font:13px/1.7 Consolas,"Microsoft YaHei",monospace;background:var(--soft);padding:2px 5px;overflow-wrap:anywhere}strong{font-weight:700}[hidden]{display:none!important}
+.skip{position:absolute;top:-100px;left:20px;z-index:20;background:#fff;padding:10px}.skip:focus{top:10px}.side{position:fixed;inset:0 auto 0 0;width:var(--nav);border-right:1px solid var(--line);padding:30px 24px;background:var(--paper);display:flex;flex-direction:column;z-index:5}.brand{font-weight:700;font-size:18px;line-height:1.5}.brand small{display:block;font-size:13px;font-weight:400;color:var(--muted);margin-top:7px}.side nav{display:grid;gap:5px;margin-top:34px}.side nav a{color:var(--muted);text-decoration:none;padding:8px 0 8px 10px;border-left:2px solid transparent;font-size:14px;line-height:1.6}.side nav a[aria-current]{color:var(--blue);border-color:var(--blue);font-weight:700}.side nav a:hover{color:var(--blue)}.side .bottom{margin-top:auto;padding-top:24px;font-size:12px;color:var(--muted);line-height:1.7}.btn{background:var(--paper);color:var(--ink);border:1px solid var(--line);padding:7px 12px;font-size:13px}.btn:hover{border-color:var(--blue);color:var(--blue)}.side .btn{width:100%;margin-bottom:12px}
+main{margin-left:var(--nav);padding:42px 52px 60px;max-width:1450px}.meta{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap;font-size:13px;color:var(--muted);padding-bottom:20px;border-bottom:1px solid var(--line);margin-bottom:34px}.meta span:first-child{color:var(--blue);font-weight:700}.hero .lead{font-size:19px;line-height:1.8;max-width:900px;margin-top:22px}.hero .one-line{margin-top:25px;padding:20px 24px;border-left:4px solid var(--blue);background:var(--paper);font-size:17px}.overview-facts{display:grid;grid-template-columns:repeat(3,1fr);margin-top:32px;border-top:1px solid var(--line);border-bottom:1px solid var(--line)}.overview-facts>div{padding:20px 22px 20px 0}.overview-facts>div+div{border-left:1px solid var(--line);padding-left:22px}.overview-facts b{display:block;font-size:30px;color:var(--blue);line-height:1.3}.overview-facts span{font-size:14px;color:var(--muted)}section{margin-top:64px;scroll-margin-top:28px}.section-head{display:flex;align-items:baseline;gap:15px;margin-bottom:20px}.num{font-size:14px;font-weight:700;color:var(--blue);flex:none;font-variant-numeric:tabular-nums}.intro{color:var(--muted);max-width:940px;margin-bottom:24px}.note{margin-top:18px;padding:15px 20px;border-left:3px solid var(--line);background:var(--paper);font-size:14px;line-height:1.85}.note.blue{border-color:var(--blue)}.small{font-size:13px;color:var(--muted)}.tag{display:inline-block;font-size:12px;line-height:1.5;padding:3px 8px;border:1px solid var(--line);white-space:nowrap}.tag.blue{border-color:var(--blue);color:var(--blue);background:var(--tint)}
+.architecture{padding:28px;background:var(--paper);border:1px solid var(--line)}.architecture figcaption{font-size:14px;color:var(--muted);margin-bottom:22px}.entries{display:grid;grid-template-columns:1fr 1fr;gap:32px}.entry-label{font-size:13px;color:var(--muted);margin-bottom:10px}.node{border:1px solid var(--line);padding:15px 18px;background:var(--paper);text-align:left}.node strong{display:block}.node span{display:block;font-size:13px;color:var(--muted);margin-top:5px}.node.accent{border-color:var(--blue);background:var(--tint)}.down{width:1px;height:25px;background:var(--line);position:relative;margin:0 auto}.down:after{content:"";position:absolute;bottom:0;left:-3px;border-left:4px solid transparent;border-right:4px solid transparent;border-top:6px solid var(--muted)}.entry .node{min-height:92px}.merge{height:34px;border-left:1px solid var(--line);border-right:1px solid var(--line);border-bottom:1px solid var(--line);margin:0 calc(25% - 8px)}.shared{max-width:740px;margin:0 auto}.providers{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:20px}.providers .node{background:var(--bg)}.storage-band{border-top:1px solid var(--line);margin-top:22px;padding-top:17px;font-size:14px;line-height:1.8}.framework-points{display:grid;grid-template-columns:repeat(3,1fr);gap:24px;margin-top:24px}.framework-points h3{font-size:16px;margin-bottom:8px}.framework-points p{font-size:14px;color:var(--muted)}
+.roles{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}.role{border:1px solid var(--line);background:var(--paper);padding:24px;min-width:0}.role .id{font-size:12px;color:var(--blue);margin-bottom:12px}.role h3{margin-bottom:14px}.role>p{font-size:15px}.role dl{margin-top:20px;border-top:1px solid var(--line);padding-top:16px;font-size:13px}.role dt{font-weight:700;margin-top:12px}.role dt:first-child{margin-top:0}.role dd{margin:3px 0 0;color:var(--muted)}.role .boundary{border-top:1px solid var(--line);padding-top:14px;margin-top:18px;font-size:13px;color:var(--muted)}
+.concepts{display:grid;grid-template-columns:repeat(3,1fr);border-top:1px solid var(--line);border-bottom:1px solid var(--line);margin-bottom:26px}.concept{padding:20px 20px 20px 0}.concept+.concept{border-left:1px solid var(--line);padding-left:20px}.concept h3{font-size:17px;margin-bottom:7px}.concept p{font-size:14px;color:var(--muted)}.skill-list{display:grid;gap:0;background:var(--paper);border:1px solid var(--line)}.skill-row{display:grid;grid-template-columns:220px 1fr;gap:20px;padding:20px 24px}.skill-row+.skill-row{border-top:1px solid var(--line)}.skill-row h3{font-size:16px}.skill-row p{font-size:14px}.skill-row small{color:var(--muted)}.tool-example{margin-top:24px;background:var(--paper);border:1px solid var(--line);padding:22px}.tool-chain{display:flex;align-items:center;gap:9px;flex-wrap:wrap;margin:12px 0}.tool-chain span{border:1px solid var(--line);padding:6px 10px;font-size:13px}.tool-chain i{font-style:normal;color:var(--muted)}.mcp-grid{display:grid;grid-template-columns:1fr 1fr;gap:26px;margin-top:20px}.mcp-grid h3{font-size:16px;margin-bottom:8px}.mcp-grid p{font-size:14px;color:var(--muted)}
+.route-tabs{display:flex;gap:0;margin-bottom:24px}.route-tabs button{padding:11px 22px;background:var(--paper);border:1px solid var(--line);color:var(--muted);font-size:15px}.route-tabs button+button{border-left:0}.route-tabs button[aria-selected=true]{background:var(--blue);color:#fff;border-color:var(--blue)}.route-title{font-size:17px;margin-bottom:16px}.journey{list-style:none;padding:0}.journey>li{display:grid;grid-template-columns:44px 1fr;gap:20px;position:relative;padding-bottom:23px}.journey>li:not(:last-child):before{content:"";position:absolute;left:17px;top:36px;bottom:0;width:1px;background:var(--line)}.step{width:35px;height:35px;display:flex;align-items:center;justify-content:center;border:1px solid var(--line);background:var(--paper);font-size:13px;font-weight:700;z-index:1;color:var(--blue)}.journey h3{font-size:17px;margin:3px 0 5px}.journey p{font-size:14px;color:var(--muted)}.journey .who{font-size:12px;color:var(--blue);display:inline-block;margin-right:8px}.gate{padding:20px 24px;background:var(--tint);border:1px solid #c7d1ed;margin-top:6px}.gate h3{font-size:18px}.gate p{font-size:14px;margin-top:8px}.gate-demo{display:flex;align-items:center;gap:9px;flex-wrap:wrap;margin-top:14px}.gate-demo button{padding:6px 12px;border:1px solid #b8c2df;background:var(--paper);font-size:13px}.gate-demo button[aria-pressed=true]{background:var(--blue);color:#fff;border-color:var(--blue)}.gate-result{margin-top:12px;font-size:14px;font-weight:700;min-height:28px}.handoff{display:grid;grid-template-columns:150px 1fr;gap:20px;margin-top:25px;padding:20px 0;border-top:1px solid var(--line);border-bottom:1px solid var(--line)}.handoff h3{font-size:17px}.handoff p{font-size:14px}.handoff .small{margin-top:8px}
+.dataflow{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}.data-node{background:var(--paper);border:1px solid var(--line);padding:20px;position:relative;min-width:0}.data-node .data-n{color:var(--blue);font-size:12px;font-weight:700}.data-node h3{font-size:17px;margin:8px 0}.data-node p{font-size:14px;color:var(--muted)}.data-node code{font-size:12px;display:inline-block;margin-bottom:8px}.lineage{margin-top:18px;padding:15px 20px;background:var(--paper);border:1px solid var(--line);font-size:14px}.bindings{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}.bindings span{font-size:12px;padding:3px 9px;border:1px solid var(--line)}.example{margin-top:20px;padding:20px 24px;border-left:3px solid var(--blue);background:var(--paper)}.example h3{font-size:16px;margin-bottom:8px}.example p{font-size:14px;color:var(--muted)}
+.task-levels{display:grid;grid-template-columns:repeat(3,1fr);gap:22px;margin-bottom:25px}.task-levels h3{font-size:16px;margin-bottom:8px}.task-levels p{font-size:14px;color:var(--muted)}.states{background:var(--paper);border:1px solid var(--line);padding:22px}.rail{display:grid;grid-template-columns:1fr 30px 1fr 30px 1fr;align-items:center;gap:5px}.rail .state{border:1px solid var(--line);padding:14px}.rail b{display:block;font-size:15px}.rail code{font-size:12px}.rail .connector{font-size:20px;color:var(--blue);text-align:center}.exceptions{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:20px;border-top:1px solid var(--line);padding-top:20px}.exceptions h3{font-size:15px}.exceptions p{font-size:13px;color:var(--muted);margin-top:7px}.rules{padding-left:20px;margin-top:20px;font-size:14px}.rules li+li{margin-top:8px}
+.visual-stage{padding:22px 25px;border:1px dashed var(--blue);background:var(--paper)}.visual-stage header{display:flex;align-items:center;gap:15px;flex-wrap:wrap;margin-bottom:14px}.visual-stage h3{font-size:19px}.visual-stage p{font-size:14px}.visual-stage .split{display:grid;grid-template-columns:1fr 1fr;gap:26px;margin-top:20px;border-top:1px solid var(--line);padding-top:16px}.visual-stage .split h4{font-size:14px;margin:0 0 6px}.visual-stage .split p{color:var(--muted)}details{margin-top:15px;border:1px solid var(--line);background:var(--paper)}summary{padding:16px 20px;cursor:pointer;font-size:15px;font-weight:700}.detail-body{padding:0 22px 22px;font-size:14px;color:var(--muted)}.evidence-list{display:grid;grid-template-columns:1fr 1fr;gap:15px 24px;list-style:none;padding:0}.evidence-list li{min-width:0}.evidence-list a{font-size:13px;overflow-wrap:anywhere}.evidence-list span{display:block;font-size:13px;color:var(--muted)}footer{border-top:1px solid var(--line);padding-top:24px;margin-top:54px;font-size:12px;color:var(--muted)}
+.tool-map{margin:26px 0;border:1px solid var(--line);background:var(--paper);padding:24px}.tool-map>h3{font-size:20px;margin-bottom:10px}.tool-map>p{font-size:14px;color:var(--muted)}.tool-owner-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:22px;margin-top:20px;padding-top:18px;border-top:1px solid var(--line)}.tool-owner-grid h4{margin:0 0 7px;font-size:15px}.tool-owner-grid p{font-size:13px;color:var(--muted)}.capability-list{margin-top:24px;border:1px solid var(--line);background:var(--paper)}.capability-row{display:grid;grid-template-columns:minmax(130px,.72fr) minmax(0,1.65fr) minmax(0,1.2fr);gap:20px;padding:18px 20px}.capability-row+.capability-row{border-top:1px solid var(--line)}.capability-row>div{min-width:0;font-size:13px;overflow-wrap:anywhere}.capability-row strong{display:block;font-size:15px;margin-bottom:6px}.capability-row code{font-size:12px}.capability-row p{font-size:13px;margin-top:5px}.capability-row .tag{font-size:11px;margin:0 5px 6px 0}.capability-head{background:var(--soft)}.capability-head>div{font-weight:700}.capability-row .row-label{display:none}.capability-caption{margin-top:10px;font-size:12px;color:var(--muted)}
+@media(min-width:1650px){main{margin-left:calc(var(--nav) + (100vw - 1650px)/2);padding-right:66px;padding-left:66px}}
+@media(max-width:1150px){:root{--nav:190px}.side{padding:24px 17px}main{padding:30px}.roles{gap:10px}.role{padding:19px}.skill-row{grid-template-columns:175px 1fr}.role code{font-size:12px}.dataflow{grid-template-columns:1fr 1fr}}
+@media(max-width:900px){.side{position:static;width:auto;border-right:0;border-bottom:1px solid var(--line);padding:18px 24px}.brand small{display:none}.side nav{margin-top:12px;display:flex;gap:8px;flex-wrap:wrap}.side nav a{padding:4px 7px;border-left:0;border-bottom:2px solid transparent;font-size:12px}.side .bottom{display:none}main{margin:0 auto;padding:25px;max-width:1000px}.roles{grid-template-columns:1fr}.role{display:grid;grid-template-columns:1fr 1fr;gap:0 24px}.role .id,.role h3,.role>p{grid-column:1}.role dl{grid-column:2;grid-row:1/5;margin-top:0;border-top:0;padding-top:0}.role .boundary{grid-column:1/-1}.task-levels{gap:16px}.framework-points{gap:16px}section{margin-top:48px}}
+@media(max-width:600px){body{font-size:15px}.side{padding:18px}.side nav{gap:4px}main{padding:25px 18px 36px}h1{font-size:34px}h2{font-size:23px}.hero .lead{font-size:17px}.hero .one-line{font-size:15px;padding:15px 17px}.overview-facts>div{padding:16px 10px 16px 0}.overview-facts>div+div{padding-left:10px}.overview-facts b{font-size:23px}.overview-facts span{font-size:12px}.section-head{gap:10px}.architecture{padding:18px}.entries{grid-template-columns:1fr;gap:24px}.entry .node{min-height:0}.merge{display:none}.architecture>.down{margin-top:0}.providers{grid-template-columns:1fr;gap:10px}.framework-points,.concepts,.mcp-grid,.task-levels,.dataflow,.visual-stage .split{grid-template-columns:1fr}.framework-points{gap:18px}.concept+.concept{border-left:0;border-top:1px solid var(--line);padding-left:0}.role{display:block;padding:22px}.role dl{margin-top:18px;border-top:1px solid var(--line);padding-top:16px}.skill-row{grid-template-columns:1fr;gap:8px;padding:18px}.route-tabs button{padding:10px 13px;font-size:14px;flex:1}.journey>li{gap:12px;grid-template-columns:38px 1fr}.handoff{grid-template-columns:1fr;gap:9px}.gate{padding:18px}.exceptions{grid-template-columns:1fr}.rail{grid-template-columns:1fr}.rail .connector{transform:rotate(90deg);height:28px}.evidence-list{grid-template-columns:1fr}.meta{font-size:12px}.note{padding:14px 16px}.tool-example{padding:18px}.tool-chain{align-items:flex-start}.visual-stage{padding:20px}.data-node{padding:18px}}
+@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
+@media(max-width:600px){.tool-map{padding:18px}.tool-owner-grid{grid-template-columns:1fr;gap:16px}.capability-head{display:none}.capability-row{grid-template-columns:1fr;gap:10px;padding:18px}.capability-row .row-label{display:block;color:var(--muted);font-size:12px;margin-bottom:4px}.capability-row strong{font-size:17px}}
+@media print{.tool-map,.capability-row{break-inside:avoid}.capability-row{font-size:9pt;padding:12px}.tool-owner-grid{grid-template-columns:repeat(3,1fr)}}
+@media print{@page{size:A4;margin:16mm 14mm}body{font-size:10pt;background:#fff;color:#000}.side,.route-tabs,.gate-demo,.skip,.print-hide{display:none!important}main{margin:0!important;padding:0!important;max-width:none}.hero h1{font-size:28pt}.hero .lead{font-size:12pt}.meta{margin-bottom:20px}section{margin-top:28px;break-inside:auto}.section-head{break-after:avoid}h2{font-size:18pt}h3{break-after:avoid}.node,.role,.skill-row,.data-node,.journey>li,.gate,.states,.visual-stage,.note{break-inside:avoid}.roles{grid-template-columns:repeat(3,1fr)}.role{display:block;padding:12px}.role dl{margin-top:12px;border-top:1px solid var(--line);padding-top:12px}.role>p,.role dl{font-size:9pt}.route-panel[hidden]{display:block!important}.route-panel{margin-top:20px}.route-title{font-size:14pt}.route-panel .common-flow-copy{display:none}.dataflow{grid-template-columns:repeat(3,1fr)}.evidence-list{grid-template-columns:1fr 1fr}.small,.note{font-size:9pt}a{color:#002fa7}.architecture{padding:18px}.providers .node{font-size:10pt}footer{margin-top:25px}.framework-points p,.journey p,.data-node p,.skill-row p{font-size:10pt}details .detail-body{display:block}body{-webkit-print-color-adjust:exact;print-color-adjust:exact}}
+</style>
+</head>
+<body>
+<a class="skip" href="#main">跳到正文</a>
+<aside class="side">
+  <div class="brand">内容创作架构<small>Deep Agents · 项目说明</small></div>
+  <nav aria-label="文档目录">
+    <a href="#overview" aria-current="location">概览</a>
+    <a href="#framework">01　框架怎么组织</a>
+    <a href="#agents">02　三个 Agent</a>
+    <a href="#capabilities">03　工具能力与 MCP</a>
+    <a href="#workflow">04　用户业务流程</a>
+    <a href="#data">05　数据怎样流转</a>
+    <a href="#jobs">06　任务与恢复</a>
+    <a href="#vision">07　视觉能力接在哪里</a>
+    <a href="#sources">08　源码依据</a>
+  </nav>
+  <div class="bottom"><button class="btn" type="button" id="print">打印 / 保存 PDF</button>基于 2026-09-30 源码核查<br>当前实现与后续接入分别说明<br>本页可离线阅读</div>
+</aside>
+<main id="main">
+<header class="hero" id="overview">
+  <div class="meta"><span>自媒体视频生成 · 内容创作</span><span>源码核查：2026-09-30</span></div>
+  <h1>从参考内容，<br>到三份可选的原创稿。</h1>
+  <p class="lead">用户选参考、定风格；系统整理素材、生成三稿、独立审核。<strong>三稿全部合格后，用户选定一稿</strong>，再进入口播视频或 Wan 短视频制作。</p>
+  <p class="one-line"><strong>Deep Agents 管角色协作，内容服务管写作和审核，业务代码管版本、费用与放行。</strong></p>
+  <p class="small" style="margin-top:14px">主控还能调用热点获取、配音和数字人制作等工具。移除音频、数字人导演 Agent 后，这些业务能力仍然保留。<a href="#tool-map">查看完整工具能力清单</a></p>
+  <div class="overview-facts"><div><b>3 个角色</b><span>总控 / 写作 / 审核</span></div><div><b>2 条路线</b><span>口播稿 / 结构化分镜</span></div><div><b>3/3 通过</b><span>单稿合格 + 整组差异合格</span></div></div>
+</header>
+
+<section id="framework">
+  <div class="section-head"><span class="num">01</span><h2>框架怎么组织</h2></div>
+  <p class="intro">Deep Agents 提供总控委派、角色上下文和工具调用能力，底层基于 LangGraph。项目在外层用业务 DAG 固定步骤与用户选择点，实际写作和审核统一落到内容服务。</p>
+  <figure class="architecture" aria-label="两个入口复用同一套内容服务的架构图">
+    <figcaption>本图展示内容写作链路的两个入口。主控还可调用媒体工具，完整能力见<a href="#tool-map">工具清单</a>。</figcaption>
+    <div class="entries">
+      <div class="entry"><div class="entry-label">页面操作入口</div><div class="node"><strong>内容创作工作台</strong><span>搜索、导入、改提示、生成、返工</span></div><div class="down"></div><div class="node"><strong>内容 API → 持久化内容任务</strong><span>返回 job_id，页面查询进度</span></div></div>
+      <div class="entry"><div class="entry-label">Agent 编排入口</div><div class="node"><strong>业务 DAG → Deep Agents</strong><span>总控通过 task 委派写作 / 审核</span></div><div class="down"></div><div class="node"><strong>角色工具 → tools.invoke</strong><span>权限、作品归属、参数、幂等校验</span></div></div>
+    </div>
+    <div class="merge"></div><div class="down"></div>
+    <div class="shared node accent"><strong>共享内容业务层 · content.service / references / tasks</strong><span>参考导入 → 整理提示 → 三稿生成 → 审核返工 → 版本绑定 → 可选性校验</span></div>
+    <div class="providers"><div class="node"><strong>RedFox</strong><span>搜索、详情、音频转写</span></div><div class="node"><strong>Claude</strong><span>写稿、定向返工</span></div><div class="node"><strong>Qwen</strong><span>参考拆解、独立语义审核</span></div></div>
+    <div class="storage-band"><strong>SQLite 业务库 + 外部调用台账</strong><br>保存参考、提示、稿件、审核、用户选择和远端任务号；框架对话中的“完成”不能代替这些记录。<br><a href="内容创作架构总览.html">打开可缩放的独立架构总览图</a></div>
+  </figure>
+  <div class="framework-points"><div><h3>步骤由业务 DAG 决定</h3><p>当前主阶段是 <code>script</code> → <code>content_review</code> → 等待用户选稿。Agent 不能自行越过选择点。</p></div><div><h3>角色通过工具办事</h3><p>默认采用确定性的调用序列。写作与审核模型由内容服务调用；这不等于让大模型自由规划全部流程。</p></div><div><h3>恢复依靠业务记录</h3><p>保存工作项、内容任务和供应商作业。重启后按状态续跑，已完成的请求复用结果。</p></div></div>
+  <div class="note blue"><strong>两个容易混淆的点：</strong>点击内容页面按钮不一定经过 Deep Agents；Agent 工具复用的生成任务本身已经包含“写作 → 审核 → 有限返工”。独立审核指不同模型、上下文和审核记录，不要求每次审稿都再开一个外层 Agent 工作项。</div>
+</section>
+
+<section id="agents">
+  <div class="section-head"><span class="num">02</span><h2>三个 Agent，各管一件事</h2></div>
+  <div class="roles">
+    <article class="role"><div class="id">supervisor</div><h3>总控 Agent</h3><p>安排内容工作项，委派写作与审核；按权限调用检索、视觉分析和媒体制作工具。</p><dl><dt>输入</dt><dd>作品要求、任务状态、上游产物引用</dd><dt>主要工具</dt><dd><code>task</code> 委派；热点搜索、参考画面分析、人设查询、配音、动作底片、数字人 / 单段 Wan 视频提交与作业查询</dd><dt>交付</dt><dd>工作项、调用记录、当前流程状态</dd><dt>模型定位</dt><dd>默认确定性调度，不另收费做自主规划</dd></dl><p class="boundary">工具已授权不等于每次都自动执行。用户选稿和付费确认仍由业务记录决定；媒体制作不设单独导演 Agent。</p></article>
+    <article class="role"><div class="id">content</div><h3>写作 Agent</h3><p>基于主题、风格和参考，产出三个切入角度不同的原创候选。</p><dl><dt>输入</dt><dd>创作要求、参考快照、写作提示、事实资料</dd><dt>绑定 Skill</dt><dd>S01 选题与新意；S02 内容写作</dd><dt>主要工具</dt><dd><code>register_script_candidates</code></dd><dt>写作 / 返工模型默认</dt><dd><code>claude-sonnet-5-5</code></dd></dl><p class="boundary">交付稿件批次和新版本。不自行联网抓取，不批准自己的作品。</p></article>
+    <article class="role"><div class="id">quality</div><h3>审核 Agent</h3><p>审每一稿的质量，再审三稿是否实质不同，给出明确修改意见。</p><dl><dt>输入</dt><dd>原稿、完整分镜、参考、资料、风格和提示版本</dd><dt>绑定 Skill</dt><dd>S03 事实与重复审核</dd><dt>主要工具</dt><dd><code>search_content_history</code><br><code>submit_quality_report</code></dd><dt>独立语义审核模型默认</dt><dd><code>qwen-plus</code></dd></dl><p class="boundary">写审核结论，不改被审原稿。硬性规则失败时，模型的“通过”无法放行。</p></article>
+  </div>
+  <p class="note">模型名称是当前代码默认值，可由服务端配置覆盖。参考拆解也默认使用 <code>qwen-plus</code>；<code>planner / writer / repair / reviewer</code> 是内容服务的四种调用用途，不是四个新增 Agent。</p>
+</section>
+
+<section id="capabilities">
+  <div class="section-head"><span class="num">03</span><h2>工具有很多，MCP 是接入协议</h2></div>
+  <p class="intro">热点获取、主播形象、音频、数字人视频，都是具体的工具能力。<strong>一个 MCP 服务可以暴露多个工具；一个 Python 文件也能登记多个能力。</strong>不能用 MCP 服务数或文件数来代表工具数量。</p>
+  <div class="concepts"><div class="concept"><h3>Skill：怎么做</h3><p>角色的工作说明书。约定输入、步骤、输出与拒收条件；它本身不执行 API 请求。</p></div><div class="concept"><h3>Tool：执行什么</h3><p>执行一个具体动作，例如搜索热点、合成配音、提交数字人视频。每个动作有自己的输入与结果。</p></div><div class="concept"><h3>MCP：怎么接</h3><p>向 Agent 公开工具的标准协议。工具也可以直接注册成原生函数；只有经 MCP 服务暴露的工具才是 MCP tools。</p></div></div>
+  <div class="tool-map" id="tool-map"><h3>项目的工具能力全景</h3><p>内容多 Agent 协作与媒体工具调用同时存在。音频、数字人不再设置导演 Agent，主控通过受控工具调用其业务服务。</p><div class="tool-owner-grid"><div><h4>总控可调用的工具</h4><p>热点搜索、参考视觉分析、人设 / 资产查询、表达计划、音频合成、动作 / 嘴型、数字人 / 单段 Wan 视频、作业查询。</p></div><div><h4>写作与审核的专业工具</h4><p>写作：提交三稿、提出经验候选。<br>审核：历史检索、提交审核报告、提出经验候选。各自使用角色白名单。</p></div><div><h4>已有 API 与 Worker 能力</h4><p>静态形象生成、图生图、音色克隆、Wan 多镜头制作已有业务入口；拼接、后期和自动发布由 Worker 执行。</p></div></div></div>
+  <div class="capability-list" role="table" aria-label="工具能力、实际入口及 Agent 接入状态">
+    <div class="capability-row capability-head" role="row"><div role="columnheader">业务能力</div><div role="columnheader">实际工具 / 业务入口</div><div role="columnheader">谁来调用，当前做到哪里</div></div>
+    <div class="capability-row" role="row"><div role="cell"><strong>热点与参考获取</strong>找选题、选参考、取得转写</div><div role="cell"><span class="row-label">工具 / 入口</span><code>search_douyin</code><p>RedFox 搜索；详情、导入和转写通过内容 API 与任务服务执行。</p></div><div role="cell"><span class="tag blue">搜索已注册总控工具</span><p>主控可检索，用户选择主参考。导入 / 转写有 API 入口，未各自注册同名 Agent 工具。</p></div></div>
+    <div class="capability-row" role="row"><div role="cell"><strong>参考视频理解</strong>分析画面、动作与镜头</div><div role="cell"><span class="row-label">工具 / 入口</span><code>analyze_reference_visual</code><p>视频预处理 → Qwen-VL → 新参考快照。</p></div><div role="cell"><span class="tag blue">已注册总控工具</span><p>页面与主控复用视觉分析服务；费用由用户确认。本次仅核查源码，未做真实质量验收。</p></div></div>
+    <div class="capability-row" role="row"><div role="cell"><strong>数字人形象</strong>生成人物图、图生图、选用资产</div><div role="cell"><span class="row-label">工具 / 入口</span><code>get_presenter_profile</code><br><code>list_approved_assets</code><p>形象生成另走 <code>person_image</code>；图生图走 <code>avatar_image_api</code>。</p></div><div role="cell"><span class="tag blue">查询已注册工具</span><span class="tag">生图已有 API</span><p>“生成静态形象”尚未注册为主控工具；它与“生成数字人说话视频”是两项能力。</p></div></div>
+    <div class="capability-row" role="row"><div role="cell"><strong>音频与音色</strong>语气、情绪、语速、配音、克隆</div><div role="cell"><span class="row-label">工具 / 入口</span><code>compile_performance_plan</code><br><code>compile_speech_expression</code><br><code>submit_tts</code><p>音色克隆另走 <code>voice_clone_api</code>。</p></div><div role="cell"><span class="tag blue">配音已注册总控工具</span><span class="tag">克隆已有 API</span><p>Minimax 合成前核对用户费用确认。克隆功能尚未注册为主控工具。</p></div></div>
+    <div class="capability-row" role="row"><div role="cell"><strong>数字人视频</strong>M2 / OmniHuman</div><div role="cell"><span class="row-label">工具 / 入口</span><code>prepare_motion_assets</code><br><code>submit_motion</code> · <code>submit_lipsync</code><br><code>submit_avatar_video</code></div><div role="cell"><span class="tag blue">已注册总控工具</span><p>M2 使用动作与嘴型链路；OmniHuman 直接提交云视频任务。调用保留路线、时长和费用校验。</p></div></div>
+    <div class="capability-row" role="row"><div role="cell"><strong>Wan 短视频</strong>单段或多个镜头成片</div><div role="cell"><span class="row-label">工具 / 入口</span><code>submit_avatar_video</code><p>当 <code>route=WAN_3_0</code> 时提交单段。分镜任务图、生图、逐镜投喂走 <code>wan_api / short_video</code>。</p></div><div role="cell"><span class="tag blue">单段已注册工具</span><span class="tag">多镜头走 API / Worker</span><p>不能把单段视频提交，等同于已提供完整分镜制作 Agent 工具。</p></div></div>
+    <div class="capability-row" role="row"><div role="cell"><strong>写作与质量审核</strong>三稿、查重、独立审核</div><div role="cell"><span class="row-label">工具 / 入口</span><code>register_script_candidates</code><br><code>search_content_history</code><br><code>submit_quality_report</code></div><div role="cell"><span class="tag blue">已注册专业角色工具</span><p>分别交给写作和审核 Agent；主控通过 <code>task</code> 委派，最终复用内容服务。</p></div></div>
+    <div class="capability-row" role="row"><div role="cell"><strong>查询、成片与发布</strong>跟踪作业、拼接、后期、发布</div><div role="cell"><span class="row-label">工具 / 入口</span><code>get_media_job</code><br><code>get_media_result</code><p>执行层为 <code>short_video.worker</code>、<code>postprocess_worker</code> 与发布 Worker。</p></div><div role="cell"><span class="tag blue">查询已注册工具</span><span class="tag">制作 / 发布由 Worker 执行</span><p>主控可查媒体结果；现有自动内容工作图不靠额外的后期 / 发布 Agent 推进。</p></div></div>
+  </div>
+  <p class="capability-caption">“已注册工具”指代码允许相应角色调用；“已有 API”指用户页面可进入的业务能力。两者都属于项目能力，但不能混称为“已接通 MCP”。</p>
+  <h3 style="margin:30px 0 16px">Skill 为这些角色提供工作方法</h3>
+  <div class="skill-list">
+    <div class="skill-row"><div><h3>S01 · 选题与新意</h3><small>使用者：写作 Agent</small></div><p>明确受众和具体问题，规划三个有差异的角度；未知事实标记待核，不编造热度、数字和来源。</p></div>
+    <div class="skill-row"><div><h3>S02 · 内容写作</h3><small>目录名仍为“口播写作”</small></div><p>口播路线交付自然可朗读的正文；分镜路线交付画面、台词、音效、时长与 Wan 提示词。借鉴叙事方式，避免照搬独特表达。</p></div>
+    <div class="skill-row"><div><h3>S03 · 事实与重复审核</h3><small>使用者：审核 Agent</small></div><p>核对事实依据、原创性和三稿差异；分别检查口语表达或分镜可制作性。每个问题给出具体位置和可执行改法。</p></div>
+  </div>
+  <p class="note">当前执行路径把已登记的 Skill 正文加入角色提示，并记录文件摘要；Skill 缺失会阻断。Skill 指令负责引导，权限白名单、审核绑定和费用校验由业务代码执行。两类专业 Agent 还可提交 <code>propose_memory</code> 经验候选，候选不等于已生效的长期知识。</p>
+  <div class="tool-example"><h3>一次工具调用，实际经过这些步骤</h3><div class="tool-chain"><span>Agent 提出调用</span><i aria-hidden="true">→</i><span>角色白名单</span><i aria-hidden="true">→</i><span>归属与参数校验</span><i aria-hidden="true">→</i><span>幂等与业务门禁</span><i aria-hidden="true">→</i><span>共享业务服务</span><i aria-hidden="true">→</i><span>产物引用 + 审计</span></div><p class="small">例如：主控调用 <code>search_douyin</code>，工具向内容任务层提交搜索，再由 RedFox 适配器访问供应商。写作 Agent 消费选定的参考快照。</p></div>
+  <div class="mcp-grid"><div><h3>一个 mcp.py，并不代表一个工具</h3><p>这个文件已登记稿件、表演计划、质量报告、TTS、动作、嘴型、数字人视频和云视频等多个能力，并提供提交 / 查询接口。它也不是整个项目唯一的工具注册表；实际角色工具见 <code>agents/tools.py</code> 与 <code>roles.py</code>。</p></div><div><h3>当前如何连接这些能力</h3><p>目前通过原生 Agent 工具、业务 API、Provider 适配器及 Worker 执行；未发现标准 MCP Server / Client 的生产连接。以后若采用 MCP，可以按内容、形象、音频、视频分组，也可以由一个服务公开多个工具，分组数不等于能力数。</p></div></div>
+  <details><summary>实现细节：框架默认工具与 Skill 版本</summary><div class="detail-body"><p>Deep Agents 使用内存 StateBackend。通用写文件与 shell 能力被移除；框架强制保留的 <code>read_file</code> 只面对未注入业务文件的内存空间。生产执行显式加载可信 Skill 内容。</p><p>当前登记代码的 Skill 版本常量为 0.2.0，S02 / S03 正文声明为 0.3.0；文件摘要仍会变化。这份文档不把该差异描述为已统一的版本管理。</p></div></details>
+</section>
+
+<section id="workflow">
+  <div class="section-head"><span class="num">04</span><h2>用户业务流程</h2></div>
+  <p class="intro">两条路线共享检索、写作和审核；交付格式及选稿后的制作流程不同。以下展示参考驱动的创作流程，页面仍可使用已有主题与资料直接写作。</p>
+  <div class="route-tabs" role="tablist" aria-label="选择创作路线"><button type="button" role="tab" id="tab-talk" aria-selected="true" aria-controls="panel-talk" data-route="talk">口播稿路线</button><button type="button" role="tab" id="tab-story" aria-selected="false" aria-controls="panel-story" tabindex="-1" data-route="story">短视频分镜路线</button></div>
+  <ol class="journey">
+    <li><span class="step">1</span><div><h3>定义创作任务</h3><p><span class="who">用户</span>选择路线，填写主题、受众、目标时长和账号风格；事实资料单独提供。</p></div></li>
+    <li><span class="step">2</span><div><h3>搜索并选择参考</h3><p><span class="who">RedFox + 用户</span>搜索相关作品，显示可取得的互动数据、封面和原视频链接；用户选择主参考后才深入提取。</p></div></li>
+    <li><span class="step">3</span><div><h3>导入参考，形成快照</h3><p><span class="who">内容任务</span>分别保存标题、简介和音频转写，记录远端转写 taskId。分镜参考没有有效口播时，可经用户确认使用视频画面分析；标题、简介不能冒充转写。</p></div></li>
+    <li><span class="step">4</span><div><h3>整理写作提示</h3><p><span class="who">Qwen + 用户</span>分析参考的结构、开头与节奏，结合账号风格生成可编辑提示，并规划三种角度。</p></div></li>
+    <li><span class="step">5</span><div><h3>生成三份候选</h3><p><span class="who">Claude</span>按当前路线的结构交付三个不同角度的原创稿，连同事实断言和来源依据进入审核。</p></div></li>
+    <li><span class="step">6</span><div><h3>先审核，再展示</h3><p><span class="who">业务规则 + Qwen</span>规则检查事实和结构，独立模型审核表达、原创性及三稿差异。不通过的候选按具体意见返工，默认最多自动返工 2 轮。</p></div></li>
+    <li><span class="step">7</span><div><h3>用户选定一份</h3><p><span class="who">用户 + 后端校验</span>三份候选及整组审核全部通过，页面才显示正文。选稿接口再次校验版本和审核，随后记录用户采用决定。</p></div></li>
+  </ol>
+  <div class="gate"><h3>展示条件 = 三稿齐全 + 三份单稿通过 + 整组通过 + 版本仍一致</h3><p>不足三份合格稿时，保留问题与返工入口，候选正文继续隐藏。已通过的稿保留；修改失败稿后，重审修改项及整组差异。</p><div class="gate-demo" aria-label="审核门禁演示"><span class="small">交互示意：</span><button type="button" data-gate="partial" aria-pressed="true">仅 2 / 3 通过</button><button type="button" data-gate="ready" aria-pressed="false">3 / 3 且整组通过</button><button type="button" data-gate="stale" aria-pressed="false">通过后又改稿</button></div><div class="gate-result" id="gate-result" role="status" aria-live="polite">不展示正文，继续返工未通过项。</div><p class="small print-hide">此处仅演示规则，不执行生成或付费调用。</p></div>
+  <div id="panel-talk" class="route-panel" role="tabpanel" aria-labelledby="tab-talk"><div class="handoff"><h3>口播稿交付</h3><div><p><strong>标题、角度、正文、预计时长、事实断言与审核记录。</strong></p><p class="small">用户选稿 → 配置音色与表达 → 确认费用 → 音频生成 → 用户选择的数字人路线 → 合成 / 发布 Worker。OmniHuman 仍按实际音频时长执行限制，不能靠文稿估时放行。</p></div></div></div>
+  <div id="panel-story" class="route-panel" role="tabpanel" aria-labelledby="tab-story" hidden><div class="handoff"><h3>分镜剧本交付</h3><div><p><strong>逐镜头：画面、台词 / 旁白、音效、时长、Wan 提示词。</strong>当前分镜契约要求每镜头 2–30 秒整数时长。</p><p class="small">用户选稿 → 构造逐镜头任务图 → 确认生图预算 → 逐镜头生图 → 用户确认图片与 Wan 费用 → Wan 逐镜头生成画面和声音 → 确认原片 → Worker 顺序拼接，做短音频过渡 → 确认成片。</p><p class="small">多镜头累计时长可超过 60 秒。这条路线不依赖外部配音；独立生成镜头不保证动作与音色连续，应在剧本中设计明确的场景切换。</p></div></div></div>
+  <p class="note"><strong>内容与制作的交接点就是用户选稿。</strong>Deep Agents 的自动内容工作图在这里等待。音频、数字人可由主控受控工具调用，付费提交仍需匹配的用户确认；最终拼接、合成和自动发布由 Worker 执行。</p>
+</section>
+
+<section id="data">
+  <div class="section-head"><span class="num">05</span><h2>数据怎样流转</h2></div>
+  <p class="intro">输入决定提示，提示生成稿件，审核绑定这些输入与稿件版本，用户选择绑定审核后的产物。作品保存“当前采用哪一版”，历史记录继续留存。</p>
+  <div class="dataflow" aria-label="内容数据依次流经六个版本化对象">
+    <article class="data-node"><span class="data-n">01 · 创作要求</span><h3>主题与风格</h3><code>Work.brief · StyleProfile</code><p>主题、受众、路线、时长、账号风格。作品使用风格快照，避免模板改动悄悄改变旧任务。</p></article>
+    <article class="data-node"><span class="data-n">02 · 参考输入</span><h3>不可变参考快照</h3><code>ReferenceSnapshot</code><p>原链接、标题、简介、转写、互动数据与分析结果。更新内容时保存新快照，并保留父版本。</p></article>
+    <article class="data-node"><span class="data-n">03 · 写作指令</span><h3>提示与角度计划</h3><code>PromptDocument</code><p>绑定参考、要求与风格摘要。用户编辑提示产生新版本；它决定这一批稿件的写法。</p></article>
+    <article class="data-node"><span class="data-n">04 · 内容产物</span><h3>稿件版本与三稿批次</h3><code>ScriptVersion · BatchRecord</code><p>每一稿拥有版本 ID；批次记录 slot 1 / 2 / 3 对应的稿件。返工生成新版本，不覆盖原稿。</p></article>
+    <article class="data-node"><span class="data-n">05 · 质量依据</span><h3>单稿与整组审核</h3><code>QualityDecision</code><p>单稿审核针对具体正文 / 分镜；整组审核针对三个候选的组合。审核结果必须匹配当前输入。</p></article>
+    <article class="data-node"><span class="data-n">06 · 用户决定</span><h3>采用记录与下游输入</h3><code>SelectionDecision</code><p>记录用户选定的稿件和审核。媒体链读取已采用版本；自动评分不能替用户选稿。</p></article>
+  </div>
+  <div class="lineage"><strong>主数据流：</strong>创作要求 + 参考 → 写作提示 → 三稿版本 → 审核决定 → 用户采用<br><strong>独立事实输入：</strong>用户资料 / 可核验证据 → 写作与审核。参考视频默认是灵感，热门内容中的说法不会自动变成已核实事实。</div>
+  <div class="example"><h3>为什么改一句话也要重新检查</h3><p>比如用户把稿件中的“可能改善”改成“一定有效”，旧审核不能继续有效。系统通过摘要绑定输入；改稿后，单稿审核和三稿组合审核需更新，旧的采用及下游当前绑定也可能撤销，历史文件仍保留。</p><div class="bindings" aria-label="审核绑定字段"><span>正文 / 完整分镜</span><span>参考快照</span><span>事实证据</span><span>创作要求</span><span>风格</span><span>写作提示</span><span>候选集合</span></div></div>
+</section>
+
+<section id="jobs">
+  <div class="section-head"><span class="num">06</span><h2>任务怎么运行，出错后怎么恢复</h2></div>
+  <div class="task-levels"><div><h3>AgentWorkItem</h3><p>记录哪个角色在做哪一步，依赖什么输入和 Skill。产出 AgentResult，必须包含可追溯的产物引用。</p></div><div><h3>content_jobs</h3><p>一次业务操作：搜索、导入、整理提示、生成、返工或审核。页面用 job_id 查询进度。</p></div><div><h3>provider_jobs</h3><p>一次供应商请求：模型调用或 RedFox 任务。记录预算、请求摘要、状态、结果和远端 taskId。</p></div></div>
+  <figure class="states"><figcaption class="small" style="margin-bottom:14px">内容任务的主要状态；用户选稿等待属于外层业务任务。</figcaption><div class="rail"><div class="state"><b>排队</b><code>queued</code></div><div class="connector" aria-hidden="true">→</div><div class="state"><b>执行</b><code>running</code></div><div class="connector" aria-hidden="true">→</div><div class="state"><b>完成 / 未凑齐</b><code>succeeded / partial</code></div></div><div class="exceptions"><div><h3>远端已受理，还未结束</h3><p><code>waiting_external</code>：保留远端 taskId，继续查询原作业。界面等待不代表服务器一定卡死。</p></div><div><h3>请求发出了，但结果不确定</h3><p><code>unknown</code>：暂停自动重提。有远端句柄就核查同一任务；没有句柄时需核对，避免重复计费。</p></div><div><h3>条件不满足 / 明确失败</h3><p><code>blocked / failed</code>：保留预算、配置、权限或供应商错误原因，不能冒充审核通过。</p></div><div><h3>输入变了 / 用户取消</h3><p><code>superseded / cancelled</code>：旧响应不覆盖当前作品；停止后续提交，不假定已受理的远端作业被撤回。</p></div></div></figure>
+  <ul class="rules"><li><strong>提交和查询分开：</strong>写操作返回 <code>202 + job_id</code>；GET 只读。需要更新远端转写结果时，显式刷新原作业。</li><li><strong>每次外部调用先记账：</strong>预算预留 → 保存发送状态 → 发送一次 → 保存响应与结算。相同幂等键返回原结果。</li><li><strong>两个等待点分清：</strong>三稿合格是质量条件；<code>waiting_selection</code> 是等待用户选择。通过审核不会自动进入付费制作。</li></ul>
+</section>
+
+<section id="vision">
+  <div class="section-head"><span class="num">07</span><h2>视觉理解并入哪里</h2></div>
+  <div class="visual-stage"><header><h3>让系统读懂“没有口播的画面”</h3><span class="tag blue">源码已有接入 · 真实效果未验收</span></header><p>RedFox 转写解决“说了什么”；视觉模型补充“画面里发生什么”。跳舞、带 BGM 的视频即使转写为空，仍可能有可用于分镜创作的动作、场景和镜头信息。</p><div class="split"><div><h4>本次重新核查到的入口</h4><p>页面画面分析、费用确认 API、<code>visual_analysis</code> 内容任务、总控工具及 Qwen-VL 适配器均已出现。分镜参考已允许有效转写或有效视觉结果。</p></div><div><h4>工具如何进入 Agent 工作流</h4><p>分镜参考缺少有效转写与视觉结果时，总控增加视觉准备工作项。缺视频或有效费用确认时返回用户操作要求；写作 Agent 只消费准备好的参考。</p></div></div><div class="tool-chain" aria-label="视觉分析的接入位置"><span>真实视频文件 / 直链</span><i aria-hidden="true">→</i><span>visual_analysis 任务</span><i aria-hidden="true">→</i><span>抽帧 + Qwen-VL</span><i aria-hidden="true">→</i><span>新参考快照</span><i aria-hidden="true">→</i><span>写作与审核</span></div><p><strong>主控工具是 <code>analyze_reference_visual</code>：</strong>它与页面复用内容任务、费用确认和幂等机制，写作与审核不各自重复请求视觉模型。</p><p class="small" style="margin-top:12px">以上为源码接入关系，本次未执行真实视频分析验收。口播参考仍要求有效转写；视觉观察不自动成为事实证据，抖音网页地址本身也不能当作视频文件。</p></div>
+</section>
+
+<section id="sources">
+  <div class="section-head"><span class="num">08</span><h2>源码依据</h2></div>
+  <p class="intro">这份说明描述源码结构及已确认方案。本次没有发起付费生成、重启服务或执行真实内容质量验收。</p>
+  <details><summary>展开源码与设计文档索引</summary><div class="detail-body"><ul class="evidence-list">
+    <li><a href="../../production/backend/app/agents/framework.py">agents/framework.py</a><span>Deep Agents 创建、角色委派、Skill 注入、受限内存后端</span></li>
+    <li><a href="../../production/backend/app/agents/supervisor.py">agents/supervisor.py</a><span>script / content_review 工作图与选稿等待点</span></li>
+    <li><a href="../../production/backend/app/agents/roles.py">agents/roles.py</a><span>三个角色、工具白名单与 Skill 绑定</span></li>
+    <li><a href="../../production/backend/app/agents/tools.py">agents/tools.py</a><span>内容服务桥接、权限与工具审计</span></li>
+    <li><a href="../../production/backend/app/content/service.py">content/service.py</a><span>提示、生成、审核、有限返工及稿件版本</span></li>
+    <li><a href="../../production/backend/app/content/selection.py">content/selection.py</a><span>三稿展示条件、采用校验与下游失效</span></li>
+    <li><a href="../../production/backend/app/content/semantic_review.py">content/semantic_review.py</a><span>独立单稿 / 整组审核与输入绑定</span></li>
+    <li><a href="../../production/backend/app/content/providers/text.py">content/providers/text.py</a><span>Claude / Qwen 默认模型与统一调用台账</span></li>
+    <li><a href="../../production/backend/app/content/references.py">content/references.py</a><span>RedFox 搜索、导入、转写恢复与参考快照</span></li>
+    <li><a href="../../production/backend/app/content/tasks.py">content/tasks.py</a><span>持久内容任务、幂等、发送与恢复</span></li>
+    <li><a href="../../production/backend/app/content/contracts.py">content/contracts.py</a><span>参考、提示、批次、视觉结果和摘要契约</span></li>
+    <li><a href="../../production/backend/app/mcp.py">app/mcp.py</a><span>内部受控能力登记、提交与查询</span></li>
+    <li><a href="../../production/backend/app/avatar_image_api.py">avatar_image_api.py</a><span>主播参考图上传与图生图业务入口</span></li>
+    <li><a href="../../production/backend/app/avatar/person_image.py">avatar/person_image.py</a><span>静态主播形象生成能力</span></li>
+    <li><a href="../../production/backend/app/voice_clone_api.py">voice_clone_api.py</a><span>真人音色克隆业务入口</span></li>
+    <li><a href="../../production/backend/app/agents/media.py">agents/media.py</a><span>主控音频与视频工具的确认、提交和路线分流</span></li>
+    <li><a href="../../production/backend/app/wan_api.py">wan_api.py</a><span>Wan 单段与分镜任务图的业务入口</span></li>
+    <li><a href="../../production/backend/app/short_video/service.py">short_video/service.py</a><span>多镜头生图、逐镜投喂与拼接任务</span></li>
+    <li><a href="../../production/backend/app/content/visual.py">content/visual.py</a><span>页面与主控复用的参考视觉分析任务</span></li>
+    <li><a href="../../production/skills/口播写作/SKILL.md">production/skills/口播写作/SKILL.md</a><span>S02 内容双路线；同级目录为 S01 / S03</span></li>
+    <li><a href="../../production/backend/app/content/visual_pipeline.py">content/visual_pipeline.py</a><span>已落盘的视觉预处理基础模块</span></li>
+    <li><a href="../../production/backend/app/content/providers/qwen_vision.py">content/providers/qwen_vision.py</a><span>已落盘的 Qwen-VL 适配器</span></li>
+    <li><a href="../../docs/superpowers/plans/2026-09-30-video-reference-visual-analysis.md">视觉参考分析实施计划</a><span>主控工具、费用确认、参考条件与前端接入设计</span></li>
+  </ul></div></details>
+</section>
+<footer>内容创作架构说明 · 2026-09-30 · 单文件 HTML<br>模型配置、模块接入进度以当前部署与后续源码为准；历史“五类专业 Agent”架构入口不作为本页依据。</footer>
+</main>
+<script>
+(()=>{
+  const nav=[...document.querySelectorAll('.side nav a')];
+  const sections=nav.map(a=>document.querySelector(a.getAttribute('href')));
+  function updateNav(){let active=sections[0];for(const s of sections){if(s.getBoundingClientRect().top<=140)active=s;}nav.forEach(a=>{if(a.hash==='#'+active.id)a.setAttribute('aria-current','location');else a.removeAttribute('aria-current');});}
+  let queued=false;window.addEventListener('scroll',()=>{if(!queued){queued=true;requestAnimationFrame(()=>{updateNav();queued=false;});}},{passive:true});updateNav();
+  const tabs=[...document.querySelectorAll('[data-route]')];
+  function chooseRoute(tab){tabs.forEach(t=>{const selected=t===tab;t.setAttribute('aria-selected',String(selected));t.tabIndex=selected?0:-1;document.getElementById(t.getAttribute('aria-controls')).hidden=!selected;});}
+  tabs.forEach((tab,i)=>{tab.addEventListener('click',()=>chooseRoute(tab));tab.addEventListener('keydown',e=>{let next;if(e.key==='ArrowRight'||e.key==='ArrowLeft')next=tabs[1-i];else if(e.key==='Home')next=tabs[0];else if(e.key==='End')next=tabs[tabs.length-1];if(next){e.preventDefault();chooseRoute(next);next.focus();}});});
+  const messages={partial:'不展示正文，继续返工未通过项。',ready:'展示三份候选，用户可以选择其中一份。',stale:'旧审核已失效，更新审核后才能展示和采用。'};
+  const gates=[...document.querySelectorAll('[data-gate]')];gates.forEach(button=>button.addEventListener('click',()=>{gates.forEach(b=>b.setAttribute('aria-pressed',String(b===button)));document.getElementById('gate-result').textContent=messages[button.dataset.gate];}));
+  document.getElementById('print').addEventListener('click',()=>window.print());
+  let openBeforePrint=[];window.addEventListener('beforeprint',()=>{openBeforePrint=[...document.querySelectorAll('details')].map(d=>[d,d.open]);openBeforePrint.forEach(([d])=>d.open=true);});window.addEventListener('afterprint',()=>openBeforePrint.forEach(([d,open])=>d.open=open));
+})();
+</script>
+</body>
+</html>

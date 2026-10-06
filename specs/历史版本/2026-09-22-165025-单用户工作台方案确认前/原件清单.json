@@ -1,0 +1,145 @@
+{
+  "archive_sha256": "53efc2deb32919cb96078c27a88a79872ae910c5a3d18931a62bb2537dc62cd5",
+  "files": [
+    {
+      "path": "specs/0001-douyin-ai-studio/00-文档导航.md",
+      "sha256": "d5619f0323ce1c5e91f01cd69d298eb318f00d3eb74cbbc0ec82a82db2ee4fa9"
+    },
+    {
+      "path": "specs/0001-douyin-ai-studio/01-产品需求文档.md",
+      "sha256": "e39185e11cc05347d63b2742894c382b9d2dfe6aecf8ad2ea8a1a890da0a63f9"
+    },
+    {
+      "path": "specs/0001-douyin-ai-studio/02-技术选型对比.md",
+      "sha256": "ebae544b9922e0b103f67e46bc8ea528775fa1ffc307866f93ca007cf460e1a2"
+    },
+    {
+      "path": "specs/0001-douyin-ai-studio/03-总体技术方案.md",
+      "sha256": "7857177e5389952b43d6473a688ea2c2ff691980422b9a674639f3c8dfb4a128"
+    },
+    {
+      "path": "specs/0001-douyin-ai-studio/04-接口契约与数据字典.md",
+      "sha256": "2cdfa04fb8405df811bf43a2e28f720b98a359c87250750ef5cb1db1e8d8beab"
+    },
+    {
+      "path": "specs/0001-douyin-ai-studio/05-开发实施计划.md",
+      "sha256": "b20ec079602138c9fd19901390e3d27d5709b3f5d7ce8cdf7828006d6d31a963"
+    },
+    {
+      "path": "specs/0001-douyin-ai-studio/06-验收标准与测试方案.md",
+      "sha256": "f125da755bac6e1c02054ae1899ae1e961007240762955feafe048085cd188cf"
+    },
+    {
+      "path": "specs/0001-douyin-ai-studio/07-技术选型与实测流程.md",
+      "sha256": "ff49a3dae27721e7fb6a02726cda2d211df656047bba5b3233d2e44b7dab0758"
+    },
+    {
+      "path": "specs/0001-douyin-ai-studio/08-端到端技术流程与模型选型地图.md",
+      "sha256": "75a151fed0f4193dd83b4680fba8d0b180effef3e103cdc830b9f5a41f5bf445"
+    },
+    {
+      "path": "specs/0001-douyin-ai-studio/09-模型选型决策与接入方案.md",
+      "sha256": "21c90f280f830447de95b4e11d675ed7bbcac371b99555314acbd43aa1dedde1"
+    },
+    {
+      "path": "specs/0001-douyin-ai-studio/10-Agent编排选型与整体架构.md",
+      "sha256": "1ef8962befdbcfc1f1db71b008125a74ff6266002fb9d35651ad4255b966d202"
+    },
+    {
+      "path": "specs/0001-douyin-ai-studio/00-文档导航.html",
+      "sha256": "91b68b9fea113d17246309f1f01f46da11765c482de37e9cc97d79c767e00d5c"
+    },
+    {
+      "path": "specs/0001-douyin-ai-studio/01-产品需求文档.html",
+      "sha256": "4ea3efba866795ef764cc9a4f6892aaef38301583bc25cfa0b773b6dd5bed56f"
+    },
+    {
+      "path": "specs/0001-douyin-ai-studio/02-技术选型对比.html",
+      "sha256": "235751d0dafd04df11ca33165727cd2d5c42948bfe7a57e787c14142fc42fc8c"
+    },
+    {
+      "path": "specs/0001-douyin-ai-studio/03-总体技术方案.html",
+      "sha256": "468299b81859d9c7af993d896e2a5b2504f71b17d217109bdacc582bde912d8f"
+    },
+    {
+      "path": "specs/0001-douyin-ai-studio/04-接口契约与数据字典.html",
+      "sha256": "ffe600542dd04a16ae7a05ad27082580cd6181cc717fb23318a9dba6d54c173b"
+    },
+    {
+      "path": "specs/0001-douyin-ai-studio/05-开发实施计划.html",
+      "sha256": "12580069d96d6ed61a3cdcceffc5ce57401e7c2f086f52db64dca441d915a245"
+    },
+    {
+      "path": "specs/0001-douyin-ai-studio/06-验收标准与测试方案.html",
+      "sha256": "9bc7ac395135735307ed2017d27078750008bce66cbc5de0bd85f1214ead961d"
+    },
+    {
+      "path": "specs/0001-douyin-ai-studio/07-技术选型与实测流程.html",
+      "sha256": "1e2242484c81f8858235017956e7b8986572f38affbe962cc8ad00aaf44f869a"
+    },
+    {
+      "path": "specs/0001-douyin-ai-studio/08-端到端技术流程与模型选型地图.html",
+      "sha256": "88909ec3e476110c4ac492d29859da9dde9e67b4ddd1315570cc9127a85c82e8"
+    },
+    {
+      "path": "specs/0001-douyin-ai-studio/09-模型选型决策与接入方案.html",
+      "sha256": "b519f9ce0c6bb53e593a2249f1ce0933687e4655fa85f9eec0b8a32326403ecb"
+    },
+    {
+      "path": "specs/0001-douyin-ai-studio/10-Agent编排选型与整体架构.html",
+      "sha256": "cd5f6c6308bc2693308074f678cb0b9bbd580b6ef018d1cc7bacecdbbbc3aaaf"
+    },
+    {
+      "path": "specs/架构图/DeepAgents多智能体架构.html",
+      "sha256": "fb1f3f940cfe2c05e704da842cc190b4240df0cad719312e0edd674bd76db168"
+    },
+    {
+      "path": "specs/架构图/DeepAgents多智能体架构.json",
+      "sha256": "a876a0d9951af1419cc7880a58929d30766d2eb7b071dd0ecf84fd23345d03fd"
+    },
+    {
+      "path": "specs/架构图/DeepAgents多智能体架构.png",
+      "sha256": "f930a683aa1b1e78fcac66ede76319f047f34d4ea8d856bf7fa56412c53433eb"
+    },
+    {
+      "path": "specs/架构图/DeepAgents多智能体架构.visual-check.1440x900.dark.png",
+      "sha256": "cbd770288a55b3ea222c579cdd402d0748a88de2e808dc94b910da12eee40bbd"
+    },
+    {
+      "path": "specs/架构图/DeepAgents多智能体架构.visual-check.1440x900.light.png",
+      "sha256": "a02c534f91a8827f24ebdac60cf5d2ed14dfe5404cddb1a99d095f163ada268b"
+    },
+    {
+      "path": "specs/架构图/DeepAgents多智能体架构.visual-check.1600x1000.light.png",
+      "sha256": "4c1b09c5dd793daa3be0982426aeae0227398a2d011a09c7eea28a13839cb27a"
+    },
+    {
+      "path": "specs/架构图/DeepAgents多智能体架构.visual-check.1920x1080.light.png",
+      "sha256": "341f10f938bf812efe36db78b8d78a0a7074172661ccd9fbea31f7720222d0ab"
+    },
+    {
+      "path": "specs/架构图/DeepAgents多智能体架构.visual-check.2048x1320.dark.png",
+      "sha256": "ae4630733b84d2911cfbb17eb3e6afcad24f903abb86b2e1866f9947372977b3"
+    },
+    {
+      "path": "specs/架构图/DeepAgents多智能体架构.visual-check.2048x1320.light.png",
+      "sha256": "c1278f5c3a86874648987e1aa8fef66fb70c8caa974753980bb26fe376003ea2"
+    },
+    {
+      "path": "specs/架构图/DeepAgents多智能体架构.visual-check.html",
+      "sha256": "e62aeb833697b1cdcb5c0426aaee6a3d870e2e46599bb75a682282c2dba7b29c"
+    },
+    {
+      "path": "specs/架构图/DeepAgents多智能体架构.visual-check.json",
+      "sha256": "71f4c82f589ae4ece76bf4a6aa1b49efb78b03d311e3b3ee3c74d5fec0e9dae1"
+    },
+    {
+      "path": "specs/配置/已选模型配置.example.json",
+      "sha256": "be18c0160f5aa6d88ba3da6e9d2ebe126dc8480506090c06475add26c792b205"
+    },
+    {
+      "path": "specs/阅读器/生成评估指标总表.py",
+      "sha256": "302a276d909fe783dc66f0779fef55bbd17ba5aa2a9094da86cf5a4677274ef8"
+    }
+  ]
+}

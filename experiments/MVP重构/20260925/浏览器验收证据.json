@@ -1,0 +1,18 @@
+{
+  "date": "2026-09-26",
+  "scope": "隔离库操作及浏览器组件验收，不是新模型生产闭环",
+  "created_and_restored_work_id": "work_059120128413",
+  "draft_copy": {"source": "av_base_b_v1", "new": "av_b0a3a39ddda1", "approval": "pending", "old_work_binding_unchanged": true},
+  "audio": {"duration_seconds": 23.186719, "played_seconds": 0.316223, "ready_state": 4, "fixture_confirmation_allowed": false},
+  "video_component": {
+    "status_source": "browser_route_fixture",
+    "media_source": "existing_real_local_render",
+    "duration_seconds": 23.166667, "width": 1080, "height": 1920,
+    "played_seconds": 0.385428, "ready_state": 4,
+    "confirmation_payload": {"review_ack": true, "actor_id": "user_local", "execution_id": "ui_only_execution"},
+    "backend_human_review_written": false, "page_errors": []
+  },
+  "download": {"scope": "local_engineering_sample_zip", "bytes": 5173614, "sha256": "b7a6cfd16118270f42ca71151da2c51b92b6d7c9aa76cb624eecba7dcddfbdac", "matches_source": true, "zip_error": null},
+  "layouts": {"desktop_width": 1440, "mobile_width": 390, "mobile_document_width": 390, "visually_reviewed": true},
+  "production_start": {"health": "ok", "mode": "production", "work_count": 19, "acceptance_fixtures_in_production": false}
+}

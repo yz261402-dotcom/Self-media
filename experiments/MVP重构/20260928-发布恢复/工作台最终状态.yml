@@ -1,0 +1,198 @@
+- generic [ref=e3]:
+  - complementary "功能导航" [ref=e4]:
+    - link "口播工作台" [ref=e6] [cursor=pointer]:
+      - /url: "#/avatar"
+    - generic [ref=e7]:
+      - generic [ref=e8]:
+        - generic [ref=e9]: 制作
+        - link "人物形象 候选 女·22 岁左右 · 新草稿" [ref=e129] [cursor=pointer]:
+          - /url: "#/avatar"
+          - generic [ref=e11]:
+            - generic [ref=e12]: 人物形象
+            - generic [ref=e13]: 候选 女·22 岁左右 · 新草稿
+        - link "口播稿 已采用一稿" [ref=e133] [cursor=pointer]:
+          - /url: "#/script"
+          - generic [ref=e15]:
+            - generic [ref=e16]: 口播稿
+            - generic [ref=e17]: 已采用一稿
+        - link "语音配音 已确认 46.4s" [ref=e134] [cursor=pointer]:
+          - /url: "#/tts"
+          - generic [ref=e19]:
+            - generic [ref=e20]: 语音配音
+            - generic [ref=e21]: 已确认 46.4s
+        - link "视频合成 成片可下载" [ref=e135] [cursor=pointer]:
+          - /url: "#/video"
+          - generic [ref=e23]:
+            - generic [ref=e24]: 视频合成
+            - generic [ref=e25]: 成片可下载
+      - generic [ref=e26]:
+        - generic [ref=e27]: 其他功能
+        - link "发布" [ref=e28] [cursor=pointer]:
+          - /url: "#/publish"
+        - link "指标监控 开发中" [ref=e31] [cursor=pointer]:
+          - /url: "#/metrics"
+          - generic [ref=e32]: 指标监控
+          - generic [ref=e34]: 开发中
+        - link "模型选择 开发中" [ref=e35] [cursor=pointer]:
+          - /url: "#/models"
+          - generic [ref=e36]: 模型选择
+          - generic [ref=e38]: 开发中
+    - generic "运行模式 生产 · 单条额度 ¥30.00" [ref=e39]:
+      - generic [ref=e40]: 生产
+      - generic [ref=e41]: 额度 ¥30.00
+  - generic [ref=e42]:
+    - banner [ref=e43]:
+      - generic [ref=e44]:
+        - generic [ref=e45]: 当前作品
+        - combobox "当前作品" [ref=e46] [cursor=pointer]:
+          - 'option "真实链路验证（TTS L1） · #e27d"'
+          - 'option "真实链路验证（TTS L1） · #caec"'
+          - 'option "演示demo · #d92e"'
+          - 'option "情感主播 · #00d9"'
+          - 'option "demo · #caf8"'
+          - 'option "demo · #45e0" [selected]'
+          - 'option "为什么 AI 读了你的文件还是会答错 · #ac9b"'
+          - 'option "修复验证-口播稿生成 · #8ae6"'
+          - 'option "RAG · #8f55"'
+          - 'option "RAG · #68d5"'
+          - 'option "T04 冒烟 · #ffd4"'
+          - 'option "E2E 冒烟 · #3db9"'
+          - 'option "E2E 冒烟 · #e7bd"'
+          - 'option "E2E 冒烟 · #0255"'
+          - 'option "E2E 冒烟 · #6b13"'
+          - 'option "E2E 冒烟 · #8c58"'
+          - 'option "E2E 冒烟 · #2e8d"'
+          - 'option "E2E 冒烟 · #6ef6"'
+          - 'option "t · #3c35"'
+          - 'option "t · #6c63"'
+          - 'option "E2E 冒烟 · #e37d"'
+          - 'option "E2E 冒烟 · #33ea"'
+          - 'option "E2E 冒烟 · #b164"'
+      - button "新建作品" [ref=e47] [cursor=pointer]
+      - generic [ref=e136]: 已完成
+    - generic [ref=e56]:
+      - generic [ref=e57]:
+        - heading "发布" [level=1] [ref=e58]
+        - generic [ref=e59]: 抖音 · 浏览器发布
+      - paragraph [ref=e60]: 先登录账号，再上传已确认的成片。准备完成后，由你核对并确认发布。
+      - generic [ref=e61]:
+        - generic [ref=e62]:
+          - heading "抖音账号" [level=2] [ref=e63]
+          - generic [ref=e64]: 已登录
+        - paragraph [ref=e65]:
+          - text: 当前账号：
+          - strong [ref=e66]: 抖音号：54228495601
+          - text: · 54228495601
+        - paragraph [ref=e67]: 使用专用发布浏览器扫码登录，普通浏览器中的登录不会自动共享。
+        - generic [ref=e68]:
+          - button "打开专用浏览器登录" [ref=e69] [cursor=pointer]
+          - button "检查登录状态" [ref=e70] [cursor=pointer]
+          - link "打开抖音创作者中心" [ref=e71] [cursor=pointer]:
+            - /url: https://creator.douyin.com/
+      - generic [ref=e72]:
+        - generic [ref=e73]:
+          - heading "当前作品" [level=2] [ref=e74]
+          - generic [ref=e75]: demo
+          - button "刷新" [ref=e76] [cursor=pointer]
+        - generic [ref=e137]:
+          - generic [ref=e138]:
+            - strong [ref=e139]: 它不只是会聊天，它开始动手了
+            - paragraph [ref=e140]: 交付包已确认，可开始准备投稿。
+          - link "下载完整作品包" [ref=e141] [cursor=pointer]:
+            - /url: /api/v1/publish-packages/pkg_fd31e76ebaffacef221173f9/download
+        - generic [ref=e142]:
+          - generic [ref=e143]:
+            - generic [ref=e144]: 视频预览
+            - generic "视频预览" [ref=e145]
+          - generic [ref=e146]:
+            - generic [ref=e147]: 封面预览
+            - img "封面预览" [ref=e148]
+        - generic [ref=e149]:
+          - strong [ref=e151]: 投稿资料
+          - generic [ref=e152]:
+            - generic [ref=e153]:
+              - generic [ref=e154]: 标题
+              - generic [ref=e155]:
+                - textbox "标题" [ref=e156]: 它不只是会聊天，它开始动手了
+                - generic [ref=e157]: 14 / 30 字；标题需要 1–30 字，过长请手动缩短。
+              - button "复制标题" [ref=e158] [cursor=pointer]
+            - generic [ref=e159]:
+              - generic [ref=e160]: 简介
+              - textbox "简介" [ref=e161]: 用聊天机器人和 agent 的差别做对比，讲清 agent 从回答到完成的转变。
+              - button "复制简介" [ref=e162] [cursor=pointer]
+            - generic [ref=e163]:
+              - generic [ref=e164]: 话题
+              - generic [ref=e165]:
+                - textbox "话题" [ref=e166]:
+                  - /placeholder: 例如：AI、RAG、知识库
+                  - text: agent、科普、对比
+                - generic [ref=e167]: "用空格、逗号或顿号分隔，可带 #。"
+              - button "复制话题" [ref=e168] [cursor=pointer]
+            - paragraph [ref=e169]: 已开始准备，以上是本次投稿文案。需要修改时先取消准备，再重新开始。
+      - generic [ref=e81]:
+        - generic [ref=e82]:
+          - heading "发布平台" [level=2] [ref=e83]
+          - generic [ref=e84]: 单账号、单作品
+        - table [ref=e85]:
+          - rowgroup [ref=e86]:
+            - row [ref=e87]:
+              - columnheader "平台" [ref=e88]
+              - columnheader "状态" [ref=e89]
+              - columnheader "说明" [ref=e90]
+              - columnheader [ref=e91]
+          - rowgroup [ref=e92]:
+            - row [ref=e93]:
+              - cell [ref=e94]:
+                - strong [ref=e95]: 抖音
+              - cell "浏览器发布" [ref=e96]
+              - cell "扫码登录，准备后由你确认发布" [ref=e98]
+              - cell [ref=e99]:
+                - button "选择" [ref=e100] [cursor=pointer]
+            - row [ref=e101]:
+              - cell [ref=e102]:
+                - strong [ref=e103]: B 站
+              - cell "开发中" [ref=e104]
+              - cell "尚未接入" [ref=e106]
+              - cell "—" [ref=e107]
+            - row [ref=e108]:
+              - cell [ref=e109]:
+                - strong [ref=e110]: 快手
+              - cell "开发中" [ref=e111]
+              - cell "尚未接入" [ref=e113]
+              - cell "—" [ref=e114]
+            - row [ref=e115]:
+              - cell [ref=e116]:
+                - strong [ref=e117]: 小红书
+              - cell "开发中" [ref=e118]
+              - cell "尚未接入" [ref=e120]
+              - cell "—" [ref=e121]
+            - row [ref=e122]:
+              - cell [ref=e123]:
+                - strong [ref=e124]: 微信视频号
+              - cell "开发中" [ref=e125]
+              - cell "尚未接入" [ref=e127]
+              - cell "—" [ref=e128]
+      - generic [ref=e170]:
+        - generic [ref=e171]:
+          - heading "抖音自动发布" [level=2] [ref=e172]
+          - generic [ref=e173]: 待确认
+        - generic [ref=e174]:
+          - paragraph [ref=e175]: 请核对专用浏览器内的账号、视频、文案、封面和 AI 内容声明。确认后将执行发布。
+          - list "抖音准备状态" [ref=e176]:
+            - listitem [ref=e177]:
+              - generic [ref=e178]: "1"
+              - text: 扫码登录
+            - listitem [ref=e179]:
+              - generic [ref=e180]: "2"
+              - text: 上传与填写
+            - listitem [ref=e181]:
+              - generic [ref=e182]: "3"
+              - text: 确认发布
+          - generic [ref=e183]:
+            - checkbox "我已在专用浏览器核对发布账号、视频、文案、封面和 AI 内容声明，确认发布这条作品。" [ref=e184]
+            - generic [ref=e185]: 我已在专用浏览器核对发布账号、视频、文案、封面和 AI 内容声明，确认发布这条作品。
+          - generic [ref=e186]:
+            - button "确认并发布" [disabled] [ref=e187]
+            - button "取消" [ref=e188] [cursor=pointer]
+          - paragraph [ref=e189]: 扫码和验证码由你在专用浏览器完成。遇到结果不明确时先核对投稿列表，系统不会自动重复发布。
+          - paragraph [ref=e190]: 任务编号：publish_9073988ae1f7

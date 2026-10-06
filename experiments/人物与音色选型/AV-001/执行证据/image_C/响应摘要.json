@@ -1,0 +1,19 @@
+{
+  "http_status": 200,
+  "headers": {
+    "content-type": "application/json",
+    "x-request-id": "8d5a4d70-5d77-4780-9899-70331191ef2e, 519ba582-dfbf-4b58-8bfb-3399fd804299, req_8da01bde7f1841e3af558428"
+  },
+  "model": "gpt-image-2",
+  "created": 1790033887,
+  "usage": {
+    "input_tokens": 0,
+    "output_tokens": 0,
+    "total_tokens": 0,
+    "input_tokens_details": {
+      "text_tokens": 0,
+      "image_tokens": 0
+    }
+  },
+  "data_count": 1
+}

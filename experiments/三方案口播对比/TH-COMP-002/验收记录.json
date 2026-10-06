@@ -1,0 +1,29 @@
+{
+  "regression_tests": {
+    "passed": 4,
+    "scope": "at-most-once submission, uncertain timeout, HTTP failure, source hash mismatch"
+  },
+  "media": {
+    "playable_video_count": 2,
+    "full_decode": "PASS",
+    "original_hashes_preserved": true,
+    "audio_duration_seconds": 9.36
+  },
+  "browser": {
+    "desktop_width": 1440,
+    "mobile_width": 390,
+    "page_horizontal_overflow": false,
+    "synchronous_muted_play": true,
+    "restore_single_play": true,
+    "half_speed": true,
+    "flow_document_rendered": true
+  },
+  "local_links": {
+    "html_count": 24,
+    "checked": 836,
+    "errors": 0
+  },
+  "third_video": "BLOCKED_BY_VOLCENGINE_401_50400",
+  "manual_full_audiovisual_review": "NOT_REVIEWED",
+  "production_selection": "UNSELECTED"
+}

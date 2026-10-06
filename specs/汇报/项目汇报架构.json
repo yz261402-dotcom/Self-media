@@ -1,0 +1,194 @@
+{
+  "schema_version": 1,
+  "diagram_type": "architecture",
+  "meta": {
+    "title": "DeepAgents 视频生产组件概览",
+    "quality_profile": "showcase",
+    "viewBox": [
+      1120,
+      600
+    ],
+    "legend": {
+      "mode": "hidden"
+    }
+  },
+  "components": [
+    {
+      "id": "studio",
+      "type": "frontend",
+      "label": "七入口工作台",
+      "sublabel": "前四入口制作闭环 · 后三入口规划",
+      "tag": "单用户 · 一条作品贯穿",
+      "pos": [
+        40,
+        35
+      ],
+      "size": [
+        280,
+        100
+      ]
+    },
+    {
+      "id": "business",
+      "type": "security",
+      "label": "业务 API · 作品契约",
+      "sublabel": "强制质量、用户选择与预算门禁",
+      "tag": "实现技术待选型",
+      "pos": [
+        420,
+        35
+      ],
+      "size": [
+        280,
+        100
+      ]
+    },
+    {
+      "id": "supervisor",
+      "type": "backend",
+      "label": "DeepAgents 总控",
+      "sublabel": "1 个总控 + 4 类专业智能体",
+      "tag": "框架已选 · 应用未实现",
+      "pos": [
+        800,
+        35
+      ],
+      "size": [
+        280,
+        100
+      ]
+    },
+    {
+      "id": "support",
+      "type": "database",
+      "label": "7 个 Skill · 四层记忆",
+      "sublabel": "任务 · 人设 · 历史 · 经验",
+      "tag": "规范与知识能力拟建",
+      "pos": [
+        800,
+        250
+      ],
+      "size": [
+        280,
+        100
+      ]
+    },
+    {
+      "id": "mcp",
+      "type": "messagebus",
+      "label": "MCP 能力入口",
+      "sublabel": "4 组能力 · 初期拟建 2 个服务",
+      "tag": "质量角色查历史，无联网抓取工具",
+      "pos": [
+        420,
+        250
+      ],
+      "size": [
+        280,
+        100
+      ]
+    },
+    {
+      "id": "generation",
+      "type": "cloud",
+      "label": "Provider + GPU Worker",
+      "sublabel": "OmniHuman MVP · M2 可选",
+      "tag": "固定人物＋最终 TTS＋路线预算门禁",
+      "pos": [
+        40,
+        250
+      ],
+      "size": [
+        280,
+        100
+      ]
+    },
+    {
+      "id": "finishing",
+      "type": "backend",
+      "label": "确定性后期 Worker",
+      "sublabel": "字幕、合成、清晰度与封面",
+      "tag": "quality 终审后，内部代码打包",
+      "pos": [
+        40,
+        465
+      ],
+      "size": [
+        280,
+        100
+      ]
+    },
+    {
+      "id": "delivery",
+      "type": "frontend",
+      "label": "内部打包 → 预览下载",
+      "sublabel": "PublishPackage · 成片与投稿资料",
+      "tag": "V1 到可下载交付包",
+      "pos": [
+        420,
+        465
+      ],
+      "size": [
+        280,
+        100
+      ]
+    }
+  ],
+  "connections": [
+    {
+      "id": "create-work",
+      "from": "studio",
+      "to": "business",
+      "variant": "emphasis"
+    },
+    {
+      "id": "delegate-work",
+      "from": "business",
+      "to": "supervisor",
+      "variant": "emphasis"
+    },
+    {
+      "id": "call-tools",
+      "from": "supervisor",
+      "to": "mcp",
+      "label": "调用",
+      "variant": "emphasis",
+      "fromSide": "bottom",
+      "toSide": "top"
+    },
+    {
+      "id": "support-agents",
+      "from": "support",
+      "to": "supervisor",
+      "label": "按需加载",
+      "variant": "dashed",
+      "fromSide": "top",
+      "toSide": "bottom"
+    },
+    {
+      "id": "submit-production",
+      "from": "mcp",
+      "to": "generation",
+      "variant": "emphasis"
+    },
+    {
+      "id": "inspect-media",
+      "from": "generation",
+      "to": "finishing",
+      "label": "原片审核通过",
+      "variant": "emphasis",
+      "labelAt": [
+        180,
+        410
+      ]
+    },
+    {
+      "id": "deliver-package",
+      "from": "finishing",
+      "to": "delivery",
+      "variant": "emphasis",
+      "label": "quality 终审通过"
+    }
+  ],
+  "cards": []
+}

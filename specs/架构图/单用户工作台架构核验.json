@@ -1,0 +1,10 @@
+{
+  "diagram_type": "architecture",
+  "specification_sha256": "e25583ac78eac0b8d35ee8a3b8fb8bbcb362adc4d7a566c44bfbdd5e715823bd",
+  "artifact_sha256": "4c7be5e3b97098642aff918c0deb2b5bb97b5902b7c2cdee2cbeecfd0fb535f1",
+  "validation": "9/9 showcase, 0 errors, 0 warnings",
+  "visual_review": "passed",
+  "correction_rounds": 0,
+  "viewport_receipt": "DeepAgents多智能体架构.visual-check.json",
+  "png_sha256": "e9a4a52c12a8c491af0e00878b0408ed6ee1fd09a00c1ec4e4243742aef1eab5"
+}

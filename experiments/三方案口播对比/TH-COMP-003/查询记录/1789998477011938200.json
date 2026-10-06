@@ -1,0 +1,13 @@
+{
+  "code": 10000,
+  "data": {
+    "aigc_meta_tagged": false,
+    "status": "generating",
+    "video_url": ""
+  },
+  "message": "Success",
+  "request_id": "2026092121475920C0175B80428F26532C",
+  "status": 10000,
+  "time_elapsed": "18.34801ms",
+  "_http_status": 200
+}

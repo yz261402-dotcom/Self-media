@@ -122,7 +122,7 @@ Invoke-RestMethod http://127.0.0.1:18080/v1/healthz
 
 1. **创建作品**：填写主题、受众、时长和要求。顶部五步向导显示当前缺项，选择会持久保存。
 2. **确认人物**：选择已就绪主播；新人物完成原图审核、参考依据、权属确认、冻结定版。人物身份与背景变体分开管理。
-3. **三选一稿件**：DeepSeek 根据用户提示和材料生成三个角度；质量模块检查历史重复、表达与内容问题。用户采用一稿后才能合成全文音频。此环节不联网搜索或爬取。
+3. **三选一稿件**：由配置的写稿模型根据用户提示和材料生成三个角度；质量模块检查历史重复、表达与内容问题。用户采用一稿后才能合成全文音频。此环节不联网搜索或爬取。
 4. **试听与确认**：MiniMax 生成试听和全文语音。用户听检并确认当前音轨。相同输入已有有效音频时优先复用；显式重新合成可能再次收费。
 5. **合成与下载**：确认生成条件和调用清单，生成口播原片；审核画面与音轨并确认原片；代码 Worker 生成字幕、封面与成片；观看成片后确认并下载。
 6. **抖音发布**：选择已确认的交付包，编辑标题、简介和话题，开始准备上传；核对专用浏览器内的账号、视频、封面、文案和 AI 内容声明后，勾选并点击“确认并发布”。准备阶段不执行最终发布。
@@ -134,12 +134,12 @@ M2 路线需要已审人物变体和获准动作参考：LivePortrait 生成表�
 ## 实际技术实现
 
 - **界面**：Vue 3、TypeScript、Pinia、Vite；七入口与常驻创作向导。
-- **服务与持久化**：FastAPI、Pydantic、SQLite；作品、选择、审核、任务、成本与资产血缘持久化。PostgreSQL、pgvector 未在当前工程部署。
+- **服务与持久化**：FastAPI、Pydantic、PostgreSQL（psycopg 3）；作品、选择、审核、任务、成本与资产血缘持久化。本机开发使用 Docker 容器 `avatar-studio-pg`（端口 `15432`），连接串见 `backend/.env` 的 `AVATAR_STUDIO_DATABASE_URL`。pgvector 未部署。
 - **智能体**：总控维护工作项依赖和人工选择门，content / quality / avatar / audio 四类角色执行受控工具。默认由真实 DeepAgents 运行时执行工作项，业务门禁、预算与幂等由代码复算。
 - **模型调度边界**：默认 `AVATAR_STUDIO_MODEL_BACKEND=deterministic`，表示框架调度使用确定性决策；不代表所有生成 Provider 都是 Mock。内容工具可独立调用真实 DeepSeek。`deepseek` 调度适配器已接入，但还需安装可选依赖 `langchain-openai`（当前环境未装）；本轮没有进行全模型自主调度的收费验收。
-- **模型与媒体**：文本使用配置指定的 DeepSeek model ID；图片使用 GPT Image 2.5 Sunburst（请求模型 ID `gpt-image-2.5-sunburst`，兼容保留原有图片 Provider 配置键）；语音 MiniMax `speech-2.8-hd`；M2 为 LivePortrait + MuseTalk 1.5；云路线为 OmniHuman 1.5。
+- **模型与媒体**：口播稿与返工默认使用 GPT（`AVATAR_STUDIO_CONTENT_WRITER_PROVIDER=openai`，model `gpt-6.1-sol`）；画面分析使用 Qwen3-VL；图片使用 GPT Image 2.5 Sunburst（请求模型 ID `gpt-image-2.5-sunburst`，兼容保留原有图片 Provider 配置键）；语音 MiniMax `speech-2.8-hd`；M2 为 LivePortrait + MuseTalk 1.5；云路线为 OmniHuman 1.5。`deepseek` 作为可选写稿/调度 Provider 保留。
 - **字幕与后期**：Qwen3-ASR-1.7B + Qwen3-ForcedAligner-0.6B 提供真实识别/对齐时间轴。FFmpeg 完成裁切、规格统一、降噪/锐化、响度处理、字幕与封面输出，并复验成片。当前清晰度处理是常规滤镜与缩放，不是模型超分。
-- **发布**：独立 Playwright Adapter 操作抖音创作者中心，SQLite 保存发布任务、确认快照与提交状态。它不是官方 OpenAPI；首版只支持单账号、单条、即时投稿。
+- **发布**：独立 Playwright Adapter 操作抖音创作者中心，发布任务、确认快照与提交状态存入业务库。它不是官方 OpenAPI；首版只支持单账号、单条、即时投稿。
 - **Skill / MCP / 记忆**：角色读取受信业务 Skill，通过受限工具通道执行能力；记录工具审计及 checkpoint、persona、history、experience。没有联网搜索工具，也没有 editor Agent；后期直接由代码 Worker 执行。
 
 ## 已接通的交付能力
@@ -211,7 +211,7 @@ production/
     jobs.py                 外部作业台账、幂等、租约与预算
     memory.py               四层记忆
     lineage.py              上下游依赖失效
-    storage.py              SQLite 仓储
+    storage.py              PostgreSQL 仓储
   backend/tests/            后端回归
   frontend/tests/           前端状态回归
   skills/                   业务 Skill

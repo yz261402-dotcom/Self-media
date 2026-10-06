@@ -1,0 +1,168 @@
+{
+  "updated_at": "2026-09-22 09:38（北京时间）",
+  "summary": "用户已选定M2：LivePortrait迁移动作到固定人物B，再由MuseTalk 1.5配音色3的嘴型。三条真实短样片和实测记录保留，M1为基准、M3为对照。M2采样中眼睑和轻微面部动作有所增加，但肩膀/躯干、约9.13秒动作循环和一分钟连续口播尚未通过生产质量验收。",
+  "inputs": {
+    "avatar_path": "输入派生/人物B-偶数尺寸.png",
+    "audio_path": "输入派生/音色3原始试听.wav",
+    "identity": "固定人物B；原941×1672，只在右侧复制1列像素成为942×1672，无缩放",
+    "voice": "MiniMax speech-2.8-hd / Chinese (Mandarin)_Warm_Bestie，15.218844秒"
+  },
+  "clips": [
+    {
+      "id": "M1",
+      "label": "单图 MuseTalk",
+      "model": "MuseTalk 1.5",
+      "processing_summary": "人物B静图＋音色3 → MuseTalk配嘴型 → 音视频合成",
+      "motion_source": "未单独驱动表情或头姿；以音频驱动嘴部",
+      "postprocessing_summary": "输出H.264/AAC；未另做增强、补帧或字幕",
+      "processing_steps": [
+        "输入：固定人物B＋已有音色3试听音频（15.218844秒）。人物原图941×1672，仅在右侧复制1列像素至942×1672，解决H.264偶数宽度要求；没有缩放、换脸或重新生成人物。",
+        "嘴型驱动：MuseTalk 1.5以同一张图片作为各帧的视觉输入，结合音频生成嘴部区域，并融合回完整画面；本路线没有额外的眨眼、头姿或表情驱动阶段。",
+        "输出合成：生成942×1672、25fps、380帧的H.264口播视频，并合入音色3，音轨为AAC、32kHz单声道。视频15.20秒，音频15.218844秒。",
+        "后处理：本页直接播放成功作业M1B的输出；未另做超分、面部增强、补帧、字幕或片头片尾。最初奇数宽度导致的失败作业M1及日志仍保留。"
+      ],
+      "processing_parameters": [
+        "MuseTalk：version=v15；unet=models/musetalkV15/unet.pth；fps=25；batch_size=4；use_float16开启；bbox_shift=0。",
+        "音频来源：MiniMax speech-2.8-hd / Chinese (Mandarin)_Warm_Bestie的既有试听，本次未重新调用TTS。",
+        "[图像派生记录](输入派生/来源记录.json) · [M1B启动参数](作业配置/M1B.json) · [M1B输入配置](作业配置/M1B.yaml) · [M1B执行结果](执行证据/M1B/result.json)。"
+      ],
+      "status": "SUCCEEDED",
+      "video_path": "样片/M1-单图MuseTalk.mp4",
+      "poster_path": "画面核验/M1-封面.jpg",
+      "width": 942,
+      "height": 1672,
+      "fps": 25,
+      "video_seconds": 15.2,
+      "audio_seconds": 15.218844,
+      "wall_seconds": 111.684,
+      "gpu_peak_mib": 7489,
+      "estimated_gpu_cny": 0.049017,
+      "observations": [
+        "嘴型变化可见；代表帧中头部和眉眼基本固定。",
+        "基准：人物B＋原始音色3，完整解码通过。"
+      ],
+      "limitations": [
+        "无法单独满足自然眨眼、表情和头动要求。",
+        "面部偏平滑，唇齿细节仍需看片确认。"
+      ],
+      "evidence_path": "执行证据/M1B/result.json",
+      "motion_summary": "嘴型变化；头部与眉眼基本固定",
+      "video_codec": "H.264",
+      "audio_format": "AAC / 32000 Hz / 1声道"
+    },
+    {
+      "id": "M2",
+      "label": "已选：LivePortrait＋MuseTalk",
+      "model": "LivePortrait → MuseTalk 1.5",
+      "processing_summary": "参考动作 → LivePortrait生成B动作底片 → MuseTalk配音色3嘴型",
+      "motion_source": "已有阿里样片的动作迁移；约9.13秒后循环",
+      "postprocessing_summary": "MuseTalk输出H.264/AAC；未另做增强、补帧或字幕",
+      "processing_steps": [
+        "准备输入：沿用与M1相同的人物B偶数尺寸图和音色3。另取本项目早期阿里wan2.2-s2v样片，仅作为动作参考；参考画面的人物不是B，不直接作为B的成片。",
+        "准备动作：将约9.134秒的参考视频去掉声音，统一为25fps，原速循环并截到381帧（15.24秒）。因此约9.13秒处有循环接缝，并非15秒独立动作。",
+        "迁移动作：LivePortrait以人物B图片为source、参考视频为driving，迁移眼睑、表情和头姿，并回贴到B的完整画面，生成无音频的[LP1动作底片](样片/LP1-动作底片.mp4)。这一阶段依赖参考视频，不是由TTS自动规划表情。",
+        "重新配嘴型：将LP1动作底片与音色3交给MuseTalk 1.5，按音频重生成嘴部并合入声音。最终为942×1672、25fps、380帧、H.264/AAC；视频15.20秒，音频15.218844秒、32kHz单声道。",
+        "后处理：本页直接播放第二阶段输出，未另做超分、面部增强、补帧或字幕。LivePortrait的原有嘴部表情会被MuseTalk重新处理；动作迁移不代表身体和肩膀也获得自然运动。"
+      ],
+      "processing_parameters": [
+        "LivePortrait：flag_crop_driving_video开启；source_max_dim=1920；沿用默认相对运动、stitching和pasteback；未开启eye/lip retargeting或torch.compile。",
+        "MuseTalk：version=v15；fps=25；batch_size=4；use_float16开启；bbox_shift=0，与M1一致。",
+        "分阶段耗时：LivePortrait 53.505秒＋MuseTalk 181.672秒＝235.177秒。",
+        "[动作参考来源](输入派生/动作参考来源.json) · [LivePortrait启动参数](作业配置/LP1.json) · [LivePortrait执行结果](执行证据/LP1/result.json)。",
+        "[MuseTalk启动参数](作业配置/M2.json) · [MuseTalk输入配置](作业配置/M2.yaml) · [MuseTalk执行结果](执行证据/M2/result.json)。"
+      ],
+      "status": "SUCCEEDED",
+      "video_path": "样片/M2-LivePortrait加MuseTalk.mp4",
+      "poster_path": "画面核验/M2-封面.jpg",
+      "width": 942,
+      "height": 1672,
+      "fps": 25,
+      "video_seconds": 15.2,
+      "audio_seconds": 15.218844,
+      "wall_seconds": 235.177,
+      "gpu_peak_mib": 7489,
+      "estimated_gpu_cny": 0.103217,
+      "observations": [
+        "眼部采样有明显眼睑开合变化，头部和面部有轻微变化。",
+        "两阶段已完成：动作底片53.505秒＋口播181.672秒；完整解码通过。",
+        "没有明显换人或大面积背景破坏，但这只是代表帧观察。"
+      ],
+      "limitations": [
+        "动作参考约9.13秒，之后循环；不代表15秒独立动作或一分钟自然度已通过。",
+        "MuseTalk重配后部分笑容减弱，唇齿边缘偏软；肩膀与躯干仍基本固定。",
+        "默认InsightFace预训练权重仅供非商业研究，生产接入需处理许可或替换。"
+      ],
+      "evidence_path": "执行证据/M2/result.json",
+      "motion_summary": "眼睑开合更明显，面部和头姿轻微变化",
+      "video_codec": "H.264",
+      "audio_format": "AAC / 32000 Hz / 1声道"
+    },
+    {
+      "id": "M3",
+      "label": "音频驱动全脸",
+      "model": "SadTalker 512 / full，未启用 still",
+      "processing_summary": "人物B静图＋音色3 → SadTalker预测表情和头姿 → 全脸渲染回贴",
+      "motion_source": "SadTalker由音频驱动的表情、头姿流程；无参考动作视频",
+      "postprocessing_summary": "原片MPEG-4 Part2；另存H.264浏览器版，AAC音轨直接复制",
+      "processing_steps": [
+        "输入：与M1相同的人物B偶数尺寸图和原始音色3音频，不加入参考动作视频，也不接LivePortrait或MuseTalk。",
+        "全脸运动：SadTalker从图像提取人脸信息，按音频生成表情与头姿系数，再以512脸区渲染。使用full模式将结果回贴到完整画幅；本次未启用still，保留模型的头部运动。",
+        "原片合成：输出942×1672、25fps、380帧，视频编码为MPEG-4 Part2。模型原流程将音频转为16kHz单声道并输出AAC；音视频均15.20秒，比原音频短约18.844毫秒。",
+        "浏览器兼容：保留[SadTalker原片](样片/M3-SadTalker.mp4)，另存播放器使用的H.264版本（libx264、CRF18、yuv420p），AAC音轨直接复制。此次转码仅解决播放兼容，没有补帧、面部增强或超分，也未添加字幕。"
+      ],
+      "processing_parameters": [
+        "SadTalker：preprocess=full；size=512；pose_style=0；expression_scale=1.0；batch_size=2；verbose开启；still关闭；未启用面部或背景增强器。",
+        "权重：SadTalker_V0.0.2_512.safetensors＋full路径使用的mapping_00109-model.pth.tar；full不等于still。Python、NumPy、Torch随机种子均为20260922，不承诺逐位确定性。",
+        "GPU作业193.795秒；浏览器兼容转码在本机约3.203秒，后者未计入GPU作业费。",
+        "[作业参数与权重摘要](作业配置/S1B.json) · [实际执行脚本](SadTalker执行.py) · [执行结果](执行证据/S1B/result.json) · [播放兼容处理记录](执行证据/S1B/播放兼容处理.json)。"
+      ],
+      "status": "SUCCEEDED",
+      "video_path": "样片/M3-SadTalker-浏览器播放.mp4",
+      "poster_path": "画面核验/M3-封面.jpg",
+      "width": 942,
+      "height": 1672,
+      "fps": 25,
+      "video_seconds": 15.2,
+      "audio_seconds": 15.2,
+      "wall_seconds": 193.795,
+      "gpu_peak_mib": 9033,
+      "estimated_gpu_cny": 0.085054,
+      "motion_summary": "小幅偏转和倾斜；采样中嘴部开合较小",
+      "video_codec": "MPEG-4 Part2；播放器另用H.264兼容版",
+      "observations": [
+        "代表帧可见小幅头部偏转、倾斜，眼睑变化较轻。",
+        "512脸区渲染，保留完整画幅；未使用still或面部增强器。",
+        "原片和播放兼容版均完整解码通过；音轨与原TTS波形最佳偏移为0ms。"
+      ],
+      "limitations": [
+        "身体和肩膀仍基本固定；代表帧多为抿嘴、轻笑，明显张口样本较少。",
+        "脸部细节偏软，不能凭静帧确认身份与口型质量达标。",
+        "原输出视频和音频均15.2秒，比原TTS短约18.844毫秒；帧率取整边界保留。",
+        "播放器使用仅转码的H.264版，未补帧、未改脸，AAC音轨保持一致。",
+        "SadTalker原流程将旁白转换为16kHz；前两条为32kHz，后续生产可独立复用原TTS音轨。"
+      ],
+      "evidence_path": "执行证据/S1B/result.json",
+      "audio_format": "AAC / 16000 Hz / 1声道"
+    }
+  ],
+  "cost_note": "按用户提供的1.58元/小时，以本次作业墙钟时间估算，包含该进程加载和编码，不含模型安装、等待/空闲、传输、TTS/生图、历史动作素材成本；不是平台实际账单。M1奇数宽度的失败尝试另计103.665秒、约0.045497元。M2计入本轮两阶段首次运行，尚未测缓存复用吞吐。显存为整张GPU总占用的采样峰值。 S1首次输入预检因本地摘要多录一字符而被阻止，未启动推理，记录另计0.956秒、约0.000420元。M3浏览器兼容转码在本机约3.203秒，未计入GPU表。",
+  "notes": [
+    "2026-09-22用户明确选择M2，已登记[口播路线定版](口播路线定版.json)；SELECTED_BY_USER与PENDING_ACCEPTANCE分别记录。",
+    "三条路线均以相同的人物B派生图与原始音色3音频为起点；M2的MuseTalk阶段实际接收LivePortrait生成的B动作底片，M3内部音频转为16kHz。所有成功/失败执行记录保留。",
+    "[LivePortrait动作底片（无音频）](样片/LP1-动作底片.mp4) 是中间产物，不能单独当作口播成片。",
+    "[动作参考来源](输入派生/动作参考来源.json)：旧阿里样片只作为LivePortrait driving input，source仍是人物B。",
+    "[M1代表帧](画面核验/M1-代表帧.jpg) · [M2代表帧](画面核验/M2-代表帧.jpg) · [M2眼部采样](画面核验/M2-眼部采样.jpg)。",
+    "没有给出虚构的自然度/身份相似度分数；音轨解码成功也不等于嘴型同步通过。",
+    "本轮未调用生图、TTS或云端口播收费API，也未发布视频。",
+    "[SadTalker原始MPEG-4文件](样片/M3-SadTalker.mp4) · [播放兼容处理记录](执行证据/S1B/播放兼容处理.json) · [M3代表帧](画面核验/M3-代表帧.jpg)。",
+    "[三条音轨核验](音轨一致性核验.json)：最佳音轨偏移均0ms，重叠波形相关系数约0.9986～0.9996；仅证明音轨对齐，不是唇形评分。",
+    "本轮云端观察区间为北京时间08:47:11—09:34:48，约47.63分钟，含安装/下载/等待的实例费估算约1.2543元，账单未核对。它与表中作业费用重叠，不能相加。",
+    "GPU推理与安装作业已结束，实例仍开机；关机前继续按平台规则计费。"
+  ],
+  "selection": {
+    "route_id": "M2",
+    "selection_status": "SELECTED_BY_USER",
+    "selection_record_path": "口播路线定版.json",
+    "production_acceptance": "PENDING_ACCEPTANCE"
+  }
+}

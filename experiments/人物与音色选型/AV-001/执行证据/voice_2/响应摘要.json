@@ -1,0 +1,20 @@
+{
+  "http_status": 200,
+  "base_resp": {
+    "status_code": 0,
+    "status_msg": "success"
+  },
+  "trace_id": "0700f279826648eaffdacab7dcb216ca",
+  "extra_info": {
+    "audio_length": 18399,
+    "audio_sample_rate": 32000,
+    "audio_size": 1178728,
+    "bitrate": 128000,
+    "word_count": 86,
+    "invisible_character_ratio": 0,
+    "usage_characters": 148,
+    "audio_format": "wav",
+    "audio_channel": 1
+  },
+  "model": "speech-2.8-hd"
+}

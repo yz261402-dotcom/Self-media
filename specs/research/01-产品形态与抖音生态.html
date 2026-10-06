@@ -1,0 +1,1682 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="light">
+<link rel="icon" href="data:,">
+<meta name="source-sha256" content="d52429efd0280202c8800fe91b71c6b6b2dc1576177c5a70ba43d808ce2d5780">
+<title>01 产品形态与抖音生态调研 · AI 自媒体文档</title>
+<style>:root {
+  color-scheme: light;
+  --paper: #ffffff;
+  --surface: #f7f7f8;
+  --ink: #202126;
+  --muted: #666970;
+  --line: #dedfe3;
+  --blue: #002fa7;
+  --reader-font-size: 17px;
+  --header-height: 76px;
+  font-family: "Helvetica Neue", Helvetica, Arial, "PingFang SC", "Microsoft YaHei", sans-serif;
+  font-synthesis: none;
+}
+
+* { box-sizing: border-box; }
+.sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; border: 0; }
+.source-notice { margin-top: 22px; padding: 12px 14px; border-left: 3px solid var(--blue); background: var(--surface); color: var(--muted); font-size: 13px; }
+html { scroll-padding-top: 104px; }
+body { margin: 0; min-width: 320px; color: var(--ink); background: var(--surface); font-size: 14px; line-height: 1.6; }
+body.menu-open { overflow: hidden; }
+a { color: var(--blue); text-underline-offset: 3px; }
+button, input { font: inherit; }
+button { color: inherit; cursor: pointer; }
+button, input[type="search"] { border: 1px solid var(--line); border-radius: 3px; background: var(--paper); }
+button { min-height: 36px; padding: 6px 11px; line-height: 1.4; }
+button:hover { border-color: var(--blue); color: var(--blue); }
+button:disabled { opacity: .42; cursor: default; }
+button:disabled:hover { color: inherit; border-color: var(--line); }
+:focus-visible { outline: 2px solid var(--blue); outline-offset: 3px; }
+[hidden] { display: none !important; }
+::selection { background: #dbe4ff; color: #151c32; }
+
+.skip-link { position: fixed; z-index: 100; top: -70px; left: 16px; padding: 10px 18px; background: var(--blue); color: white; }
+.skip-link:focus { top: 10px; }
+.topbar { position: sticky; z-index: 30; top: 0; min-height: var(--header-height); display: flex; align-items: center; gap: 24px; padding: 15px 32px; border-bottom: 1px solid var(--line); background: var(--paper); }
+.brand { min-width: 0; color: var(--ink); font-size: 17px; font-weight: 700; line-height: 1.35; letter-spacing: -.02em; text-decoration: none; }
+.brand small, .brand span { display: block; margin-top: 4px; font-size: 11px; font-weight: 400; letter-spacing: .08em; color: var(--muted); }
+.toolbar { display: flex; align-items: center; gap: 6px; margin-left: auto; flex-shrink: 0; }
+.toolbar .font-smaller, .toolbar .font-reset, .toolbar .font-larger { min-width: 36px; padding: 5px 8px; font-variant-numeric: tabular-nums; }
+.toolbar .print-button { margin-left: 8px; }
+.mobile-menu { display: none; }
+.layout { display: grid; grid-template-columns: 244px minmax(0, 1fr) 208px; max-width: 1536px; margin: 0 auto; align-items: start; background: var(--paper); }
+.sidebar { position: sticky; top: var(--header-height); height: calc(100dvh - var(--header-height)); overflow-y: auto; overscroll-behavior: contain; padding: 32px 20px 36px 24px; border-right: 1px solid var(--line); scrollbar-width: thin; background: var(--surface); }
+.nav-group + .nav-group { margin-top: 32px; padding-top: 26px; border-top: 1px solid var(--line); }
+.group-title { margin: 0 10px 12px; color: var(--muted); font-size: 11px; font-weight: 600; letter-spacing: .11em; }
+.doc-nav { display: flex; flex-direction: column; gap: 4px; }
+.doc-nav a { display: block; padding: 9px 10px; border-left: 2px solid transparent; color: #55575d; font-size: 13px; line-height: 1.65; text-decoration: none; overflow-wrap: anywhere; }
+.doc-nav a:hover { color: var(--blue); background: #eeeeef; }
+.doc-nav a[aria-current="page"] { border-left-color: var(--blue); background: #eaf0ff; color: var(--blue); font-weight: 600; }
+.doc-nav .doc-number { display: inline-block; min-width: 25px; color: var(--muted); font-variant-numeric: tabular-nums; }
+
+#main { min-width: 0; padding: 46px clamp(28px, 3.7vw, 60px) 56px; }
+.document-header { margin-bottom: 29px; }
+.eyebrow { margin: 0 0 18px; color: var(--blue); font-size: 12px; font-weight: 600; letter-spacing: .08em; }
+.document-header h1 { margin: 0 0 21px; font-size: clamp(30px, 2.8vw, 42px); font-weight: 700; letter-spacing: -.045em; line-height: 1.3; overflow-wrap: anywhere; }
+.doc-meta { display: flex; flex-wrap: wrap; align-items: baseline; gap: 6px 18px; color: var(--muted); font-size: 12px; }
+.doc-meta a { color: var(--muted); }
+.doc-meta a:hover { color: var(--blue); }
+.reader-tools { margin: 0 0 36px; padding: 16px 0; border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); }
+#search-form { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; }
+#search-input { flex: 1 1 160px; min-width: 100px; width: 0; height: 36px; padding: 6px 10px; color: var(--ink); }
+#search-input::placeholder { color: #777a82; }
+#search-next, #search-clear { flex: 0 0 auto; font-size: 12px; }
+#search-status { flex: 1 0 100%; color: var(--muted); font-size: 11px; line-height: 1.5; }
+#search-status:empty { display: none; }
+
+#document-body { font-size: var(--reader-font-size); line-height: 1.9; overflow-wrap: anywhere; }
+#document-body > :first-child { margin-top: 0; }
+#document-body h2, #document-body h3, #document-body h4, #document-body h5, #document-body h6 { scroll-margin-top: 106px; font-weight: 650; line-height: 1.45; color: #15171c; }
+#document-body h2 { margin: 2.8em 0 1.05em; padding-top: 1.25em; border-top: 1px solid var(--line); font-size: 1.5em; letter-spacing: -.035em; }
+#document-body h3 { margin: 2em 0 .85em; font-size: 1.18em; letter-spacing: -.025em; }
+#document-body h4 { margin: 1.65em 0 .7em; font-size: 1.03em; }
+#document-body h5, #document-body h6 { margin: 1.4em 0 .6em; font-size: 1em; }
+#document-body p { margin: .9em 0; }
+#document-body ul, #document-body ol { margin: 1em 0; padding-left: 1.55em; }
+#document-body li { margin: .38em 0; padding-left: .15em; }
+#document-body li > p { margin: .4em 0; }
+#document-body li > ul, #document-body li > ol { margin: .35em 0 .6em; }
+#document-body strong { color: #14161b; font-weight: 650; }
+#document-body hr { margin: 2.1em 0; border: 0; border-top: 1px solid var(--line); }
+#document-body blockquote { margin: 1.5em 0; padding: .25em 1.15em; border-left: 3px solid var(--blue); background: var(--surface); color: #4c4f57; }
+#document-body blockquote p { margin: .55em 0; }
+#document-body a { overflow-wrap: anywhere; }
+#document-body a:hover { text-decoration-thickness: 2px; }
+#document-body img { max-width: 100%; height: auto; }
+#document-body code { padding: .12em .32em; border: 1px solid #e7e7ea; border-radius: 3px; background: var(--surface); font-family: Consolas, "SFMono-Regular", "Liberation Mono", monospace; font-size: .82em; overflow-wrap: anywhere; }
+#document-body pre { position: relative; margin: 1.5em 0; padding: 44px 0 0; max-width: 100%; overflow: hidden; border: 1px solid var(--line); border-radius: 4px; background: var(--surface); line-height: 1.7; }
+#document-body pre > code { display: block; max-width: 100%; overflow-x: auto; padding: 0 19px 18px; border: 0; border-radius: 0; font-size: .79em; line-height: 1.75; white-space: pre; overflow-wrap: normal; tab-size: 2; }
+.copy-code { position: absolute; top: 7px; right: 8px; min-height: 28px; padding: 4px 9px; color: var(--muted); font-size: 11px; background: var(--paper); }
+.table-scroll { max-width: 100%; margin: 1.5em 0; overflow-x: auto; border: 1px solid var(--line); border-radius: 3px; scrollbar-width: thin; }
+#document-body table { width: 100%; min-width: 100%; border-collapse: collapse; font-size: .82em; line-height: 1.7; }
+#document-body th, #document-body td { min-width: 105px; padding: 12px 14px; border-right: 1px solid var(--line); border-bottom: 1px solid var(--line); text-align: left; vertical-align: top; }
+#document-body th { background: var(--surface); font-weight: 600; color: #30333a; }
+#document-body tr > :last-child { border-right: 0; }
+#document-body tbody tr:last-child td { border-bottom: 0; }
+#document-body tbody tr:hover { background: #fafafb; }
+#document-body th:first-child, #document-body td:first-child { min-width: 95px; }
+#document-body input[type="checkbox"] { width: 14px; height: 14px; margin: 0 7px 0 0; vertical-align: middle; accent-color: var(--blue); }
+#document-body details { margin: 1.15em 0; padding: 12px 16px; border: 1px solid var(--line); border-radius: 3px; }
+#document-body summary { color: var(--muted); font-size: .85em; cursor: pointer; }
+#document-body details[open] summary { margin-bottom: 12px; }
+.architecture { margin: 1.8em 0; }
+.diagram-viewport { max-width: 100%; overflow-x: auto; border: 1px solid var(--line); scrollbar-width: thin; }
+.diagram-viewport > svg { display: block; min-width: 720px; width: 100%; height: auto; background: var(--paper); }
+.architecture > svg { display: block; width: 100%; height: auto; max-width: 100%; border: 1px solid var(--line); background: var(--paper); }
+.architecture figcaption { margin-top: 8px; color: var(--muted); font-size: .75em; }
+.architecture details { font-size: .85em; }
+mark.reader-match { padding: 1px 0; background: #dbe4ff; color: inherit; border-radius: 2px; scroll-margin-top: 120px; }
+mark.reader-match.is-current { background: var(--blue); color: white; box-shadow: 0 0 0 2px var(--blue); }
+.search-block-current { outline: 1px solid #b2c5f9; outline-offset: 6px; }
+
+.toc-panel { position: sticky; top: var(--header-height); max-height: calc(100dvh - var(--header-height)); overflow-y: auto; padding: 38px 20px 30px 19px; border-left: 1px solid var(--line); scrollbar-width: thin; }
+.toc-panel > h2, #toc > h2, .toc-title { margin: 0 0 15px; color: var(--muted); font-size: 11px; font-weight: 600; letter-spacing: .08em; }
+#toc ul, #toc ol { list-style: none; margin: 0; padding: 0; }
+#toc a { display: block; margin: 2px 0; padding: 5px 0 5px 12px; border-left: 2px solid transparent; color: #6c6f78; font-size: 12px; line-height: 1.65; text-decoration: none; overflow-wrap: anywhere; }
+#toc a:hover { color: var(--blue); }
+#toc a[aria-current="location"], #toc a.is-active { color: var(--blue); border-left-color: var(--blue); }
+#toc a[data-level="3"], #toc .toc-h3 a, #toc a.toc-h3, #toc li.level-3 a { padding-left: 24px; font-size: 11px; }
+.document-pager { display: flex; justify-content: space-between; gap: 20px; margin-top: 60px; padding-top: 24px; border-top: 1px solid var(--line); }
+.document-pager a { flex: 1; min-width: 0; text-decoration: none; font-size: 14px; font-weight: 600; overflow-wrap: anywhere; }
+.document-pager a:last-child { text-align: right; }
+.document-pager a:only-child { text-align: left; }
+.document-pager small, .document-pager span { display: block; margin-bottom: 4px; font-size: 11px; font-weight: 400; color: var(--muted); }
+.page-footer { max-width: 1536px; margin: auto; padding: 22px 32px; border-top: 1px solid var(--line); color: var(--muted); font-size: 11px; background: var(--surface); }
+.back-top { position: fixed; right: 24px; bottom: 24px; z-index: 20; min-height: 40px; border-color: var(--line); background: var(--paper); font-size: 12px; }
+.sidebar-scrim { display: none; }
+
+@media (min-width: 1600px) {
+  .layout { border-left: 1px solid var(--line); border-right: 1px solid var(--line); }
+  .topbar { padding-left: max(32px, calc((100vw - 1472px) / 2)); padding-right: max(32px, calc((100vw - 1472px) / 2)); }
+}
+@media (max-width: 1190px) {
+  .layout { grid-template-columns: 225px minmax(0, 1fr); }
+  .toc-panel { display: none; }
+  #main { padding-left: 42px; padding-right: 42px; }
+}
+@media (max-width: 800px) {
+  :root { --header-height: 68px; }
+  .topbar { gap: 12px; padding: 13px 18px; }
+  .brand { font-size: 15px; }
+  .brand small, .brand span { font-size: 9px; }
+  .mobile-menu { display: inline-flex; align-items: center; justify-content: center; flex-shrink: 0; min-height: 34px; padding: 6px 9px; font-size: 12px; }
+  .layout { display: block; }
+  .sidebar { position: fixed; z-index: 50; left: 0; top: var(--header-height); bottom: 0; width: min(300px, calc(100vw - 44px)); height: calc(100dvh - var(--header-height)); padding: 24px 18px; transform: translateX(-101%); visibility: hidden; transition: transform .18s ease, visibility .18s; border-right: 1px solid var(--line); }
+  .menu-open .sidebar { transform: translateX(0); visibility: visible; }
+  .sidebar-scrim:not([hidden]) { display: block; position: fixed; z-index: 40; inset: var(--header-height) 0 0; background: rgb(18 21 30 / 28%); }
+  .toolbar { gap: 3px; }
+  .toolbar .font-smaller, .toolbar .font-reset, .toolbar .font-larger { min-width: 29px; min-height: 32px; padding: 4px 5px; font-size: 12px; }
+  .toolbar .print-button { display: none; }
+  #main { padding: 33px 28px 40px; }
+  .document-header h1 { font-size: 32px; }
+  .eyebrow { margin-bottom: 13px; }
+  #document-body { line-height: 1.9; }
+  #document-body h2 { margin-top: 2.3em; font-size: 1.4em; }
+  .page-footer { padding: 18px 28px; }
+  .back-top { right: 16px; bottom: 16px; }
+}
+@media (max-width: 460px) {
+  .topbar { gap: 8px; padding-left: 12px; padding-right: 12px; }
+  .brand { font-size: 13px; letter-spacing: -.035em; }
+  .brand small, .brand span { max-width: 125px; overflow: hidden; white-space: nowrap; text-overflow: ellipsis; }
+  .mobile-menu { padding: 5px 7px; font-size: 11px; }
+  #main { padding: 29px 20px 36px; }
+  .document-header h1 { font-size: 28px; }
+  .doc-meta { gap: 4px 12px; font-size: 11px; }
+  .reader-tools { margin-bottom: 28px; }
+  #search-input { flex-basis: 110px; font-size: 12px; }
+  #search-next, #search-clear { padding-left: 8px; padding-right: 8px; }
+  #document-body { font-size: calc(var(--reader-font-size) - 1px); }
+  #document-body pre > code { padding-left: 13px; padding-right: 13px; }
+  #document-body th, #document-body td { padding: 10px 12px; }
+  .document-pager { gap: 18px; margin-top: 40px; }
+  .document-pager a { font-size: 12px; }
+  .page-footer { padding-left: 20px; padding-right: 20px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { scroll-behavior: auto !important; transition: none !important; }
+}
+@media print {
+  @page { margin: 18mm 16mm; }
+  :root { --reader-font-size: 10.5pt !important; }
+  body { min-width: 0; background: white; color: black; }
+  .topbar, .sidebar, .toc-panel, .reader-tools, .document-pager, .back-top, .sidebar-scrim, .skip-link, .copy-code { display: none !important; }
+  .layout { display: block; max-width: none; border: 0; }
+  #main { padding: 0; }
+  .document-header h1 { font-size: 24pt; }
+  .document-header { margin-bottom: 24pt; }
+  .doc-meta { font-size: 8pt; }
+  #document-body { font-size: 10.5pt; line-height: 1.65; }
+  #document-body h2, #document-body h3, #document-body h4 { break-after: avoid; }
+  #document-body h2 { margin-top: 20pt; padding-top: 12pt; font-size: 15pt; }
+  #document-body a { color: inherit; text-decoration: underline; }
+  #document-body pre { padding: 9pt; overflow: visible; background: #f7f7f8; }
+  #document-body pre > code { padding: 0; overflow: visible; white-space: pre-wrap; overflow-wrap: anywhere; font-size: 8pt; }
+  .table-scroll { overflow: visible; border-radius: 0; }
+  #document-body table { table-layout: fixed; font-size: 7.5pt; }
+  #document-body th, #document-body td, #document-body th:first-child, #document-body td:first-child { min-width: 0; padding: 5pt; overflow-wrap: anywhere; }
+  #document-body thead { display: table-header-group; }
+  #document-body tr, .architecture { break-inside: avoid; }
+  #document-body details:not([open]) { display: none; }
+  .architecture > svg { max-height: 230mm; }
+  mark.reader-match, mark.reader-match.is-current { color: inherit; background: transparent; box-shadow: none; }
+  .search-block-current { outline: none; }
+  .page-footer { margin-top: 24pt; padding: 10pt 0 0; font-size: 8pt; background: white; }
+}
+</style>
+</head>
+<body>
+<a class="skip-link" href="#main">跳到正文</a>
+<header class="topbar">
+  <button type="button" class="mobile-menu" aria-controls="doc-sidebar" aria-expanded="false">文档目录</button>
+  <a class="brand" href="../0001-douyin-ai-studio/00-%E6%96%87%E6%A1%A3%E5%AF%BC%E8%88%AA.html">AI 自媒体<span>开发文档与调研</span></a>
+  <div class="toolbar" aria-label="阅读设置">
+    <button type="button" class="font-smaller" aria-label="缩小正文字号" title="缩小字号">A−</button>
+    <button type="button" class="font-reset" aria-label="恢复默认正文字号" title="恢复字号">默认</button>
+    <button type="button" class="font-larger" aria-label="放大正文字号" title="放大字号">A+</button>
+    <button type="button" class="print-button">打印</button>
+  </div>
+</header>
+<div class="layout">
+  <aside id="doc-sidebar" class="sidebar" aria-label="全部文档"><section class="nav-group"><h2 class="group-title">开发文档</h2><nav class="doc-nav" aria-label="开发文档"><a data-document href="../0001-douyin-ai-studio/00-%E6%96%87%E6%A1%A3%E5%AF%BC%E8%88%AA.html">00 文档导航</a><a data-document href="../0001-douyin-ai-studio/01-%E4%BA%A7%E5%93%81%E9%9C%80%E6%B1%82%E6%96%87%E6%A1%A3.html">01 产品需求文档</a><a data-document href="../0001-douyin-ai-studio/02-%E6%8A%80%E6%9C%AF%E9%80%89%E5%9E%8B%E5%AF%B9%E6%AF%94.html">02 技术选型对比</a><a data-document href="../0001-douyin-ai-studio/03-%E6%80%BB%E4%BD%93%E6%8A%80%E6%9C%AF%E6%96%B9%E6%A1%88.html">03 总体技术方案</a><a data-document href="../0001-douyin-ai-studio/04-%E6%8E%A5%E5%8F%A3%E5%A5%91%E7%BA%A6%E4%B8%8E%E6%95%B0%E6%8D%AE%E5%AD%97%E5%85%B8.html">04 接口契约与数据字典</a><a data-document href="../0001-douyin-ai-studio/05-%E5%BC%80%E5%8F%91%E5%AE%9E%E6%96%BD%E8%AE%A1%E5%88%92.html">05 开发实施计划</a><a data-document href="../0001-douyin-ai-studio/06-%E9%AA%8C%E6%94%B6%E6%A0%87%E5%87%86%E4%B8%8E%E6%B5%8B%E8%AF%95%E6%96%B9%E6%A1%88.html">06 验收标准与测试方案</a><a data-document href="../0001-douyin-ai-studio/07-%E6%8A%80%E6%9C%AF%E9%80%89%E5%9E%8B%E4%B8%8E%E5%AE%9E%E6%B5%8B%E6%B5%81%E7%A8%8B.html">07 技术选型与实测流程</a><a data-document href="../0001-douyin-ai-studio/08-%E7%AB%AF%E5%88%B0%E7%AB%AF%E6%8A%80%E6%9C%AF%E6%B5%81%E7%A8%8B%E4%B8%8E%E6%A8%A1%E5%9E%8B%E9%80%89%E5%9E%8B%E5%9C%B0%E5%9B%BE.html">08 端到端技术流程与模型选型地图</a><a data-document href="../0001-douyin-ai-studio/09-%E6%A8%A1%E5%9E%8B%E9%80%89%E5%9E%8B%E5%86%B3%E7%AD%96%E4%B8%8E%E6%8E%A5%E5%85%A5%E6%96%B9%E6%A1%88.html">09 模型选型决策与接入方案</a><a data-document href="../0001-douyin-ai-studio/10-Agent%E7%BC%96%E6%8E%92%E9%80%89%E5%9E%8B%E4%B8%8E%E6%95%B4%E4%BD%93%E6%9E%B6%E6%9E%84.html">10 Agent编排选型与整体架构</a></nav></section><section class="nav-group"><h2 class="group-title">本轮选型试验</h2><nav class="doc-nav" aria-label="本轮选型试验"><a data-document href="../selection/01-%E6%95%B0%E5%AD%97%E4%BA%BA%E5%8F%A3%E6%92%AD/01-%E9%80%89%E5%9E%8B%E8%AF%95%E9%AA%8C%E6%96%B9%E6%A1%88.html">01 选型试验方案</a><a data-document href="../selection/01-%E6%95%B0%E5%AD%97%E4%BA%BA%E5%8F%A3%E6%92%AD/02-%E9%A6%96%E8%BD%AE%E5%AE%9E%E6%B5%8B%E7%BB%93%E6%9E%9C.html">02 首轮实测结果</a><a data-document href="../selection/01-%E6%95%B0%E5%AD%97%E4%BA%BA%E5%8F%A3%E6%92%AD/03-MuseTalk%E4%BA%91%E7%AB%AF%E9%83%A8%E7%BD%B2%E4%B8%8E%E8%AF%95%E9%AA%8C%E6%96%B9%E6%A1%88.html">03 MuseTalk云端部署与试验方案</a><a data-document href="../selection/01-%E6%95%B0%E5%AD%97%E4%BA%BA%E5%8F%A3%E6%92%AD/04-MuseTalk%E9%83%A8%E7%BD%B2%E4%B8%8E%E9%A6%96%E6%B5%8B%E7%BB%93%E6%9E%9C.html">04 MuseTalk部署与首测结果</a><a data-document href="../selection/01-%E6%95%B0%E5%AD%97%E4%BA%BA%E5%8F%A3%E6%92%AD/05-OmniHuman%E5%BC%80%E9%80%9A%E5%90%8E%E5%AE%9E%E6%B5%8B%E7%BB%93%E6%9E%9C.html">05 OmniHuman开通后实测结果</a><a data-document href="../selection/01-%E6%95%B0%E5%AD%97%E4%BA%BA%E5%8F%A3%E6%92%AD/06-%E4%BA%BA%E7%89%A9B%E8%A1%A8%E6%83%85%E5%8A%A8%E4%BD%9C%E6%94%B9%E5%96%84%E5%AE%9E%E6%B5%8B.html">06 人物B表情动作改善实测</a><a data-document href="../selection/01-%E6%95%B0%E5%AD%97%E4%BA%BA%E5%8F%A3%E6%92%AD/MuseTalk%E5%AE%98%E6%96%B9%E8%83%BD%E5%8A%9B%E6%A0%B8%E9%AA%8C.html">MuseTalk官方能力核验</a><a data-document href="../selection/01-%E6%95%B0%E5%AD%97%E4%BA%BA%E5%8F%A3%E6%92%AD/%E6%B5%8B%E8%AF%95%E7%B4%A0%E6%9D%90%E6%8E%A5%E5%8F%A3%E6%A0%B8%E9%AA%8C.html">测试素材接口核验</a><a data-document href="../selection/01-%E6%95%B0%E5%AD%97%E4%BA%BA%E5%8F%A3%E6%92%AD/%E7%81%AB%E5%B1%B1%E5%80%99%E9%80%89%E6%A0%B8%E9%AA%8C.html">火山候选核验</a><a data-document href="../selection/01-%E6%95%B0%E5%AD%97%E4%BA%BA%E5%8F%A3%E6%92%AD/%E9%98%BF%E9%87%8C%E5%80%99%E9%80%89%E6%A0%B8%E9%AA%8C.html">阿里候选核验</a></nav></section><section class="nav-group"><h2 class="group-title">已选模型接入核验</h2><nav class="doc-nav" aria-label="已选模型接入核验"><a data-document href="../selection/02-%E5%B7%B2%E9%80%89%E6%A8%A1%E5%9E%8B/%E5%AE%98%E6%96%B9%E6%96%87%E6%9C%AC%E4%B8%8E%E8%AF%AD%E9%9F%B3%E6%8E%A5%E5%8F%A3%E6%A0%B8%E9%AA%8C.html">官方文本与语音接口核验</a></nav></section><section class="nav-group"><h2 class="group-title">人物与音色候选</h2><nav class="doc-nav" aria-label="人物与音色候选"><a data-document href="../selection/03-%E4%BA%BA%E7%89%A9%E4%B8%8E%E9%9F%B3%E8%89%B2/01-%E9%A6%96%E8%BD%AE%E5%80%99%E9%80%89%E4%B8%8E%E9%80%89%E6%8B%A9%E8%AF%B4%E6%98%8E.html">01 首轮候选与选择说明</a><a data-document href="../selection/03-%E4%BA%BA%E7%89%A9%E4%B8%8E%E9%9F%B3%E8%89%B2/02-%E4%BA%BA%E7%89%A9B%E4%B8%8E%E9%9F%B3%E8%89%B23%E5%AE%9A%E7%89%88%E8%AE%B0%E5%BD%95.html">02 人物B与音色3定版记录</a></nav></section><section class="nav-group"><h2 class="group-title">调研资料</h2><nav class="doc-nav" aria-label="调研资料"><a data-document href="01-%E4%BA%A7%E5%93%81%E5%BD%A2%E6%80%81%E4%B8%8E%E6%8A%96%E9%9F%B3%E7%94%9F%E6%80%81.html" aria-current="page">01 产品形态与抖音生态</a><a data-document href="02-%E4%BA%BA%E7%89%A9%E4%B8%80%E8%87%B4%E6%80%A7%E7%94%9F%E6%88%90.html">02 人物一致性生成</a><a data-document href="03-%E6%95%B0%E5%AD%97%E4%BA%BA%E5%8F%A3%E6%92%AD%E9%80%89%E5%9E%8B.html">03 数字人口播选型</a><a data-document href="04-TTS%E9%9F%B3%E8%89%B2%E4%B8%8E%E5%86%85%E5%AE%B9%E7%94%9F%E6%88%90%E8%B4%A8%E6%A3%80.html">04 TTS音色与内容生成质检</a><a data-document href="05-%E8%A7%86%E9%A2%91%E5%90%8E%E5%A4%84%E7%90%86%E5%8F%91%E5%B8%83%E4%B8%8E%E5%90%88%E8%A7%84.html">05 视频后处理发布与合规</a><a data-document href="06-%E5%86%B3%E7%AD%96%E6%B1%87%E6%80%BB.html">06 决策汇总</a></nav></section>
+    <p class="sidebar-note">11 份开发文档<br>10 份本轮选型试验<br>1 份已选模型接入核验<br>2 份人物与音色候选<br>6 份调研资料</p>
+  </aside>
+  <main id="main" tabindex="-1">
+    <header class="document-header">
+      <p class="eyebrow">调研资料 / 01</p>
+      <h1>01 产品形态与抖音生态调研</h1>
+      <div class="doc-meta"><span>2026-09-21 核验记录</span><span>12 个章节</span><a href="01-%E4%BA%A7%E5%93%81%E5%BD%A2%E6%80%81%E4%B8%8E%E6%8A%96%E9%9F%B3%E7%94%9F%E6%80%81.md">Markdown 原文</a></div>
+      <p class="source-notice">调研原始记录。当前范围和决策以最新开发文档及实测选型记录为准。</p>
+    </header>
+    <div class="reader-tools">
+      <form id="search-form" role="search">
+        <label class="sr-only" for="search-input">搜索本文</label>
+        <input id="search-input" type="search" placeholder="搜索本文，按 Enter 跳转" autocomplete="off">
+        <button id="search-next" type="submit">下一处</button>
+        <button id="search-clear" type="button">清除</button>
+        <span id="search-status" role="status" aria-live="polite"></span>
+      </form>
+    </div>
+    <article id="document-body">
+<blockquote>
+<p>项目：面向抖音的 AI 自媒体自动化系统（AI 教学/科普赛道，固定虚拟主播 + 云 API 数字人口播）
+调研时间：2026-09-21　调研人：Hermes 子代理（产品形态与平台生态专项）
+边界：本文件只覆盖「赛道 / 内容形态 / 平台规则 / 合规 / 发布机制」。人物一致性生成、数字人模型选型、TTS 实现分别见 02 / 03 / 04 号文件。</p>
+</blockquote>
+<hr/>
+<h2 id="0-本文件结论速览">0. 本文件结论速览</h2>
+<div aria-label="可横向滚动的表格" class="table-scroll" tabindex="0"><table>
+<thead>
+<tr>
+<th style="text-align:left">编号</th>
+<th style="text-align:left">结论点</th>
+<th style="text-align:left">推荐</th>
+<th style="text-align:left">置信度</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left">P1</td>
+<td style="text-align:left">赛道选择：抖音对「知识科普」有官方长期扶持（DOU知计划→知识创作人计划→砥砺计划→AI新星计划），AI 科普属于被点名扶持的前沿科技方向</td>
+<td style="text-align:left">继续做 AI 教学/科普，但<strong>定位为「AI 工具实操 + 认知科普」而非纯理论</strong>，靠"可立即照做"提升完播与收藏</td>
+<td style="text-align:left">中高（扶持计划为二手媒体报道，[待核验]）</td>
+</tr>
+<tr>
+<td style="text-align:left">P2</td>
+<td style="text-align:left">时长形态：知识类口播的主流安全区是 <strong>45~90 秒</strong>；35 秒以内适合单点冷知识，2~5 分钟适合"完整方法论"（可挂中视频/合集）</td>
+<td style="text-align:left">首期统一 <strong>60~75 秒</strong>，单条只讲 1 个知识点，避免 15 秒以下（信息不足以支撑"教学"定位）</td>
+<td style="text-align:left">中（时长类结论均为二手，[待核验]）</td>
+</tr>
+<tr>
+<td style="text-align:left">P3</td>
+<td style="text-align:left">数字人路线在<strong>短视频</strong>场景是可行且被平台承认的：抖音自身就提供「AI 分身」开放能力（同主体绑定、个人主体可建 5 个分身应用）</td>
+<td style="text-align:left">短视频口播用 AI 数字人<strong>可以做</strong>；不要把"数字人"和"直播"混为一谈——两者的合规门槛完全不同</td>
+<td style="text-align:left">高（AI 分身文档为[实测]）</td>
+</tr>
+<tr>
+<td style="text-align:left">P4</td>
+<td style="text-align:left"><strong>关键分水岭</strong>：抖音对「虚拟人<strong>直播</strong>」要求"必须由真人驱动进行实时互动，不允许完全由人工智能驱动"；但该条约束针对直播，<strong>短视频投稿走的是 AI 内容标识路径</strong></td>
+<td style="text-align:left">本项目只做"生成式口播短视频 + 定时发布"，<strong>不做无人直播</strong>，从而绕开最硬的一条合规红线</td>
+<td style="text-align:left">中高（AI分身文档[实测]；直播真人驱动条款为二手，[待核验]）</td>
+</tr>
+<tr>
+<td style="text-align:left">P5</td>
+<td style="text-align:left">AI 标识是<strong>强制项+必须先做</strong>：国家层面《人工智能生成合成内容标识办法》2025-09-01 已施行，要求显式（视频起始画面+播放周边）+ 隐式（文件元数据）双标识，且禁止恶意删除/篡改/隐匿</td>
+<td style="text-align:left">管线里把"AI 标识"做成<strong>不可绕过的后处理步骤</strong>：视频首帧叠加"本视频由 AI 生成"角标（全程保留）+ 元数据写入；发布时勾选"发文助手-自主声明-内容由AI生成"</td>
+<td style="text-align:left">高（办法原文[实测]）</td>
+</tr>
+<tr>
+<td style="text-align:left">P6</td>
+<td style="text-align:left">发布机制：开放平台可做"代替用户发布内容到抖音"，但<strong>需申请权限 + 用户授权</strong>，且<strong>一个用户在一个应用下每天最多 75 个作品</strong>、单视频<strong>不超过 15 分钟</strong>、标题<strong>不超过 1000 字</strong>，创建后有审核期（期间仅自己可见）</td>
+<td style="text-align:left">按 <strong>每天 1~3 条</strong>排产即可，75 条上限对本项目不是瓶颈；把"审核中"当正常状态处理，发布成功后不立刻断言"已过审"</td>
+<td style="text-align:left">高（开发者文档[实测]）</td>
+</tr>
+<tr>
+<td style="text-align:left">P7</td>
+<td style="text-align:left">自动化量产最大的隐性风险不是"AI"，而是<strong>同质化与搬运判定</strong>：抖音有"同质化博流量文案"多期专项治理、"搬运"专题规则(190 万+播放)、原创保护中心</td>
+<td style="text-align:left">质检环节必须加"<strong>同质化指纹自检</strong>"：模板句/开场句/结构不得跨条高度重复；素材、BGM、配图全部走可商用或自产；<strong>不做跨平台搬运式二次剪辑</strong></td>
+<td style="text-align:left">中高（规则中心公告列表[实测]，治理细则为二手）</td>
+</tr>
+<tr>
+<td style="text-align:left">P8</td>
+<td style="text-align:left">变现方式与内容形态强绑定：知识科普类常见路径为 星图商单 / 知识付费（课程、训练营）/ 橱窗带货（书籍、工具）/ 平台激励计划</td>
+<td style="text-align:left">立项阶段<strong>不把变现做进 V1 需求</strong>，V1 只验证"能不能稳定起量与稳定产出"；变现接口预留（星图/商品挂载依赖企业资质或粉丝门槛）</td>
+<td style="text-align:left">中（星图门槛信息冲突，见 §7 冲突说明）</td>
+</tr>
+<tr>
+<td style="text-align:left">P9</td>
+<td style="text-align:left">挂载能力有主体资质墙：小程序锚点、POI 锚点<strong>仅支持具备企业资质或与企业资质关联的账号</strong></td>
+<td style="text-align:left">个人开发者 V1 <strong>不规划小程序/POI 挂载</strong>；若后续要挂课程/工具落地页，需先解决主体资质问题（这是立项级前置条件，非技术问题）</td>
+<td style="text-align:left">高（创建视频接口文档[实测]）</td>
+</tr>
+<tr>
+<td style="text-align:left">P10</td>
+<td style="text-align:left">抖音开放平台文档站是 JS 单页应用，<code>curl</code> 直连拿不到正文，但 <strong>Jina Reader（r.jina.ai）可渲染出正文</strong>；<code>sitemap/home/index*.xml</code> 可枚举全部 7470 条文档路径</td>
+<td style="text-align:left">后续做 02/03/04 调研时，用 <code>curl https://r.jina.ai/&lt;doc-url&gt;</code> + sitemap 枚举，是低成本核验官方文档的标准手法</td>
+<td style="text-align:left">高（本次实测验证）</td>
+</tr>
+</tbody>
+</table></div>
+<hr/>
+<h2 id="1-ai-教学科普赛道在抖音的现状">1. AI 教学/科普赛道在抖音的现状</h2>
+<h3 id="11-平台侧的定位被官方持续扶持的知识内容大类">1.1 平台侧的定位：被官方持续扶持的「知识内容」大类</h3>
+<p>抖音对知识科普的扶持是一条<strong>多年连续的政策线</strong>，且 2025 年起明确把「前沿科技 / AI」放进重点方向。以下为可查到的公开节点（均为媒体报道，非官方一手文档，标 [待核验]）：</p>
+<div aria-label="可横向滚动的表格" class="table-scroll" tabindex="0"><table>
+<thead>
+<tr>
+<th style="text-align:left">时间</th>
+<th style="text-align:left">计划/动作</th>
+<th style="text-align:left">与本项目的相关性</th>
+<th style="text-align:left">来源</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left">2019-03</td>
+<td style="text-align:left">「DOU知计划」，配套"知识增容行动"</td>
+<td style="text-align:left">赛道被官方认定的起点</td>
+<td style="text-align:left"><code>www.sohu.com</code>（360 搜索索引，2019-03-26）</td>
+</tr>
+<tr>
+<td style="text-align:left">2020-10</td>
+<td style="text-align:left">抖音 + 西瓜视频「知识创作人计划」（报道称百亿流量扶持）</td>
+<td style="text-align:left">说明"知识创作"长期是平台级投入</td>
+<td style="text-align:left"><code>baijiahao.baidu.com</code>（2020-10-14）</td>
+</tr>
+<tr>
+<td style="text-align:left">2023-08</td>
+<td style="text-align:left">抖音知识公开课内容扶持计划（面向高校/教师/知识名人）</td>
+<td style="text-align:left">高校/IP 化知识内容受鼓励</td>
+<td style="text-align:left"><code>www.bbtnews.com.cn</code>（2023-08-29）</td>
+</tr>
+<tr>
+<td style="text-align:left">2025-04-24</td>
+<td style="text-align:left"><strong>抖音知识创作砥砺计划</strong>：聚焦<strong>自然科普、前沿科技</strong>、人文等方向；重点推出 200 门以上高校名课、与高校共建 20+ 学科名片；针对 AI 领域推出 <strong>「AI新星计划」</strong>（征稿、玩家…）；服务 1000 位优质知识创作者</td>
+<td style="text-align:left"><strong>直接命中本项目赛道</strong>：AI 属于被点名的重点方向</td>
+<td style="text-align:left"><code>finance.sina.com.cn</code> / <code>www.163.com</code>（2025-04-27）</td>
+</tr>
+<tr>
+<td style="text-align:left">—</td>
+<td style="text-align:left">《医生已就位》科普栏目：平台提供 IP 定制、专业制作、视频包装、流量扶持，报道称助力合作账号播放量提升 20 倍</td>
+<td style="text-align:left">佐证"垂类科普 + 平台栏目合作"是可走的增长路径</td>
+<td style="text-align:left"><code>news.mydrivers.com</code>（360 搜索索引）</td>
+</tr>
+</tbody>
+</table></div>
+<p><strong>判断</strong>：赛道本身不缺平台意愿，缺的是<strong>能持续产出、结构稳定的供给</strong>。这恰好是自动化系统的价值点——但也是 §8 风险清单里"同质化"的引信。</p>
+<h3 id="12-内容形态四种主流结构">1.2 内容形态：四种主流结构</h3>
+<p>从公开的运营方法论与官方规则描述归纳，AI/知识科普口播在抖音上稳定跑通的形态有四类（<strong>这部分是基于二手信源与平台规则的归纳，非实测</strong>）：</p>
+<div aria-label="可横向滚动的表格" class="table-scroll" tabindex="0"><table>
+<thead>
+<tr>
+<th style="text-align:left">形态</th>
+<th style="text-align:left">结构</th>
+<th style="text-align:left">典型时长</th>
+<th style="text-align:left">适合内容</th>
+<th style="text-align:left">优点</th>
+<th style="text-align:left">缺点</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left">A. 单点冷知识</td>
+<td style="text-align:left">1 个反常识结论 + 1 个解释</td>
+<td style="text-align:left">30~45s</td>
+<td style="text-align:left">"为什么…其实是因为…"</td>
+<td style="text-align:left">完播率高、易批量</td>
+<td style="text-align:left">收藏/关注转化弱，涨粉慢</td>
+</tr>
+<tr>
+<td style="text-align:left">B. 工具实操</td>
+<td style="text-align:left">痛点 + 3 步操作 + 结果展示</td>
+<td style="text-align:left">45~90s</td>
+<td style="text-align:left">"用 AI 这样干，10 分钟搞定 X"</td>
+<td style="text-align:left"><strong>收藏率最高</strong>，离变现最近</td>
+<td style="text-align:left">需要真实操作画面配合</td>
+</tr>
+<tr>
+<td style="text-align:left">C. 认知科普/原理拆解</td>
+<td style="text-align:left">现象 → 原理 → 类比 → 启示</td>
+<td style="text-align:left">60~120s</td>
+<td style="text-align:left">"大模型为什么会胡说"</td>
+<td style="text-align:left">建立专业人设、利他性强</td>
+<td style="text-align:left">完播率承压，需要类比技巧</td>
+</tr>
+<tr>
+<td style="text-align:left">D. 系列/合集</td>
+<td style="text-align:left">单集解决一个子问题，统一片头片尾</td>
+<td style="text-align:left">60~90s × N</td>
+<td style="text-align:left">"AI 入门 10 讲"</td>
+<td style="text-align:left">沉淀主页、提升关注转化</td>
+<td style="text-align:left">需要选题库做支撑</td>
+</tr>
+</tbody>
+</table></div>
+<p><strong>形态建议（P2 的展开）</strong>：本项目定位"教学/科普"，应主推 <strong>B（工具实操）+ C（认知科普）</strong>，用 <strong>D 的系列化外壳</strong>包装。A 形态只用来做"钩子型引流条"，不作为主形态。</p>
+<h3 id="13-时长与完播的现实约束">1.3 时长与完播的现实约束</h3>
+<ul>
+<li>二手信源说法：<strong>15~30 秒</strong>完播表现最佳，避免 7 秒以内；完播率 10%~30% 属正常区间，&gt;30% 且点赞率 &gt;5% 时上热门概率显著提升（<code>36kr.com</code>、360 AI 问答聚合，年份不一，<strong>标 [待核验]</strong>）。</li>
+<li>另有二手运营观点认为"完播率的敌人不是时长而是枯燥"，曾把某家居账号视频从 40s 压到 25s 提升完播（<code>www.520zimeiti.cn</code>，2025-12-27，<strong>标 [待核验]</strong>）。</li>
+<li><strong>对自动化系统的含义</strong>：时长不是一个固定值，而是<strong>可调参数</strong>。建议把"口播稿字数 × 语速"作为一等配置项，A/B 测试 45s / 60s / 90s 三档，而不是一次性写死。</li>
+</ul>
+<h3 id="14-更新频率">1.4 更新频率</h3>
+<p><strong>未查到平台官方对"更新频率"的硬性规定</strong>（官方约束是发布接口的每日上限，见 §6）。二手运营共识为"日更或隔日更、固定时段"。本项目建议按 §6 的 75 条/天技术上限之下取 <strong>1~3 条/天</strong>，重点在"节律稳定"而非"数量堆叠"。</p>
+<h3 id="15-变现方式概览细节标-待核验">1.5 变现方式（概览，细节标 [待核验]）</h3>
+<div aria-label="可横向滚动的表格" class="table-scroll" tabindex="0"><table>
+<thead>
+<tr>
+<th style="text-align:left">方式</th>
+<th style="text-align:left">门槛要点</th>
+<th style="text-align:left">是否依赖主体资质</th>
+<th style="text-align:left">来源</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left">巨量星图商单</td>
+<td style="text-align:left">达人入驻门槛存在<strong>信息冲突</strong>：早期资料称个人认证需粉丝 &gt;1 万（2021）；另有资料称"零粉丝也能开通星图任务"（2024）</td>
+<td style="text-align:left">部分任务需企业合作</td>
+<td style="text-align:left">详见 §7 冲突说明</td>
+</tr>
+<tr>
+<td style="text-align:left">知识付费（课程/训练营）</td>
+<td style="text-align:left">需承接页/交付能力，抖音侧通常走小程序或外部链路</td>
+<td style="text-align:left"><strong>是</strong>（小程序锚点需企业资质，见 P9）</td>
+<td style="text-align:left">创建视频接口文档（[实测]）</td>
+</tr>
+<tr>
+<td style="text-align:left">橱窗带货（书籍/工具/硬件）</td>
+<td style="text-align:left">需开通电商权限，粉丝与内容质量门槛</td>
+<td style="text-align:left">是</td>
+<td style="text-align:left">二手</td>
+</tr>
+<tr>
+<td style="text-align:left">平台激励计划</td>
+<td style="text-align:left">随平台活动变化</td>
+<td style="text-align:left">否</td>
+<td style="text-align:left">二手</td>
+</tr>
+</tbody>
+</table></div>
+<p><strong>结论</strong>：变现路径在本项目 4+1 立项阶段<strong>不作为 V1 需求</strong>。唯一需要现在记下的是：<strong>P9 的"主体资质墙"是变现路径的前置阻塞项</strong>，如果用户坚持个人开发者主体，那么"小程序锚点 → 课程落地页"这条最自然的变现链路在 V1 是不通的。</p>
+<hr/>
+<h2 id="2-数字人口播账号生态">2. 数字人口播账号生态</h2>
+<h3 id="21-平台自身的答案抖音提供官方ai-分身开放能力-实测">2.1 平台自身的答案：抖音提供官方「AI 分身」开放能力 [实测]</h3>
+<p>这是本次调研最有价值的发现之一——数字人内容在抖音不是"灰产"，平台自己就有官方产品线。</p>
+<p>来源：<code>https://developer.open-douyin.com/docs/resource/zh-CN/ai-avatar/quick-start/ai-avatar-guide</code>（Jina Reader 渲染抓取，采集日期 2026-09-21，标 <strong>[实测]</strong>）</p>
+<p>原文要点（摘录）：</p>
+<ul>
+<li>「认证开发者类型：选择入驻的开发者类型，不同类型开发者创建 AI 分身时会有不同数量限制」
+<ul>
+<li><strong>企业 / 个体工商户 / 党政机关 / 事业单位 / 社会组织 / 其他组织</strong>：可创建 <strong>50 个</strong>分身应用</li>
+<li><strong>个人</strong>（身份证照片）：可创建 <strong>5 个</strong>分身应用</li>
+</ul>
+</li>
+<li>「<strong>开发者认证是创建 AI 分身应用的必要条件</strong>」</li>
+<li>「AI 分身仅支持与<strong>同主体的抖音号</strong>进行绑定」</li>
+<li>「若抖音号为个人实名认证，则需抖音号扫码确认授权」</li>
+</ul>
+<p><strong>AI 分身能力面（文档目录，[实测] 自 sitemap 枚举）</strong>：</p>
+<ul>
+<li><code>clone-service</code>（克隆/分身卡：含小程序卡、照片上传 <code>photo-upload</code>、模板增删改）</li>
+<li><code>atomic-service</code>（原子服务）</li>
+<li><code>large-model-call</code>（大模型调用，仅支持 <code>doubao-lite-32k</code> / <code>doubao-pro-32k</code> 语言模型，不支持 embedding）</li>
+<li><code>streaming-chat</code>（流式对话）</li>
+<li>运营侧还有 <code>ai-avatar-protocol</code>（AI 分身应用服务协议）、<code>ai-avatar-dev-service</code>（开发者服务协议）</li>
+</ul>
+<p><strong>对本项目的含义</strong>：</p>
+<ol>
+<li>"个人开发者主体"在抖音官方体系里<strong>可以</strong>做 AI 数字人应用（个人上限 5 个），不存在"必须企业"的一刀切。但注意这条是<strong>开发者侧创建 App 的数量</strong>，不等于"用 AI 数字人发短视频"的账号资质。</li>
+<li>抖音官方 AI 分身定位是<strong>对话式应用（小程序内）</strong>，不是"生成式口播视频"。本项目走的是<strong>生成式短视频</strong>路线，与官方 AI 分身是<strong>两条不同产品线</strong>——不要混淆，也不要把官方 AI 分身当成本项目的现成底座。</li>
+<li><code>large-model-call</code> 只能调 doubao-lite/pro-32k，若本项目要用平台内大模型做脚本生成，能力上限较低，<strong>建议自建 LLM 调用（与本机/云 API 编排一致）</strong>。</li>
+</ol>
+<h3 id="22-短视频数字人-vs-直播数字人生态实况与关键分野">2.2 短视频数字人 vs 直播数字人：生态实况与关键分野</h3>
+<p><strong>生态实况（二手，[待核验]）</strong>：</p>
+<ul>
+<li>抖音上存在大量"数字人口播"内容，多个内容里出现教学式的"用数字人做口播，X 条视频涨粉 Y 万"叙事（<code>www.douyin.com</code>、<code>www.bilibili.com</code> 等搜索结果标题，2024~2025）。<strong>这些具体数字未经核实，且明显带有卖课/引流动机，一律不作为立项依据。</strong></li>
+<li>第三方数字人工具被内容反复提及的品牌包括：数字人工坊、飞影数字人、闪剪、HeyGen（及其"平替"）。<strong>这些是搜索结果中的工具名，非推荐，选型见 02/03 号文件。</strong></li>
+</ul>
+<p><strong>关键分野（本文件最重要的合规结论之一）</strong>：</p>
+<div aria-label="可横向滚动的表格" class="table-scroll" tabindex="0"><table>
+<thead>
+<tr>
+<th style="text-align:left">维度</th>
+<th style="text-align:left">数字人<strong>直播</strong></th>
+<th style="text-align:left">数字人<strong>短视频口播（本项目）</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left">平台核心约束</td>
+<td style="text-align:left">「使用已注册的虚拟人形象进行直播时，<strong>必须由真人驱动进行实时互动，不允许完全由人工智能驱动进行互动</strong>」（二手，出自 2023-05 平台规范报道，[待核验]）</td>
+<td style="text-align:left">无"真人驱动"要求；走 <strong>AI 内容标识</strong>路径（显式 + 隐式）</td>
+</tr>
+<tr>
+<td style="text-align:left">主要风险</td>
+<td style="text-align:left">被判"无人直播/录播"，报道称可致账号封禁</td>
+<td style="text-align:left">被判"AI 内容未标识"、同质化、低质</td>
+</tr>
+<tr>
+<td style="text-align:left">本项目是否涉及</td>
+<td style="text-align:left"><strong>不涉及</strong>（明确不做直播）</td>
+<td style="text-align:left"><strong>全部涉及</strong></td>
+</tr>
+</tbody>
+</table></div>
+<p><strong>结论（P4）</strong>：本项目"生成式口播短视频 + 定时发布"的形态，<strong>避开了抖音数字人监管中最硬的一条（直播真人驱动）</strong>，这是产品形态设计上的一个实质性优势，应在立项文档里明确写死："V1 不做直播、不做无人直播"。</p>
+<h3 id="23-观众接受度与被识别为-ai-的后果">2.3 观众接受度与"被识别为 AI 的后果"</h3>
+<p><strong>未查到可靠的、可量化的"观众对数字人内容接受度"研究或平台数据</strong>。可核实的只有两个方向：</p>
+<ol>
+<li><strong>平台态度是"标识即可，而非禁止"</strong>：抖音 2023 年即发布《关于人工智能生成内容的平台规范暨行业倡议》与《关于人工智能生成内容标识的水印与元数据规范》，并在 2024 年针对"<strong>不当利用</strong> AI 生成虚拟人物"单独发治理公告（<code>www.douyin.com/rule</code> 公告列表，[实测] 抓取）。用词是"不当利用"，<strong>说明存在"正当利用"的空间</strong>。</li>
+<li><strong>"被识别为 AI"的后果取决于是否主动标识</strong>：据媒体报道，平台会"核验、检测站内未主动标识的内容是否由 AIGC 技术生成，对疑似内容……"（<code>www.chinaz.com</code> / <code>finance.sina.com.cn</code>，2025-09-01，[待核验]）。也就是说——<strong>主动标识 ≈ 合规路径；被动被检测出未标识 = 风险路径</strong>。</li>
+</ol>
+<p><strong>风险推论（标注为本文件推理，非信源）</strong>：在 AI 科普赛道，"这是一位 AI 主播"<strong>本身可能就是内容的一部分</strong>（可做成栏目设定，甚至成为记忆点），主动标识的"人设成本"远低于其他赛道。这是本项目相对"AI 换脸真人口播"路线的<strong>又一个形态优势</strong>。</p>
+<hr/>
+<h2 id="3-口播稿内容结构可复用模板">3. 口播稿内容结构（可复用模板）</h2>
+<blockquote>
+<p>说明：小节 3.1~3.3 的模板来自二手运营方法论信源，已标注；3.4 起为<strong>本文件基于上述信源综合拟定的模板</strong>（明确标注为"本项目拟定"，非信源原文）。</p>
+</blockquote>
+<h3 id="31-三段式最通用">3.1 三段式（最通用）</h3>
+<p><strong>结构</strong>：黄金三秒钩子 + 主体拆解 + 结尾互动</p>
+<ul>
+<li>冲突前置（例：迟到被骂 vs 他人加薪）</li>
+<li>中间激化/展开</li>
+<li>结尾逆袭或升华</li>
+</ul>
+<p>来源：<code>news.sohu.com</code>（翔骁教育：短视频脚本实战指南，2025-08-01，[待核验]）</p>
+<h3 id="32-总分总最适合知识分享">3.2 总分总（最适合知识分享）</h3>
+<p><strong>结构</strong>：</p>
+<ol>
+<li><strong>开头先发制人</strong>——热点 / 痛点 / 争议点</li>
+<li><strong>中间扩展</strong>——把开头那句话讲清楚</li>
+<li><strong>结尾</strong>——升华 + 金句 + 互动</li>
+</ol>
+<p>来源：<code>www.jianshu.com</code>（短视频学习笔记：脚本三部曲和爆款主题，[待核验]）</p>
+<h3 id="33-并列结构">3.3 并列结构</h3>
+<p><strong>结构</strong>：开头抛论点 → 中间用几个实例说明 → 最后点题。
+适合"N 个方法/N 个工具"类内容，与 §1.2 的 B 形态（工具实操）天然匹配。</p>
+<p>来源：同上（<code>www.jianshu.com</code>）</p>
+<h3 id="34-用于-ai-脚本生成的提示词级结构指令二手">3.4 用于 AI 脚本生成的提示词级结构指令（二手）</h3>
+<p>有资料给出了可直接写进提示词的<strong>结构约束句式</strong>：</p>
+<blockquote>
+<p>「在提示词中加入结构指令：<strong>开头 3 秒内抛出反常识问题，中间用 1 个生活化类比展开原理，结尾用 1 句行动建议收束</strong>。第三步：限定视频时长，如 45 秒以内控制在 6xx 字。」</p>
+</blockquote>
+<p>来源：<code>www.php.cn</code>（剪映 AI 写知识科普短视频脚本的提示词，2026-06-09，[待核验]）</p>
+<p><strong>这套约束与 §3.2 的总分总高度一致，可直接作为本项目口播稿生成 LLM 的 system prompt 骨架。</strong></p>
+<h3 id="35-本项目拟定ai-科普口播稿五段式模板-本项目拟定非外部信源">3.5 本项目拟定：AI 科普口播稿「五段式」模板（<strong>本项目拟定，非外部信源</strong>）</h3>
+<pre><code>[0-3s 钩子]   反常识断言 / 具体损失 / 具体收益
+              句式示例："你花 3 小时做的事，其实一句话就能让 AI 干完。"
+              禁止：问候语、自我介绍、"大家好我是XX"
+
+[3-12s 立信]  一句话说明"为什么我讲的值得听"
+              可复用最省时长的做法：直接抛数据/后果，不铺垫
+
+[12-50s 主体] 只讲 1 个点，用「现象 → 为什么 → 所以」三步走
+              硬性约束：至少 1 个生活化类比；必须有 1 个"可截图保存"的具体步骤
+
+[50-65s 收束] 金句总结（≤20 字）
+              例："AI 不会取代你，会用 AI 的人会。"
+
+[65-75s 引导] 单指令引导，且必须与内容强相关
+              优先：评论区提问（可复用为下一条选题）
+              次选：主页/合集（做系列化沉淀）
+              禁止：无信息量的"点赞关注"
+</code></pre>
+<p><strong>配套的硬性写作约束（本项目拟定）</strong>：</p>
+<ol>
+<li>单句 ≤ 20 字（数字人口型对齐友好，且听觉负担低）</li>
+<li>全文不出现"首先/其次/最后"之外的书面连接词</li>
+<li>每条只讲 1 个知识点（对应 P2 的"单点"原则）</li>
+<li>至少 1 处"具体数字"（提升可信度，但<strong>数字必须有来源，不得由 LLM 编造</strong>）</li>
+<li>开场句必须写入"跨条去重表"，避免同质化（对应 P7）</li>
+</ol>
+<h3 id="36-真实案例拆解">3.6 真实案例拆解</h3>
+<p><strong>能做到的</strong>：本文件核到了<strong>平台级案例</strong>——抖音《医生已就位》科普栏目，平台为该栏目合作账号提供"IP 定制、专业制作、视频包装、流量扶持"权益，报道称助力合作医生账号播放量提升 20 倍（<code>news.mydrivers.com</code>，[待核验]）。</p>
+<p><strong>做不到的</strong>：<strong>未能核到具体抖音账号的口播稿原文或逐条数据</strong>。原因：抖音网页端内容与账号数据在未登录/无客户端环境下不可抓取（本次实测 <code>www.douyin.com</code> 经 Jina Reader 返回 <code>403 Forbidden</code>）。任何"某账号用某开场句涨粉 X 万"的说法，本文件一律<strong>拒收为立项依据</strong>。</p>
+<p><strong>替代方案（建议动作）</strong>：口播稿模板的最终校验，应通过<strong>人工在抖音 App 内采集 20~30 条同赛道 10 万+点赞视频的逐字稿</strong>完成。这是一个明确的人工待办，已列入 §9。</p>
+<hr/>
+<h2 id="4-选题机制">4. 选题机制</h2>
+<h3 id="41-可用的选题来源按可靠性排序">4.1 可用的选题来源（按可靠性排序）</h3>
+<div aria-label="可横向滚动的表格" class="table-scroll" tabindex="0"><table>
+<thead>
+<tr>
+<th style="text-align:left">来源</th>
+<th style="text-align:left">类型</th>
+<th style="text-align:left">说明</th>
+<th style="text-align:left">可靠性</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left">抖音开放平台「热点/热榜」类数据接口</td>
+<td style="text-align:left">官方 API</td>
+<td style="text-align:left">sitemap 中存在 <code>data-open-service/tops-data/hot-video-list/</code>、<code>data-open-service/hot-video-data/</code>、<code>search-management/keywords-video-list/</code> 等路径（[实测] sitemap 枚举）</td>
+<td style="text-align:left"><strong>高</strong>，但需核验权限与可用主体</td>
+</tr>
+<tr>
+<td style="text-align:left">巨量算数</td>
+<td style="text-align:left">官方数据产品</td>
+<td style="text-align:left">抖音官方趋势/关键词工具，搜索结果中出现 <code>@巨量算数</code> 官方账号</td>
+<td style="text-align:left">高（未实测）</td>
+</tr>
+<tr>
+<td style="text-align:left">平台扶持方向反推</td>
+<td style="text-align:left">策略型</td>
+<td style="text-align:left">依 §1.1，AI/前沿科技/自然科普是 2025 年被点名方向；有平台活动时优先跟进（如「AI新星计划」）</td>
+<td style="text-align:left">中</td>
+</tr>
+<tr>
+<td style="text-align:left">评论区提问抽取</td>
+<td style="text-align:left">运营型</td>
+<td style="text-align:left">§3.5 结尾引导"评论区提问"，把评论沉淀为下一条选题 —— <strong>这是自动化系统最能吃到红利的一条</strong></td>
+<td style="text-align:left">中高（方法论，非官方）</td>
+</tr>
+<tr>
+<td style="text-align:left">自有知识库/需求清单</td>
+<td style="text-align:left">内容型</td>
+<td style="text-align:left">固定栏目 + 系列化（对应 §1.2 形态 D）</td>
+<td style="text-align:left">高（可控）</td>
+</tr>
+</tbody>
+</table></div>
+<h3 id="42-稳定选题的三个机制本项目拟定">4.2 稳定选题的三个机制（本项目拟定）</h3>
+<ol>
+<li><strong>系列化优先于单点</strong>：先定 3~5 个系列（例：AI 工具实操 / 大模型原理 / AI 行业观察），每个系列预留 10~20 条选题位。系列化的收益：主页可沉淀、观众预期稳定、<strong>批量生成时天然降低"同质化"判定的说服力</strong>（因为有明确栏目归属）。</li>
+<li><strong>常态位 + 热点位双轨</strong>：
+<ul>
+<li>常态位（70%）：从系列选题库出，保证不断更</li>
+<li>热点位（30%）：接平台热榜/AI 领域突发事件，用"热点 + 你的固定框架"而不是"从头为热点写稿"</li>
+</ul>
+</li>
+<li><strong>选题排队的"防撞车"检查</strong>：同一周内不得出现两条以上同结构、同开场句式的内容（直接对接 P7 的同质化风险）。</li>
+</ol>
+<h3 id="43-热点追踪可核验的事实边界">4.3 热点追踪：可核验的事实边界</h3>
+<ul>
+<li>抖音开放平台确实提供<strong>热榜/热门视频/关键词视频</strong>等数据类接口路径（[实测] sitemap）。</li>
+<li>但<strong>这些接口的开放范围、权限申请条件、QPS、返回值字段，本文件未实测</strong>——列入 §9 待核验。</li>
+<li>二手信源中反复出现的选题方法论是"常规、热点、系列"三要领（<code>www.sohu.com</code>，2020 及 <code>www.meixiaosan.com</code>，2023，<strong>[待核验]，且信息偏旧</strong>）。</li>
+</ul>
+<hr/>
+<h2 id="5-平台政策与合规">5. 平台政策与合规</h2>
+<h3 id="51-国家层面人工智能生成合成内容标识办法已生效的硬约束-实测">5.1 国家层面：《人工智能生成合成内容标识办法》——已生效的硬约束 [实测]</h3>
+<ul>
+<li><strong>文件</strong>：《关于印发〈人工智能生成合成内容标识办法〉的通知》，<strong>国信办通字〔2025〕2 号</strong></li>
+<li><strong>发布主体</strong>：国家互联网信息办公室、工业和信息化部、公安部、国家广播电视总局</li>
+<li><strong>发布/施行</strong>：署期 2025-03-07，公开 2025-03-14；<strong>自 2025-09-01 起施行</strong>（第十四条）</li>
+<li><strong>来源</strong>：<code>https://www.cac.gov.cn/2025-03/14/c_1743654684782215.htm</code>（<code>curl</code> + 浏览器 UA 直连抓取成功，采集日期 2026-09-21，<strong>[实测]</strong>）</li>
+</ul>
+<p><strong>与本项目直接相关的条款（原文摘录）</strong>：</p>
+<div aria-label="可横向滚动的表格" class="table-scroll" tabindex="0"><table>
+<thead>
+<tr>
+<th style="text-align:left">条款</th>
+<th style="text-align:left">原文要点</th>
+<th style="text-align:left">对本项目的动作</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left">第三条</td>
+<td style="text-align:left">生成合成内容含<strong>文本、图片、音频、视频、虚拟场景</strong>；标识分<strong>显式</strong>与<strong>隐式</strong></td>
+<td style="text-align:left">本项目的口播视频属"视频"，须双标识</td>
+</tr>
+<tr>
+<td style="text-align:left">第四条（四）</td>
+<td style="text-align:left">「在<strong>视频起始画面</strong>和视频<strong>播放周边</strong>的适当位置添加显著的提示标识，可以在视频末尾和中间适当位置添加显著的提示标识」</td>
+<td style="text-align:left">首帧角标 + 全程常驻角标；<strong>首帧必须有</strong></td>
+</tr>
+<tr>
+<td style="text-align:left">第四条（六）</td>
+<td style="text-align:left">「其他生成合成服务场景根据自身应用特点添加显著的提示标识」</td>
+<td style="text-align:left">若页面上有标题/简介，也可加文字说明</td>
+</tr>
+<tr>
+<td style="text-align:left">第五条</td>
+<td style="text-align:left">应在<strong>文件元数据</strong>中添加隐式标识，包含「生成合成内容属性信息、服务提供者名称或者编码、内容编号」；鼓励数字水印</td>
+<td style="text-align:left">后处理阶段写入元数据；若上游数字人 API 已写，需<strong>保留不得剥离</strong></td>
+</tr>
+<tr>
+<td style="text-align:left">第六条</td>
+<td style="text-align:left">传播平台（抖音）须核验元数据；用户声明或检测到痕迹时须加"可能/疑似"提示</td>
+<td style="text-align:left">抖音侧的标识是<strong>双向</strong>的，主动声明可避免"疑似"标签</td>
+</tr>
+<tr>
+<td style="text-align:left">第九条</td>
+<td style="text-align:left">提供无显式标识内容时，须协议明确用户义务，并<strong>留存相关日志不少于六个月</strong></td>
+<td style="text-align:left">本系统应保留"生成记录 ↔ 发布记录"的可追溯日志 ≥6 个月</td>
+</tr>
+<tr>
+<td style="text-align:left">第十条</td>
+<td style="text-align:left">「用户使用网络信息内容传播服务发布生成合成内容的，<strong>应当主动声明</strong>并使用服务提供者提供的标识功能进行标识」；「<strong>不得恶意删除、篡改、伪造、隐匿</strong>」标识</td>
+<td style="text-align:left">声明是<strong>用户义务</strong>；管线不得剥离元数据</td>
+</tr>
+<tr>
+<td style="text-align:left">第十三条</td>
+<td style="text-align:left">违反的由网信、电信、公安、广电等按职责处理</td>
+<td style="text-align:left">违规后果不止平台限流</td>
+</tr>
+</tbody>
+</table></div>
+<p><strong>结论</strong>：这不是"平台偏好"，是<strong>部门规章</strong>。本项目必须把标识做成管线的<strong>必经步骤</strong>，且要有"标识校验"的失败阻断（标识写入失败 → 不允许发布）。</p>
+<h3 id="52-平台层面抖音的-ai-内容规则体系-实测抓取公告列表">5.2 平台层面：抖音的 AI 内容规则体系 [实测抓取公告列表]</h3>
+<p>来源：<code>https://www.douyin.com/rule</code>（抖音规则中心，Jina Reader 渲染，采集 2026-09-21，<strong>[实测]</strong>）</p>
+<p>在官方公告列表中确认存在的相关文件：</p>
+<div aria-label="可横向滚动的表格" class="table-scroll" tabindex="0"><table>
+<thead>
+<tr>
+<th style="text-align:left">公告/规范</th>
+<th style="text-align:left">日期</th>
+<th style="text-align:left">备注</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left">抖音社区自律公约</td>
+<td style="text-align:left">—</td>
+<td style="text-align:left">见 5.3</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>抖音关于人工智能生成内容的平台规范暨行业倡议</strong></td>
+<td style="text-align:left">2023.05.09</td>
+<td style="text-align:left">国内首批 AIGC 平台规范之一</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>抖音关于人工智能生成内容标识的水印与元数据规范</strong></td>
+<td style="text-align:left">2023.05.09</td>
+<td style="text-align:left">与上一条配套，<strong>元数据规范</strong>对 P5 的落地最关键</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>抖音关于不当利用AI生成虚拟人物的治理公告</strong></td>
+<td style="text-align:left">2024.03.27</td>
+<td style="text-align:left">针对"不当利用"，未禁止全部 AI 虚拟人物</td>
+</tr>
+<tr>
+<td style="text-align:left">抖音关于上线原创保护中心、持续打击网络侵权的公告</td>
+<td style="text-align:left">2023.04.26</td>
+<td style="text-align:left">与搬运/原创判定相关</td>
+</tr>
+<tr>
+<td style="text-align:left">抖音开展"同质化博流量文案"专项治理行动的公告（多期）</td>
+<td style="text-align:left">2021.07 起多期</td>
+<td style="text-align:left"><strong>对自动化量产的直接风险</strong></td>
+</tr>
+<tr>
+<td style="text-align:left">关于开展"同质化网络水军"专项治理的公告</td>
+<td style="text-align:left">—</td>
+<td style="text-align:left">同上</td>
+</tr>
+<tr>
+<td style="text-align:left">抖音《营销行为》规则更新公告</td>
+<td style="text-align:left">2024.08.29</td>
+<td style="text-align:left">涉及导流/营销</td>
+</tr>
+</tbody>
+</table></div>
+<p>规则学院（<code>www.douyin.com/rule/encyclopedia</code>）中存在"<strong>搬运</strong>"专题，标注播放量 <strong>190.41 万次</strong>（[实测] 抓取页面文本）——说明搬运是平台社区的<strong>高频治理主题</strong>。</p>
+<h3 id="53-抖音社区自律公约中的相关红线-实测">5.3 抖音社区自律公约中的相关红线 [实测]</h3>
+<p>来源：<code>https://www.douyin.com/rule/policy</code>（Jina Reader 渲染，[实测]）。相关原文摘录：</p>
+<ul>
+<li><strong>鼓励原创</strong>：「我们鼓励原创、优质的内容。建议<strong>减少拼接网络图片、粗劣特效、无实质性的内容</strong>；创作画质清晰、完整度高和观赏性强的作品」
+→ <strong>对自动化系统的直接含义</strong>：批量生成的视频若呈现"PPT 式拼接 + 无实质内容"，命中这一条的描述。</li>
+<li><strong>禁止虚假信息</strong>：「利用<strong>基于深度学习、虚拟现实等的新技术、新应用</strong>制作、发布、传播的虚假信息」
+→ AI 生成内容本身不违规，<strong>用 AI 生成"虚假信息"才违规</strong>。AI 教学/科普的选题必须守住"事实正确"这条线（这也是选 04/质检环节的硬指标）。</li>
+<li><strong>知识产权</strong>：平台保障用户对自己作品享有的知识产权，同时要求用户不得上传侵犯他人知识产权的内容；「用户在平台上发布的所有原创内容和信息都归用户所有」。
+→ <strong>配图/配乐/BGM 素材必须可商用</strong>，这是自动化管线里最容易失守的一环。</li>
+</ul>
+<h3 id="54-ai-内容标识的具体操作路径二手待核验">5.4 AI 内容标识的具体操作路径（二手，[待核验]）</h3>
+<p>据多家媒体报道（2025-09-01 前后，与《标识办法》施行同步）：</p>
+<ul>
+<li>抖音发布《关于升级AI内容标识功能的公告》，上线两项核心功能：
+<ol>
+<li><strong>AI 内容标识功能</strong>——辅助创作者打标</li>
+<li><strong>AI 内容元数据标识读写功能</strong>——支持 AI 内容的元数据识别与写入</li>
+</ol>
+</li>
+<li>创作者操作路径：<strong>抖音作品发布界面 → 高级设置 → 发文助手自主声明 → 内容由AI生成</strong></li>
+<li>平台将核验、检测站内未主动标识的内容是否为 AIGC 生成</li>
+</ul>
+<p>来源：<code>www.chinaz.com</code>、<code>www.donews.com</code>、<code>finance.sina.com.cn</code>（均为媒体转载，<strong>报告日期 2025-09-01</strong>，[待核验]）
+<strong>落地前需在抖音创作服务平台实测复核该路径是否仍为此名称。</strong></p>
+<h3 id="55-数字人虚拟人的平台规则二手待核验">5.5 数字人/虚拟人的平台规则（二手，[待核验]）</h3>
+<ul>
+<li>2023-05 平台规范报道：<strong>使用虚拟人形象直播须由真人驱动实时互动，不允许完全由 AI 驱动互动</strong>（<code>new.qq.com</code>，2023-05-10）。</li>
+<li>2025-03 媒体报道：抖音集团回应"AI 无人直播卖课"事件时表示"<strong>必须真人实名认证，严禁完全 AI 驱动</strong>"（<code>www.douyin.com</code> 站内视频标题，2025-03-18，[待核验]）。</li>
+<li>2026-04-23：抖音黑板报发布《关于 AI 生成不当内容及侵犯他人权益的治理公告》，涉及"AI 恶搞肖像"等（<code>www.whwx.gov.cn</code> 转载，[待核验]）。</li>
+<li>2026-04：报道提及抖音开展"<strong>AI 起号</strong>专项治理"，整治利用 AI 生成低俗猎奇视频等（<code>k.sina.com.cn</code>，2026-04-16，[待核验]）。</li>
+</ul>
+<p><strong>对本项目的净结论</strong>：</p>
+<ol>
+<li>上述"真人驱动"约束<strong>全部指向直播场景</strong>，本项目不涉及（P4）。</li>
+<li>但"<strong>AI 起号专项治理</strong>"这个词值得高度警惕——它说明平台已经<strong>把'用 AI 批量起号'当成一类需要治理的行为模式</strong>，而不是单个内容问题。→ 直接支撑 P7（同质化自检）必须进 V1。</li>
+</ol>
+<h3 id="56-限流风险与搬运原创判定">5.6 限流风险与"搬运/原创"判定</h3>
+<p><strong>可核验事实</strong>：</p>
+<ul>
+<li>平台侧有专门的"搬运"规则专题与"原创保护中心"公告（§5.2，[实测]）。</li>
+<li>有"同质化博流量文案"专项治理的<strong>多期</strong>公告（[实测]）。</li>
+</ul>
+<p><strong>未能核验</strong>：抖音"搬运/原创"的<strong>具体判定阈值</strong>（如相似度百分比、发布时差），以及"AI 内容是否会被降权"的官方量化口径。网上流传的"7 大核心标准""晚 48 小时发布被判搬运"等说法均出自自媒体（<code>www.php.cn</code>，2025-10-03 等），<strong>不采信为立项依据</strong>，列入 §9。</p>
+<p><strong>风险清单化（本文件推导）</strong>：</p>
+<div aria-label="可横向滚动的表格" class="table-scroll" tabindex="0"><table>
+<thead>
+<tr>
+<th style="text-align:left">触发行为</th>
+<th style="text-align:left">依据</th>
+<th style="text-align:left">等级</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left">跨条高度同质化（模板句、开场、结构雷同）</td>
+<td style="text-align:left">同质化博流量文案专项治理（[实测] 存在）</td>
+<td style="text-align:left"><strong>高</strong></td>
+</tr>
+<tr>
+<td style="text-align:left">使用他人视频素材做二次剪辑</td>
+<td style="text-align:left">搬运专题 + 原创保护中心（[实测] 存在）</td>
+<td style="text-align:left"><strong>高</strong></td>
+</tr>
+<tr>
+<td style="text-align:left">AI 内容未主动标识</td>
+<td style="text-align:left">《标识办法》第十条 + 平台核验（[实测] 法规原文）</td>
+<td style="text-align:left"><strong>高</strong></td>
+</tr>
+<tr>
+<td style="text-align:left">生成事实错误内容</td>
+<td style="text-align:left">自律公约"新技术制作虚假信息"（[实测] 原文）</td>
+<td style="text-align:left"><strong>中高</strong></td>
+</tr>
+<tr>
+<td style="text-align:left">配图/配乐侵权</td>
+<td style="text-align:left">自律公约知识产权章节（[实测] 原文）</td>
+<td style="text-align:left"><strong>中高</strong></td>
+</tr>
+<tr>
+<td style="text-align:left">高频发布（接近 75 条/天上限）</td>
+<td style="text-align:left">接口上限存在（[实测]），但"高频是否直接限流"未核到</td>
+<td style="text-align:left"><strong>中</strong></td>
+</tr>
+<tr>
+<td style="text-align:left">主页/简介/落地页强导流</td>
+<td style="text-align:left">创建视频接口文档明确"强烈建议第三方谨慎拟定话题名称，避免强导流行为"（[实测]）</td>
+<td style="text-align:left"><strong>中</strong></td>
+</tr>
+</tbody>
+</table></div>
+<hr/>
+<h2 id="6-发布机制事实">6. 发布机制事实</h2>
+<h3 id="61-官方开放能力代替用户发布内容到抖音-实测">6.1 官方开放能力：「代替用户发布内容到抖音」 [实测]</h3>
+<p><strong>接口</strong>（来源：<code>https://developer.open-douyin.com/docs/resource/zh-CN/dop/develop/openapi/video-management/douyin/create-video/video-create</code>，Jina Reader 渲染，采集 2026-09-21，<strong>[实测]</strong>）</p>
+<div aria-label="可横向滚动的表格" class="table-scroll" tabindex="0"><table>
+<thead>
+<tr>
+<th style="text-align:left">项</th>
+<th style="text-align:left">值</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left">能力名</td>
+<td style="text-align:left"><strong>创建视频</strong>（支持话题、小程序等功能）</td>
+</tr>
+<tr>
+<td style="text-align:left">HTTP URL</td>
+<td style="text-align:left"><code>https://open.douyin.com/api/douyin/v1/video/create_video/</code></td>
+</tr>
+<tr>
+<td style="text-align:left">Method</td>
+<td style="text-align:left"><code>POST</code></td>
+</tr>
+<tr>
+<td style="text-align:left">Scope</td>
+<td style="text-align:left"><strong><code>video.create.bind</code></strong></td>
+</tr>
+<tr>
+<td style="text-align:left">权限要求</td>
+<td style="text-align:left">① 需要申请权限：<strong>抖音开放平台控制台 &gt; 应用详情 &gt; 能力管理 &gt; 能力实验室 &gt; 代替用户发布内容到抖音</strong>；② 需要用户授权</td>
+</tr>
+<tr>
+<td style="text-align:left">请求头</td>
+<td style="text-align:left"><code>access-token</code>（必填，OAuth 生成）、<code>content-type: application/json</code></td>
+</tr>
+<tr>
+<td style="text-align:left">Query</td>
+<td style="text-align:left"><code>open_id</code>（必填，用户唯一标志）</td>
+</tr>
+<tr>
+<td style="text-align:left">Body 必填</td>
+<td style="text-align:left"><code>video_id</code>——<strong>必须上传加密的 video_id</strong>，通过 <code>/api/douyin/v1/video/upload_video/</code> 接口获得</td>
+</tr>
+<tr>
+<td style="text-align:left">Body 常见可选</td>
+<td style="text-align:left"><code>text</code>（标题，可带话题与 @，总字数 ≤1000）、<code>cover_tsp</code>（指定秒数取帧做封面）、<code>custom_cover_image_url</code>、<code>private_status</code>（0 全部可见 / 1 自见 / 2 好友可见）、<code>download_type</code>（0 可下载 / 1 作者不允许下载）、<code>music_id</code>、<code>poi_id</code>、<code>micro_app_*</code>（小程序锚点）、<code>publish_clip</code>（slide 投稿）、<code>vr_transcode_extra_params</code></td>
+</tr>
+</tbody>
+</table></div>
+<p><strong>官方的「使用限制」原文（关键）</strong>：</p>
+<ul>
+<li>抖音的 OAuth API 以 <code>https://open.douyin.com/</code> 开头</li>
+<li><strong>「创建抖音视频后，会有一个审核过程，期间只有自己可见」</strong></li>
+<li>支持的锚点类型：小程序、POI；<strong>「其中小程序和 POI 锚点仅支持具有企业资质或者和企业资质关联的账号进行挂载，包括但不仅限于小程序品牌号/员工号/合作号、企业号等」</strong></li>
+<li>标题「<strong>注意：话题审核依旧遵循抖音的审核逻辑，强烈建议第三方谨慎拟定话题名称，避免强导流行为</strong>」（对 <code>text</code> 参数的原文说明）</li>
+</ul>
+<h3 id="62-频次与硬性约束全部来自官方错误码表实测">6.2 频次与硬性约束（全部来自官方错误码表）[实测]</h3>
+<div aria-label="可横向滚动的表格" class="table-scroll" tabindex="0"><table>
+<thead>
+<tr>
+<th style="text-align:left">错误码</th>
+<th style="text-align:left">官方描述</th>
+<th style="text-align:left">官方排查建议（原文）</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"><strong>2114007</strong></td>
+<td style="text-align:left">视频发布数量超过每日上限</td>
+<td style="text-align:left"><strong>「一个用户在一个应用下，一天最多发布 75 个作品」</strong></td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>2114006</strong></td>
+<td style="text-align:left">视频时长不能超过 15 分钟</td>
+<td style="text-align:left">检查视频时长是否超过 15 分钟</td>
+</tr>
+<tr>
+<td style="text-align:left">2100005</td>
+<td style="text-align:left">标题文字不得多于 1000 个</td>
+<td style="text-align:left">—</td>
+</tr>
+<tr>
+<td style="text-align:left">2190007</td>
+<td style="text-align:left">无效的视频文件 id</td>
+<td style="text-align:left">检查 video_id 是否有效</td>
+</tr>
+<tr>
+<td style="text-align:left">28001018</td>
+<td style="text-align:left">应用未获得该能力</td>
+<td style="text-align:left">开通相关能力</td>
+</tr>
+<tr>
+<td style="text-align:left">28003017</td>
+<td style="text-align:left">quota 已用完</td>
+<td style="text-align:left">联系平台处理</td>
+</tr>
+<tr>
+<td style="text-align:left">28001016</td>
+<td style="text-align:left">当前应用已被封禁或下线</td>
+<td style="text-align:left">clientKey 被封禁或者下线</td>
+</tr>
+</tbody>
+</table></div>
+<p><strong>其他</strong>：<code>upload-video</code> 接口文档页在本次抓取时返回 404（<code>https://developer.open-douyin.com/docs/resource/zh-CN/dop/develop/openapi/video-management/douyin/create-video/upload-video</code> 渲染出"页面不存在"），但 sitemap 中确认存在 <code>create-video/upload-video</code>、<code>video-part-upload</code>、<code>video-part-upload-init</code>、<code>video-part-upload-complete</code>（分片上传）等路径。<strong>→ 分片上传能力存在，但具体参数需实测，列入 §9。</strong></p>
+<h3 id="63-审核流程与时间频次约束的现实解读">6.3 审核流程与时间、频次约束的现实解读</h3>
+<p><strong>能确认的</strong>：</p>
+<ul>
+<li>投稿后进入<strong>审核期，期间仅自己可见</strong>（[实测] 官方原文）。</li>
+<li>每日 75 条/用户/应用是<strong>技术上限</strong>（[实测] 官方错误码表）。</li>
+</ul>
+<p><strong>不能确认的</strong>：审核<strong>时长分布</strong>、是否有"新号冷启动期额外审核"、是否有"同一账号高频投稿触发人工审核"。<strong>均未核到官方说明，列入 §9。</strong></p>
+<p><strong>对本项目排产的建议（推导）</strong>：</p>
+<ol>
+<li>排产按 <strong>1~3 条/天</strong>，与 75 条上限有两个数量级的余量，不构成工程约束。</li>
+<li>发布流程必须实现**"提交成功 ≠ 发布成功"**的状态机：<code>uploaded → created(审核中) → published / rejected</code>，并把"审核中"作为正常的中间态，而不是异常。</li>
+<li>时间与频次的"最优解"（几点发、发几条）<strong>没有官方答案</strong>，应由本系统自己跑 A/B：把发布时间作为配置项，积累数据后回填。</li>
+</ol>
+<h3 id="64-其他相关能力sitemap-枚举实测开放范围待核验">6.4 其他相关能力（sitemap 枚举，[实测]，开放范围待核验）</h3>
+<p>数据与服务类路径（均在 <code>developer.open-douyin.com</code> sitemap 中确认存在）：</p>
+<ul>
+<li>数据开放服务：<code>data-open-service/video-data/</code>（get-basic-data / get-play-data / get-like-data / get-comment-data / get-share-data）、<code>user-data/get-user-video-status</code>、<code>tops-data/hot-video-list/</code>、<code>hot-video-data/</code></li>
+<li>搜索能力：<code>search-management/keywords-video-list/</code>、<code>keywords-video-comment-management/</code></li>
+<li>内容互动：<code>interaction-management/</code>（评论管理、回复等）</li>
+<li>抖音分享 SDK：<code>ability/opensdk/share/video-create-bind</code>（<strong>注意：这条是"分享至抖音私信/群"，不是发布视频</strong>，能力权限默认开通，需申请"移动应用内-能力管理-视频权限-分享给抖音好友/群"）</li>
+</ul>
+<blockquote>
+<p>⚠️ <strong>易踩坑提示（[实测] 教训）</strong>：本文件在调研时，用 URL <code>.../dop/ability/content-management/video.create.bind</code> 试图抓"发布能力"页面，实际渲染出来的是**"分享至抖音私信/群"<strong>页面（更新时间 2025-03-20）。</strong><code>video.create.bind</code> 这个 slug 在"能力"目录下指向分享能力，而真正的发布接口在 <code>develop/openapi/video-management/douyin/create-video/</code> 下。** 做 02/04 号文件或实际接入时，务必以 OpenAPI 目录下的 <code>create-video</code> 页为准。</p>
+</blockquote>
+<hr/>
+<h2 id="7-对标工具与账号盘点">7. 对标工具与账号盘点</h2>
+<blockquote>
+<p>纪律说明：<strong>本节只收录本次实际验证或能定位到出处的条目。任何"某账号 X 条视频涨粉 Y 万"的自媒体叙事，因无法核验且带明显卖课动机，一律不进表。</strong></p>
+</blockquote>
+<h3 id="71-平台与官方能力可信度最高">7.1 平台与官方能力（可信度最高）</h3>
+<div aria-label="可横向滚动的表格" class="table-scroll" tabindex="0"><table>
+<thead>
+<tr>
+<th style="text-align:left">名称</th>
+<th style="text-align:left">类型</th>
+<th style="text-align:left">定位</th>
+<th style="text-align:left">可借鉴点</th>
+<th style="text-align:left">来源</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left">抖音开放平台 · 创建视频接口</td>
+<td style="text-align:left">官方 API</td>
+<td style="text-align:left">代替用户发布内容到抖音</td>
+<td style="text-align:left"><strong>本项目的发布底座</strong>；75 条/天上限、15 分钟时长上限、审核期仅自己可见</td>
+<td style="text-align:left">[实测] <code>developer.open-douyin.com/.../create-video/video-create</code></td>
+</tr>
+<tr>
+<td style="text-align:left">抖音开放平台 · 数据开放服务</td>
+<td style="text-align:left">官方 API</td>
+<td style="text-align:left">视频/账号数据回读</td>
+<td style="text-align:left">为"数据回流 → 选题优化"闭环提供接口；开放范围待核验</td>
+<td style="text-align:left">[实测] sitemap 枚举</td>
+</tr>
+<tr>
+<td style="text-align:left">抖音开放平台 · AI 分身（ai-avatar）</td>
+<td style="text-align:left">官方产品线</td>
+<td style="text-align:left">对话式 AI 分身应用</td>
+<td style="text-align:left">证明数字人内容在平台内有官方位置；个人主体可建 5 个分身应用；仅支持同主体抖音号绑定</td>
+<td style="text-align:left">[实测] <code>.../ai-avatar/quick-start/ai-avatar-guide</code></td>
+</tr>
+<tr>
+<td style="text-align:left">抖音规则中心</td>
+<td style="text-align:left">官方规则库</td>
+<td style="text-align:left">全部平台规则与公告</td>
+<td style="text-align:left"><strong>合规信息的唯一权威入口</strong>，应纳入本系统的人工巡检清单</td>
+<td style="text-align:left">[实测] <code>www.douyin.com/rule</code></td>
+</tr>
+<tr>
+<td style="text-align:left">抖音发文助手（自主声明）</td>
+<td style="text-align:left">官方功能</td>
+<td style="text-align:left">AI 内容声明打标</td>
+<td style="text-align:left">发布环节的<strong>强制动作</strong>：高级设置 → 发文助手自主声明 → 内容由AI生成</td>
+<td style="text-align:left">[二手] 媒体报道 2025-09-01，待核验</td>
+</tr>
+<tr>
+<td style="text-align:left">巨量星图</td>
+<td style="text-align:left">官方达人合作平台</td>
+<td style="text-align:left">商单变现</td>
+<td style="text-align:left">变现路径之一；门槛信息冲突（见 7.3）</td>
+<td style="text-align:left">[二手]</td>
+</tr>
+<tr>
+<td style="text-align:left">巨量算数</td>
+<td style="text-align:left">官方数据产品</td>
+<td style="text-align:left">趋势/关键词洞察</td>
+<td style="text-align:left">选题热点追踪候选工具</td>
+<td style="text-align:left">[二手，未实测]</td>
+</tr>
+</tbody>
+</table></div>
+<h3 id="72-第三方工具与内容形态参照仅作生态观察不做选型结论">7.2 第三方工具与内容形态参照（仅作生态观察，不做选型结论）</h3>
+<div aria-label="可横向滚动的表格" class="table-scroll" tabindex="0"><table>
+<thead>
+<tr>
+<th style="text-align:left">名称</th>
+<th style="text-align:left">类型</th>
+<th style="text-align:left">定位</th>
+<th style="text-align:left">可借鉴点</th>
+<th style="text-align:left">来源</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left">数字人工坊 / 飞影数字人 / 闪剪 / HeyGen</td>
+<td style="text-align:left">第三方数字人工具</td>
+<td style="text-align:left">数字人口播视频生成</td>
+<td style="text-align:left">生态成熟度高、被内容反复提及；<strong>选型评估见 02/03 号文件，本文件不做结论</strong></td>
+<td style="text-align:left">[二手] <code>www.douyin.com</code> / <code>www.bilibili.com</code> 搜索索引标题（2024~2025）</td>
+</tr>
+<tr>
+<td style="text-align:left">剪映</td>
+<td style="text-align:left">官方剪辑工具（字节）</td>
+<td style="text-align:left">剪辑 + AI 写脚本</td>
+<td style="text-align:left">社区存在"剪映 AI 写知识科普脚本提示词"的方法论内容，可参考其提示词结构</td>
+<td style="text-align:left">[二手] <code>www.php.cn</code>，2026-06-09</td>
+</tr>
+<tr>
+<td style="text-align:left">豆包（Doubao）</td>
+<td style="text-align:left">官方大模型</td>
+<td style="text-align:left">文案/脚本生成</td>
+<td style="text-align:left">平台内 <code>large-model-call</code> 亦仅支持 doubao 系列</td>
+<td style="text-align:left">[实测] <code>.../ai-avatar/develop/openapi/large-model-call</code></td>
+</tr>
+</tbody>
+</table></div>
+<h3 id="73-内容形态对标栏目级可核验与账号级不可核验">7.3 内容形态对标：栏目级（可核验）与账号级（不可核验）</h3>
+<div aria-label="可横向滚动的表格" class="table-scroll" tabindex="0"><table>
+<thead>
+<tr>
+<th style="text-align:left">名称</th>
+<th style="text-align:left">类型</th>
+<th style="text-align:left">定位</th>
+<th style="text-align:left">可借鉴点</th>
+<th style="text-align:left">来源</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left">抖音《医生已就位》</td>
+<td style="text-align:left">平台科普栏目</td>
+<td style="text-align:left">垂类医生科普</td>
+<td style="text-align:left">"垂类科普 + 平台栏目共创 + 流量扶持"的合作范式</td>
+<td style="text-align:left">[二手] <code>news.mydrivers.com</code></td>
+</tr>
+<tr>
+<td style="text-align:left">抖音知识创作砥砺计划 / AI新星计划</td>
+<td style="text-align:left">平台扶持计划</td>
+<td style="text-align:left">知识创作者扶持</td>
+<td style="text-align:left"><strong>AI 是点名扶持方向</strong>；可通过参加官方活动拿初始流量</td>
+<td style="text-align:left">[二手] <code>finance.sina.com.cn</code> / <code>www.163.com</code>，2025-04-27</td>
+</tr>
+<tr>
+<td style="text-align:left">具体 AI 科普账号（名称/数据）</td>
+<td style="text-align:left">—</td>
+<td style="text-align:left">—</td>
+<td style="text-align:left"><strong>未能核验，不予列出</strong>（抖音站内数据在本机环境不可抓取：<code>www.douyin.com</code> 经 Jina Reader 返回 403）</td>
+<td style="text-align:left">—</td>
+</tr>
+</tbody>
+</table></div>
+<h3 id="74-冲突信息说明">7.4 冲突信息说明</h3>
+<div aria-label="可横向滚动的表格" class="table-scroll" tabindex="0"><table>
+<thead>
+<tr>
+<th style="text-align:left">冲突点</th>
+<th style="text-align:left">说法 A</th>
+<th style="text-align:left">说法 B</th>
+<th style="text-align:left">处理</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left">星图入驻粉丝门槛</td>
+<td style="text-align:left">个人认证需<strong>粉丝 &gt;1 万</strong> + 至少发过 1 条视频 + 绑定手机号（<code>zhuanlan.zhihu.com</code>，2021-09-06）</td>
+<td style="text-align:left"><strong>零粉丝也能开通星图任务</strong>（<code>www.douyin.com</code> 站内视频，2024-06-17）</td>
+<td style="text-align:left"><strong>两说时间跨度 3 年且均非官方文档，不予采信任何一方</strong>。落地前必须在巨量星图官网实测复核 → §9</td>
+</tr>
+<tr>
+<td style="text-align:left">数字人直播是否被封禁</td>
+<td style="text-align:left">"抖音清扫 AI 数字人"类标题（<code>it.sohu.com</code>，2024-10-13）</td>
+<td style="text-align:left">"抖音明确鼓励数字人直播技术，并对数字人直播与真人直播作出区分"（同源，引 2023-05 规范）</td>
+<td style="text-align:left">倾向后者（有具体规范指向），但<strong>本项目不做直播，该冲突对本项目否决性影响为零</strong></td>
+</tr>
+<tr>
+<td style="text-align:left">完播率最优时长</td>
+<td style="text-align:left">"15~30 秒最佳"（<code>36kr.com</code>）</td>
+<td style="text-align:left">"时长不是关键，枯燥才是"（<code>www.520zimeiti.cn</code>，2025-12-27）</td>
+<td style="text-align:left">采信"时长是<strong>可调参数</strong>而非最优解"，用 A/B 实测（见 §6.3）</td>
+</tr>
+</tbody>
+</table></div>
+<hr/>
+<h2 id="8-风险清单">8. 风险清单</h2>
+<div aria-label="可横向滚动的表格" class="table-scroll" tabindex="0"><table>
+<thead>
+<tr>
+<th style="text-align:left">#</th>
+<th style="text-align:left">风险</th>
+<th style="text-align:left">触发条件</th>
+<th style="text-align:left">后果</th>
+<th style="text-align:left">缓解动作</th>
+<th style="text-align:left">依据等级</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left">R1</td>
+<td style="text-align:left"><strong>AI 标识缺失/被剥离</strong></td>
+<td style="text-align:left">后处理环节未加首帧标识；上游 SDK 元数据被覆盖；使用第三方工具"去水印"</td>
+<td style="text-align:left">违反《标识办法》第十条，平台加"疑似"标签，限流，严重时主管部门处理</td>
+<td style="text-align:left">管线内加"标识校验闸门"：无标识不出片；保留生成日志 ≥6 个月（第九条）</td>
+<td style="text-align:left">[实测] 法规原文</td>
+</tr>
+<tr>
+<td style="text-align:left">R2</td>
+<td style="text-align:left"><strong>同质化被判低质</strong></td>
+<td style="text-align:left">批量内容模板句/结构/开场高度雷同</td>
+<td style="text-align:left">命中"同质化博流量文案"专项治理 → 限流</td>
+<td style="text-align:left">跨条去重表；每条至少 1 处独有信息；系列化包装</td>
+<td style="text-align:left">[实测] 规则中心存在该专项公告</td>
+</tr>
+<tr>
+<td style="text-align:left">R3</td>
+<td style="text-align:left"><strong>搬运/侵权判定</strong></td>
+<td style="text-align:left">使用网络素材做画面；BGM/字体未授权；"参考"同赛道视频再生成</td>
+<td style="text-align:left">判搬运、侵权，扣分/封禁</td>
+<td style="text-align:left">素材白名单（可商用）；禁止跨平台搬运式改写；配乐走平台曲库</td>
+<td style="text-align:left">[实测] 自律公约知识产权章节 + 搬运专题存在</td>
+</tr>
+<tr>
+<td style="text-align:left">R4</td>
+<td style="text-align:left"><strong>内容事实错误</strong></td>
+<td style="text-align:left">LLM 生成含幻觉的数字/结论；AI 科普领域尤甚</td>
+<td style="text-align:left">命中自律公约"新技术制作传播虚假信息"红线，专业人设崩塌</td>
+<td style="text-align:left">质检环节加"数字/结论必须可溯源"硬校验；无源数据一律改为定性表述</td>
+<td style="text-align:left">[实测] 自律公约原文</td>
+</tr>
+<tr>
+<td style="text-align:left">R5</td>
+<td style="text-align:left"><strong>主体资质墙阻塞变现</strong></td>
+<td style="text-align:left">想挂小程序/POI/课程落地页</td>
+<td style="text-align:left">个人主体无法挂载（官方原文限制）</td>
+<td style="text-align:left">V1 不规划挂载；若必须，改为企业/个体工商户主体（立项前置决策）</td>
+<td style="text-align:left">[实测] 开发者文档原文</td>
+</tr>
+<tr>
+<td style="text-align:left">R6</td>
+<td style="text-align:left"><strong>账号人设崩溃</strong></td>
+<td style="text-align:left">固定虚拟主播在不同视频中形象漂移（脸/发型不一致）</td>
+<td style="text-align:left">观众难以记住 IP，"固定主播"这一核心资产失效</td>
+<td style="text-align:left">属 02/03 号文件范围（人物一致性）；本文件只标记为<strong>核心资产级风险</strong></td>
+<td style="text-align:left">项目背景（用户决策）</td>
+</tr>
+<tr>
+<td style="text-align:left">R7</td>
+<td style="text-align:left"><strong>自动化被识别为"AI 起号"</strong></td>
+<td style="text-align:left">高频、同构、多账号、无真人痕迹</td>
+<td style="text-align:left">平台已有"AI 起号专项治理"的动作</td>
+<td style="text-align:left">控制频次（1~3 条/天）；单账号先做深；不搞账号矩阵</td>
+<td style="text-align:left">[二手] 2026-04 报道</td>
+</tr>
+<tr>
+<td style="text-align:left">R8</td>
+<td style="text-align:left"><strong>发布后状态误判</strong></td>
+<td style="text-align:left">把"create_video 返回成功"当成"已发布"</td>
+<td style="text-align:left">排产/统计错乱，误判账号健康度</td>
+<td style="text-align:left">状态机区分 <code>created(审核中)</code> 与 <code>published</code>；回读 <code>get-user-video-status</code></td>
+<td style="text-align:left">[实测] 官方"审核期仅自己可见"原文</td>
+</tr>
+<tr>
+<td style="text-align:left">R9</td>
+<td style="text-align:left"><strong>权限申请被驳回</strong></td>
+<td style="text-align:left"><code>video.create.bind</code> 需人工审核</td>
+<td style="text-align:left">发布链路不通，整个自动化系统空转</td>
+<td style="text-align:left"><strong>立项阶段就把权限申请当第一优先事项</strong>（审核周期未知，需尽早排队）</td>
+<td style="text-align:left">[实测] 权限路径原文；周期 [待核验]</td>
+</tr>
+<tr>
+<td style="text-align:left">R10</td>
+<td style="text-align:left"><strong>政策时效性</strong></td>
+<td style="text-align:left">平台规则与 AI 监管快速演进（2023→2024→2025→2026 每年都有新公告）</td>
+<td style="text-align:left">依调研结论固化实现，半年后可能失效</td>
+<td style="text-align:left">把"规则巡检"做成<strong>周期性人工任务</strong>（每月查一次 <code>www.douyin.com/rule</code>）</td>
+<td style="text-align:left">[实测] 公告列表时间线</td>
+</tr>
+</tbody>
+</table></div>
+<hr/>
+<h2 id="9-待核验-清单">9. [待核验] 清单</h2>
+<blockquote>
+<p>以下为落地前<strong>必须在官网/开放平台/App 内实测复核</strong>的事项。按优先级排序，⚠️ 为阻塞项。</p>
+</blockquote>
+<h3 id="91-最高优先阻塞-v1-发布链路">9.1 最高优先（阻塞 V1 发布链路）</h3>
+<ul class="contains-task-list">
+<li class="task-list-item"><input class="task-list-item-checkbox" disabled="disabled" type="checkbox"/> ⚠️ <strong><code>video.create.bind</code> 权限申请</strong>：在抖音开放平台控制台实测申请路径「应用详情 &gt; 能力管理 &gt; 能力实验室 &gt; 代替用户发布内容到抖音」，确认：所需主体资质、审核周期、是否要求应用已上线/有用户量。</li>
+<li class="task-list-item"><input class="task-list-item-checkbox" disabled="disabled" type="checkbox"/> ⚠️ <strong><code>upload_video</code> 接口文档</strong>：本次抓取该页返回 404，但 sitemap 确认路径存在。需在浏览器内实测确认接口地址、加密 video_id 的获取方式、分片上传（<code>video-part-upload-init</code> / <code>video-part-upload</code> / <code>video-part-upload-complete</code>）的适用阈值。</li>
+<li class="task-list-item"><input class="task-list-item-checkbox" disabled="disabled" type="checkbox"/> ⚠️ <strong>发布接口的实时频次限制（QPS/QPM）</strong>：官方错误码表只给了"每天 75 条"的日上限，<strong>未见 QPS 说明</strong>。需在"通用参数"文档页核验。</li>
+<li class="task-list-item"><input class="task-list-item-checkbox" disabled="disabled" type="checkbox"/> ⚠️ <strong>AI 内容标识的操作路径</strong>：媒体报道路径为「作品发布界面 → 高级设置 → 发文助手自主声明 → 内容由AI生成」（2025-09 报道）。需在抖音 App / 创作服务平台实测该入口是否仍为此名称与位置。</li>
+<li class="task-list-item"><input class="task-list-item-checkbox" disabled="disabled" type="checkbox"/> ⚠️ <strong>开放平台 API 发布是否自动附带平台侧 AI 标识</strong>：若从 API 投稿，平台是否会强制/可选地打 AI 标签，需实测（影响是否能靠平台兜底 R1）。</li>
+</ul>
+<h3 id="92-高优先影响合规与成本">9.2 高优先（影响合规与成本）</h3>
+<ul class="contains-task-list">
+<li class="task-list-item"><input class="task-list-item-checkbox" disabled="disabled" type="checkbox"/> <strong>《抖音关于人工智能生成内容标识的水印与元数据规范》原文</strong>：规则中心公告列表确认存在（2023-05-09），但本次未能取得正文。该文件规定了水印与元数据的具体技术要求，<strong>是 P5 落地的最直接依据</strong>。</li>
+<li class="task-list-item"><input class="task-list-item-checkbox" disabled="disabled" type="checkbox"/> <strong>《抖音关于人工智能生成内容的平台规范暨行业倡议》原文</strong>：同上（2023-05-09）。需取得正文以核验"虚拟人直播须真人驱动"条款的准确表述。</li>
+<li class="task-list-item"><input class="task-list-item-checkbox" disabled="disabled" type="checkbox"/> <strong>《抖音关于不当利用AI生成虚拟人物的治理公告》原文</strong>（2024-03-27）：需明确"不当利用"的具体界定，确认本项目形态（AI 主讲人 + 科普内容）不落入其范围。</li>
+<li class="task-list-item"><input class="task-list-item-checkbox" disabled="disabled" type="checkbox"/> <strong>《关于升级AI内容标识功能的公告》原文</strong>（2025-09-01 前后）：目前只有媒体转载。</li>
+<li class="task-list-item"><input class="task-list-item-checkbox" disabled="disabled" type="checkbox"/> <strong>抖音"搬运/原创"判定阈值</strong>：官方是否有量化标准（相似度、时差等）。目前流传的"7 大标准""48 小时"说法均为自媒体，需向平台官方或创作服务平台核验。</li>
+<li class="task-list-item"><input class="task-list-item-checkbox" disabled="disabled" type="checkbox"/> <strong>AI 内容是否影响推荐权重</strong>：平台对已标识 AI 内容是否有官方降权口径。</li>
+</ul>
+<h3 id="93-中优先影响选题与变现">9.3 中优先（影响选题与变现）</h3>
+<ul class="contains-task-list">
+<li class="task-list-item"><input class="task-list-item-checkbox" disabled="disabled" type="checkbox"/> <strong>热点/数据类接口的开放范围</strong>：<code>data-open-service/tops-data/hot-video-list/</code>、<code>hot-video-data/</code>、<code>search-management/keywords-video-list/</code> 的权限要求、QPS、返回字段、是否对个人开发者开放。</li>
+<li class="task-list-item"><input class="task-list-item-checkbox" disabled="disabled" type="checkbox"/> <strong>巨量星图达人入驻门槛</strong>：官方现行标准（7.4 存在 2021 与 2024 冲突说法）。</li>
+<li class="task-list-item"><input class="task-list-item-checkbox" disabled="disabled" type="checkbox"/> <strong>知识类内容的流量扶持入口</strong>：抖音知识创作砥砺计划 / AI新星计划在 2026 年的现行状态与报名入口（媒体报道为 2025-04，可能已变更）。</li>
+<li class="task-list-item"><input class="task-list-item-checkbox" disabled="disabled" type="checkbox"/> <strong>中视频/合集类内容的现行激励政策</strong>：是否仍在运行。</li>
+</ul>
+<h3 id="94-建议由人工在-app-内完成工具无法代劳">9.4 建议由人工在 App 内完成（工具无法代劳）</h3>
+<ul class="contains-task-list">
+<li class="task-list-item"><input class="task-list-item-checkbox" disabled="disabled" type="checkbox"/> <strong>人工采集 20~30 条同赛道 10 万+点赞视频的逐字稿</strong>，用于校验 §3.5 的五段式模板（本次已确认：抖音站内数据在无登录环境不可抓取，<code>www.douyin.com</code> 经 Jina Reader 返回 403）。</li>
+<li class="task-list-item"><input class="task-list-item-checkbox" disabled="disabled" type="checkbox"/> <strong>人工观察 5~10 个 AI 科普类账号</strong>：记录其时长、更新频率、AI 标识方式、观众评论中对"AI 主播"的态度，用于校准"主动标识的人设成本"这一推理。</li>
+<li class="task-list-item"><input class="task-list-item-checkbox" disabled="disabled" type="checkbox"/> <strong>人工实测一次完整投稿流程</strong>（含 AI 声明），记录各环节耗时。</li>
+</ul>
+<hr/>
+<h2 id="附录-a本次调研的方法与可复用命令">附录 A：本次调研的方法与可复用命令</h2>
+<p><strong>结论</strong>：抖音开放平台文档站（<code>developer.open-douyin.com</code>）是 <strong>JS 单页应用</strong>，<code>curl</code> 直连只能拿到页面外壳（约 950KB 无正文），浏览器直接访问部分路径会渲染为"页面不存在"；但 <strong>Jina Reader 可以正确渲染正文</strong>。</p>
+<p>可复用命令（Windows / git-bash，实测可用）：</p>
+<pre><code class="language-bash"># 1) 渲染单个官方文档页（最可靠）
+curl -s -m 70 -H 'X-Return-Format: markdown' \
+  'https://r.jina.ai/https://developer.open-douyin.com/docs/resource/zh-CN/dop/develop/openapi/video-management/douyin/create-video/video-create'
+
+# 2) 枚举全部文档路径（sitemap 索引，2026-09-21 实测 lastmod 为当日）
+curl -s -A '&lt;浏览器UA&gt;' -L 'https://developer.open-douyin.com/sitemap/home/index.xml'
+# → index1..4.xml，合计 43MB，可 grep 出 7470 条 docs/resource 路径
+
+# 3) 国家法规原文（cac.gov.cn 对浏览器 UA 开放，直连可取）
+curl -s -A '&lt;浏览器UA&gt;' -L 'https://www.cac.gov.cn/2025-03/14/c_1743654684782215.htm'
+
+# 4) 抖音规则中心（需 Jina Reader 渲染）
+curl -s -m 70 'https://r.jina.ai/https://www.douyin.com/rule'
+</code></pre>
+<p><strong>搜索信源说明</strong>：本机环境 <strong>无独立 WebSearch 工具</strong>；实测 <strong>Bing <code>cs.bing.com</code>/<code>bing.com</code> 对中文长尾查询返回垃圾结果（Naver 站点群）</strong>，<code>DuckDuckGo html</code> 直连失败（curl 返回 000）。<strong>实际有效的中文搜索路径是 360 搜索（<code>www.so.com</code>）</strong>，<code>curl</code> + 浏览器 UA 可正常返回 10 条结构化结果。其结果为 <code>so.com/link</code> 跳转封装，<code>curl -L</code> 无法解出真实 URL（返回 000，为 JS 跳转），因此<strong>媒体类信源的 URL 只能精确到</strong>域名 + 标题 + 日期，已在文中逐条标注 <strong>[二手]</strong> 并附采集日期 2026-09-21。</p>
+<p><strong>证据等级定义</strong>：</p>
+<ul>
+<li><strong>[实测]</strong>：本次调研通过 <code>curl</code> / Jina Reader 直接取得原文，附命令与来源 URL。</li>
+<li><strong>[二手]</strong>：来自搜索引擎索引的媒体转载/自媒体内容，仅有域名、标题、日期，<strong>不作为立项唯一依据</strong>。</li>
+<li><strong>[待核验]</strong>：结论可能随时间变化，落地前须在官方渠道复核。</li>
+</ul>
+<hr/>
+<h2 id="附录-b本文件与后续文件的分工">附录 B：本文件与后续文件的分工</h2>
+<div aria-label="可横向滚动的表格" class="table-scroll" tabindex="0"><table>
+<thead>
+<tr>
+<th style="text-align:left">本文件已回答</th>
+<th style="text-align:left">需下游文件回答</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left">做什么赛道、什么形态、多长、怎么发、合规红线在哪</td>
+<td style="text-align:left">02：固定虚拟主播的一致性生成（脸/发型/五官/身份锁定）技术路线</td>
+</tr>
+<tr>
+<td style="text-align:left">平台发布机制与频次约束（75 条/天、审核期）</td>
+<td style="text-align:left">03：云 API 数字人方案选型（按秒计费、真唇形、真人级画质）</td>
+</tr>
+<tr>
+<td style="text-align:left">AI 标识的法规与平台要求（必须做，不可绕过）</td>
+<td style="text-align:left">04：TTS 实现与音色一致性、口播稿 → 音频的工程链路</td>
+</tr>
+<tr>
+<td style="text-align:left">口播稿结构模板（§3.5 可直接作为 prompt 骨架）</td>
+<td style="text-align:left">05：成本核算与决策汇总</td>
+</tr>
+<tr>
+<td style="text-align:left">风险清单与待核验清单（§8 / §9）</td>
+<td style="text-align:left">—</td>
+</tr>
+</tbody>
+</table></div>
+<p><strong>给评审的一句话</strong>：赛道被平台扶持、数字人短视频形态在平台上<strong>合规可行</strong>（关键是把 AI 标识做成管线的必经闸门）；本项目真正的敌人不是"AI 会不会被封"，而是"<strong>批量生成会不会被判同质化</strong>"——这必须在 V1 的质检环节就设计进去。</p>
+</article>
+    <nav class="document-pager" aria-label="相邻文档"><a rel="prev" href="../selection/03-%E4%BA%BA%E7%89%A9%E4%B8%8E%E9%9F%B3%E8%89%B2/02-%E4%BA%BA%E7%89%A9B%E4%B8%8E%E9%9F%B3%E8%89%B23%E5%AE%9A%E7%89%88%E8%AE%B0%E5%BD%95.html"><span>上一篇</span>02-人物B与音色3定版记录</a><a rel="next" href="02-%E4%BA%BA%E7%89%A9%E4%B8%80%E8%87%B4%E6%80%A7%E7%94%9F%E6%88%90.html"><span>下一篇</span>02-人物一致性生成</a></nav>
+    <footer class="page-footer">与同名 Markdown 对应的阅读版 · 可离线阅读与打印</footer>
+  </main>
+  <aside class="toc-panel" aria-label="本文章节"><p class="group-title">本页目录</p><nav id="toc"><a class="toc-h2" href="#0-%E6%9C%AC%E6%96%87%E4%BB%B6%E7%BB%93%E8%AE%BA%E9%80%9F%E8%A7%88">0. 本文件结论速览</a><a class="toc-h2" href="#1-ai-%E6%95%99%E5%AD%A6%E7%A7%91%E6%99%AE%E8%B5%9B%E9%81%93%E5%9C%A8%E6%8A%96%E9%9F%B3%E7%9A%84%E7%8E%B0%E7%8A%B6">1. AI 教学/科普赛道在抖音的现状</a><a class="toc-h3" href="#11-%E5%B9%B3%E5%8F%B0%E4%BE%A7%E7%9A%84%E5%AE%9A%E4%BD%8D%E8%A2%AB%E5%AE%98%E6%96%B9%E6%8C%81%E7%BB%AD%E6%89%B6%E6%8C%81%E7%9A%84%E7%9F%A5%E8%AF%86%E5%86%85%E5%AE%B9%E5%A4%A7%E7%B1%BB">1.1 平台侧的定位：被官方持续扶持的「知识内容」大类</a><a class="toc-h3" href="#12-%E5%86%85%E5%AE%B9%E5%BD%A2%E6%80%81%E5%9B%9B%E7%A7%8D%E4%B8%BB%E6%B5%81%E7%BB%93%E6%9E%84">1.2 内容形态：四种主流结构</a><a class="toc-h3" href="#13-%E6%97%B6%E9%95%BF%E4%B8%8E%E5%AE%8C%E6%92%AD%E7%9A%84%E7%8E%B0%E5%AE%9E%E7%BA%A6%E6%9D%9F">1.3 时长与完播的现实约束</a><a class="toc-h3" href="#14-%E6%9B%B4%E6%96%B0%E9%A2%91%E7%8E%87">1.4 更新频率</a><a class="toc-h3" href="#15-%E5%8F%98%E7%8E%B0%E6%96%B9%E5%BC%8F%E6%A6%82%E8%A7%88%E7%BB%86%E8%8A%82%E6%A0%87-%E5%BE%85%E6%A0%B8%E9%AA%8C">1.5 变现方式（概览，细节标 [待核验]）</a><a class="toc-h2" href="#2-%E6%95%B0%E5%AD%97%E4%BA%BA%E5%8F%A3%E6%92%AD%E8%B4%A6%E5%8F%B7%E7%94%9F%E6%80%81">2. 数字人口播账号生态</a><a class="toc-h3" href="#21-%E5%B9%B3%E5%8F%B0%E8%87%AA%E8%BA%AB%E7%9A%84%E7%AD%94%E6%A1%88%E6%8A%96%E9%9F%B3%E6%8F%90%E4%BE%9B%E5%AE%98%E6%96%B9ai-%E5%88%86%E8%BA%AB%E5%BC%80%E6%94%BE%E8%83%BD%E5%8A%9B-%E5%AE%9E%E6%B5%8B">2.1 平台自身的答案：抖音提供官方「AI 分身」开放能力 [实测]</a><a class="toc-h3" href="#22-%E7%9F%AD%E8%A7%86%E9%A2%91%E6%95%B0%E5%AD%97%E4%BA%BA-vs-%E7%9B%B4%E6%92%AD%E6%95%B0%E5%AD%97%E4%BA%BA%E7%94%9F%E6%80%81%E5%AE%9E%E5%86%B5%E4%B8%8E%E5%85%B3%E9%94%AE%E5%88%86%E9%87%8E">2.2 短视频数字人 vs 直播数字人：生态实况与关键分野</a><a class="toc-h3" href="#23-%E8%A7%82%E4%BC%97%E6%8E%A5%E5%8F%97%E5%BA%A6%E4%B8%8E%E8%A2%AB%E8%AF%86%E5%88%AB%E4%B8%BA-ai-%E7%9A%84%E5%90%8E%E6%9E%9C">2.3 观众接受度与&quot;被识别为 AI 的后果&quot;</a><a class="toc-h2" href="#3-%E5%8F%A3%E6%92%AD%E7%A8%BF%E5%86%85%E5%AE%B9%E7%BB%93%E6%9E%84%E5%8F%AF%E5%A4%8D%E7%94%A8%E6%A8%A1%E6%9D%BF">3. 口播稿内容结构（可复用模板）</a><a class="toc-h3" href="#31-%E4%B8%89%E6%AE%B5%E5%BC%8F%E6%9C%80%E9%80%9A%E7%94%A8">3.1 三段式（最通用）</a><a class="toc-h3" href="#32-%E6%80%BB%E5%88%86%E6%80%BB%E6%9C%80%E9%80%82%E5%90%88%E7%9F%A5%E8%AF%86%E5%88%86%E4%BA%AB">3.2 总分总（最适合知识分享）</a><a class="toc-h3" href="#33-%E5%B9%B6%E5%88%97%E7%BB%93%E6%9E%84">3.3 并列结构</a><a class="toc-h3" href="#34-%E7%94%A8%E4%BA%8E-ai-%E8%84%9A%E6%9C%AC%E7%94%9F%E6%88%90%E7%9A%84%E6%8F%90%E7%A4%BA%E8%AF%8D%E7%BA%A7%E7%BB%93%E6%9E%84%E6%8C%87%E4%BB%A4%E4%BA%8C%E6%89%8B">3.4 用于 AI 脚本生成的提示词级结构指令（二手）</a><a class="toc-h3" href="#35-%E6%9C%AC%E9%A1%B9%E7%9B%AE%E6%8B%9F%E5%AE%9Aai-%E7%A7%91%E6%99%AE%E5%8F%A3%E6%92%AD%E7%A8%BF%E4%BA%94%E6%AE%B5%E5%BC%8F%E6%A8%A1%E6%9D%BF-%E6%9C%AC%E9%A1%B9%E7%9B%AE%E6%8B%9F%E5%AE%9A%E9%9D%9E%E5%A4%96%E9%83%A8%E4%BF%A1%E6%BA%90">3.5 本项目拟定：AI 科普口播稿「五段式」模板（ 本项目拟定，非外部信源 ）</a><a class="toc-h3" href="#36-%E7%9C%9F%E5%AE%9E%E6%A1%88%E4%BE%8B%E6%8B%86%E8%A7%A3">3.6 真实案例拆解</a><a class="toc-h2" href="#4-%E9%80%89%E9%A2%98%E6%9C%BA%E5%88%B6">4. 选题机制</a><a class="toc-h3" href="#41-%E5%8F%AF%E7%94%A8%E7%9A%84%E9%80%89%E9%A2%98%E6%9D%A5%E6%BA%90%E6%8C%89%E5%8F%AF%E9%9D%A0%E6%80%A7%E6%8E%92%E5%BA%8F">4.1 可用的选题来源（按可靠性排序）</a><a class="toc-h3" href="#42-%E7%A8%B3%E5%AE%9A%E9%80%89%E9%A2%98%E7%9A%84%E4%B8%89%E4%B8%AA%E6%9C%BA%E5%88%B6%E6%9C%AC%E9%A1%B9%E7%9B%AE%E6%8B%9F%E5%AE%9A">4.2 稳定选题的三个机制（本项目拟定）</a><a class="toc-h3" href="#43-%E7%83%AD%E7%82%B9%E8%BF%BD%E8%B8%AA%E5%8F%AF%E6%A0%B8%E9%AA%8C%E7%9A%84%E4%BA%8B%E5%AE%9E%E8%BE%B9%E7%95%8C">4.3 热点追踪：可核验的事实边界</a><a class="toc-h2" href="#5-%E5%B9%B3%E5%8F%B0%E6%94%BF%E7%AD%96%E4%B8%8E%E5%90%88%E8%A7%84">5. 平台政策与合规</a><a class="toc-h3" href="#51-%E5%9B%BD%E5%AE%B6%E5%B1%82%E9%9D%A2%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E7%94%9F%E6%88%90%E5%90%88%E6%88%90%E5%86%85%E5%AE%B9%E6%A0%87%E8%AF%86%E5%8A%9E%E6%B3%95%E5%B7%B2%E7%94%9F%E6%95%88%E7%9A%84%E7%A1%AC%E7%BA%A6%E6%9D%9F-%E5%AE%9E%E6%B5%8B">5.1 国家层面：《人工智能生成合成内容标识办法》——已生效的硬约束 [实测]</a><a class="toc-h3" href="#52-%E5%B9%B3%E5%8F%B0%E5%B1%82%E9%9D%A2%E6%8A%96%E9%9F%B3%E7%9A%84-ai-%E5%86%85%E5%AE%B9%E8%A7%84%E5%88%99%E4%BD%93%E7%B3%BB-%E5%AE%9E%E6%B5%8B%E6%8A%93%E5%8F%96%E5%85%AC%E5%91%8A%E5%88%97%E8%A1%A8">5.2 平台层面：抖音的 AI 内容规则体系 [实测抓取公告列表]</a><a class="toc-h3" href="#53-%E6%8A%96%E9%9F%B3%E7%A4%BE%E5%8C%BA%E8%87%AA%E5%BE%8B%E5%85%AC%E7%BA%A6%E4%B8%AD%E7%9A%84%E7%9B%B8%E5%85%B3%E7%BA%A2%E7%BA%BF-%E5%AE%9E%E6%B5%8B">5.3 抖音社区自律公约中的相关红线 [实测]</a><a class="toc-h3" href="#54-ai-%E5%86%85%E5%AE%B9%E6%A0%87%E8%AF%86%E7%9A%84%E5%85%B7%E4%BD%93%E6%93%8D%E4%BD%9C%E8%B7%AF%E5%BE%84%E4%BA%8C%E6%89%8B%E5%BE%85%E6%A0%B8%E9%AA%8C">5.4 AI 内容标识的具体操作路径（二手，[待核验]）</a><a class="toc-h3" href="#55-%E6%95%B0%E5%AD%97%E4%BA%BA%E8%99%9A%E6%8B%9F%E4%BA%BA%E7%9A%84%E5%B9%B3%E5%8F%B0%E8%A7%84%E5%88%99%E4%BA%8C%E6%89%8B%E5%BE%85%E6%A0%B8%E9%AA%8C">5.5 数字人/虚拟人的平台规则（二手，[待核验]）</a><a class="toc-h3" href="#56-%E9%99%90%E6%B5%81%E9%A3%8E%E9%99%A9%E4%B8%8E%E6%90%AC%E8%BF%90%E5%8E%9F%E5%88%9B%E5%88%A4%E5%AE%9A">5.6 限流风险与&quot;搬运/原创&quot;判定</a><a class="toc-h2" href="#6-%E5%8F%91%E5%B8%83%E6%9C%BA%E5%88%B6%E4%BA%8B%E5%AE%9E">6. 发布机制事实</a><a class="toc-h3" href="#61-%E5%AE%98%E6%96%B9%E5%BC%80%E6%94%BE%E8%83%BD%E5%8A%9B%E4%BB%A3%E6%9B%BF%E7%94%A8%E6%88%B7%E5%8F%91%E5%B8%83%E5%86%85%E5%AE%B9%E5%88%B0%E6%8A%96%E9%9F%B3-%E5%AE%9E%E6%B5%8B">6.1 官方开放能力：「代替用户发布内容到抖音」 [实测]</a><a class="toc-h3" href="#62-%E9%A2%91%E6%AC%A1%E4%B8%8E%E7%A1%AC%E6%80%A7%E7%BA%A6%E6%9D%9F%E5%85%A8%E9%83%A8%E6%9D%A5%E8%87%AA%E5%AE%98%E6%96%B9%E9%94%99%E8%AF%AF%E7%A0%81%E8%A1%A8%E5%AE%9E%E6%B5%8B">6.2 频次与硬性约束（全部来自官方错误码表）[实测]</a><a class="toc-h3" href="#63-%E5%AE%A1%E6%A0%B8%E6%B5%81%E7%A8%8B%E4%B8%8E%E6%97%B6%E9%97%B4%E9%A2%91%E6%AC%A1%E7%BA%A6%E6%9D%9F%E7%9A%84%E7%8E%B0%E5%AE%9E%E8%A7%A3%E8%AF%BB">6.3 审核流程与时间、频次约束的现实解读</a><a class="toc-h3" href="#64-%E5%85%B6%E4%BB%96%E7%9B%B8%E5%85%B3%E8%83%BD%E5%8A%9Bsitemap-%E6%9E%9A%E4%B8%BE%E5%AE%9E%E6%B5%8B%E5%BC%80%E6%94%BE%E8%8C%83%E5%9B%B4%E5%BE%85%E6%A0%B8%E9%AA%8C">6.4 其他相关能力（sitemap 枚举，[实测]，开放范围待核验）</a><a class="toc-h2" href="#7-%E5%AF%B9%E6%A0%87%E5%B7%A5%E5%85%B7%E4%B8%8E%E8%B4%A6%E5%8F%B7%E7%9B%98%E7%82%B9">7. 对标工具与账号盘点</a><a class="toc-h3" href="#71-%E5%B9%B3%E5%8F%B0%E4%B8%8E%E5%AE%98%E6%96%B9%E8%83%BD%E5%8A%9B%E5%8F%AF%E4%BF%A1%E5%BA%A6%E6%9C%80%E9%AB%98">7.1 平台与官方能力（可信度最高）</a><a class="toc-h3" href="#72-%E7%AC%AC%E4%B8%89%E6%96%B9%E5%B7%A5%E5%85%B7%E4%B8%8E%E5%86%85%E5%AE%B9%E5%BD%A2%E6%80%81%E5%8F%82%E7%85%A7%E4%BB%85%E4%BD%9C%E7%94%9F%E6%80%81%E8%A7%82%E5%AF%9F%E4%B8%8D%E5%81%9A%E9%80%89%E5%9E%8B%E7%BB%93%E8%AE%BA">7.2 第三方工具与内容形态参照（仅作生态观察，不做选型结论）</a><a class="toc-h3" href="#73-%E5%86%85%E5%AE%B9%E5%BD%A2%E6%80%81%E5%AF%B9%E6%A0%87%E6%A0%8F%E7%9B%AE%E7%BA%A7%E5%8F%AF%E6%A0%B8%E9%AA%8C%E4%B8%8E%E8%B4%A6%E5%8F%B7%E7%BA%A7%E4%B8%8D%E5%8F%AF%E6%A0%B8%E9%AA%8C">7.3 内容形态对标：栏目级（可核验）与账号级（不可核验）</a><a class="toc-h3" href="#74-%E5%86%B2%E7%AA%81%E4%BF%A1%E6%81%AF%E8%AF%B4%E6%98%8E">7.4 冲突信息说明</a><a class="toc-h2" href="#8-%E9%A3%8E%E9%99%A9%E6%B8%85%E5%8D%95">8. 风险清单</a><a class="toc-h2" href="#9-%E5%BE%85%E6%A0%B8%E9%AA%8C-%E6%B8%85%E5%8D%95">9. [待核验] 清单</a><a class="toc-h3" href="#91-%E6%9C%80%E9%AB%98%E4%BC%98%E5%85%88%E9%98%BB%E5%A1%9E-v1-%E5%8F%91%E5%B8%83%E9%93%BE%E8%B7%AF">9.1 最高优先（阻塞 V1 发布链路）</a><a class="toc-h3" href="#92-%E9%AB%98%E4%BC%98%E5%85%88%E5%BD%B1%E5%93%8D%E5%90%88%E8%A7%84%E4%B8%8E%E6%88%90%E6%9C%AC">9.2 高优先（影响合规与成本）</a><a class="toc-h3" href="#93-%E4%B8%AD%E4%BC%98%E5%85%88%E5%BD%B1%E5%93%8D%E9%80%89%E9%A2%98%E4%B8%8E%E5%8F%98%E7%8E%B0">9.3 中优先（影响选题与变现）</a><a class="toc-h3" href="#94-%E5%BB%BA%E8%AE%AE%E7%94%B1%E4%BA%BA%E5%B7%A5%E5%9C%A8-app-%E5%86%85%E5%AE%8C%E6%88%90%E5%B7%A5%E5%85%B7%E6%97%A0%E6%B3%95%E4%BB%A3%E5%8A%B3">9.4 建议由人工在 App 内完成（工具无法代劳）</a><a class="toc-h2" href="#%E9%99%84%E5%BD%95-a%E6%9C%AC%E6%AC%A1%E8%B0%83%E7%A0%94%E7%9A%84%E6%96%B9%E6%B3%95%E4%B8%8E%E5%8F%AF%E5%A4%8D%E7%94%A8%E5%91%BD%E4%BB%A4">附录 A：本次调研的方法与可复用命令</a><a class="toc-h2" href="#%E9%99%84%E5%BD%95-b%E6%9C%AC%E6%96%87%E4%BB%B6%E4%B8%8E%E5%90%8E%E7%BB%AD%E6%96%87%E4%BB%B6%E7%9A%84%E5%88%86%E5%B7%A5">附录 B：本文件与后续文件的分工</a></nav></aside>
+</div>
+<button type="button" class="sidebar-scrim" aria-label="关闭文档目录" hidden></button>
+<button type="button" class="back-top" aria-label="返回顶部">顶部</button>
+<script>(() => {
+  'use strict';
+
+  function initializeReader() {
+    const article = document.getElementById('document-body');
+    if (!article) return;
+    const root = document.documentElement;
+    const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
+    const scrollBehavior = () => reducedMotion.matches ? 'instant' : 'smooth';
+
+    // Local files and privacy settings can deny storage; controls remain usable.
+    const fontKey = 'document-reader-font-size';
+    let fontSize = 17;
+    try {
+      const savedSize = Number(localStorage.getItem(fontKey));
+      if (Number.isFinite(savedSize) && savedSize >= 14 && savedSize <= 22) fontSize = savedSize;
+    } catch (_) { /* Storage is optional. */ }
+    const smaller = document.querySelector('.font-smaller');
+    const reset = document.querySelector('.font-reset');
+    const larger = document.querySelector('.font-larger');
+    function setFontSize(value) {
+      fontSize = Math.max(14, Math.min(22, value));
+      root.style.setProperty('--reader-font-size', `${fontSize}px`);
+      if (smaller) smaller.disabled = fontSize === 14;
+      if (larger) larger.disabled = fontSize === 22;
+      if (reset) reset.title = `恢复默认字号（当前 ${fontSize}px）`;
+      try { localStorage.setItem(fontKey, String(fontSize)); } catch (_) { /* Optional. */ }
+    }
+    setFontSize(fontSize);
+    smaller?.addEventListener('click', () => setFontSize(fontSize - 1));
+    reset?.addEventListener('click', () => setFontSize(17));
+    larger?.addEventListener('click', () => setFontSize(fontSize + 1));
+    document.querySelector('.print-button')?.addEventListener('click', () => window.print());
+
+    const menu = document.querySelector('.mobile-menu');
+    const sidebar = document.getElementById('doc-sidebar');
+    const scrim = document.querySelector('.sidebar-scrim');
+    const mobileWidth = window.matchMedia('(max-width: 800px)');
+    function setMenu(open, returnFocus = false) {
+      const visible = open && mobileWidth.matches;
+      document.body.classList.toggle('menu-open', visible);
+      menu?.setAttribute('aria-expanded', String(visible));
+      if (scrim) scrim.hidden = !visible;
+      if (visible) {
+        sidebar?.querySelector('[aria-current="page"], a, button')?.focus();
+      } else if (returnFocus) menu?.focus();
+    }
+    menu?.addEventListener('click', () => setMenu(!document.body.classList.contains('menu-open')));
+    scrim?.addEventListener('click', () => setMenu(false, true));
+    sidebar?.addEventListener('click', (event) => {
+      if (event.target.closest('a')) setMenu(false);
+    });
+    mobileWidth.addEventListener('change', () => setMenu(false));
+    document.addEventListener('keydown', (event) => {
+      if (!document.body.classList.contains('menu-open')) return;
+      if (event.key === 'Escape') {
+        event.preventDefault();
+        setMenu(false, true);
+      }
+      if (event.key === 'Tab') {
+        const focusable = [menu, ...sidebar.querySelectorAll('a[href], button:not([disabled]), [tabindex="0"]')].filter(Boolean);
+        const first = focusable[0];
+        const last = focusable[focusable.length - 1];
+        if (event.shiftKey && document.activeElement === first) {
+          event.preventDefault();
+          last?.focus();
+        } else if (!event.shiftKey && document.activeElement === last) {
+          event.preventDefault();
+          first?.focus();
+        }
+      }
+    });
+    setMenu(false);
+
+    const searchForm = document.getElementById('search-form');
+    const searchInput = document.getElementById('search-input');
+    const searchNext = document.getElementById('search-next');
+    const searchClear = document.getElementById('search-clear');
+    const searchStatus = document.getElementById('search-status');
+    let searchResults = [];
+    let currentResult = -1;
+    let currentQuery = '';
+    let searchTimer;
+
+    function clearHighlights() {
+      article.querySelectorAll('mark.reader-match').forEach((mark) => {
+        const parent = mark.parentNode;
+        mark.replaceWith(document.createTextNode(mark.textContent));
+        parent.normalize();
+      });
+      article.querySelectorAll('.search-block-current').forEach((block) => block.classList.remove('search-block-current'));
+      searchResults = [];
+      currentResult = -1;
+    }
+
+    function showResult(index, shouldScroll) {
+      searchResults.forEach((result) => {
+        result.block.classList.remove('search-block-current');
+        result.marks.forEach((mark) => mark.classList.remove('is-current'));
+      });
+      currentResult = (index + searchResults.length) % searchResults.length;
+      const result = searchResults[currentResult];
+      result.block.classList.add('search-block-current');
+      result.marks.forEach((mark) => mark.classList.add('is-current'));
+      if (searchStatus) searchStatus.textContent = `第 ${currentResult + 1} / ${searchResults.length} 处匹配 · Enter 下一处`;
+      if (shouldScroll) {
+        let container = result.block.parentElement;
+        while (container && container !== article) {
+          if (container.tagName === 'DETAILS') container.open = true;
+          container = container.parentElement;
+        }
+        result.marks[0].scrollIntoView({ behavior: scrollBehavior(), block: 'center', inline: 'nearest' });
+      }
+    }
+
+    function runSearch(shouldScroll = false) {
+      clearTimeout(searchTimer);
+      clearHighlights();
+      const query = searchInput?.value.trim() || '';
+      currentQuery = query;
+      if (searchClear) searchClear.disabled = !query;
+      if (!query) {
+        if (searchStatus) searchStatus.textContent = '';
+        if (searchNext) searchNext.disabled = true;
+        return;
+      }
+      const queryLower = query.toLocaleLowerCase();
+      const blockResults = new Map();
+      // Walk original text nodes, preserving links, emphasis, tables and code.
+      const walker = document.createTreeWalker(article, NodeFilter.SHOW_TEXT, {
+        acceptNode(node) {
+          if (!node.nodeValue.trim()) return NodeFilter.FILTER_REJECT;
+          if (node.parentElement.closest('script, style, button, svg, mark, [aria-hidden="true"]')) return NodeFilter.FILTER_REJECT;
+          return node.nodeValue.toLocaleLowerCase().includes(queryLower) ? NodeFilter.FILTER_ACCEPT : NodeFilter.FILTER_REJECT;
+        }
+      });
+      const nodes = [];
+      while (walker.nextNode()) nodes.push(walker.currentNode);
+      nodes.forEach((node) => {
+        const original = node.nodeValue;
+        const normalized = original.toLocaleLowerCase();
+        const block = node.parentElement.closest('p, li, td, th, h2, h3, h4, h5, h6, pre, summary, figcaption') || node.parentElement;
+        let result = blockResults.get(block);
+        if (!result) {
+          result = { block, marks: [] };
+          blockResults.set(block, result);
+        }
+        const fragment = document.createDocumentFragment();
+        let position = 0;
+        let matchPosition;
+        while ((matchPosition = normalized.indexOf(queryLower, position)) !== -1) {
+          fragment.append(document.createTextNode(original.slice(position, matchPosition)));
+          const mark = document.createElement('mark');
+          mark.className = 'reader-match';
+          mark.textContent = original.slice(matchPosition, matchPosition + query.length);
+          fragment.append(mark);
+          result.marks.push(mark);
+          position = matchPosition + query.length;
+        }
+        fragment.append(document.createTextNode(original.slice(position)));
+        node.replaceWith(fragment);
+      });
+      searchResults = [...blockResults.values()];
+      if (searchNext) searchNext.disabled = !searchResults.length;
+      if (!searchResults.length) {
+        if (searchStatus) searchStatus.textContent = '未找到匹配内容';
+      } else showResult(0, shouldScroll);
+    }
+
+    searchInput?.addEventListener('input', (event) => {
+      if (event.isComposing) return;
+      clearTimeout(searchTimer);
+      searchTimer = setTimeout(() => runSearch(false), 180);
+    });
+    searchInput?.addEventListener('compositionend', () => {
+      clearTimeout(searchTimer);
+      searchTimer = setTimeout(() => runSearch(false), 180);
+    });
+    searchForm?.addEventListener('submit', (event) => {
+      event.preventDefault();
+      const queryChanged = currentQuery !== searchInput.value.trim();
+      if (queryChanged) runSearch(true);
+      else if (searchResults.length) showResult(currentResult + 1, true);
+    });
+    if (searchNext && searchNext.type !== 'submit') {
+      searchNext.addEventListener('click', () => {
+        if (currentQuery !== searchInput.value.trim()) runSearch(true);
+        else if (searchResults.length) showResult(currentResult + 1, true);
+      });
+    }
+    function resetSearch() {
+      clearTimeout(searchTimer);
+      if (searchInput) searchInput.value = '';
+      currentQuery = '';
+      clearHighlights();
+      if (searchStatus) searchStatus.textContent = '';
+      if (searchNext) searchNext.disabled = true;
+      if (searchClear) searchClear.disabled = true;
+    }
+    searchClear?.addEventListener('click', (event) => {
+      event.preventDefault();
+      resetSearch();
+      searchInput?.focus();
+    });
+    searchInput?.addEventListener('keydown', (event) => {
+      if (event.key === 'Escape' && !event.isComposing) {
+        event.preventDefault();
+        resetSearch();
+      }
+      if (event.key === 'Enter' && event.isComposing) event.preventDefault();
+    });
+    resetSearch();
+
+    async function copyText(text) {
+      try {
+        if (navigator.clipboard?.writeText) {
+          await navigator.clipboard.writeText(text);
+          return true;
+        }
+      } catch (_) { /* File URLs may reject the modern Clipboard API. */ }
+      const previousFocus = document.activeElement;
+      const selection = window.getSelection();
+      const savedRanges = selection ? Array.from({ length: selection.rangeCount }, (_, i) => selection.getRangeAt(i).cloneRange()) : [];
+      const field = document.createElement('textarea');
+      field.value = text;
+      field.readOnly = true;
+      field.style.cssText = 'position:fixed;left:-9999px;top:0;opacity:0;font-size:16px';
+      document.body.append(field);
+      field.select();
+      let copied = false;
+      try { copied = document.execCommand('copy'); } catch (_) { /* Show the failure state. */ }
+      field.remove();
+      if (selection) {
+        selection.removeAllRanges();
+        savedRanges.forEach((range) => selection.addRange(range));
+      }
+      previousFocus?.focus({ preventScroll: true });
+      return copied;
+    }
+
+    article.querySelectorAll('pre').forEach((pre) => {
+      const code = pre.querySelector('code');
+      if (!code || pre.querySelector('.copy-code')) return;
+      const button = document.createElement('button');
+      button.type = 'button';
+      button.className = 'copy-code';
+      button.textContent = '复制代码';
+      button.setAttribute('aria-label', '复制代码');
+      button.setAttribute('aria-live', 'polite');
+      pre.append(button);
+      let labelTimer;
+      button.addEventListener('click', async () => {
+        clearTimeout(labelTimer);
+        const copied = await copyText(code.textContent);
+        button.textContent = copied ? '已复制' : '请选中后复制';
+        labelTimer = setTimeout(() => { button.textContent = '复制代码'; }, 2200);
+      });
+    });
+
+    // Scroll-spy works without observers and avoids changing browser history.
+    const tocLinks = Array.from(document.querySelectorAll('#toc a[href^="#"]'));
+    const sections = tocLinks.map((link) => {
+      let id;
+      try { id = decodeURIComponent(link.getAttribute('href').slice(1)); } catch (_) { return null; }
+      const heading = document.getElementById(id);
+      return heading ? { link, heading } : null;
+    }).filter(Boolean);
+    let activeLink = null;
+    const backTop = document.querySelector('.back-top');
+    let framePending = false;
+    function updateScrollState() {
+      framePending = false;
+      if (backTop) backTop.hidden = window.scrollY < 480;
+      let active = sections[0];
+      const header = document.querySelector('.topbar');
+      const threshold = (header?.getBoundingClientRect().height || 76) + 38;
+      for (const section of sections) {
+        if (section.heading.getBoundingClientRect().top <= threshold) active = section;
+        else break;
+      }
+      if (!active || active.link === activeLink) return;
+      activeLink?.removeAttribute('aria-current');
+      activeLink?.classList.remove('is-active');
+      activeLink = active.link;
+      activeLink.setAttribute('aria-current', 'location');
+      activeLink.classList.add('is-active');
+      const panel = document.querySelector('.toc-panel');
+      if (panel && panel.clientHeight) {
+        const linkRect = activeLink.getBoundingClientRect();
+        const panelRect = panel.getBoundingClientRect();
+        if (linkRect.top < panelRect.top + 25 || linkRect.bottom > panelRect.bottom - 25) {
+          panel.scrollTop += linkRect.top - panelRect.top - panel.clientHeight / 3;
+        }
+      }
+    }
+    function queueScrollUpdate() {
+      if (!framePending) {
+        framePending = true;
+        requestAnimationFrame(updateScrollState);
+      }
+    }
+    window.addEventListener('scroll', queueScrollUpdate, { passive: true });
+    window.addEventListener('resize', queueScrollUpdate, { passive: true });
+    backTop?.addEventListener('click', () => window.scrollTo({ top: 0, behavior: scrollBehavior() }));
+    updateScrollState();
+  }
+
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', initializeReader, { once: true });
+  else initializeReader();
+})();
+</script>
+</body>
+</html>

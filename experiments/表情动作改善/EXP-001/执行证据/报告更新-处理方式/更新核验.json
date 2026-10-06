@@ -1,0 +1,23 @@
+{
+  "checked_at": "2026-09-22T01:53:06.894454+00:00",
+  "scope": "三条样片处理方式、关键参数、预后处理和执行证据链接；无模型重新运行",
+  "report_contract_tests_passed": 4,
+  "existing_clip_fields_unchanged": true,
+  "processing_steps_per_route": {
+    "M1": 4,
+    "M2": 5,
+    "M3": 4
+  },
+  "local_links_checked": 39,
+  "broken_links": 0,
+  "browser_video_players_ready": 3,
+  "parameter_details_expanded": 3,
+  "desktop_1440px_overflow": false,
+  "mobile_390px_overflow": false,
+  "files": {
+    "对比结果.json": "8e8a4522a5ddc0b6bf78963c66865a6094749bf042305698c65f5e78df0cbf91",
+    "生成对比报告.py": "253e186da2e8a77e594b0c089b946b4800e74bd7541bd135c7ee3b14eb22df0d",
+    "人物B表情动作对比.html": "38daf65995fa23559b01382a2beb9dbc46a118c814fa7280e45b2993e8e2d1b7"
+  },
+  "production_acceptance": "PENDING_ACCEPTANCE"
+}

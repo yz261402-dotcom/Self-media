@@ -1,0 +1,24 @@
+{
+  "schemaVersion": 1,
+  "ok": true,
+  "command": "deliver",
+  "type": "architecture",
+  "input": "C:\\Users\\22346\\Desktop\\自媒体视频生成\\specs\\汇报\\Agent协作框架.json",
+  "output": "C:\\Users\\22346\\Desktop\\自媒体视频生成\\specs\\汇报\\Agent协作框架.html",
+  "specification": {
+    "sha256": "1ec51833ded76670a40ad9b763ba7d173e93e720b1ffafbc86b3535cc58a8e8f",
+    "bytes": 7040
+  },
+  "artifact": {
+    "sha256": "641c07786d8cd059b593726ff1daf7e7d607b24dcd5c5c555a89d7592b344485",
+    "bytes": 642244
+  },
+  "validation": {
+    "checksPassed": 9,
+    "checkCount": 9,
+    "compositionProfile": "showcase",
+    "compositionStatus": "pass",
+    "errors": 0,
+    "warnings": 0
+  }
+}

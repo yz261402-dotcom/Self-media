@@ -1,0 +1,182 @@
+[
+  {
+    "source": "0001-douyin-ai-studio\\00-文档导航.md",
+    "html": "0001-douyin-ai-studio\\00-文档导航.html",
+    "sha256": "bffab228b6815b7b07694629b2e0b228caab853ab319be4df4ce1f97ee317a1f",
+    "chapters": 5
+  },
+  {
+    "source": "0001-douyin-ai-studio\\01-产品需求文档.md",
+    "html": "0001-douyin-ai-studio\\01-产品需求文档.html",
+    "sha256": "52bd82073b5995628c1d7208f1364e1dd90925f4dea918411d71a0f512f5a19d",
+    "chapters": 14
+  },
+  {
+    "source": "0001-douyin-ai-studio\\02-技术选型对比.md",
+    "html": "0001-douyin-ai-studio\\02-技术选型对比.html",
+    "sha256": "f15aeb424a9c8156a3411531cbabca060e56bbee0af6a03b8220c86e3304145a",
+    "chapters": 5
+  },
+  {
+    "source": "0001-douyin-ai-studio\\03-总体技术方案.md",
+    "html": "0001-douyin-ai-studio\\03-总体技术方案.html",
+    "sha256": "41d0306df9979133df33a6e69b9d12a945278342235cb56912c8434f0bb49b0b",
+    "chapters": 13
+  },
+  {
+    "source": "0001-douyin-ai-studio\\04-接口契约与数据字典.md",
+    "html": "0001-douyin-ai-studio\\04-接口契约与数据字典.html",
+    "sha256": "3a936814b2187159d1eafe484fffc87bc7d08060efeea33d05af8cdea11fedce",
+    "chapters": 7
+  },
+  {
+    "source": "0001-douyin-ai-studio\\05-开发实施计划.md",
+    "html": "0001-douyin-ai-studio\\05-开发实施计划.html",
+    "sha256": "0f371387bbe918da4b9d77464c2f3d7a3ddc0b83e994d06e3b5f83a8e2b8ffad",
+    "chapters": 6
+  },
+  {
+    "source": "0001-douyin-ai-studio\\06-验收标准与测试方案.md",
+    "html": "0001-douyin-ai-studio\\06-验收标准与测试方案.html",
+    "sha256": "63d9e71a031439fa7947e1415cce997c5d010b3843bfc4cef9f657e29e1f0541",
+    "chapters": 8
+  },
+  {
+    "source": "0001-douyin-ai-studio\\07-技术选型与实测流程.md",
+    "html": "0001-douyin-ai-studio\\07-技术选型与实测流程.html",
+    "sha256": "c4a2e815be2c126a2e95764d9c290f0d48d84a6c0e5a8db14be93e9e8189b24e",
+    "chapters": 6
+  },
+  {
+    "source": "0001-douyin-ai-studio\\08-端到端技术流程与模型选型地图.md",
+    "html": "0001-douyin-ai-studio\\08-端到端技术流程与模型选型地图.html",
+    "sha256": "d3a428a5f0efac36aa51d99216fbd9bb9dd06fa78fdf94e171fd7f98fcc5957c",
+    "chapters": 8
+  },
+  {
+    "source": "0001-douyin-ai-studio\\09-模型选型决策与接入方案.md",
+    "html": "0001-douyin-ai-studio\\09-模型选型决策与接入方案.html",
+    "sha256": "1167042dcb900e57c3d57e8438a0574796556477ede743e18b21ea41bb442a8b",
+    "chapters": 7
+  },
+  {
+    "source": "0001-douyin-ai-studio\\10-Agent编排选型与整体架构.md",
+    "html": "0001-douyin-ai-studio\\10-Agent编排选型与整体架构.html",
+    "sha256": "dd6b7e8726e194290911e139684a3a0fae9ba4187a9501b9a018d2e2a41db538",
+    "chapters": 10
+  },
+  {
+    "source": "selection\\01-数字人口播\\01-选型试验方案.md",
+    "html": "selection\\01-数字人口播\\01-选型试验方案.html",
+    "sha256": "1724987dbf0596b299ef0ae5fd7eda51b629df7e08995c43fc34a2869f9eed53",
+    "chapters": 8
+  },
+  {
+    "source": "selection\\01-数字人口播\\02-首轮实测结果.md",
+    "html": "selection\\01-数字人口播\\02-首轮实测结果.html",
+    "sha256": "28a4df377cb4f1f8da9ab5fff2cdc879d7798468b9fce312acc13112e3d35461",
+    "chapters": 7
+  },
+  {
+    "source": "selection\\01-数字人口播\\03-MuseTalk云端部署与试验方案.md",
+    "html": "selection\\01-数字人口播\\03-MuseTalk云端部署与试验方案.html",
+    "sha256": "890a1d437314913cbdebbd7b38d3b5c6f35e674bcecda2cc50627c09cdab40c5",
+    "chapters": 7
+  },
+  {
+    "source": "selection\\01-数字人口播\\04-MuseTalk部署与首测结果.md",
+    "html": "selection\\01-数字人口播\\04-MuseTalk部署与首测结果.html",
+    "sha256": "cb6418aa097520a2df6bca6e65247637cbc070837b3f76e803bc4944d20c401c",
+    "chapters": 7
+  },
+  {
+    "source": "selection\\01-数字人口播\\05-OmniHuman开通后实测结果.md",
+    "html": "selection\\01-数字人口播\\05-OmniHuman开通后实测结果.html",
+    "sha256": "49e416e088d17bf6f390f2190a9332ef5293995ef716c97d5fe68ec5a82757d8",
+    "chapters": 5
+  },
+  {
+    "source": "selection\\01-数字人口播\\06-人物B表情动作改善实测.md",
+    "html": "selection\\01-数字人口播\\06-人物B表情动作改善实测.html",
+    "sha256": "01a2b64472387ec46f4dc88897ca5a1abf9f4e8ad28d1de694a7030ceaa2af96",
+    "chapters": 5
+  },
+  {
+    "source": "selection\\01-数字人口播\\MuseTalk官方能力核验.md",
+    "html": "selection\\01-数字人口播\\MuseTalk官方能力核验.html",
+    "sha256": "835a1eed4d75158d14239ca34bc652893044bf3d502dff1801b80cc4502990b1",
+    "chapters": 8
+  },
+  {
+    "source": "selection\\01-数字人口播\\测试素材接口核验.md",
+    "html": "selection\\01-数字人口播\\测试素材接口核验.html",
+    "sha256": "d9b7cf6aec9be5cd8dc4fb7a61e9c9405811c618f5648fcd87ca44ac451313f7",
+    "chapters": 8
+  },
+  {
+    "source": "selection\\01-数字人口播\\火山候选核验.md",
+    "html": "selection\\01-数字人口播\\火山候选核验.html",
+    "sha256": "bbfdbc2bc1fdfb6730287f13be1be24661e292a3771da9402d575de064162fa4",
+    "chapters": 8
+  },
+  {
+    "source": "selection\\01-数字人口播\\阿里候选核验.md",
+    "html": "selection\\01-数字人口播\\阿里候选核验.html",
+    "sha256": "1f752a6657bdccdef6df578dd9fd912695be09eded2276e7c23894c86b2cd52e",
+    "chapters": 10
+  },
+  {
+    "source": "selection\\02-已选模型\\官方文本与语音接口核验.md",
+    "html": "selection\\02-已选模型\\官方文本与语音接口核验.html",
+    "sha256": "7c428d435f5cd504286a14eb8cf3020d373b9cef331b4ca8e56f1afc8be7a6b8",
+    "chapters": 6
+  },
+  {
+    "source": "selection\\03-人物与音色\\01-首轮候选与选择说明.md",
+    "html": "selection\\03-人物与音色\\01-首轮候选与选择说明.html",
+    "sha256": "97a10f20387db44b32e97f73a2b2db1a5118633c624d010f76e55287c815b651",
+    "chapters": 4
+  },
+  {
+    "source": "selection\\03-人物与音色\\02-人物B与音色3定版记录.md",
+    "html": "selection\\03-人物与音色\\02-人物B与音色3定版记录.html",
+    "sha256": "2ca11144e04542776e2169447b7189d0a9b606599bd3e0f510f098a526958180",
+    "chapters": 4
+  },
+  {
+    "source": "research\\01-产品形态与抖音生态.md",
+    "html": "research\\01-产品形态与抖音生态.html",
+    "sha256": "d52429efd0280202c8800fe91b71c6b6b2dc1576177c5a70ba43d808ce2d5780",
+    "chapters": 12
+  },
+  {
+    "source": "research\\02-人物一致性生成.md",
+    "html": "research\\02-人物一致性生成.html",
+    "sha256": "18785b2fb025284cfda1c9137e0318258d0513980edf6d0051b30ecbb53213e0",
+    "chapters": 13
+  },
+  {
+    "source": "research\\03-数字人口播选型.md",
+    "html": "research\\03-数字人口播选型.html",
+    "sha256": "dbfd02e14a27fd18edfdb97794660f68d7f60744b9106198ef515c7b33078e42",
+    "chapters": 12
+  },
+  {
+    "source": "research\\04-TTS音色与内容生成质检.md",
+    "html": "research\\04-TTS音色与内容生成质检.html",
+    "sha256": "5e009611374190e1b37b9d3b0edb02c5f0042acd3cce2303538a16ff874c791c",
+    "chapters": 12
+  },
+  {
+    "source": "research\\05-视频后处理发布与合规.md",
+    "html": "research\\05-视频后处理发布与合规.html",
+    "sha256": "010df8e0e22fceb9896455d9082e74372bf7b40d35c1bdd21ea2abb5e9568b8e",
+    "chapters": 13
+  },
+  {
+    "source": "research\\06-决策汇总.md",
+    "html": "research\\06-决策汇总.html",
+    "sha256": "5a0aacaef84e780cb765d48515fbe381edc24be30a2a52b740ef4f115a01e698",
+    "chapters": 9
+  }
+]

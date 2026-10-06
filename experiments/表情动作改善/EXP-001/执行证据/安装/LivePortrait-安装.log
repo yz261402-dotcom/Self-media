@@ -1,0 +1,432 @@
+Channels:
+ - https://mirrors.tuna.tsinghua.edu.cn/anaconda/pkgs/main
+ - https://mirrors.tuna.tsinghua.edu.cn/anaconda/pkgs/free
+ - https://mirrors.tuna.tsinghua.edu.cn/anaconda/cloud/pytorch
+ - defaults
+Platform: linux-64
+Collecting package metadata (repodata.json): ...working... done
+Solving environment: ...working... done
+
+## Package Plan ##
+
+  environment location: /root/autodl-tmp/avatar-motion/EXP-001/env-liveportrait
+
+  added / updated specs:
+    - python=3.10
+
+
+The following packages will be downloaded:
+
+    package                    |            build
+    ---------------------------|-----------------
+    _libgcc_mutex-0.1          |             main           3 KB  https://mirrors.tuna.tsinghua.edu.cn/anaconda/pkgs/main
+    _openmp_mutex-5.1          |           52_gnu           7 KB  https://mirrors.tuna.tsinghua.edu.cn/anaconda/pkgs/main
+    bzip2-1.0.8                |       h5eee18b_6         262 KB  https://mirrors.tuna.tsinghua.edu.cn/anaconda/pkgs/main
+    ca-certificates-2026.8.13  |       h06a4308_0         107 KB  https://mirrors.tuna.tsinghua.edu.cn/anaconda/pkgs/main
+    ld_impl_linux-64-2.44      |       h9e0c5a2_3         725 KB  https://mirrors.tuna.tsinghua.edu.cn/anaconda/pkgs/main
+    libexpat-2.8.4             |       h7354ed3_0         128 KB  https://mirrors.tuna.tsinghua.edu.cn/anaconda/pkgs/main
+    libffi-3.4.8               |       h06d3fd0_3         137 KB  https://mirrors.tuna.tsinghua.edu.cn/anaconda/pkgs/main
+    libgcc-15.2.0              |       h69a1729_8         803 KB  https://mirrors.tuna.tsinghua.edu.cn/anaconda/pkgs/main
+    libgcc-ng-15.2.0           |       h166f726_8          28 KB  https://mirrors.tuna.tsinghua.edu.cn/anaconda/pkgs/main
+    libnsl-2.0.0               |       h5eee18b_0          31 KB  https://mirrors.tuna.tsinghua.edu.cn/anaconda/pkgs/main
+    libstdcxx-15.2.0           |       h39759b7_8         3.7 MB  https://mirrors.tuna.tsinghua.edu.cn/anaconda/pkgs/main
+    libuuid-1.41.5             |       h5eee18b_0          27 KB  https://mirrors.tuna.tsinghua.edu.cn/anaconda/pkgs/main
+    libxcb-1.17.0              |       h9b100fa_0         430 KB  https://mirrors.tuna.tsinghua.edu.cn/anaconda/pkgs/main
+    libzlib-1.3.2              |       h47b2149_0          60 KB  https://mirrors.tuna.tsinghua.edu.cn/anaconda/pkgs/main
+    ncurses-6.6                |       hfaaeb4e_0         893 KB  https://mirrors.tuna.tsinghua.edu.cn/anaconda/pkgs/main
+    openssl-3.5.8              |       h1b28b03_0         5.5 MB  https://mirrors.tuna.tsinghua.edu.cn/anaconda/pkgs/main
+    packaging-26.3             |  py310h06a4308_0         329 KB  https://mirrors.tuna.tsinghua.edu.cn/anaconda/pkgs/main
+    pip-26.2.1                 |     pyhc872135_0         1.1 MB  https://mirrors.tuna.tsinghua.edu.cn/anaconda/pkgs/main
+    pthread-stubs-0.3          |       h47b2149_2           7 KB  https://mirrors.tuna.tsinghua.edu.cn/anaconda/pkgs/main
+    python-3.10.21             |       h17756b0_0        24.4 MB  https://mirrors.tuna.tsinghua.edu.cn/anaconda/pkgs/main
+    readline-8.3               |       hc2a1206_0         471 KB  https://mirrors.tuna.tsinghua.edu.cn/anaconda/pkgs/main
+    setuptools-83.0.0          |  py310h06a4308_0         1.2 MB  https://mirrors.tuna.tsinghua.edu.cn/anaconda/pkgs/main
+    sqlite-3.53.4              |       h795bf6d_0         1.2 MB  https://mirrors.tuna.tsinghua.edu.cn/anaconda/pkgs/main
+    tk-8.6.15                  |       h54e0aa7_0         3.4 MB  https://mirrors.tuna.tsinghua.edu.cn/anaconda/pkgs/main
+    tzdata-2026c               |       he532380_0         117 KB  https://mirrors.tuna.tsinghua.edu.cn/anaconda/pkgs/main
+    wheel-0.47.0               |  py310h06a4308_0          56 KB  https://mirrors.tuna.tsinghua.edu.cn/anaconda/pkgs/main
+    xorg-libx11-1.8.13         |       h65de747_0         817 KB  https://mirrors.tuna.tsinghua.edu.cn/anaconda/pkgs/main
+    xorg-libxau-1.0.12         |       h9b100fa_0          13 KB  https://mirrors.tuna.tsinghua.edu.cn/anaconda/pkgs/main
+    xorg-libxdmcp-1.1.5        |       h9b100fa_0          19 KB  https://mirrors.tuna.tsinghua.edu.cn/anaconda/pkgs/main
+    xorg-xorgproto-2025.1      |       h47b2149_0         555 KB  https://mirrors.tuna.tsinghua.edu.cn/anaconda/pkgs/main
+    xz-5.8.2                   |       h448239c_0         621 KB  https://mirrors.tuna.tsinghua.edu.cn/anaconda/pkgs/main
+    zlib-1.3.2                 |       h47b2149_0          92 KB  https://mirrors.tuna.tsinghua.edu.cn/anaconda/pkgs/main
+    ------------------------------------------------------------
+                                           Total:        47.2 MB
+
+The following NEW packages will be INSTALLED:
+
+  _libgcc_mutex      anaconda/pkgs/main/linux-64::_libgcc_mutex-0.1-main 
+  _openmp_mutex      anaconda/pkgs/main/linux-64::_openmp_mutex-5.1-52_gnu 
+  bzip2              anaconda/pkgs/main/linux-64::bzip2-1.0.8-h5eee18b_6 
+  ca-certificates    anaconda/pkgs/main/linux-64::ca-certificates-2026.8.13-h06a4308_0 
+  ld_impl_linux-64   anaconda/pkgs/main/linux-64::ld_impl_linux-64-2.44-h9e0c5a2_3 
+  libexpat           anaconda/pkgs/main/linux-64::libexpat-2.8.4-h7354ed3_0 
+  libffi             anaconda/pkgs/main/linux-64::libffi-3.4.8-h06d3fd0_3 
+  libgcc             anaconda/pkgs/main/linux-64::libgcc-15.2.0-h69a1729_8 
+  libgcc-ng          anaconda/pkgs/main/linux-64::libgcc-ng-15.2.0-h166f726_8 
+  libnsl             anaconda/pkgs/main/linux-64::libnsl-2.0.0-h5eee18b_0 
+  libstdcxx          anaconda/pkgs/main/linux-64::libstdcxx-15.2.0-h39759b7_8 
+  libuuid            anaconda/pkgs/main/linux-64::libuuid-1.41.5-h5eee18b_0 
+  libxcb             anaconda/pkgs/main/linux-64::libxcb-1.17.0-h9b100fa_0 
+  libzlib            anaconda/pkgs/main/linux-64::libzlib-1.3.2-h47b2149_0 
+  ncurses            anaconda/pkgs/main/linux-64::ncurses-6.6-hfaaeb4e_0 
+  openssl            anaconda/pkgs/main/linux-64::openssl-3.5.8-h1b28b03_0 
+  packaging          anaconda/pkgs/main/linux-64::packaging-26.3-py310h06a4308_0 
+  pip                anaconda/pkgs/main/noarch::pip-26.2.1-pyhc872135_0 
+  pthread-stubs      anaconda/pkgs/main/linux-64::pthread-stubs-0.3-h47b2149_2 
+  python             anaconda/pkgs/main/linux-64::python-3.10.21-h17756b0_0 
+  readline           anaconda/pkgs/main/linux-64::readline-8.3-hc2a1206_0 
+  setuptools         anaconda/pkgs/main/linux-64::setuptools-83.0.0-py310h06a4308_0 
+  sqlite             anaconda/pkgs/main/linux-64::sqlite-3.53.4-h795bf6d_0 
+  tk                 anaconda/pkgs/main/linux-64::tk-8.6.15-h54e0aa7_0 
+  tzdata             anaconda/pkgs/main/noarch::tzdata-2026c-he532380_0 
+  wheel              anaconda/pkgs/main/linux-64::wheel-0.47.0-py310h06a4308_0 
+  xorg-libx11        anaconda/pkgs/main/linux-64::xorg-libx11-1.8.13-h65de747_0 
+  xorg-libxau        anaconda/pkgs/main/linux-64::xorg-libxau-1.0.12-h9b100fa_0 
+  xorg-libxdmcp      anaconda/pkgs/main/linux-64::xorg-libxdmcp-1.1.5-h9b100fa_0 
+  xorg-xorgproto     anaconda/pkgs/main/linux-64::xorg-xorgproto-2025.1-h47b2149_0 
+  xz                 anaconda/pkgs/main/linux-64::xz-5.8.2-h448239c_0 
+  zlib               anaconda/pkgs/main/linux-64::zlib-1.3.2-h47b2149_0 
+
+
+
+Downloading and Extracting Packages: ...working... done
+Preparing transaction: ...working... done
+Verifying transaction: ...working... done
+Executing transaction: ...working... done
+#
+# To activate this environment, use
+#
+#     $ conda activate /root/autodl-tmp/avatar-motion/EXP-001/env-liveportrait
+#
+# To deactivate an active environment, use
+#
+#     $ conda deactivate
+
+hint: Using 'master' as the name for the initial branch. This default branch name
+hint: is subject to change. To configure the initial branch name to use in all
+hint: of your new repositories, which will suppress this warning, call:
+hint: 
+hint: 	git config --global init.defaultBranch <name>
+hint: 
+hint: Names commonly chosen instead of 'master' are 'main', 'trunk' and
+hint: 'development'. The just-created branch can be renamed via this command:
+hint: 
+hint: 	git branch -m <name>
+Initialized empty Git repository in /root/autodl-tmp/avatar-motion/EXP-001/LivePortrait/.git/
+From https://github.com/KlingAIResearch/LivePortrait
+ * branch            9b294b3d0536135442ea73cb01e6cb3ca7029dd3 -> FETCH_HEAD
+HEAD is now at 9b294b3 docs: add AVTR-1 to community resources
+Looking in indexes: https://download.pytorch.org/whl/cu118
+Collecting torch==2.3.0
+  Downloading torch-2.3.0%2Bcu118-cp310-cp310-linux_x86_64.whl (839.6 MB)
+Collecting torchvision==0.18.0
+  Downloading torchvision-0.18.0%2Bcu118-cp310-cp310-linux_x86_64.whl (6.3 MB)
+Collecting torchaudio==2.3.0
+  Downloading torchaudio-2.3.0%2Bcu118-cp310-cp310-linux_x86_64.whl (3.3 MB)
+Collecting filelock (from torch==2.3.0)
+  Using cached filelock-3.32.3-py3-none-any.whl.metadata (2.0 kB)
+Collecting typing-extensions>=4.8.0 (from torch==2.3.0)
+  Using cached typing_extensions-4.16.0-py3-none-any.whl.metadata (3.3 kB)
+Collecting sympy (from torch==2.3.0)
+  Using cached sympy-1.14.0-py3-none-any.whl.metadata (12 kB)
+Collecting networkx (from torch==2.3.0)
+  Using cached networkx-3.4.2-py3-none-any.whl.metadata (6.3 kB)
+Collecting jinja2 (from torch==2.3.0)
+  Using cached jinja2-3.1.6-py3-none-any.whl.metadata (2.9 kB)
+Collecting fsspec (from torch==2.3.0)
+  Downloading fsspec-2026.7.0-py3-none-any.whl.metadata (10 kB)
+Collecting nvidia-cuda-nvrtc-cu11==11.8.89 (from torch==2.3.0)
+  Downloading nvidia_cuda_nvrtc_cu11-11.8.89-py3-none-manylinux1_x86_64.whl (23.2 MB)
+Collecting nvidia-cuda-runtime-cu11==11.8.89 (from torch==2.3.0)
+  Downloading nvidia_cuda_runtime_cu11-11.8.89-py3-none-manylinux1_x86_64.whl (875 kB)
+Collecting nvidia-cuda-cupti-cu11==11.8.87 (from torch==2.3.0)
+  Downloading nvidia_cuda_cupti_cu11-11.8.87-py3-none-manylinux1_x86_64.whl (13.1 MB)
+Collecting nvidia-cudnn-cu11==8.7.0.84 (from torch==2.3.0)
+  Downloading nvidia_cudnn_cu11-8.7.0.84-py3-none-manylinux1_x86_64.whl (728.5 MB)
+Collecting nvidia-cublas-cu11==11.11.3.6 (from torch==2.3.0)
+  Downloading nvidia_cublas_cu11-11.11.3.6-py3-none-manylinux1_x86_64.whl (417.9 MB)
+Collecting nvidia-cufft-cu11==10.9.0.58 (from torch==2.3.0)
+  Downloading nvidia_cufft_cu11-10.9.0.58-py3-none-manylinux1_x86_64.whl (168.4 MB)
+Collecting nvidia-curand-cu11==10.3.0.86 (from torch==2.3.0)
+  Downloading nvidia_curand_cu11-10.3.0.86-py3-none-manylinux1_x86_64.whl (58.1 MB)
+Collecting nvidia-cusolver-cu11==11.4.1.48 (from torch==2.3.0)
+  Downloading nvidia_cusolver_cu11-11.4.1.48-py3-none-manylinux1_x86_64.whl (128.2 MB)
+Collecting nvidia-cusparse-cu11==11.7.5.86 (from torch==2.3.0)
+  Downloading nvidia_cusparse_cu11-11.7.5.86-py3-none-manylinux1_x86_64.whl (204.1 MB)
+Collecting nvidia-nccl-cu11==2.20.5 (from torch==2.3.0)
+  Downloading nvidia_nccl_cu11-2.20.5-py3-none-manylinux2014_x86_64.whl (142.9 MB)
+Collecting nvidia-nvtx-cu11==11.8.86 (from torch==2.3.0)
+  Downloading nvidia_nvtx_cu11-11.8.86-py3-none-manylinux1_x86_64.whl (99 kB)
+Collecting triton==2.3.0 (from torch==2.3.0)
+  Downloading triton-2.3.0-cp310-cp310-manylinux_2_17_x86_64.manylinux2014_x86_64.whl (168.1 MB)
+Collecting numpy (from torchvision==0.18.0)
+  Using cached numpy-2.2.6-cp310-cp310-manylinux_2_17_x86_64.manylinux2014_x86_64.whl.metadata (62 kB)
+Collecting pillow!=8.3.*,>=5.3.0 (from torchvision==0.18.0)
+  Using cached pillow-12.3.0-cp310-cp310-manylinux_2_27_x86_64.manylinux_2_28_x86_64.whl.metadata (9.1 kB)
+Collecting MarkupSafe>=2.0 (from jinja2->torch==2.3.0)
+  Using cached markupsafe-3.0.3-cp310-cp310-manylinux2014_x86_64.manylinux_2_17_x86_64.manylinux_2_28_x86_64.whl.metadata (2.7 kB)
+Collecting mpmath<1.4,>=1.1.0 (from sympy->torch==2.3.0)
+  Using cached mpmath-1.3.0-py3-none-any.whl.metadata (8.6 kB)
+Using cached pillow-12.3.0-cp310-cp310-manylinux_2_27_x86_64.manylinux_2_28_x86_64.whl (6.9 MB)
+Using cached typing_extensions-4.16.0-py3-none-any.whl (45 kB)
+Using cached filelock-3.32.3-py3-none-any.whl (98 kB)
+Downloading fsspec-2026.7.0-py3-none-any.whl (206 kB)
+Using cached jinja2-3.1.6-py3-none-any.whl (134 kB)
+Using cached markupsafe-3.0.3-cp310-cp310-manylinux2014_x86_64.manylinux_2_17_x86_64.manylinux_2_28_x86_64.whl (20 kB)
+Using cached networkx-3.4.2-py3-none-any.whl (1.7 MB)
+Using cached numpy-2.2.6-cp310-cp310-manylinux_2_17_x86_64.manylinux2014_x86_64.whl (16.8 MB)
+Using cached sympy-1.14.0-py3-none-any.whl (6.3 MB)
+Using cached mpmath-1.3.0-py3-none-any.whl (536 kB)
+Installing collected packages: mpmath, typing-extensions, sympy, pillow, nvidia-nvtx-cu11, nvidia-nccl-cu11, nvidia-cusparse-cu11, nvidia-curand-cu11, nvidia-cufft-cu11, nvidia-cuda-runtime-cu11, nvidia-cuda-nvrtc-cu11, nvidia-cuda-cupti-cu11, nvidia-cublas-cu11, numpy, networkx, MarkupSafe, fsspec, filelock, triton, nvidia-cusolver-cu11, nvidia-cudnn-cu11, jinja2, torch, torchvision, torchaudio
+Successfully installed MarkupSafe-3.0.3 filelock-3.32.3 fsspec-2026.7.0 jinja2-3.1.6 mpmath-1.3.0 networkx-3.4.2 numpy-2.2.6 nvidia-cublas-cu11-11.11.3.6 nvidia-cuda-cupti-cu11-11.8.87 nvidia-cuda-nvrtc-cu11-11.8.89 nvidia-cuda-runtime-cu11-11.8.89 nvidia-cudnn-cu11-8.7.0.84 nvidia-cufft-cu11-10.9.0.58 nvidia-curand-cu11-10.3.0.86 nvidia-cusolver-cu11-11.4.1.48 nvidia-cusparse-cu11-11.7.5.86 nvidia-nccl-cu11-2.20.5 nvidia-nvtx-cu11-11.8.86 pillow-12.3.0 sympy-1.14.0 torch-2.3.0+cu118 torchaudio-2.3.0+cu118 torchvision-0.18.0+cu118 triton-2.3.0 typing-extensions-4.16.0
+WARNING: Running pip as the 'root' user can result in broken permissions and conflicting behaviour with the system package manager, possibly rendering your system unusable. It is recommended to use a virtual environment instead: https://pip.pypa.io/warnings/venv. Use the --root-user-action option if you know what you are doing and want to suppress this warning.
+Looking in indexes: http://mirrors.aliyun.com/pypi/simple
+Collecting huggingface_hub==0.25.2
+  Downloading huggingface_hub-0.25.2-py3-none-any.whl (436 kB)
+Collecting numpy==1.26.4 (from -r /root/autodl-tmp/avatar-motion/EXP-001/LivePortrait/requirements_base.txt (line 1))
+  Downloading numpy-1.26.4-cp310-cp310-manylinux_2_17_x86_64.manylinux2014_x86_64.whl (18.2 MB)
+Collecting pyyaml==6.0.1 (from -r /root/autodl-tmp/avatar-motion/EXP-001/LivePortrait/requirements_base.txt (line 2))
+  Downloading PyYAML-6.0.1-cp310-cp310-manylinux_2_17_x86_64.manylinux2014_x86_64.whl (705 kB)
+Collecting opencv-python==4.10.0.84 (from -r /root/autodl-tmp/avatar-motion/EXP-001/LivePortrait/requirements_base.txt (line 3))
+  Downloading opencv_python-4.10.0.84-cp37-abi3-manylinux_2_17_x86_64.manylinux2014_x86_64.whl (62.5 MB)
+Collecting scipy==1.13.1 (from -r /root/autodl-tmp/avatar-motion/EXP-001/LivePortrait/requirements_base.txt (line 4))
+  Downloading scipy-1.13.1-cp310-cp310-manylinux_2_17_x86_64.manylinux2014_x86_64.whl (38.6 MB)
+Collecting imageio==2.34.2 (from -r /root/autodl-tmp/avatar-motion/EXP-001/LivePortrait/requirements_base.txt (line 5))
+  Downloading imageio-2.34.2-py3-none-any.whl (313 kB)
+Collecting lmdb==1.4.1 (from -r /root/autodl-tmp/avatar-motion/EXP-001/LivePortrait/requirements_base.txt (line 6))
+  Downloading lmdb-1.4.1-cp310-cp310-manylinux_2_17_x86_64.manylinux2014_x86_64.whl (299 kB)
+Collecting tqdm==4.66.4 (from -r /root/autodl-tmp/avatar-motion/EXP-001/LivePortrait/requirements_base.txt (line 7))
+  Downloading tqdm-4.66.4-py3-none-any.whl (78 kB)
+Collecting rich==13.7.1 (from -r /root/autodl-tmp/avatar-motion/EXP-001/LivePortrait/requirements_base.txt (line 8))
+  Downloading rich-13.7.1-py3-none-any.whl (240 kB)
+Collecting ffmpeg-python==0.2.0 (from -r /root/autodl-tmp/avatar-motion/EXP-001/LivePortrait/requirements_base.txt (line 9))
+  Downloading ffmpeg_python-0.2.0-py3-none-any.whl (25 kB)
+Collecting onnx==1.16.1 (from -r /root/autodl-tmp/avatar-motion/EXP-001/LivePortrait/requirements_base.txt (line 10))
+  Downloading onnx-1.16.1-cp310-cp310-manylinux_2_17_x86_64.manylinux2014_x86_64.whl (15.9 MB)
+Collecting scikit-image==0.24.0 (from -r /root/autodl-tmp/avatar-motion/EXP-001/LivePortrait/requirements_base.txt (line 11))
+  Downloading scikit_image-0.24.0-cp310-cp310-manylinux_2_17_x86_64.manylinux2014_x86_64.whl (14.9 MB)
+Collecting albumentations==1.4.10 (from -r /root/autodl-tmp/avatar-motion/EXP-001/LivePortrait/requirements_base.txt (line 12))
+  Downloading albumentations-1.4.10-py3-none-any.whl (161 kB)
+Collecting matplotlib==3.9.0 (from -r /root/autodl-tmp/avatar-motion/EXP-001/LivePortrait/requirements_base.txt (line 13))
+  Downloading matplotlib-3.9.0-cp310-cp310-manylinux_2_17_x86_64.manylinux2014_x86_64.whl (8.3 MB)
+Collecting imageio-ffmpeg==0.5.1 (from -r /root/autodl-tmp/avatar-motion/EXP-001/LivePortrait/requirements_base.txt (line 14))
+  Downloading imageio_ffmpeg-0.5.1-py3-none-manylinux2010_x86_64.whl (26.9 MB)
+Collecting tyro==0.8.5 (from -r /root/autodl-tmp/avatar-motion/EXP-001/LivePortrait/requirements_base.txt (line 15))
+  Downloading tyro-0.8.5-py3-none-any.whl (103 kB)
+Collecting gradio==5.1.0 (from -r /root/autodl-tmp/avatar-motion/EXP-001/LivePortrait/requirements_base.txt (line 16))
+  Downloading gradio-5.1.0-py3-none-any.whl (42.3 MB)
+Collecting pykalman==0.9.7 (from -r /root/autodl-tmp/avatar-motion/EXP-001/LivePortrait/requirements_base.txt (line 17))
+  Downloading pykalman-0.9.7-py2.py3-none-any.whl (251 kB)
+Requirement already satisfied: pillow>=10.2.0 in ./autodl-tmp/avatar-motion/EXP-001/env-liveportrait/lib/python3.10/site-packages (from -r /root/autodl-tmp/avatar-motion/EXP-001/LivePortrait/requirements_base.txt (line 18)) (12.3.0)
+Collecting onnxruntime-gpu==1.18.0 (from -r /root/autodl-tmp/avatar-motion/EXP-001/LivePortrait/requirements.txt (line 3))
+  Downloading onnxruntime_gpu-1.18.0-cp310-cp310-manylinux_2_28_x86_64.whl (199.8 MB)
+Collecting transformers==4.38.0 (from -r /root/autodl-tmp/avatar-motion/EXP-001/LivePortrait/requirements.txt (line 4))
+  Downloading transformers-4.38.0-py3-none-any.whl (8.5 MB)
+Requirement already satisfied: filelock in ./autodl-tmp/avatar-motion/EXP-001/env-liveportrait/lib/python3.10/site-packages (from huggingface_hub==0.25.2) (3.32.3)
+Requirement already satisfied: fsspec>=2023.5.0 in ./autodl-tmp/avatar-motion/EXP-001/env-liveportrait/lib/python3.10/site-packages (from huggingface_hub==0.25.2) (2026.7.0)
+Requirement already satisfied: packaging>=20.9 in ./autodl-tmp/avatar-motion/EXP-001/env-liveportrait/lib/python3.10/site-packages (from huggingface_hub==0.25.2) (26.3)
+Collecting requests (from huggingface_hub==0.25.2)
+  Downloading requests-2.34.2-py3-none-any.whl (73 kB)
+Requirement already satisfied: typing-extensions>=3.7.4.3 in ./autodl-tmp/avatar-motion/EXP-001/env-liveportrait/lib/python3.10/site-packages (from huggingface_hub==0.25.2) (4.16.0)
+Collecting markdown-it-py>=2.2.0 (from rich==13.7.1->-r /root/autodl-tmp/avatar-motion/EXP-001/LivePortrait/requirements_base.txt (line 8))
+  Downloading markdown_it_py-4.2.0-py3-none-any.whl (91 kB)
+Collecting pygments<3.0.0,>=2.13.0 (from rich==13.7.1->-r /root/autodl-tmp/avatar-motion/EXP-001/LivePortrait/requirements_base.txt (line 8))
+  Downloading pygments-2.21.0-py3-none-any.whl (1.3 MB)
+Collecting future (from ffmpeg-python==0.2.0->-r /root/autodl-tmp/avatar-motion/EXP-001/LivePortrait/requirements_base.txt (line 9))
+  Downloading future-1.0.0-py3-none-any.whl (491 kB)
+Collecting protobuf>=3.20.2 (from onnx==1.16.1->-r /root/autodl-tmp/avatar-motion/EXP-001/LivePortrait/requirements_base.txt (line 10))
+  Downloading protobuf-7.36.2-cp310-abi3-manylinux2014_x86_64.whl (343 kB)
+Requirement already satisfied: networkx>=2.8 in ./autodl-tmp/avatar-motion/EXP-001/env-liveportrait/lib/python3.10/site-packages (from scikit-image==0.24.0->-r /root/autodl-tmp/avatar-motion/EXP-001/LivePortrait/requirements_base.txt (line 11)) (3.4.2)
+Collecting tifffile>=2022.8.12 (from scikit-image==0.24.0->-r /root/autodl-tmp/avatar-motion/EXP-001/LivePortrait/requirements_base.txt (line 11))
+  Downloading tifffile-2025.5.10-py3-none-any.whl (226 kB)
+Collecting lazy-loader>=0.4 (from scikit-image==0.24.0->-r /root/autodl-tmp/avatar-motion/EXP-001/LivePortrait/requirements_base.txt (line 11))
+  Downloading lazy_loader-0.5-py3-none-any.whl (8.0 kB)
+Collecting scikit-learn>=1.3.2 (from albumentations==1.4.10->-r /root/autodl-tmp/avatar-motion/EXP-001/LivePortrait/requirements_base.txt (line 12))
+  Downloading scikit_learn-1.7.2-cp310-cp310-manylinux2014_x86_64.manylinux_2_17_x86_64.whl (9.7 MB)
+Collecting pydantic>=2.7.0 (from albumentations==1.4.10->-r /root/autodl-tmp/avatar-motion/EXP-001/LivePortrait/requirements_base.txt (line 12))
+  Downloading pydantic-2.13.5-py3-none-any.whl (472 kB)
+Collecting albucore>=0.0.11 (from albumentations==1.4.10->-r /root/autodl-tmp/avatar-motion/EXP-001/LivePortrait/requirements_base.txt (line 12))
+  Downloading albucore-0.2.18-py3-none-any.whl (60 kB)
+Collecting opencv-python-headless>=4.9.0.80 (from albumentations==1.4.10->-r /root/autodl-tmp/avatar-motion/EXP-001/LivePortrait/requirements_base.txt (line 12))
+  Downloading opencv_python_headless-5.0.0.93-cp37-abi3-manylinux_2_28_x86_64.whl (61.2 MB)
+Collecting contourpy>=1.0.1 (from matplotlib==3.9.0->-r /root/autodl-tmp/avatar-motion/EXP-001/LivePortrait/requirements_base.txt (line 13))
+  Downloading contourpy-1.3.2-cp310-cp310-manylinux_2_17_x86_64.manylinux2014_x86_64.whl (325 kB)
+Collecting cycler>=0.10 (from matplotlib==3.9.0->-r /root/autodl-tmp/avatar-motion/EXP-001/LivePortrait/requirements_base.txt (line 13))
+  Downloading cycler-0.12.1-py3-none-any.whl (8.3 kB)
+Collecting fonttools>=4.22.0 (from matplotlib==3.9.0->-r /root/autodl-tmp/avatar-motion/EXP-001/LivePortrait/requirements_base.txt (line 13))
+  Downloading fonttools-4.65.0-cp310-cp310-manylinux2014_x86_64.manylinux_2_17_x86_64.whl (5.3 MB)
+Collecting kiwisolver>=1.3.1 (from matplotlib==3.9.0->-r /root/autodl-tmp/avatar-motion/EXP-001/LivePortrait/requirements_base.txt (line 13))
+  Downloading kiwisolver-1.5.1-cp310-cp310-manylinux_2_12_x86_64.manylinux2010_x86_64.whl (1.6 MB)
+Collecting pyparsing>=2.3.1 (from matplotlib==3.9.0->-r /root/autodl-tmp/avatar-motion/EXP-001/LivePortrait/requirements_base.txt (line 13))
+  Downloading pyparsing-3.3.2-py3-none-any.whl (122 kB)
+Collecting python-dateutil>=2.7 (from matplotlib==3.9.0->-r /root/autodl-tmp/avatar-motion/EXP-001/LivePortrait/requirements_base.txt (line 13))
+  Downloading python_dateutil-2.9.0.post0-py2.py3-none-any.whl (229 kB)
+Requirement already satisfied: setuptools in ./autodl-tmp/avatar-motion/EXP-001/env-liveportrait/lib/python3.10/site-packages (from imageio-ffmpeg==0.5.1->-r /root/autodl-tmp/avatar-motion/EXP-001/LivePortrait/requirements_base.txt (line 14)) (83.0.0)
+Collecting docstring-parser>=0.16 (from tyro==0.8.5->-r /root/autodl-tmp/avatar-motion/EXP-001/LivePortrait/requirements_base.txt (line 15))
+  Downloading docstring_parser-0.18.0-py3-none-any.whl (22 kB)
+Collecting shtab>=1.5.6 (from tyro==0.8.5->-r /root/autodl-tmp/avatar-motion/EXP-001/LivePortrait/requirements_base.txt (line 15))
+  Downloading shtab-1.12.1-py3-none-any.whl (22 kB)
+Collecting aiofiles<24.0,>=22.0 (from gradio==5.1.0->-r /root/autodl-tmp/avatar-motion/EXP-001/LivePortrait/requirements_base.txt (line 16))
+  Downloading aiofiles-23.2.1-py3-none-any.whl (15 kB)
+Collecting anyio<5.0,>=3.0 (from gradio==5.1.0->-r /root/autodl-tmp/avatar-motion/EXP-001/LivePortrait/requirements_base.txt (line 16))
+  Downloading anyio-4.15.1-py3-none-any.whl (132 kB)
+Collecting fastapi<1.0 (from gradio==5.1.0->-r /root/autodl-tmp/avatar-motion/EXP-001/LivePortrait/requirements_base.txt (line 16))
+  Downloading fastapi-0.141.1-py3-none-any.whl (131 kB)
+Collecting ffmpy (from gradio==5.1.0->-r /root/autodl-tmp/avatar-motion/EXP-001/LivePortrait/requirements_base.txt (line 16))
+  Downloading ffmpy-1.0.0-py3-none-any.whl (5.6 kB)
+Collecting gradio-client==1.4.0 (from gradio==5.1.0->-r /root/autodl-tmp/avatar-motion/EXP-001/LivePortrait/requirements_base.txt (line 16))
+  Downloading gradio_client-1.4.0-py3-none-any.whl (319 kB)
+Collecting httpx>=0.24.1 (from gradio==5.1.0->-r /root/autodl-tmp/avatar-motion/EXP-001/LivePortrait/requirements_base.txt (line 16))
+  Downloading httpx-0.28.1-py3-none-any.whl (73 kB)
+Requirement already satisfied: jinja2<4.0 in ./autodl-tmp/avatar-motion/EXP-001/env-liveportrait/lib/python3.10/site-packages (from gradio==5.1.0->-r /root/autodl-tmp/avatar-motion/EXP-001/LivePortrait/requirements_base.txt (line 16)) (3.1.6)
+Collecting markupsafe~=2.0 (from gradio==5.1.0->-r /root/autodl-tmp/avatar-motion/EXP-001/LivePortrait/requirements_base.txt (line 16))
+  Downloading MarkupSafe-2.1.5-cp310-cp310-manylinux_2_17_x86_64.manylinux2014_x86_64.whl (25 kB)
+Collecting orjson~=3.0 (from gradio==5.1.0->-r /root/autodl-tmp/avatar-motion/EXP-001/LivePortrait/requirements_base.txt (line 16))
+  Downloading orjson-3.12.0-cp310-cp310-manylinux_2_17_x86_64.manylinux2014_x86_64.whl (131 kB)
+Collecting pandas<3.0,>=1.0 (from gradio==5.1.0->-r /root/autodl-tmp/avatar-motion/EXP-001/LivePortrait/requirements_base.txt (line 16))
+  Downloading pandas-2.3.3-cp310-cp310-manylinux_2_24_x86_64.manylinux_2_28_x86_64.whl (12.8 MB)
+Collecting pillow>=10.2.0 (from -r /root/autodl-tmp/avatar-motion/EXP-001/LivePortrait/requirements_base.txt (line 18))
+  Downloading pillow-10.4.0-cp310-cp310-manylinux_2_28_x86_64.whl (4.5 MB)
+Collecting pydub (from gradio==5.1.0->-r /root/autodl-tmp/avatar-motion/EXP-001/LivePortrait/requirements_base.txt (line 16))
+  Downloading pydub-0.25.1-py2.py3-none-any.whl (32 kB)
+Collecting python-multipart>=0.0.9 (from gradio==5.1.0->-r /root/autodl-tmp/avatar-motion/EXP-001/LivePortrait/requirements_base.txt (line 16))
+  Downloading python_multipart-0.0.32-py3-none-any.whl (30 kB)
+Collecting ruff>=0.2.2 (from gradio==5.1.0->-r /root/autodl-tmp/avatar-motion/EXP-001/LivePortrait/requirements_base.txt (line 16))
+  Downloading ruff-0.16.8-py3-none-manylinux_2_17_x86_64.manylinux2014_x86_64.whl (10.3 MB)
+Collecting semantic-version~=2.0 (from gradio==5.1.0->-r /root/autodl-tmp/avatar-motion/EXP-001/LivePortrait/requirements_base.txt (line 16))
+  Downloading semantic_version-2.10.0-py2.py3-none-any.whl (15 kB)
+Collecting tomlkit==0.12.0 (from gradio==5.1.0->-r /root/autodl-tmp/avatar-motion/EXP-001/LivePortrait/requirements_base.txt (line 16))
+  Downloading tomlkit-0.12.0-py3-none-any.whl (37 kB)
+Collecting typer<1.0,>=0.12 (from gradio==5.1.0->-r /root/autodl-tmp/avatar-motion/EXP-001/LivePortrait/requirements_base.txt (line 16))
+  Downloading typer-0.27.2-py3-none-any.whl (123 kB)
+Collecting uvicorn>=0.14.0 (from gradio==5.1.0->-r /root/autodl-tmp/avatar-motion/EXP-001/LivePortrait/requirements_base.txt (line 16))
+  Downloading uvicorn-0.53.0-py3-none-any.whl (87 kB)
+Collecting coloredlogs (from onnxruntime-gpu==1.18.0->-r /root/autodl-tmp/avatar-motion/EXP-001/LivePortrait/requirements.txt (line 3))
+  Downloading coloredlogs-15.0.1-py2.py3-none-any.whl (46 kB)
+Collecting flatbuffers (from onnxruntime-gpu==1.18.0->-r /root/autodl-tmp/avatar-motion/EXP-001/LivePortrait/requirements.txt (line 3))
+  Downloading flatbuffers-25.12.19-py2.py3-none-any.whl (26 kB)
+Requirement already satisfied: sympy in ./autodl-tmp/avatar-motion/EXP-001/env-liveportrait/lib/python3.10/site-packages (from onnxruntime-gpu==1.18.0->-r /root/autodl-tmp/avatar-motion/EXP-001/LivePortrait/requirements.txt (line 3)) (1.14.0)
+Collecting regex!=2019.12.17 (from transformers==4.38.0->-r /root/autodl-tmp/avatar-motion/EXP-001/LivePortrait/requirements.txt (line 4))
+  Downloading regex-2026.9.10-cp310-cp310-manylinux2014_x86_64.manylinux_2_17_x86_64.manylinux_2_28_x86_64.whl (796 kB)
+Collecting tokenizers<0.19,>=0.14 (from transformers==4.38.0->-r /root/autodl-tmp/avatar-motion/EXP-001/LivePortrait/requirements.txt (line 4))
+  Downloading tokenizers-0.15.2-cp310-cp310-manylinux_2_17_x86_64.manylinux2014_x86_64.whl (3.6 MB)
+Collecting safetensors>=0.4.1 (from transformers==4.38.0->-r /root/autodl-tmp/avatar-motion/EXP-001/LivePortrait/requirements.txt (line 4))
+  Downloading safetensors-0.8.0-cp310-abi3-manylinux_2_17_x86_64.manylinux2014_x86_64.whl (516 kB)
+Collecting websockets<13.0,>=10.0 (from gradio-client==1.4.0->gradio==5.1.0->-r /root/autodl-tmp/avatar-motion/EXP-001/LivePortrait/requirements_base.txt (line 16))
+  Downloading websockets-12.0-cp310-cp310-manylinux_2_5_x86_64.manylinux1_x86_64.manylinux_2_17_x86_64.manylinux2014_x86_64.whl (130 kB)
+Collecting exceptiongroup>=1.0.2 (from anyio<5.0,>=3.0->gradio==5.1.0->-r /root/autodl-tmp/avatar-motion/EXP-001/LivePortrait/requirements_base.txt (line 16))
+  Downloading exceptiongroup-1.3.1-py3-none-any.whl (16 kB)
+Collecting idna>=2.8 (from anyio<5.0,>=3.0->gradio==5.1.0->-r /root/autodl-tmp/avatar-motion/EXP-001/LivePortrait/requirements_base.txt (line 16))
+  Downloading idna-3.20-py3-none-any.whl (69 kB)
+Collecting starlette>=0.46.0 (from fastapi<1.0->gradio==5.1.0->-r /root/autodl-tmp/avatar-motion/EXP-001/LivePortrait/requirements_base.txt (line 16))
+  Downloading starlette-1.6.0-py3-none-any.whl (75 kB)
+Collecting typing-inspection>=0.4.2 (from fastapi<1.0->gradio==5.1.0->-r /root/autodl-tmp/avatar-motion/EXP-001/LivePortrait/requirements_base.txt (line 16))
+  Downloading typing_inspection-0.4.4-py3-none-any.whl (14 kB)
+Collecting annotated-doc>=0.0.2 (from fastapi<1.0->gradio==5.1.0->-r /root/autodl-tmp/avatar-motion/EXP-001/LivePortrait/requirements_base.txt (line 16))
+  Downloading annotated_doc-0.0.5-py3-none-any.whl (5.3 kB)
+Collecting pytz>=2020.1 (from pandas<3.0,>=1.0->gradio==5.1.0->-r /root/autodl-tmp/avatar-motion/EXP-001/LivePortrait/requirements_base.txt (line 16))
+  Downloading pytz-2026.3.post1-py2.py3-none-any.whl (508 kB)
+Collecting tzdata>=2022.7 (from pandas<3.0,>=1.0->gradio==5.1.0->-r /root/autodl-tmp/avatar-motion/EXP-001/LivePortrait/requirements_base.txt (line 16))
+  Downloading tzdata-2026.4-py2.py3-none-any.whl (347 kB)
+Collecting shellingham>=1.3.0 (from typer<1.0,>=0.12->gradio==5.1.0->-r /root/autodl-tmp/avatar-motion/EXP-001/LivePortrait/requirements_base.txt (line 16))
+  Downloading shellingham-1.5.4-py2.py3-none-any.whl (9.8 kB)
+INFO: pip is looking at multiple versions of typer to determine which version is compatible with other requirements. This could take a while.
+Collecting typer<1.0,>=0.12 (from gradio==5.1.0->-r /root/autodl-tmp/avatar-motion/EXP-001/LivePortrait/requirements_base.txt (line 16))
+  Downloading typer-0.27.1-py3-none-any.whl (122 kB)
+  Downloading typer-0.27.0-py3-none-any.whl (122 kB)
+  Downloading typer-0.26.8-py3-none-any.whl (122 kB)
+  Downloading typer-0.26.7-py3-none-any.whl (122 kB)
+  Downloading typer-0.26.6-py3-none-any.whl (122 kB)
+  Downloading typer-0.26.5-py3-none-any.whl (122 kB)
+  Downloading typer-0.26.4-py3-none-any.whl (122 kB)
+INFO: pip is still looking at multiple versions of typer to determine which version is compatible with other requirements. This could take a while.
+  Downloading typer-0.26.3-py3-none-any.whl (122 kB)
+  Downloading typer-0.26.2-py3-none-any.whl (123 kB)
+  Downloading typer-0.26.1-py3-none-any.whl (123 kB)
+  Downloading typer-0.26.0-py3-none-any.whl (123 kB)
+  Downloading typer-0.25.1-py3-none-any.whl (58 kB)
+Collecting click>=8.2.1 (from typer<1.0,>=0.12->gradio==5.1.0->-r /root/autodl-tmp/avatar-motion/EXP-001/LivePortrait/requirements_base.txt (line 16))
+  Downloading click-8.5.0-py3-none-any.whl (125 kB)
+INFO: This is taking longer than usual. You might need to provide the dependency resolver with stricter constraints to reduce runtime. See https://pip.pypa.io/warnings/backtracking for guidance. If you want to abort this run, press Ctrl + C.
+Collecting typer<1.0,>=0.12 (from gradio==5.1.0->-r /root/autodl-tmp/avatar-motion/EXP-001/LivePortrait/requirements_base.txt (line 16))
+  Downloading typer-0.25.0-py3-none-any.whl (55 kB)
+  Downloading typer-0.24.2-py3-none-any.whl (55 kB)
+Collecting numkong>=7.8.0 (from albucore>=0.0.11->albumentations==1.4.10->-r /root/autodl-tmp/avatar-motion/EXP-001/LivePortrait/requirements_base.txt (line 12))
+  Downloading numkong-7.8.2-cp310-cp310-manylinux_2_28_x86_64.whl (10.5 MB)
+Collecting stringzilla>=5.1.2 (from albucore>=0.0.11->albumentations==1.4.10->-r /root/autodl-tmp/avatar-motion/EXP-001/LivePortrait/requirements_base.txt (line 12))
+  Downloading stringzilla-5.1.2-cp310-cp310-manylinux2014_x86_64.manylinux_2_17_x86_64.manylinux_2_28_x86_64.whl (4.3 MB)
+Collecting certifi (from httpx>=0.24.1->gradio==5.1.0->-r /root/autodl-tmp/avatar-motion/EXP-001/LivePortrait/requirements_base.txt (line 16))
+  Downloading certifi-2026.7.22-py3-none-any.whl (136 kB)
+Collecting httpcore==1.* (from httpx>=0.24.1->gradio==5.1.0->-r /root/autodl-tmp/avatar-motion/EXP-001/LivePortrait/requirements_base.txt (line 16))
+  Downloading httpcore-1.0.9-py3-none-any.whl (78 kB)
+Collecting h11>=0.16 (from httpcore==1.*->httpx>=0.24.1->gradio==5.1.0->-r /root/autodl-tmp/avatar-motion/EXP-001/LivePortrait/requirements_base.txt (line 16))
+  Downloading h11-0.16.0-py3-none-any.whl (37 kB)
+Collecting mdurl~=0.1 (from markdown-it-py>=2.2.0->rich==13.7.1->-r /root/autodl-tmp/avatar-motion/EXP-001/LivePortrait/requirements_base.txt (line 8))
+  Downloading mdurl-0.1.2-py3-none-any.whl (10.0 kB)
+INFO: pip is looking at multiple versions of opencv-python-headless to determine which version is compatible with other requirements. This could take a while.
+Collecting opencv-python-headless>=4.9.0.80 (from albumentations==1.4.10->-r /root/autodl-tmp/avatar-motion/EXP-001/LivePortrait/requirements_base.txt (line 12))
+  Downloading opencv_python_headless-4.14.0.94-cp37-abi3-manylinux_2_28_x86_64.whl (62.0 MB)
+  Downloading opencv_python_headless-4.13.0.92-cp37-abi3-manylinux_2_28_x86_64.whl (60.4 MB)
+  Downloading opencv_python_headless-4.13.0.90-cp37-abi3-manylinux_2_28_x86_64.whl (62.5 MB)
+  Downloading opencv_python_headless-4.12.0.88-cp37-abi3-manylinux2014_x86_64.manylinux_2_17_x86_64.whl (54.0 MB)
+  Downloading opencv_python_headless-4.11.0.86-cp37-abi3-manylinux_2_17_x86_64.manylinux2014_x86_64.whl (50.0 MB)
+Collecting annotated-types>=0.6.0 (from pydantic>=2.7.0->albumentations==1.4.10->-r /root/autodl-tmp/avatar-motion/EXP-001/LivePortrait/requirements_base.txt (line 12))
+  Downloading annotated_types-0.8.0-py3-none-any.whl (13 kB)
+Collecting pydantic-core==2.46.5 (from pydantic>=2.7.0->albumentations==1.4.10->-r /root/autodl-tmp/avatar-motion/EXP-001/LivePortrait/requirements_base.txt (line 12))
+  Downloading pydantic_core-2.46.5-cp310-cp310-manylinux_2_17_x86_64.manylinux2014_x86_64.whl (2.1 MB)
+Collecting six>=1.5 (from python-dateutil>=2.7->matplotlib==3.9.0->-r /root/autodl-tmp/avatar-motion/EXP-001/LivePortrait/requirements_base.txt (line 13))
+  Downloading six-1.17.0-py2.py3-none-any.whl (11 kB)
+Collecting joblib>=1.2.0 (from scikit-learn>=1.3.2->albumentations==1.4.10->-r /root/autodl-tmp/avatar-motion/EXP-001/LivePortrait/requirements_base.txt (line 12))
+  Downloading joblib-1.6.0-py3-none-any.whl (306 kB)
+Collecting threadpoolctl>=3.1.0 (from scikit-learn>=1.3.2->albumentations==1.4.10->-r /root/autodl-tmp/avatar-motion/EXP-001/LivePortrait/requirements_base.txt (line 12))
+  Downloading threadpoolctl-3.7.0-py3-none-any.whl (26 kB)
+Collecting cloudpickle>=3.0 (from joblib>=1.2.0->scikit-learn>=1.3.2->albumentations==1.4.10->-r /root/autodl-tmp/avatar-motion/EXP-001/LivePortrait/requirements_base.txt (line 12))
+  Downloading cloudpickle-3.1.2-py3-none-any.whl (22 kB)
+Collecting humanfriendly>=9.1 (from coloredlogs->onnxruntime-gpu==1.18.0->-r /root/autodl-tmp/avatar-motion/EXP-001/LivePortrait/requirements.txt (line 3))
+  Downloading humanfriendly-10.0-py2.py3-none-any.whl (86 kB)
+Collecting charset_normalizer<4,>=2 (from requests->huggingface_hub==0.25.2)
+  Downloading charset_normalizer-3.5.1-cp310-cp310-manylinux2014_x86_64.manylinux_2_17_x86_64.manylinux_2_28_x86_64.whl (261 kB)
+Collecting urllib3<3,>=1.26 (from requests->huggingface_hub==0.25.2)
+  Downloading urllib3-2.8.0-py3-none-any.whl (135 kB)
+Requirement already satisfied: mpmath<1.4,>=1.1.0 in ./autodl-tmp/avatar-motion/EXP-001/env-liveportrait/lib/python3.10/site-packages (from sympy->onnxruntime-gpu==1.18.0->-r /root/autodl-tmp/avatar-motion/EXP-001/LivePortrait/requirements.txt (line 3)) (1.3.0)
+Installing collected packages: pytz, pydub, lmdb, flatbuffers, websockets, urllib3, tzdata, typing-inspection, tqdm, tomlkit, threadpoolctl, stringzilla, six, shtab, shellingham, semantic-version, safetensors, ruff, regex, pyyaml, python-multipart, pyparsing, pygments, pydantic-core, protobuf, pillow, orjson, numpy, numkong, mdurl, markupsafe, lazy-loader, kiwisolver, imageio-ffmpeg, idna, humanfriendly, h11, future, fonttools, ffmpy, exceptiongroup, docstring-parser, cycler, cloudpickle, click, charset_normalizer, certifi, annotated-types, annotated-doc, aiofiles, uvicorn, tifffile, scipy, requests, python-dateutil, pydantic, opencv-python-headless, opencv-python, onnx, markdown-it-py, joblib, imageio, httpcore, ffmpeg-python, contourpy, coloredlogs, anyio, albucore, starlette, scikit-learn, scikit-image, rich, pykalman, pandas, onnxruntime-gpu, matplotlib, huggingface_hub, httpx, tyro, typer, tokenizers, gradio-client, fastapi, albumentations, transformers, gradio
+  Attempting uninstall: pillow
+    Found existing installation: pillow 12.3.0
+    Uninstalling pillow-12.3.0:
+      Successfully uninstalled pillow-12.3.0
+  Attempting uninstall: numpy
+    Found existing installation: numpy 2.2.6
+    Uninstalling numpy-2.2.6:
+      Successfully uninstalled numpy-2.2.6
+  Attempting uninstall: markupsafe
+    Found existing installation: MarkupSafe 3.0.3
+    Uninstalling MarkupSafe-3.0.3:
+      Successfully uninstalled MarkupSafe-3.0.3
+Successfully installed aiofiles-23.2.1 albucore-0.2.18 albumentations-1.4.10 annotated-doc-0.0.5 annotated-types-0.8.0 anyio-4.15.1 certifi-2026.7.22 charset_normalizer-3.5.1 click-8.5.0 cloudpickle-3.1.2 coloredlogs-15.0.1 contourpy-1.3.2 cycler-0.12.1 docstring-parser-0.18.0 exceptiongroup-1.3.1 fastapi-0.141.1 ffmpeg-python-0.2.0 ffmpy-1.0.0 flatbuffers-25.12.19 fonttools-4.65.0 future-1.0.0 gradio-5.1.0 gradio-client-1.4.0 h11-0.16.0 httpcore-1.0.9 httpx-0.28.1 huggingface_hub-0.25.2 humanfriendly-10.0 idna-3.20 imageio-2.34.2 imageio-ffmpeg-0.5.1 joblib-1.6.0 kiwisolver-1.5.1 lazy-loader-0.5 lmdb-1.4.1 markdown-it-py-4.2.0 markupsafe-2.1.5 matplotlib-3.9.0 mdurl-0.1.2 numkong-7.8.2 numpy-1.26.4 onnx-1.16.1 onnxruntime-gpu-1.18.0 opencv-python-4.10.0.84 opencv-python-headless-4.11.0.86 orjson-3.12.0 pandas-2.3.3 pillow-10.4.0 protobuf-7.36.2 pydantic-2.13.5 pydantic-core-2.46.5 pydub-0.25.1 pygments-2.21.0 pykalman-0.9.7 pyparsing-3.3.2 python-dateutil-2.9.0.post0 python-multipart-0.0.32 pytz-2026.3.post1 pyyaml-6.0.1 regex-2026.9.10 requests-2.34.2 rich-13.7.1 ruff-0.16.8 safetensors-0.8.0 scikit-image-0.24.0 scikit-learn-1.7.2 scipy-1.13.1 semantic-version-2.10.0 shellingham-1.5.4 shtab-1.12.1 six-1.17.0 starlette-1.6.0 stringzilla-5.1.2 threadpoolctl-3.7.0 tifffile-2025.5.10 tokenizers-0.15.2 tomlkit-0.12.0 tqdm-4.66.4 transformers-4.38.0 typer-0.24.2 typing-inspection-0.4.4 tyro-0.8.5 tzdata-2026.4 urllib3-2.8.0 uvicorn-0.53.0 websockets-12.0
+WARNING: Running pip as the 'root' user can result in broken permissions and conflicting behaviour with the system package manager, possibly rendering your system unusable. It is recommended to use a virtual environment instead: https://pip.pypa.io/warnings/venv. Use the --root-user-action option if you know what you are doing and want to suppress this warning.
+No broken requirements found.
+Fetching 8 files:   0%|          | 0/8 [00:00<?, ?it/s]Fetching 8 files:  12%|█▎        | 1/8 [00:10<01:14, 10.71s/it]Fetching 8 files:  50%|█████     | 4/8 [00:20<00:18,  4.58s/it]Fetching 8 files:  62%|██████▎   | 5/8 [00:39<00:25,  8.59s/it]Fetching 8 files:  75%|███████▌  | 6/8 [00:46<00:16,  8.10s/it]Fetching 8 files:  88%|████████▊ | 7/8 [00:53<00:07,  7.81s/it]Fetching 8 files: 100%|██████████| 8/8 [00:53<00:00,  6.64s/it]
+verified insightface/models/buffalo_l/2d106det.onnx (5030888 bytes)
+verified insightface/models/buffalo_l/det_10g.onnx (16923827 bytes)
+verified liveportrait/base_models/appearance_feature_extractor.pth (3387959 bytes)
+verified liveportrait/base_models/motion_extractor.pth (112545506 bytes)
+verified liveportrait/base_models/spade_generator.pth (221813590 bytes)
+verified liveportrait/base_models/warping_module.pth (182180086 bytes)
+verified liveportrait/landmark.onnx (114666491 bytes)
+verified liveportrait/retargeting_models/stitching_retargeting_module.pth (2393098 bytes)
+Verified 8 human-model weights.
+{
+  "torch": "2.3.0+cu118",
+  "torch_cuda": "11.8",
+  "cuda_available": true,
+  "onnxruntime": "1.18.0",
+  "onnx_available_providers": [
+    "TensorrtExecutionProvider",
+    "CUDAExecutionProvider",
+    "AzureExecutionProvider",
+    "CPUExecutionProvider"
+  ]
+}
+Environment and weight preparation complete. No LivePortrait inference has run.

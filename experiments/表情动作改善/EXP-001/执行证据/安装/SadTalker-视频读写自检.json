@@ -1,0 +1,10 @@
+{
+  "av": "12.3.0",
+  "torch": "2.0.1+cu118",
+  "torchvision": "0.15.2+cu118",
+  "pict_type_string_NONE": true,
+  "write_video_decode_passed": true,
+  "frames": 25,
+  "fps": 25.0,
+  "output": "/root/autodl-tmp/avatar-motion/EXP-001/evidence/sadtalker/torchvision-write-video-recovery1-20260922T011305Z-5500.mp4"
+}

@@ -1,0 +1,13 @@
+{
+  "code": 10000,
+  "data": {
+    "aigc_meta_tagged": false,
+    "status": "done",
+    "video_url": "https://v26-aiop.aigc-cloud.com/c8eb187f869db79307a7ce6391917917/6ab14438/video/tos/cn/tos-cn-v-242bcc/4078db13555e41c681d6d965c3041ae8/"
+  },
+  "message": "Success",
+  "request_id": "202609212150235B37B0CEDEDBC7D69B03",
+  "status": 10000,
+  "time_elapsed": "228.181483ms",
+  "_http_status": 200
+}

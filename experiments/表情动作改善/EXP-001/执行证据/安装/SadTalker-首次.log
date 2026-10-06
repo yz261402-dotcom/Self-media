@@ -1,0 +1,189 @@
+3.10.21 (main, Aug 27 2026, 14:42:07) [GCC 14.3.0]
+Installation log: /root/autodl-tmp/avatar-motion/EXP-001/logs/sadtalker-install-20260922T005251Z-2863.log
+Filesystem      Size  Used Avail Use% Mounted on
+/dev/md0         50G   11G   40G  21% /root/autodl-tmp
+hint: Using 'master' as the name for the initial branch. This default branch name
+hint: is subject to change. To configure the initial branch name to use in all
+hint: of your new repositories, which will suppress this warning, call:
+hint: 
+hint: 	git config --global init.defaultBranch <name>
+hint: 
+hint: Names commonly chosen instead of 'master' are 'main', 'trunk' and
+hint: 'development'. The just-created branch can be renamed via this command:
+hint: 
+hint: 	git branch -m <name>
+Initialized empty Git repository in /root/autodl-tmp/avatar-motion/EXP-001/SadTalker/.git/
+From https://github.com/OpenTalker/SadTalker
+ * branch            cd4c0465ae0b54a6f85af57f5c65fec9fe23e7f8 -> FETCH_HEAD
+HEAD is now at cd4c046 update colab
+/root/autodl-tmp/avatar-motion/EXP-001/env-sadtalker/bin/python
+Looking in indexes: http://mirrors.aliyun.com/pypi/simple
+Collecting pip==24.0
+  Downloading http://mirrors.aliyun.com/pypi/packages/8a/6a/19e9fe04fca059ccf770861c7d5721ab4c2aebc539889e97c7977528a53b/pip-24.0-py3-none-any.whl (2.1 MB)
+Collecting setuptools==69.5.1
+  Downloading http://mirrors.aliyun.com/pypi/packages/f7/29/13965af254e3373bceae8fb9a0e6ea0d0e571171b80d6646932131d6439b/setuptools-69.5.1-py3-none-any.whl (894 kB)
+Collecting wheel
+  Downloading http://mirrors.aliyun.com/pypi/packages/2e/29/69cfbb602cd91690c55d38ba9fe53e6a7e76a6fa647bf38f19c138d25449/wheel-0.48.0-py3-none-any.whl (33 kB)
+Collecting packaging>=24.0
+  Downloading http://mirrors.aliyun.com/pypi/packages/63/34/ba1c580383c9eada3711951fef0795c80b829a078d72188184bcab9dd527/packaging-26.3-py3-none-any.whl (129 kB)
+Installing collected packages: setuptools, pip, packaging, wheel
+  Attempting uninstall: setuptools
+    Found existing installation: setuptools 79.0.1
+    Uninstalling setuptools-79.0.1:
+      Successfully uninstalled setuptools-79.0.1
+  Attempting uninstall: pip
+    Found existing installation: pip 23.0.1
+    Uninstalling pip-23.0.1:
+      Successfully uninstalled pip-23.0.1
+Successfully installed packaging-26.3 pip-24.0 setuptools-69.5.1 wheel-0.48.0
+Looking in indexes: https://download.pytorch.org/whl/cu118
+Collecting torch==2.0.1
+  Downloading https://download-r2.pytorch.org/whl/cu118/torch-2.0.1%2Bcu118-cp310-cp310-linux_x86_64.whl (2267.3 MB)
+Collecting torchvision==0.15.2
+  Downloading https://download-r2.pytorch.org/whl/cu118/torchvision-0.15.2%2Bcu118-cp310-cp310-linux_x86_64.whl (6.1 MB)
+Collecting torchaudio==2.0.2
+  Downloading https://download-r2.pytorch.org/whl/cu118/torchaudio-2.0.2%2Bcu118-cp310-cp310-linux_x86_64.whl (4.4 MB)
+Collecting filelock (from torch==2.0.1)
+  Downloading filelock-3.32.3-py3-none-any.whl.metadata (2.0 kB)
+Collecting typing-extensions (from torch==2.0.1)
+  Downloading typing_extensions-4.16.0-py3-none-any.whl.metadata (3.3 kB)
+Collecting sympy (from torch==2.0.1)
+  Downloading sympy-1.14.0-py3-none-any.whl.metadata (12 kB)
+Collecting networkx (from torch==2.0.1)
+  Downloading networkx-3.4.2-py3-none-any.whl.metadata (6.3 kB)
+Collecting jinja2 (from torch==2.0.1)
+  Downloading https://download.pytorch.org/whl/jinja2-3.1.6-py3-none-any.whl.metadata (2.9 kB)
+Collecting triton==2.0.0 (from torch==2.0.1)
+  Downloading https://download-r2.pytorch.org/whl/triton-2.0.0-1-cp310-cp310-manylinux2014_x86_64.manylinux_2_17_x86_64.whl (63.3 MB)
+Collecting numpy (from torchvision==0.15.2)
+  Downloading numpy-2.2.6-cp310-cp310-manylinux_2_17_x86_64.manylinux2014_x86_64.whl.metadata (62 kB)
+Collecting requests (from torchvision==0.15.2)
+  Downloading https://download.pytorch.org/whl/requests-2.28.1-py3-none-any.whl (62 kB)
+Collecting pillow!=8.3.*,>=5.3.0 (from torchvision==0.15.2)
+  Downloading pillow-12.3.0-cp310-cp310-manylinux_2_27_x86_64.manylinux_2_28_x86_64.whl.metadata (9.1 kB)
+Collecting cmake (from triton==2.0.0->torch==2.0.1)
+  Downloading https://download.pytorch.org/whl/cmake-3.25.0-py2.py3-none-manylinux_2_17_x86_64.manylinux2014_x86_64.whl (23.7 MB)
+Collecting lit (from triton==2.0.0->torch==2.0.1)
+  Downloading https://download.pytorch.org/whl/lit-15.0.7.tar.gz (132 kB)
+  Preparing metadata (setup.py): started
+  Preparing metadata (setup.py): finished with status 'done'
+Collecting MarkupSafe>=2.0 (from jinja2->torch==2.0.1)
+  Downloading https://download.pytorch.org/whl/markupsafe-3.0.3-cp310-cp310-manylinux2014_x86_64.manylinux_2_17_x86_64.manylinux_2_28_x86_64.whl.metadata (2.7 kB)
+Collecting charset-normalizer<3,>=2 (from requests->torchvision==0.15.2)
+  Downloading https://download.pytorch.org/whl/charset_normalizer-2.1.1-py3-none-any.whl (39 kB)
+Collecting idna<4,>=2.5 (from requests->torchvision==0.15.2)
+  Downloading https://download.pytorch.org/whl/idna-3.4-py3-none-any.whl (61 kB)
+Collecting urllib3<1.27,>=1.21.1 (from requests->torchvision==0.15.2)
+  Downloading https://download.pytorch.org/whl/urllib3-1.26.13-py2.py3-none-any.whl (140 kB)
+Collecting certifi>=2017.4.17 (from requests->torchvision==0.15.2)
+  Downloading https://download.pytorch.org/whl/certifi-2022.12.7-py3-none-any.whl (155 kB)
+Collecting mpmath<1.4,>=1.1.0 (from sympy->torch==2.0.1)
+  Downloading mpmath-1.3.0-py3-none-any.whl.metadata (8.6 kB)
+Downloading pillow-12.3.0-cp310-cp310-manylinux_2_27_x86_64.manylinux_2_28_x86_64.whl (6.9 MB)
+Downloading filelock-3.32.3-py3-none-any.whl (98 kB)
+Downloading https://download.pytorch.org/whl/jinja2-3.1.6-py3-none-any.whl (134 kB)
+Downloading networkx-3.4.2-py3-none-any.whl (1.7 MB)
+Downloading numpy-2.2.6-cp310-cp310-manylinux_2_17_x86_64.manylinux2014_x86_64.whl (16.8 MB)
+Downloading sympy-1.14.0-py3-none-any.whl (6.3 MB)
+Downloading typing_extensions-4.16.0-py3-none-any.whl (45 kB)
+Downloading https://download.pytorch.org/whl/markupsafe-3.0.3-cp310-cp310-manylinux2014_x86_64.manylinux_2_17_x86_64.manylinux_2_28_x86_64.whl (20 kB)
+Downloading mpmath-1.3.0-py3-none-any.whl (536 kB)
+Building wheels for collected packages: lit
+  Building wheel for lit (setup.py): started
+  Building wheel for lit (setup.py): finished with status 'done'
+  Created wheel for lit: filename=lit-15.0.7-py3-none-any.whl size=89989 sha256=08cabf3c9bac9ee9e9e165fb60475d5a0d0a122c04f53af98085f83d6684054c
+  Stored in directory: /root/autodl-tmp/avatar-motion/EXP-001/cache/sadtalker/pip/wheels/27/2c/b6/3ed2983b1b44fe0dea1bb35234b09f2c22fb8ebb308679c922
+Successfully built lit
+Installing collected packages: mpmath, lit, cmake, urllib3, typing-extensions, sympy, pillow, numpy, networkx, MarkupSafe, idna, filelock, charset-normalizer, certifi, requests, jinja2, triton, torch, torchvision, torchaudio
+Successfully installed MarkupSafe-3.0.3 certifi-2022.12.7 charset-normalizer-2.1.1 cmake-3.25.0 filelock-3.32.3 idna-3.4 jinja2-3.1.6 lit-15.0.7 mpmath-1.3.0 networkx-3.4.2 numpy-2.2.6 pillow-12.3.0 requests-2.28.1 sympy-1.14.0 torch-2.0.1+cu118 torchaudio-2.0.2+cu118 torchvision-0.15.2+cu118 triton-2.0.0 typing-extensions-4.16.0 urllib3-1.26.13
+
+[notice] A new release of pip is available: 24.0 -> 26.2.1
+[notice] To update, run: /root/autodl-tmp/avatar-motion/EXP-001/env-sadtalker/bin/python -m pip install --upgrade pip
+Looking in indexes: http://mirrors.aliyun.com/pypi/simple
+Collecting numpy==1.23.4
+  Downloading http://mirrors.aliyun.com/pypi/packages/0c/83/78ae18fffc185d0d57097610d5a97473ef11dbdca95f16739ee96b158087/numpy-1.23.4-cp310-cp310-manylinux_2_17_x86_64.manylinux2014_x86_64.whl (17.1 MB)
+Installing collected packages: numpy
+  Attempting uninstall: numpy
+    Found existing installation: numpy 2.2.6
+    Uninstalling numpy-2.2.6:
+      Successfully uninstalled numpy-2.2.6
+Successfully installed numpy-1.23.4
+
+[notice] A new release of pip is available: 24.0 -> 26.2.1
+[notice] To update, run: /root/autodl-tmp/avatar-motion/EXP-001/env-sadtalker/bin/python -m pip install --upgrade pip
+Looking in indexes: http://mirrors.aliyun.com/pypi/simple
+Requirement already satisfied: numpy==1.23.4 in /root/autodl-tmp/avatar-motion/EXP-001/env-sadtalker/lib/python3.10/site-packages (from -r requirements.cli.txt (line 1)) (1.23.4)
+Collecting face_alignment==1.3.5 (from -r requirements.cli.txt (line 2))
+  Downloading http://mirrors.aliyun.com/pypi/packages/a1/d1/572b8580cfb026b508e8edbfdafca0e119dfd9b963cc0987db50fe0e5d11/face_alignment-1.3.5-py2.py3-none-any.whl (29 kB)
+Collecting imageio==2.19.3 (from -r requirements.cli.txt (line 3))
+  Downloading http://mirrors.aliyun.com/pypi/packages/b6/78/3cf2f60ef319d253d71870c6cb00774bfc5bdccf9e06c319678388f58f41/imageio-2.19.3-py3-none-any.whl (3.4 MB)
+Collecting imageio-ffmpeg==0.4.7 (from -r requirements.cli.txt (line 4))
+  Downloading http://mirrors.aliyun.com/pypi/packages/e5/3b/fdf3e75462e93b7806ffecad6c5aa35f2cc76b9f2faaedf5e43194ceff09/imageio_ffmpeg-0.4.7-py3-none-manylinux2010_x86_64.whl (26.9 MB)
+Collecting librosa==0.9.2 (from -r requirements.cli.txt (line 5))
+  Downloading http://mirrors.aliyun.com/pypi/packages/e4/1c/23ef2fd02913d65d43dc7516fc829af709314a66c6f0bdc2e361fdcecc2d/librosa-0.9.2-py3-none-any.whl (214 kB)
+Collecting numba (from -r requirements.cli.txt (line 6))
+  Downloading http://mirrors.aliyun.com/pypi/packages/aa/9d/e93ddc139fcd5b7201bcbdd1ac9c76534aac043fbbdb86ab4bd2e7aebae5/numba-0.57.1-cp310-cp310-manylinux2014_x86_64.manylinux_2_17_x86_64.whl (3.6 MB)
+Collecting resampy==0.3.1 (from -r requirements.cli.txt (line 7))
+  Downloading http://mirrors.aliyun.com/pypi/packages/51/7e/7aec4c54c4b11ac8333dc01d0e910e692be7da944769e37f9e248537a3f1/resampy-0.3.1-py3-none-any.whl (3.1 MB)
+Collecting pydub==0.25.1 (from -r requirements.cli.txt (line 8))
+  Downloading http://mirrors.aliyun.com/pypi/packages/a6/53/d78dc063216e62fc55f6b2eebb447f6a4b0a59f55c8406376f76bf959b08/pydub-0.25.1-py2.py3-none-any.whl (32 kB)
+Collecting scipy==1.10.1 (from -r requirements.cli.txt (line 9))
+  Downloading http://mirrors.aliyun.com/pypi/packages/1f/4b/3bacad9a166350cb2e518cea80ab891016933cc1653f15c90279512c5fa9/scipy-1.10.1-cp310-cp310-manylinux_2_17_x86_64.manylinux2014_x86_64.whl (34.4 MB)
+Collecting kornia==0.6.8 (from -r requirements.cli.txt (line 10))
+  Downloading http://mirrors.aliyun.com/pypi/packages/99/03/3578e2f34d4ed63649bad6b15f9001d2d244e1f92c60a8dd5c5436e4402d/kornia-0.6.8-py2.py3-none-any.whl (551 kB)
+Collecting tqdm (from -r requirements.cli.txt (line 11))
+  Downloading http://mirrors.aliyun.com/pypi/packages/a7/03/921a3d3c75785aca9ebfbfcabfbc3a1be12e2ab5265deb026d55a5a3f83e/tqdm-4.70.1-py3-none-any.whl (80 kB)
+Collecting yacs==0.1.8 (from -r requirements.cli.txt (line 12))
+  Downloading http://mirrors.aliyun.com/pypi/packages/38/4f/fe9a4d472aa867878ce3bb7efb16654c5d63672b86dc0e6e953a67018433/yacs-0.1.8-py3-none-any.whl (14 kB)
+Collecting pyyaml (from -r requirements.cli.txt (line 13))
+  Downloading http://mirrors.aliyun.com/pypi/packages/7a/1e/7acc4f0e74c4b3d9531e24739e0ab832a5edf40e64fbae1a9c01941cabd7/pyyaml-6.0.3-cp310-cp310-manylinux2014_x86_64.manylinux_2_17_x86_64.manylinux_2_28_x86_64.whl (770 kB)
+Collecting joblib==1.1.0 (from -r requirements.cli.txt (line 14))
+  Downloading http://mirrors.aliyun.com/pypi/packages/3e/d5/0163eb0cfa0b673aa4fe1cd3ea9d8a81ea0f32e50807b0c295871e4aab2e/joblib-1.1.0-py2.py3-none-any.whl (306 kB)
+Collecting scikit-image==0.19.3 (from -r requirements.cli.txt (line 15))
+  Downloading http://mirrors.aliyun.com/pypi/packages/1b/09/88624513508fc56c646aa660193a75c953bb5dae46a2f67891af8d95a5c7/scikit_image-0.19.3-cp310-cp310-manylinux_2_17_x86_64.manylinux2014_x86_64.whl (13.9 MB)
+Collecting basicsr==1.4.2 (from -r requirements.cli.txt (line 16))
+  Downloading http://mirrors.aliyun.com/pypi/packages/86/41/00a6b000f222f0fa4c6d9e1d6dcc9811a374cabb8abb9d408b77de39648c/basicsr-1.4.2.tar.gz (172 kB)
+  Preparing metadata (setup.py): started
+  Preparing metadata (setup.py): finished with status 'done'
+Collecting facexlib==0.3.0 (from -r requirements.cli.txt (line 17))
+  Downloading http://mirrors.aliyun.com/pypi/packages/36/7b/2147339dafe1c4800514c9c21ee4444f8b419ce51dfc7695220a8e0069a6/facexlib-0.3.0-py3-none-any.whl (59 kB)
+Collecting gfpgan (from -r requirements.cli.txt (line 18))
+  Downloading http://mirrors.aliyun.com/pypi/packages/80/a2/84bb50a2655fda1e6f35ae57399526051b8a8b96ad730aea82abeaac4de8/gfpgan-1.3.8-py3-none-any.whl (52 kB)
+Collecting av (from -r requirements.cli.txt (line 19))
+  Downloading http://mirrors.aliyun.com/pypi/packages/09/45/eb750ba15c44e8106f58a22e6789f5ddbe5584d9dcb4e755b08d47ed6261/av-10.0.0.tar.gz (2.4 MB)
+  Preparing metadata (pyproject.toml): started
+  Preparing metadata (pyproject.toml): finished with status 'error'
+  error: subprocess-exited-with-error
+  
+  × Preparing metadata (pyproject.toml) did not run successfully.
+  │ exit code: 1
+  ╰─> [15 lines of output]
+      Traceback (most recent call last):
+        File "/root/autodl-tmp/avatar-motion/EXP-001/env-sadtalker/lib/python3.10/site-packages/pip/_vendor/pyproject_hooks/_in_process/_in_process.py", line 353, in <module>
+          main()
+        File "/root/autodl-tmp/avatar-motion/EXP-001/env-sadtalker/lib/python3.10/site-packages/pip/_vendor/pyproject_hooks/_in_process/_in_process.py", line 335, in main
+          json_out['return_val'] = hook(**hook_input['kwargs'])
+        File "/root/autodl-tmp/avatar-motion/EXP-001/env-sadtalker/lib/python3.10/site-packages/pip/_vendor/pyproject_hooks/_in_process/_in_process.py", line 149, in prepare_metadata_for_build_wheel
+          return hook(metadata_directory, config_settings)
+        File "/root/autodl-tmp/avatar-motion/EXP-001/env-sadtalker/lib/python3.10/site-packages/setuptools/build_meta.py", line 366, in prepare_metadata_for_build_wheel
+          self.run_setup()
+        File "/root/autodl-tmp/avatar-motion/EXP-001/env-sadtalker/lib/python3.10/site-packages/setuptools/build_meta.py", line 487, in run_setup
+          super().run_setup(setup_script=setup_script)
+        File "/root/autodl-tmp/avatar-motion/EXP-001/env-sadtalker/lib/python3.10/site-packages/setuptools/build_meta.py", line 311, in run_setup
+          exec(code, locals())
+        File "<string>", line 10, in <module>
+      ModuleNotFoundError: No module named 'Cython'
+      [end of output]
+  
+  note: This error originates from a subprocess, and is likely not a problem with pip.
+error: metadata-generation-failed
+
+× Encountered error while generating package metadata.
+╰─> See above for output.
+
+note: This is an issue with the package mentioned above, not pip.
+hint: See above for details.
+
+[notice] A new release of pip is available: 24.0 -> 26.2.1
+[notice] To update, run: /root/autodl-tmp/avatar-motion/EXP-001/env-sadtalker/bin/python -m pip install --upgrade pip
+Installation failed at line 83; keep the log and partial files. No automatic retry.

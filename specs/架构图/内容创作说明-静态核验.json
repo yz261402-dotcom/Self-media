@@ -1,0 +1,9 @@
+{
+  "artifact": "内容创作DeepAgents说明.html",
+  "bytes": 53579,
+  "sha256": "8214e7e8466609e9e917c2db4e2450286796908d8fe9ef5d62a81ca59bdbf22b",
+  "broken_links": [],
+  "duplicate_ids": [],
+  "external_asset_dependencies": [],
+  "change": "Expanded tool capability inventory and corrected protocol versus tools explanation"
+}

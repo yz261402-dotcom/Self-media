@@ -1,0 +1,18 @@
+{
+  "version": 1,
+  "authorization_id": "TH-COMP-002-user-same-avatar-comparison",
+  "maximum_fen": 2000,
+  "total_reserved_fen": 2000,
+  "stages": {
+    "volc_video": {
+      "state": "unknown",
+      "reserve_fen": 2000,
+      "request_digest": "78c51f18cf18995e1f448eea97bc0bc27e24a4cbc42d24a89903b127570d8b52",
+      "evidence_path": "提交响应.json",
+      "remote_id": null,
+      "estimated_fen": null,
+      "actual_fen": null,
+      "updated_at": "2026-09-21T13:10:29.579124+00:00"
+    }
+  }
+}

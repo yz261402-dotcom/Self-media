@@ -1,0 +1,2523 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="light">
+<link rel="icon" href="data:,">
+<meta name="source-sha256" content="18785b2fb025284cfda1c9137e0318258d0513980edf6d0051b30ecbb53213e0">
+<title>02 人物一致性生成调研 · AI 自媒体文档</title>
+<style>:root {
+  color-scheme: light;
+  --paper: #ffffff;
+  --surface: #f7f7f8;
+  --ink: #202126;
+  --muted: #666970;
+  --line: #dedfe3;
+  --blue: #002fa7;
+  --reader-font-size: 17px;
+  --header-height: 76px;
+  font-family: "Helvetica Neue", Helvetica, Arial, "PingFang SC", "Microsoft YaHei", sans-serif;
+  font-synthesis: none;
+}
+
+* { box-sizing: border-box; }
+.sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; border: 0; }
+.source-notice { margin-top: 22px; padding: 12px 14px; border-left: 3px solid var(--blue); background: var(--surface); color: var(--muted); font-size: 13px; }
+html { scroll-padding-top: 104px; }
+body { margin: 0; min-width: 320px; color: var(--ink); background: var(--surface); font-size: 14px; line-height: 1.6; }
+body.menu-open { overflow: hidden; }
+a { color: var(--blue); text-underline-offset: 3px; }
+button, input { font: inherit; }
+button { color: inherit; cursor: pointer; }
+button, input[type="search"] { border: 1px solid var(--line); border-radius: 3px; background: var(--paper); }
+button { min-height: 36px; padding: 6px 11px; line-height: 1.4; }
+button:hover { border-color: var(--blue); color: var(--blue); }
+button:disabled { opacity: .42; cursor: default; }
+button:disabled:hover { color: inherit; border-color: var(--line); }
+:focus-visible { outline: 2px solid var(--blue); outline-offset: 3px; }
+[hidden] { display: none !important; }
+::selection { background: #dbe4ff; color: #151c32; }
+
+.skip-link { position: fixed; z-index: 100; top: -70px; left: 16px; padding: 10px 18px; background: var(--blue); color: white; }
+.skip-link:focus { top: 10px; }
+.topbar { position: sticky; z-index: 30; top: 0; min-height: var(--header-height); display: flex; align-items: center; gap: 24px; padding: 15px 32px; border-bottom: 1px solid var(--line); background: var(--paper); }
+.brand { min-width: 0; color: var(--ink); font-size: 17px; font-weight: 700; line-height: 1.35; letter-spacing: -.02em; text-decoration: none; }
+.brand small, .brand span { display: block; margin-top: 4px; font-size: 11px; font-weight: 400; letter-spacing: .08em; color: var(--muted); }
+.toolbar { display: flex; align-items: center; gap: 6px; margin-left: auto; flex-shrink: 0; }
+.toolbar .font-smaller, .toolbar .font-reset, .toolbar .font-larger { min-width: 36px; padding: 5px 8px; font-variant-numeric: tabular-nums; }
+.toolbar .print-button { margin-left: 8px; }
+.mobile-menu { display: none; }
+.layout { display: grid; grid-template-columns: 244px minmax(0, 1fr) 208px; max-width: 1536px; margin: 0 auto; align-items: start; background: var(--paper); }
+.sidebar { position: sticky; top: var(--header-height); height: calc(100dvh - var(--header-height)); overflow-y: auto; overscroll-behavior: contain; padding: 32px 20px 36px 24px; border-right: 1px solid var(--line); scrollbar-width: thin; background: var(--surface); }
+.nav-group + .nav-group { margin-top: 32px; padding-top: 26px; border-top: 1px solid var(--line); }
+.group-title { margin: 0 10px 12px; color: var(--muted); font-size: 11px; font-weight: 600; letter-spacing: .11em; }
+.doc-nav { display: flex; flex-direction: column; gap: 4px; }
+.doc-nav a { display: block; padding: 9px 10px; border-left: 2px solid transparent; color: #55575d; font-size: 13px; line-height: 1.65; text-decoration: none; overflow-wrap: anywhere; }
+.doc-nav a:hover { color: var(--blue); background: #eeeeef; }
+.doc-nav a[aria-current="page"] { border-left-color: var(--blue); background: #eaf0ff; color: var(--blue); font-weight: 600; }
+.doc-nav .doc-number { display: inline-block; min-width: 25px; color: var(--muted); font-variant-numeric: tabular-nums; }
+
+#main { min-width: 0; padding: 46px clamp(28px, 3.7vw, 60px) 56px; }
+.document-header { margin-bottom: 29px; }
+.eyebrow { margin: 0 0 18px; color: var(--blue); font-size: 12px; font-weight: 600; letter-spacing: .08em; }
+.document-header h1 { margin: 0 0 21px; font-size: clamp(30px, 2.8vw, 42px); font-weight: 700; letter-spacing: -.045em; line-height: 1.3; overflow-wrap: anywhere; }
+.doc-meta { display: flex; flex-wrap: wrap; align-items: baseline; gap: 6px 18px; color: var(--muted); font-size: 12px; }
+.doc-meta a { color: var(--muted); }
+.doc-meta a:hover { color: var(--blue); }
+.reader-tools { margin: 0 0 36px; padding: 16px 0; border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); }
+#search-form { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; }
+#search-input { flex: 1 1 160px; min-width: 100px; width: 0; height: 36px; padding: 6px 10px; color: var(--ink); }
+#search-input::placeholder { color: #777a82; }
+#search-next, #search-clear { flex: 0 0 auto; font-size: 12px; }
+#search-status { flex: 1 0 100%; color: var(--muted); font-size: 11px; line-height: 1.5; }
+#search-status:empty { display: none; }
+
+#document-body { font-size: var(--reader-font-size); line-height: 1.9; overflow-wrap: anywhere; }
+#document-body > :first-child { margin-top: 0; }
+#document-body h2, #document-body h3, #document-body h4, #document-body h5, #document-body h6 { scroll-margin-top: 106px; font-weight: 650; line-height: 1.45; color: #15171c; }
+#document-body h2 { margin: 2.8em 0 1.05em; padding-top: 1.25em; border-top: 1px solid var(--line); font-size: 1.5em; letter-spacing: -.035em; }
+#document-body h3 { margin: 2em 0 .85em; font-size: 1.18em; letter-spacing: -.025em; }
+#document-body h4 { margin: 1.65em 0 .7em; font-size: 1.03em; }
+#document-body h5, #document-body h6 { margin: 1.4em 0 .6em; font-size: 1em; }
+#document-body p { margin: .9em 0; }
+#document-body ul, #document-body ol { margin: 1em 0; padding-left: 1.55em; }
+#document-body li { margin: .38em 0; padding-left: .15em; }
+#document-body li > p { margin: .4em 0; }
+#document-body li > ul, #document-body li > ol { margin: .35em 0 .6em; }
+#document-body strong { color: #14161b; font-weight: 650; }
+#document-body hr { margin: 2.1em 0; border: 0; border-top: 1px solid var(--line); }
+#document-body blockquote { margin: 1.5em 0; padding: .25em 1.15em; border-left: 3px solid var(--blue); background: var(--surface); color: #4c4f57; }
+#document-body blockquote p { margin: .55em 0; }
+#document-body a { overflow-wrap: anywhere; }
+#document-body a:hover { text-decoration-thickness: 2px; }
+#document-body img { max-width: 100%; height: auto; }
+#document-body code { padding: .12em .32em; border: 1px solid #e7e7ea; border-radius: 3px; background: var(--surface); font-family: Consolas, "SFMono-Regular", "Liberation Mono", monospace; font-size: .82em; overflow-wrap: anywhere; }
+#document-body pre { position: relative; margin: 1.5em 0; padding: 44px 0 0; max-width: 100%; overflow: hidden; border: 1px solid var(--line); border-radius: 4px; background: var(--surface); line-height: 1.7; }
+#document-body pre > code { display: block; max-width: 100%; overflow-x: auto; padding: 0 19px 18px; border: 0; border-radius: 0; font-size: .79em; line-height: 1.75; white-space: pre; overflow-wrap: normal; tab-size: 2; }
+.copy-code { position: absolute; top: 7px; right: 8px; min-height: 28px; padding: 4px 9px; color: var(--muted); font-size: 11px; background: var(--paper); }
+.table-scroll { max-width: 100%; margin: 1.5em 0; overflow-x: auto; border: 1px solid var(--line); border-radius: 3px; scrollbar-width: thin; }
+#document-body table { width: 100%; min-width: 100%; border-collapse: collapse; font-size: .82em; line-height: 1.7; }
+#document-body th, #document-body td { min-width: 105px; padding: 12px 14px; border-right: 1px solid var(--line); border-bottom: 1px solid var(--line); text-align: left; vertical-align: top; }
+#document-body th { background: var(--surface); font-weight: 600; color: #30333a; }
+#document-body tr > :last-child { border-right: 0; }
+#document-body tbody tr:last-child td { border-bottom: 0; }
+#document-body tbody tr:hover { background: #fafafb; }
+#document-body th:first-child, #document-body td:first-child { min-width: 95px; }
+#document-body input[type="checkbox"] { width: 14px; height: 14px; margin: 0 7px 0 0; vertical-align: middle; accent-color: var(--blue); }
+#document-body details { margin: 1.15em 0; padding: 12px 16px; border: 1px solid var(--line); border-radius: 3px; }
+#document-body summary { color: var(--muted); font-size: .85em; cursor: pointer; }
+#document-body details[open] summary { margin-bottom: 12px; }
+.architecture { margin: 1.8em 0; }
+.diagram-viewport { max-width: 100%; overflow-x: auto; border: 1px solid var(--line); scrollbar-width: thin; }
+.diagram-viewport > svg { display: block; min-width: 720px; width: 100%; height: auto; background: var(--paper); }
+.architecture > svg { display: block; width: 100%; height: auto; max-width: 100%; border: 1px solid var(--line); background: var(--paper); }
+.architecture figcaption { margin-top: 8px; color: var(--muted); font-size: .75em; }
+.architecture details { font-size: .85em; }
+mark.reader-match { padding: 1px 0; background: #dbe4ff; color: inherit; border-radius: 2px; scroll-margin-top: 120px; }
+mark.reader-match.is-current { background: var(--blue); color: white; box-shadow: 0 0 0 2px var(--blue); }
+.search-block-current { outline: 1px solid #b2c5f9; outline-offset: 6px; }
+
+.toc-panel { position: sticky; top: var(--header-height); max-height: calc(100dvh - var(--header-height)); overflow-y: auto; padding: 38px 20px 30px 19px; border-left: 1px solid var(--line); scrollbar-width: thin; }
+.toc-panel > h2, #toc > h2, .toc-title { margin: 0 0 15px; color: var(--muted); font-size: 11px; font-weight: 600; letter-spacing: .08em; }
+#toc ul, #toc ol { list-style: none; margin: 0; padding: 0; }
+#toc a { display: block; margin: 2px 0; padding: 5px 0 5px 12px; border-left: 2px solid transparent; color: #6c6f78; font-size: 12px; line-height: 1.65; text-decoration: none; overflow-wrap: anywhere; }
+#toc a:hover { color: var(--blue); }
+#toc a[aria-current="location"], #toc a.is-active { color: var(--blue); border-left-color: var(--blue); }
+#toc a[data-level="3"], #toc .toc-h3 a, #toc a.toc-h3, #toc li.level-3 a { padding-left: 24px; font-size: 11px; }
+.document-pager { display: flex; justify-content: space-between; gap: 20px; margin-top: 60px; padding-top: 24px; border-top: 1px solid var(--line); }
+.document-pager a { flex: 1; min-width: 0; text-decoration: none; font-size: 14px; font-weight: 600; overflow-wrap: anywhere; }
+.document-pager a:last-child { text-align: right; }
+.document-pager a:only-child { text-align: left; }
+.document-pager small, .document-pager span { display: block; margin-bottom: 4px; font-size: 11px; font-weight: 400; color: var(--muted); }
+.page-footer { max-width: 1536px; margin: auto; padding: 22px 32px; border-top: 1px solid var(--line); color: var(--muted); font-size: 11px; background: var(--surface); }
+.back-top { position: fixed; right: 24px; bottom: 24px; z-index: 20; min-height: 40px; border-color: var(--line); background: var(--paper); font-size: 12px; }
+.sidebar-scrim { display: none; }
+
+@media (min-width: 1600px) {
+  .layout { border-left: 1px solid var(--line); border-right: 1px solid var(--line); }
+  .topbar { padding-left: max(32px, calc((100vw - 1472px) / 2)); padding-right: max(32px, calc((100vw - 1472px) / 2)); }
+}
+@media (max-width: 1190px) {
+  .layout { grid-template-columns: 225px minmax(0, 1fr); }
+  .toc-panel { display: none; }
+  #main { padding-left: 42px; padding-right: 42px; }
+}
+@media (max-width: 800px) {
+  :root { --header-height: 68px; }
+  .topbar { gap: 12px; padding: 13px 18px; }
+  .brand { font-size: 15px; }
+  .brand small, .brand span { font-size: 9px; }
+  .mobile-menu { display: inline-flex; align-items: center; justify-content: center; flex-shrink: 0; min-height: 34px; padding: 6px 9px; font-size: 12px; }
+  .layout { display: block; }
+  .sidebar { position: fixed; z-index: 50; left: 0; top: var(--header-height); bottom: 0; width: min(300px, calc(100vw - 44px)); height: calc(100dvh - var(--header-height)); padding: 24px 18px; transform: translateX(-101%); visibility: hidden; transition: transform .18s ease, visibility .18s; border-right: 1px solid var(--line); }
+  .menu-open .sidebar { transform: translateX(0); visibility: visible; }
+  .sidebar-scrim:not([hidden]) { display: block; position: fixed; z-index: 40; inset: var(--header-height) 0 0; background: rgb(18 21 30 / 28%); }
+  .toolbar { gap: 3px; }
+  .toolbar .font-smaller, .toolbar .font-reset, .toolbar .font-larger { min-width: 29px; min-height: 32px; padding: 4px 5px; font-size: 12px; }
+  .toolbar .print-button { display: none; }
+  #main { padding: 33px 28px 40px; }
+  .document-header h1 { font-size: 32px; }
+  .eyebrow { margin-bottom: 13px; }
+  #document-body { line-height: 1.9; }
+  #document-body h2 { margin-top: 2.3em; font-size: 1.4em; }
+  .page-footer { padding: 18px 28px; }
+  .back-top { right: 16px; bottom: 16px; }
+}
+@media (max-width: 460px) {
+  .topbar { gap: 8px; padding-left: 12px; padding-right: 12px; }
+  .brand { font-size: 13px; letter-spacing: -.035em; }
+  .brand small, .brand span { max-width: 125px; overflow: hidden; white-space: nowrap; text-overflow: ellipsis; }
+  .mobile-menu { padding: 5px 7px; font-size: 11px; }
+  #main { padding: 29px 20px 36px; }
+  .document-header h1 { font-size: 28px; }
+  .doc-meta { gap: 4px 12px; font-size: 11px; }
+  .reader-tools { margin-bottom: 28px; }
+  #search-input { flex-basis: 110px; font-size: 12px; }
+  #search-next, #search-clear { padding-left: 8px; padding-right: 8px; }
+  #document-body { font-size: calc(var(--reader-font-size) - 1px); }
+  #document-body pre > code { padding-left: 13px; padding-right: 13px; }
+  #document-body th, #document-body td { padding: 10px 12px; }
+  .document-pager { gap: 18px; margin-top: 40px; }
+  .document-pager a { font-size: 12px; }
+  .page-footer { padding-left: 20px; padding-right: 20px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { scroll-behavior: auto !important; transition: none !important; }
+}
+@media print {
+  @page { margin: 18mm 16mm; }
+  :root { --reader-font-size: 10.5pt !important; }
+  body { min-width: 0; background: white; color: black; }
+  .topbar, .sidebar, .toc-panel, .reader-tools, .document-pager, .back-top, .sidebar-scrim, .skip-link, .copy-code { display: none !important; }
+  .layout { display: block; max-width: none; border: 0; }
+  #main { padding: 0; }
+  .document-header h1 { font-size: 24pt; }
+  .document-header { margin-bottom: 24pt; }
+  .doc-meta { font-size: 8pt; }
+  #document-body { font-size: 10.5pt; line-height: 1.65; }
+  #document-body h2, #document-body h3, #document-body h4 { break-after: avoid; }
+  #document-body h2 { margin-top: 20pt; padding-top: 12pt; font-size: 15pt; }
+  #document-body a { color: inherit; text-decoration: underline; }
+  #document-body pre { padding: 9pt; overflow: visible; background: #f7f7f8; }
+  #document-body pre > code { padding: 0; overflow: visible; white-space: pre-wrap; overflow-wrap: anywhere; font-size: 8pt; }
+  .table-scroll { overflow: visible; border-radius: 0; }
+  #document-body table { table-layout: fixed; font-size: 7.5pt; }
+  #document-body th, #document-body td, #document-body th:first-child, #document-body td:first-child { min-width: 0; padding: 5pt; overflow-wrap: anywhere; }
+  #document-body thead { display: table-header-group; }
+  #document-body tr, .architecture { break-inside: avoid; }
+  #document-body details:not([open]) { display: none; }
+  .architecture > svg { max-height: 230mm; }
+  mark.reader-match, mark.reader-match.is-current { color: inherit; background: transparent; box-shadow: none; }
+  .search-block-current { outline: none; }
+  .page-footer { margin-top: 24pt; padding: 10pt 0 0; font-size: 8pt; background: white; }
+}
+</style>
+</head>
+<body>
+<a class="skip-link" href="#main">跳到正文</a>
+<header class="topbar">
+  <button type="button" class="mobile-menu" aria-controls="doc-sidebar" aria-expanded="false">文档目录</button>
+  <a class="brand" href="../0001-douyin-ai-studio/00-%E6%96%87%E6%A1%A3%E5%AF%BC%E8%88%AA.html">AI 自媒体<span>开发文档与调研</span></a>
+  <div class="toolbar" aria-label="阅读设置">
+    <button type="button" class="font-smaller" aria-label="缩小正文字号" title="缩小字号">A−</button>
+    <button type="button" class="font-reset" aria-label="恢复默认正文字号" title="恢复字号">默认</button>
+    <button type="button" class="font-larger" aria-label="放大正文字号" title="放大字号">A+</button>
+    <button type="button" class="print-button">打印</button>
+  </div>
+</header>
+<div class="layout">
+  <aside id="doc-sidebar" class="sidebar" aria-label="全部文档"><section class="nav-group"><h2 class="group-title">开发文档</h2><nav class="doc-nav" aria-label="开发文档"><a data-document href="../0001-douyin-ai-studio/00-%E6%96%87%E6%A1%A3%E5%AF%BC%E8%88%AA.html">00 文档导航</a><a data-document href="../0001-douyin-ai-studio/01-%E4%BA%A7%E5%93%81%E9%9C%80%E6%B1%82%E6%96%87%E6%A1%A3.html">01 产品需求文档</a><a data-document href="../0001-douyin-ai-studio/02-%E6%8A%80%E6%9C%AF%E9%80%89%E5%9E%8B%E5%AF%B9%E6%AF%94.html">02 技术选型对比</a><a data-document href="../0001-douyin-ai-studio/03-%E6%80%BB%E4%BD%93%E6%8A%80%E6%9C%AF%E6%96%B9%E6%A1%88.html">03 总体技术方案</a><a data-document href="../0001-douyin-ai-studio/04-%E6%8E%A5%E5%8F%A3%E5%A5%91%E7%BA%A6%E4%B8%8E%E6%95%B0%E6%8D%AE%E5%AD%97%E5%85%B8.html">04 接口契约与数据字典</a><a data-document href="../0001-douyin-ai-studio/05-%E5%BC%80%E5%8F%91%E5%AE%9E%E6%96%BD%E8%AE%A1%E5%88%92.html">05 开发实施计划</a><a data-document href="../0001-douyin-ai-studio/06-%E9%AA%8C%E6%94%B6%E6%A0%87%E5%87%86%E4%B8%8E%E6%B5%8B%E8%AF%95%E6%96%B9%E6%A1%88.html">06 验收标准与测试方案</a><a data-document href="../0001-douyin-ai-studio/07-%E6%8A%80%E6%9C%AF%E9%80%89%E5%9E%8B%E4%B8%8E%E5%AE%9E%E6%B5%8B%E6%B5%81%E7%A8%8B.html">07 技术选型与实测流程</a><a data-document href="../0001-douyin-ai-studio/08-%E7%AB%AF%E5%88%B0%E7%AB%AF%E6%8A%80%E6%9C%AF%E6%B5%81%E7%A8%8B%E4%B8%8E%E6%A8%A1%E5%9E%8B%E9%80%89%E5%9E%8B%E5%9C%B0%E5%9B%BE.html">08 端到端技术流程与模型选型地图</a><a data-document href="../0001-douyin-ai-studio/09-%E6%A8%A1%E5%9E%8B%E9%80%89%E5%9E%8B%E5%86%B3%E7%AD%96%E4%B8%8E%E6%8E%A5%E5%85%A5%E6%96%B9%E6%A1%88.html">09 模型选型决策与接入方案</a><a data-document href="../0001-douyin-ai-studio/10-Agent%E7%BC%96%E6%8E%92%E9%80%89%E5%9E%8B%E4%B8%8E%E6%95%B4%E4%BD%93%E6%9E%B6%E6%9E%84.html">10 Agent编排选型与整体架构</a></nav></section><section class="nav-group"><h2 class="group-title">本轮选型试验</h2><nav class="doc-nav" aria-label="本轮选型试验"><a data-document href="../selection/01-%E6%95%B0%E5%AD%97%E4%BA%BA%E5%8F%A3%E6%92%AD/01-%E9%80%89%E5%9E%8B%E8%AF%95%E9%AA%8C%E6%96%B9%E6%A1%88.html">01 选型试验方案</a><a data-document href="../selection/01-%E6%95%B0%E5%AD%97%E4%BA%BA%E5%8F%A3%E6%92%AD/02-%E9%A6%96%E8%BD%AE%E5%AE%9E%E6%B5%8B%E7%BB%93%E6%9E%9C.html">02 首轮实测结果</a><a data-document href="../selection/01-%E6%95%B0%E5%AD%97%E4%BA%BA%E5%8F%A3%E6%92%AD/03-MuseTalk%E4%BA%91%E7%AB%AF%E9%83%A8%E7%BD%B2%E4%B8%8E%E8%AF%95%E9%AA%8C%E6%96%B9%E6%A1%88.html">03 MuseTalk云端部署与试验方案</a><a data-document href="../selection/01-%E6%95%B0%E5%AD%97%E4%BA%BA%E5%8F%A3%E6%92%AD/04-MuseTalk%E9%83%A8%E7%BD%B2%E4%B8%8E%E9%A6%96%E6%B5%8B%E7%BB%93%E6%9E%9C.html">04 MuseTalk部署与首测结果</a><a data-document href="../selection/01-%E6%95%B0%E5%AD%97%E4%BA%BA%E5%8F%A3%E6%92%AD/05-OmniHuman%E5%BC%80%E9%80%9A%E5%90%8E%E5%AE%9E%E6%B5%8B%E7%BB%93%E6%9E%9C.html">05 OmniHuman开通后实测结果</a><a data-document href="../selection/01-%E6%95%B0%E5%AD%97%E4%BA%BA%E5%8F%A3%E6%92%AD/06-%E4%BA%BA%E7%89%A9B%E8%A1%A8%E6%83%85%E5%8A%A8%E4%BD%9C%E6%94%B9%E5%96%84%E5%AE%9E%E6%B5%8B.html">06 人物B表情动作改善实测</a><a data-document href="../selection/01-%E6%95%B0%E5%AD%97%E4%BA%BA%E5%8F%A3%E6%92%AD/MuseTalk%E5%AE%98%E6%96%B9%E8%83%BD%E5%8A%9B%E6%A0%B8%E9%AA%8C.html">MuseTalk官方能力核验</a><a data-document href="../selection/01-%E6%95%B0%E5%AD%97%E4%BA%BA%E5%8F%A3%E6%92%AD/%E6%B5%8B%E8%AF%95%E7%B4%A0%E6%9D%90%E6%8E%A5%E5%8F%A3%E6%A0%B8%E9%AA%8C.html">测试素材接口核验</a><a data-document href="../selection/01-%E6%95%B0%E5%AD%97%E4%BA%BA%E5%8F%A3%E6%92%AD/%E7%81%AB%E5%B1%B1%E5%80%99%E9%80%89%E6%A0%B8%E9%AA%8C.html">火山候选核验</a><a data-document href="../selection/01-%E6%95%B0%E5%AD%97%E4%BA%BA%E5%8F%A3%E6%92%AD/%E9%98%BF%E9%87%8C%E5%80%99%E9%80%89%E6%A0%B8%E9%AA%8C.html">阿里候选核验</a></nav></section><section class="nav-group"><h2 class="group-title">已选模型接入核验</h2><nav class="doc-nav" aria-label="已选模型接入核验"><a data-document href="../selection/02-%E5%B7%B2%E9%80%89%E6%A8%A1%E5%9E%8B/%E5%AE%98%E6%96%B9%E6%96%87%E6%9C%AC%E4%B8%8E%E8%AF%AD%E9%9F%B3%E6%8E%A5%E5%8F%A3%E6%A0%B8%E9%AA%8C.html">官方文本与语音接口核验</a></nav></section><section class="nav-group"><h2 class="group-title">人物与音色候选</h2><nav class="doc-nav" aria-label="人物与音色候选"><a data-document href="../selection/03-%E4%BA%BA%E7%89%A9%E4%B8%8E%E9%9F%B3%E8%89%B2/01-%E9%A6%96%E8%BD%AE%E5%80%99%E9%80%89%E4%B8%8E%E9%80%89%E6%8B%A9%E8%AF%B4%E6%98%8E.html">01 首轮候选与选择说明</a><a data-document href="../selection/03-%E4%BA%BA%E7%89%A9%E4%B8%8E%E9%9F%B3%E8%89%B2/02-%E4%BA%BA%E7%89%A9B%E4%B8%8E%E9%9F%B3%E8%89%B23%E5%AE%9A%E7%89%88%E8%AE%B0%E5%BD%95.html">02 人物B与音色3定版记录</a></nav></section><section class="nav-group"><h2 class="group-title">调研资料</h2><nav class="doc-nav" aria-label="调研资料"><a data-document href="01-%E4%BA%A7%E5%93%81%E5%BD%A2%E6%80%81%E4%B8%8E%E6%8A%96%E9%9F%B3%E7%94%9F%E6%80%81.html">01 产品形态与抖音生态</a><a data-document href="02-%E4%BA%BA%E7%89%A9%E4%B8%80%E8%87%B4%E6%80%A7%E7%94%9F%E6%88%90.html" aria-current="page">02 人物一致性生成</a><a data-document href="03-%E6%95%B0%E5%AD%97%E4%BA%BA%E5%8F%A3%E6%92%AD%E9%80%89%E5%9E%8B.html">03 数字人口播选型</a><a data-document href="04-TTS%E9%9F%B3%E8%89%B2%E4%B8%8E%E5%86%85%E5%AE%B9%E7%94%9F%E6%88%90%E8%B4%A8%E6%A3%80.html">04 TTS音色与内容生成质检</a><a data-document href="05-%E8%A7%86%E9%A2%91%E5%90%8E%E5%A4%84%E7%90%86%E5%8F%91%E5%B8%83%E4%B8%8E%E5%90%88%E8%A7%84.html">05 视频后处理发布与合规</a><a data-document href="06-%E5%86%B3%E7%AD%96%E6%B1%87%E6%80%BB.html">06 决策汇总</a></nav></section>
+    <p class="sidebar-note">11 份开发文档<br>10 份本轮选型试验<br>1 份已选模型接入核验<br>2 份人物与音色候选<br>6 份调研资料</p>
+  </aside>
+  <main id="main" tabindex="-1">
+    <header class="document-header">
+      <p class="eyebrow">调研资料 / 02</p>
+      <h1>02 人物一致性生成调研</h1>
+      <div class="doc-meta"><span>2026-09-21 核验记录</span><span>13 个章节</span><a href="02-%E4%BA%BA%E7%89%A9%E4%B8%80%E8%87%B4%E6%80%A7%E7%94%9F%E6%88%90.md">Markdown 原文</a></div>
+      <p class="source-notice">调研原始记录。当前范围和决策以最新开发文档及实测选型记录为准。</p>
+    </header>
+    <div class="reader-tools">
+      <form id="search-form" role="search">
+        <label class="sr-only" for="search-input">搜索本文</label>
+        <input id="search-input" type="search" placeholder="搜索本文，按 Enter 跳转" autocomplete="off">
+        <button id="search-next" type="submit">下一处</button>
+        <button id="search-clear" type="button">清除</button>
+        <span id="search-status" role="status" aria-live="polite"></span>
+      </form>
+    </div>
+    <article id="document-body">
+<blockquote>
+<p>调研对象：AI 生成「固定虚拟主播」的 Base Avatar 人物一致性与换装/换背景解耦方案
+项目：面向抖音的 AI 自媒体自动化系统（AI 教学/科普赛道）
+采集日期：2026-09-21 ｜ 本机：RTX 3050 Ti Laptop 4GB / 驱动 591.86 / torch 2.12.1 / diffusers 0.40.0 / ffmpeg 8.1.1（Anaconda：D:\anaconda3）
+边界：本文只覆盖 <strong>Base Avatar 人物一致性生成</strong> 与 <strong>换装/换背景解耦</strong>。唇形驱动见 03，TTS 见 04，发布见 05。
+数据纪律：GitHub 元数据经 <code>gh api</code>（已认证）直连核验，标 <code>[实测]</code>；官方文档原文摘录标 <code>[实测]</code>；无法核到的一律标 <code>[待核验]</code> 或「未核验」，<strong>不填估算数字充当事实</strong>。</p>
+</blockquote>
+<hr/>
+<h2 id="0-结论速览">0. 结论速览</h2>
+<div aria-label="可横向滚动的表格" class="table-scroll" tabindex="0"><table>
+<thead>
+<tr>
+<th>编号</th>
+<th>决策点</th>
+<th>推荐</th>
+<th>理由</th>
+<th>置信度</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>A1</td>
+<td>4GB 显存能否本地跑高质量人物一致性</td>
+<td><strong>不能</strong>。本地仅保留 SD1.5 级草稿/兜底能力</td>
+<td>官方 README 实测门槛：PhotoMaker 最低 11GB、PuLID-FLUX 16GB（demo 12GB）；SDXL/Flux 系在本机 4GB 上不可用。现有 SD1.5 流程已被验证「放大到 1080×1920 后脸部崩坏」</td>
+<td>高</td>
+</tr>
+<tr>
+<td>A2</td>
+<td>主生成通道</td>
+<td><strong>云端图像 API（参考图驱动范式）</strong></td>
+<td>2025-2026 的云模型已把「参考图[最多 9 张] + 文字指令」做成原生能力，天然满足「换装换背景不改人」，无需自建多模型 pipeline</td>
+<td>高</td>
+</tr>
+<tr>
+<td>A3</td>
+<td>首选云模型（质量档）</td>
+<td><strong>Gemini 3 Pro Image（Nano Banana Pro）</strong> 与 <strong>阿里百炼 wan2.7-image-pro</strong> 双通道</td>
+<td>Nano Banana Pro：1K–2K 出图 $0.134/张、4K $0.24/张 [实测 官方价格页]；wan2.7-image-pro 官方明示「多图参考（最多 9 张输入图片）」「角色一致性多图生成」、文生图最高 4096×4096，0.50 元/张 [实测 官方文档]</td>
+<td>高</td>
+</tr>
+<tr>
+<td>A4</td>
+<td>成本档备选</td>
+<td><strong>阿里 z-image-turbo（0.1 元/张，写实人像定位）</strong> 或 wan2.7-image（0.20 元/张）</td>
+<td>官方文档明示 z-image-turbo 「生成速度快 10 倍，价格约为 1/5」「写实人像和产品照片」</td>
+<td>中（画质需自测）</td>
+</tr>
+<tr>
+<td>A5</td>
+<td>三段解耦（Base+Outfit+Background）</td>
+<td><strong>资产化 + 参考图数组 + 提示词模板</strong>，而非三段分别生成再拼</td>
+<td>拼接（人体 inpaint/抠图合成）会引入颈部接缝、发丝边缘、光照不一致三类瑕疵；云模型一次生成可绕过</td>
+<td>高</td>
+</tr>
+<tr>
+<td>A6</td>
+<td>seed 固定是否足够锁定身份</td>
+<td><strong>不够</strong>。seed 只保证「同模型同版本同 prompt」可复现</td>
+<td>换装换背景必然改 prompt；云 API 模型热更新会让 seed 漂移。seed 是<strong>复现性</strong>手段，不是<strong>身份锁定</strong>手段</td>
+<td>高</td>
+</tr>
+<tr>
+<td>A7</td>
+<td>真正的身份锁定手段</td>
+<td><strong>参考图条件 + ArcFace 人脸指纹门禁</strong></td>
+<td>每张图生成后用 InsightFace/ArcFace 提 embedding，与 Base Avatar 基线比余弦相似度，低于阈值拒收重生成</td>
+<td>高</td>
+</tr>
+<tr>
+<td>A8</td>
+<td>本地人脸指纹/抠图的许可证风险</td>
+<td>自建人脸指纹链路<strong>只能用于内部质检，不可用于可商用训练</strong></td>
+<td>insightface 官方 README 原文：模型「available for non-commercial research purposes only」[实测]；InstantID 官方 README 亦声明「Our released checkpoints are also for research purposes only」[实测]</td>
+<td>高（但注意：生成结果的商用性取决于云服务条款，不取决于本地质检脚本）</td>
+</tr>
+<tr>
+<td>A9</td>
+<td>换装/换背景实现路径</td>
+<td><strong>首选「分层生成」而非「重绘人体」</strong>：背景独立生成 → 人物（云 API 按 outfit 提示词生成）→ 抠图合成；仅在必须保留精确姿态时才用 inpaint 躯干重绘</td>
+<td>抠图合成不改人脸像素 = 零身份漂移；inpaint 需严格保护头部区域 mask，工程脆弱</td>
+<td>中高</td>
+</tr>
+<tr>
+<td>A10</td>
+<td>抠图模型选型</td>
+<td><strong>BiRefNet（MIT）</strong> 为主，<code>rembg</code>（MIT）作为封装壳；优先用 matting 专用权重</td>
+<td>BiRefNet 有 portrait / general matting 专用权重，官方 README 注明可在 1024×1024 下 17 FPS、3.45GB 显存（RTX 4090, fp16）[实测]；rembg README 明示老模型（u2net/silueta）发丝边缘需要 <code>-a</code> 才平滑 [实测]</td>
+<td>中高</td>
+</tr>
+<tr>
+<td>A11</td>
+<td>人脸修复（CodeFormer/GFPGAN）要不要用</td>
+<td><strong>默认不用</strong>。它是身份漂移的来源，不是身份保持的工具</td>
+<td>CodeFormer 为 S-Lab License 1.0「non-commercial purpose」[实测]；且人脸修复按先验「美化」五官形态，会改变下游唇形驱动依赖的嘴部几何</td>
+<td>中高</td>
+</tr>
+<tr>
+<td>A12</td>
+<td>1080×1920 放大链路</td>
+<td><strong>直接按目标分辨率云端生成，不做「先小后放大」</strong></td>
+<td>云 API 已支持 2K/4K 出图；Real-ESRGAN/GFPGAN 会在放大时「重绘」细节，对嘴部几何是灾难</td>
+<td>高</td>
+</tr>
+<tr>
+<td>A13</td>
+<td>本地还能保留什么</td>
+<td>编排调度 + 质检（人脸相似度）+ 抠图合成 + 背景拼接</td>
+<td>这几步都是小模型或 CPU 可跑，且不产生身份漂移</td>
+<td>高</td>
+</tr>
+<tr>
+<td>A14</td>
+<td>单张成图成本量级</td>
+<td>0.1–0.5 元/张（国产云）／$0.03–$0.24/张（海外云）</td>
+<td>见 §8 成本表；均为官方页采集，落地前需复核</td>
+<td>中高</td>
+</tr>
+</tbody>
+</table></div>
+<hr/>
+<h2 id="1-需求拆解身份锁定的技术定义">1. 需求拆解：身份锁定的技术定义</h2>
+<h3 id="11-必须锁死不可随机变">1.1 必须锁死（不可随机变）</h3>
+<div aria-label="可横向滚动的表格" class="table-scroll" tabindex="0"><table>
+<thead>
+<tr>
+<th>维度</th>
+<th>具体含义</th>
+<th>校验方式（建议）</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>脸型与五官</td>
+<td>颅骨轮廓、眉眼鼻唇比例、双眼间距、脸宽比</td>
+<td>ArcFace embedding 余弦相似度 ≥ 阈值</td>
+</tr>
+<tr>
+<td>发型</td>
+<td>长度、卷直、发际线形态、分发方向</td>
+<td>视觉人工抽检 + 可选 CLIP/DINO 特征距离</td>
+</tr>
+<tr>
+<td>肤色与肤色质感</td>
+<td>色相/明度/饱和度区间、肤质</td>
+<td>面部区域色度直方图距离</td>
+</tr>
+<tr>
+<td>年龄感</td>
+<td>「同一人跨年份」漂移不可超一年龄档</td>
+<td>视觉抽检</td>
+</tr>
+<tr>
+<td>性别呈现</td>
+<td>不可漂移</td>
+<td>视觉抽检 / 分类器</td>
+</tr>
+</tbody>
+</table></div>
+<h3 id="12-允许变化">1.2 允许变化</h3>
+<div aria-label="可横向滚动的表格" class="table-scroll" tabindex="0"><table>
+<thead>
+<tr>
+<th>维度</th>
+<th>可变量</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>服装</td>
+<td>演播室正装 / 教师装 / 科技感外套 / 新闻主播装 / 实验室白大褂</td>
+</tr>
+<tr>
+<td>背景</td>
+<td>演播室 / 教室 / 科技感 / 新闻演播台 / 实验室</td>
+</tr>
+<tr>
+<td>姿态</td>
+<td>限「口播可用姿态」：正脸或 3/4 侧脸、双肩可见、无遮挡</td>
+</tr>
+<tr>
+<td>光照与色调</td>
+<td>允许，但不得因此改变肤色认知</td>
+</tr>
+<tr>
+<td>表情</td>
+<td>允许张嘴（下游唇形驱动需要），但嘴部不得形变</td>
+</tr>
+</tbody>
+</table></div>
+<h3 id="13-三段解耦的可落地定义">1.3 「三段解耦」的可落地定义</h3>
+<pre><code>Base Avatar（身份层，只读资产）
+  ├─ avatar_hero.png        定妆照（2K，正脸/胸像）
+  ├─ avatar_ref_1..4.png    多角度/多光照参考图（用于多图参考输入）
+  └─ avatar_face.npy        ArcFace embedding 基线（建议 3~5 张取均值 + 类内方差）
+Outfit（服装层，可替换词条/参考图）
+  └─ outfits.yaml           { name, prompt_cn, prompt_en, ref_image?(可选) }
+Background（背景层，可替换词条/参考图）
+  └─ backgrounds.yaml       { name, prompt_cn, prompt_en, ref_image?(可选) }
+
+生成 = f(avatar_ref[], outfit, background, camera, seed)  → 单次云 API 调用
+</code></pre>
+<p><strong>核心原则：身份层只读、永不重绘。</strong> 任何会「重新画脸」的环节（inpaint 面部、face restore、超分重绘）都是身份漂移风险源。</p>
+<h3 id="14-下游唇形驱动的硬约束写给-03-的接口约定">1.4 下游唇形驱动的硬约束（写给 03 的接口约定）</h3>
+<ul>
+<li>构图：胸像或半身，<strong>正脸或 ≤15° 偏转</strong>；嘴部区域无遮挡（无手、无麦克风、无围巾遮挡嘴）。</li>
+<li>分辨率：正脸区域像素高度需足够支撑逐帧嘴部形变；建议人脸在成图中占比不要过小（生成阶段先按 2K 出图，再裁/缩到 1080×1920）。</li>
+<li>生成的图<strong>不要经过任何「重绘型」放大</strong>（见 §7）。</li>
+</ul>
+<hr/>
+<h2 id="2-方案全景对比表">2. 方案全景对比表</h2>
+<blockquote>
+<p>Stars / License / 最近推送：2026-09-21 经 <code>gh api</code>（已认证账号 yz261402-dotcom）直连核验 <code>[实测]</code>。
+「身份保真度」「换装换背景保持」为综合判断，非实测数值，标 <code>[判断]</code>。</p>
+</blockquote>
+<h3 id="21-本地开源方案">2.1 本地开源方案</h3>
+<div aria-label="可横向滚动的表格" class="table-scroll" tabindex="0"><table>
+<thead>
+<tr>
+<th>方案</th>
+<th>身份保真度</th>
+<th>换装换背景保身份</th>
+<th>显存需求</th>
+<th>License</th>
+<th>成熟度</th>
+<th>活跃度（stars / 最近推送）</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>SD1.5 + LoRA</strong>（现有 demo）</td>
+<td>中（需自训 LoRA，人脸稳定性一般）</td>
+<td>中（换装需重绘躯干，脸部易漂）</td>
+<td>2.5–3.5GB <code>[估算]</code></td>
+<td>模型：CreativeML OpenRAIL-M；训练脚本 kohya-ss/sd-scripts Apache-2.0</td>
+<td>高（2023 年范式）</td>
+<td>sd-scripts 7,239 / 2026-09-09；ai-toolkit 12,068（MIT）/ 2026-09-20</td>
+</tr>
+<tr>
+<td><strong>SDXL + LoRA</strong></td>
+<td>中高</td>
+<td>中高</td>
+<td>~8–12GB <code>[估算]</code></td>
+<td>SDXL base：openrail++（HF 卡 3,088,510 downloads / 8,202 likes）</td>
+<td>高</td>
+<td>Stability-AI/generative-models 27,288（MIT）/ 2025-12-16</td>
+</tr>
+<tr>
+<td><strong>IP-Adapter</strong></td>
+<td>中（图像提示，非人脸 ID）</td>
+<td>中</td>
+<td>SD1.5 版 ~3–4GB <code>[估算]</code></td>
+<td>tencent-ailab/IP-Adapter <strong>Apache-2.0</strong>；h94/IP-Adapter（HF）<strong>apache-2.0</strong></td>
+<td>高（范式已过时）</td>
+<td>6,689 / 2024-06-28（停更约 2 年）；ComfyUI 插件 cubiq/ComfyUI_IPAdapter_plus 6,134（<strong>GPL-3.0</strong>）/ 2025-04-14</td>
+</tr>
+<tr>
+<td><strong>IP-Adapter-FaceID</strong></td>
+<td>中高（ID embedding 注入）</td>
+<td>中</td>
+<td>SD1.5 版 ~3.5–4.5GB <code>[估算]</code>（另需 InsightFace ONNX）</td>
+<td>⚠️ InsightFace 依赖非商用；HF 卡 <code>h94/IP-Adapter-FaceID</code> <strong>无 license 字段</strong>（未核验）</td>
+<td>中（官方标注 experimental）</td>
+<td>HF 185,226 downloads / 1,886 likes / 2024-04-16（停更）</td>
+</tr>
+<tr>
+<td><strong>InstantID</strong></td>
+<td>高（人脸 keypoint + 图像适配器，2024 SOTA）</td>
+<td>高</td>
+<td>~10–16GB <code>[估算]</code>（官方称可开 CPU offloading 省显存）</td>
+<td>⚠️ <strong>代码 Apache-2.0，但官方 README 明示「我们的权重仅供研究用途」+ InsightFace 人脸模型非商用</strong> <code>[实测]</code></td>
+<td>高（论文级）</td>
+<td>11,993 / 2024-07-18（停更约 2 年，187 open issues）</td>
+</tr>
+<tr>
+<td><strong>PuLID</strong></td>
+<td>高（ID 对比对齐，弱化对文本的干扰）</td>
+<td>高</td>
+<td><strong>官方 README：PuLID-FLUX 可跑 16GB 卡；Local gradio demo 支持 12GB</strong> <code>[实测]</code></td>
+<td>Apache-2.0（仓库）<code>[实测]</code>；同样依赖 InsightFace 人脸模型（非商用）</td>
+<td>高</td>
+<td>3,551 / 2025-07-31（最近提交支持 FLUX.1-Krea-dev）；原 <code>guozinan/PuLID</code> 已 404，主仓库为 <code>ToTheBeginning/PuLID</code> <code>[实测]</code></td>
+</tr>
+<tr>
+<td><strong>PhotoMaker</strong></td>
+<td>高（堆叠 ID embedding，免训练）</td>
+<td>高</td>
+<td><strong>官方 README：最低 11GB</strong> <code>[实测]</code></td>
+<td>Apache-2.0（LICENSE 正文，除第三方组件）<code>[实测]</code>；依赖 InsightFace（非商用）</td>
+<td>高</td>
+<td>10,089 / 2024-10-31（停更）</td>
+</tr>
+<tr>
+<td><strong>Flux.1-dev + PuLID</strong></td>
+<td>很高</td>
+<td>很高</td>
+<td>fp16 24GB / fp8 ~12GB / GGUF Q4 ~6–8GB（<code>[估算]</code>，GGUF 方案见 city96/ComfyUI-GGUF 4,030 Apache-2.0）</td>
+<td>⚠️ <strong>FLUX.1-dev 为 license:other（非商用许可证，HF 卡 gated:auto）</strong> <code>[实测]</code>；商用需改 FLUX.1-schnell（<strong>apache-2.0</strong> <code>[实测]</code>）或买 BFL 商用授权</td>
+<td>高</td>
+<td>black-forest-labs/flux 25,971（Apache-2.0 代码仓）/ 2025-07-31；FLUX.1-dev HF 751,072 downloads / 14,857 likes</td>
+</tr>
+<tr>
+<td><strong>Qwen-Image-Edit / -2509</strong></td>
+<td>高（多图输入、指令编辑）</td>
+<td>高</td>
+<td>20B 级，fp16 需 40GB+ <code>[估算]</code>；<strong>官方 README 明示 DiffSynth-Studio 支持逐层 offload「inference within 4GB VRAM」</strong> <code>[实测]</code></td>
+<td><strong>Apache-2.0</strong>（README 与 HF 卡均为 apache-2.0）<code>[实测]</code></td>
+<td>中高</td>
+<td>QwenLM/Qwen-Image 8,342 / 2026-02-10；HF -2509 版 473,808 downloads / 1,243 likes</td>
+</tr>
+<tr>
+<td><strong>StoryDiffusion / ACE++ / DreamO / InstantCharacter / UNO</strong></td>
+<td>中～高</td>
+<td>高</td>
+<td>均需 SDXL/Flux 级底座</td>
+<td>ACE_plus NOASSERTION；DreamO、UNO、InstantCharacter 见下</td>
+<td>研究期</td>
+<td>ACE_plus 1,364 / 2025-04-21；Tencent/InstantCharacter 1,043 / 2025-05-14；bytedance/DreamO 1,649（Apache-2.0）/ 2025-08-14；bytedance/UNO 1,362（Apache-2.0）/ 2025-09-12</td>
+</tr>
+<tr>
+<td><strong>ByteDance/InfiniteYou</strong></td>
+<td>高</td>
+<td>高</td>
+<td>Flux 级，4GB 不可行</td>
+<td>⚠️ <strong>cc-by-nc-4.0（非商用）</strong> <code>[实测]</code></td>
+<td>中</td>
+<td>2,683（GitHub 仓 Apache-2.0）/ 2025-08-22（仓库与模型卡许可证不一致，需复核）</td>
+</tr>
+</tbody>
+</table></div>
+<h3 id="22-云端-api-方案">2.2 云端 API 方案</h3>
+<div aria-label="可横向滚动的表格" class="table-scroll" tabindex="0"><table>
+<thead>
+<tr>
+<th>方案</th>
+<th>身份保真度</th>
+<th>换装换背景能力</th>
+<th>计费（原币）<code>[实测 2026-09-21]</code></th>
+<th>商用条款</th>
+<th>备注</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>阿里百炼 wan2.7-image-pro</strong></td>
+<td>高</td>
+<td><strong>官方明示：多图参考（最多 9 张输入图片）、边界框交互式编辑、角色一致性多图生成</strong>；文生图 4096×4096，编辑 2048×2048，n≤4（组图模式≤12）</td>
+<td><strong>0.50 元/张</strong></td>
+<td>阿里云服务条款（需按百炼条款复核生成内容商用与素材授权）</td>
+<td>组图模式 <code>enable_sequential</code> 一次出最多 12 张有故事连贯性的图，<code>seed</code> 参数 [0, 2147483647]</td>
+</tr>
+<tr>
+<td><strong>阿里百炼 qwen-image-3.0-pro</strong></td>
+<td>高</td>
+<td>文生图 + 编辑；最大 2048×2048，n≤6；支持 928×1664（9:16）</td>
+<td><strong>输入 0.02 元/张 + 输出 0.25 元/张</strong>；免费额度「输入输出共 10 张」</td>
+<td>同上</td>
+<td>阿里官方定位：对标 Nano Banana Pro / GPT Image / Seedream 4.0</td>
+</tr>
+<tr>
+<td><strong>阿里百炼 wan2.7-image / wan2.6-image</strong></td>
+<td>中高</td>
+<td>同系列，最高 2K / 1440×1440</td>
+<td><strong>0.20 元/张</strong>（免费额度 50 张）</td>
+<td>同上</td>
+<td>成本档主力</td>
+</tr>
+<tr>
+<td><strong>阿里百炼 z-image-turbo</strong></td>
+<td>中</td>
+<td>仅文生图（不支持编辑），最高 2048×2048</td>
+<td><strong>0.1 元/张</strong>（关闭 prompt 改写）/ 0.2 元/张（开启）；免费额度 100 张</td>
+<td>同上</td>
+<td>官方定位「写实人像和产品照片」「速度快 10 倍，价格约 1/5」</td>
+</tr>
+<tr>
+<td><strong>阿里百炼 qwen-image-edit-max</strong></td>
+<td>高</td>
+<td>图像编辑</td>
+<td><strong>0.50 元/张</strong>（免费 100 张）</td>
+<td>同上</td>
+<td>编辑通道</td>
+</tr>
+<tr>
+<td><strong>阿里百炼 wanx2.1-imageedit</strong>（Legacy）</td>
+<td>中</td>
+<td>局部重绘/编辑，1024×1024</td>
+<td><strong>0.14 元/张</strong>（免费 500 张）</td>
+<td>同上</td>
+<td>存量模型，仅北京地域</td>
+</tr>
+<tr>
+<td><strong>Google Gemini 3 Pro Image（Nano Banana Pro）</strong></td>
+<td>很高</td>
+<td>参考图驱动 + 指令编辑，1K–4K</td>
+<td><strong>$0.134/张（1024–2048px，1120 tokens @ $120/1M）；$0.24/张（≤4096px）</strong>；图片输入 $0.0011/张</td>
+<td>Google Gemini API 条款（需复核生成内容商用与地区可用性）</td>
+<td>2026-09 官方价格页 <code>[实测]</code></td>
+</tr>
+<tr>
+<td><strong>Google Gemini 3.1 Flash Image（Nano Banana 2）</strong></td>
+<td>高</td>
+<td>同上</td>
+<td><strong>512px $0.045 / 1K $0.067 / 2K ≈$0.10</strong>（1680 tokens @ $60/1M）</td>
+<td>同上</td>
+<td>低成本档</td>
+</tr>
+<tr>
+<td><strong>Nano Banana 2 Lite（3.1 Flash Lite Image）</strong></td>
+<td>中高</td>
+<td>同上</td>
+<td><strong>1K $0.0336/张</strong>（@ $30/1M）</td>
+<td>同上</td>
+<td>最便宜档</td>
+</tr>
+<tr>
+<td><strong>Gemini 2.5 Flash Image（Nano Banana，上一代）</strong></td>
+<td>高</td>
+<td>同上</td>
+<td><strong>≤1024px $0.039/张</strong>（1290 tokens @ $30/1M）</td>
+<td>同上</td>
+<td>上一代，成本更低</td>
+</tr>
+<tr>
+<td><strong>OpenAI gpt-image-2.5-sunburst / -flare</strong></td>
+<td>很高（编辑精度）</td>
+<td>参考图 + 编辑；<code>input_fidelity</code> 在 gpt-image-2 起「始终高保真处理图片输入」</td>
+<td><strong>图片输入 $8/1M tokens（cached $2）；图片输出 $30/1M tokens；文本输入 $5/1M</strong> —— 单张价格需用官方计算器 <code>[待核验]</code></td>
+<td>OpenAI 条款</td>
+<td>尺寸：1024×1024 / 1536×1024 / 1024×1536；自定义尺寸边长 16 倍数、比例 1:3–3:1、单边 ≤3840、总像素 655,360–8,294,400；质量 low/medium/high/xhigh/max</td>
+</tr>
+<tr>
+<td><strong>fal.ai 托管（Seedream V4 / Flux Kontext Pro / Nanobanana / Qwen）</strong></td>
+<td>高</td>
+<td>参考图/编辑</td>
+<td><strong>Seedream V4 $0.03/张；Flux Kontext Pro $0.04/张；Nanobanana $0.0398/张；Qwen-Image $0.02/MP</strong> <code>[实测 fal.ai/pricing]</code></td>
+<td>各模型上游许可 + fal 条款</td>
+<td>海外聚合平台，按 1MP 归一化定价</td>
+</tr>
+<tr>
+<td><strong>BFL 官方 API</strong></td>
+<td>高</td>
+<td>Flux 系编辑/参考</td>
+<td>按<strong>输出百万像素</strong>计费，页面可见档位 $0.014 / $0.015 / $0.03 / $0.0375 / $0.045 每 MP <code>[实测 bfl.ai/pricing]</code>；<strong>模型↔单价对应关系未核验</strong></td>
+<td>BFL 商业条款</td>
+<td>具体模型单价需复核</td>
+</tr>
+<tr>
+<td><strong>即梦 / Seedream（火山引擎方舟）</strong></td>
+<td>高</td>
+<td>多参考图</td>
+<td><strong>未核验</strong>：火山引擎文档与定价页为 JS 渲染，curl 取不到正文；价格计算器需登录</td>
+<td>火山引擎条款</td>
+<td>阿里百炼官方对照表把 Seedream 4.0 列为「高质量档」对标模型 <code>[实测 阿里文档]</code>，可侧面印证其定位</td>
+</tr>
+<tr>
+<td><strong>可灵 / 可图（快手）</strong></td>
+<td>高</td>
+<td>多图参考</td>
+<td><strong>未核验</strong>（官网/文档需登录，未取得公开计费页正文）</td>
+<td>快手条款</td>
+<td>——</td>
+</tr>
+<tr>
+<td><strong>Midjourney</strong></td>
+<td>高</td>
+<td><code>--cref</code> 角色参考</td>
+<td><strong>未核验</strong>：<code>midjourney.com/plans</code> 返回 HTTP 403</td>
+<td>MJ 条款（订阅制，商用取决于订阅档）</td>
+<td>无官方 API（第三方代管存在违约风险）</td>
+</tr>
+<tr>
+<td><strong>GPT-Image（OpenAI）</strong></td>
+<td>见上</td>
+<td>见上</td>
+<td>见上</td>
+<td>——</td>
+<td>——</td>
+</tr>
+</tbody>
+</table></div>
+<h3 id="23-支撑组件抠图-放大-修复-训练">2.3 支撑组件（抠图 / 放大 / 修复 / 训练）</h3>
+<div aria-label="可横向滚动的表格" class="table-scroll" tabindex="0"><table>
+<thead>
+<tr>
+<th>组件</th>
+<th>用途</th>
+<th>License</th>
+<th>活跃度 <code>[实测]</code></th>
+<th>备注</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>ZhengPeng7/BiRefNet</strong></td>
+<td>抠图（含 portrait/general matting 专用权重）</td>
+<td><strong>MIT</strong></td>
+<td>4,211 / 2026-09-02</td>
+<td>README：1024×1024、3.45GB、17 FPS（RTX 4090 fp16）；有 ONNX 权重</td>
+</tr>
+<tr>
+<td><strong>danielgatis/rembg</strong></td>
+<td>抠图封装（多模型后端）</td>
+<td><strong>MIT</strong></td>
+<td>24,823 / 2026-09-20</td>
+<td>README 明示：老模型（u2net/silueta）边缘硬，发丝需 <code>-a</code> alpha matting；新模型（bria-rmbg / birefnet-* / isnet-general-use）边缘已平滑</td>
+</tr>
+<tr>
+<td><strong>briaai/RMBG-2.0（HF）</strong></td>
+<td>抠图（高人气）</td>
+<td><strong>license: other（gated）</strong> <code>[实测]</code></td>
+<td>621,979 downloads / 1,459 likes</td>
+<td>商用需复核 BRIA 许可全文；RMBG-1.4 同</td>
+</tr>
+<tr>
+<td><strong>xuebinqin/U-2-Net</strong></td>
+<td>抠图底座（rembg 默认 u2net）</td>
+<td>Apache-2.0</td>
+<td>9,864 / 2024-06-26</td>
+<td>老架构</td>
+</tr>
+<tr>
+<td><strong>xinntao/Real-ESRGAN</strong></td>
+<td>放大</td>
+<td><strong>BSD-3-Clause</strong></td>
+<td>36,856 / 2024-08-06</td>
+<td>支持 tile、alpha、16-bit、<code>--face_enhance</code>（GFPGAN）；ncnn 可执行文件分块会引入块间不一致（README 原文）</td>
+</tr>
+<tr>
+<td><strong>TencentARC/GFPGAN</strong></td>
+<td>人脸修复</td>
+<td><strong>Apache-2.0</strong>（除第三方组件）<code>[实测]</code></td>
+<td>37,675 / 2024-07-26</td>
+<td>按先验重建五官 → <strong>身份漂移风险</strong></td>
+</tr>
+<tr>
+<td><strong>sczhou/CodeFormer</strong></td>
+<td>人脸修复</td>
+<td>⚠️ <strong>S-Lab License 1.0 — 仅非商用</strong> <code>[实测]</code></td>
+<td>18,141 / 2025-11-18</td>
+<td>商用不可用</td>
+</tr>
+<tr>
+<td><strong>microsoft/Bringing-Old-Photos-Back-to-Life</strong></td>
+<td>老照片修复</td>
+<td>MIT</td>
+<td>15,716 / 2023-10-26</td>
+<td>停更约 3 年</td>
+</tr>
+<tr>
+<td><strong>deepinsight/insightface</strong></td>
+<td>人脸检测/对齐/ArcFace 特征</td>
+<td>代码 MIT，<strong>模型非商用研究用途</strong> <code>[实测]</code></td>
+<td>29,788 / 2026-09-09</td>
+<td>内部质检可用；不可作为可商用训练数据来源</td>
+</tr>
+<tr>
+<td><strong>serengil/deepface</strong></td>
+<td>人脸识别封装（多后端）</td>
+<td>MIT</td>
+<td>23,463 / 2026-09-16</td>
+<td>封装层；底层后端许各自约束</td>
+</tr>
+<tr>
+<td><strong>levihsu/OOTDiffusion / yisol/IDM-VTON / Zheng-Chong/CatVTON</strong></td>
+<td>虚拟试衣（换装）</td>
+<td>NOASSERTION</td>
+<td>6,597 / 2024-05-13；5,180 / 2025-03-07；1,845 / 2025-12-16</td>
+<td>均需 SDXL 级底座；本机不可跑</td>
+</tr>
+<tr>
+<td><strong>ltdrdata/ComfyUI-Impact-Pack</strong></td>
+<td>ComfyUI 的 FaceDetailer 等</td>
+<td><strong>GPL-3.0</strong></td>
+<td>3,317 / 2026-04-19</td>
+<td>GPL 对闭源分发不友好</td>
+</tr>
+<tr>
+<td><strong>comfyanonymous/ComfyUI</strong></td>
+<td>编排</td>
+<td><strong>GPL-3.0</strong></td>
+<td>134,121 / 2026-09-21</td>
+<td>若仅自用无分发，GPL 风险可控；若打包分发需注意</td>
+</tr>
+<tr>
+<td><strong>lllyasviel/ControlNet</strong></td>
+<td>结构约束</td>
+<td>Apache-2.0</td>
+<td>34,115 / 2024-02-25</td>
+<td>停更</td>
+</tr>
+<tr>
+<td><strong>city96/ComfyUI-GGUF</strong></td>
+<td>低显存量化加载</td>
+<td>Apache-2.0</td>
+<td>4,030 / 2026-01-12</td>
+<td>让 Flux/Qwen 类 DiT 模型能在低端卡跑（本机 4GB 仍不够）</td>
+</tr>
+</tbody>
+</table></div>
+<p><strong>⚠️ 许可证红线小结</strong>（商用前必须处置）</p>
+<ol>
+<li><code>insightface</code> 预训练模型<strong>非商用</strong> → InstantID / PuLID / PhotoMaker / IP-Adapter-FaceID 的<strong>人脸编码器</strong>均踩此线；InstantID 更额外声明自己的权重仅研究用途。</li>
+<li><code>FLUX.1-dev</code> 非商用；<code>InfiniteYou</code> 模型卡 cc-by-nc-4.0；<code>CodeFormer</code> S-Lab 非商用；<code>RMBG-1.4/2.0</code> 为 other（需读全文）。</li>
+<li><code>ComfyUI</code> 与 <code>ComfyUI_IPAdapter_plus</code>、<code>Impact-Pack</code> 为 <strong>GPL-3.0</strong> —— 自用可，闭源分发需评估。</li>
+</ol>
+<hr/>
+<h2 id="3-4gb-显存可行性裁决正面回答">3. 4GB 显存可行性裁决（正面回答）</h2>
+<p><strong>结论：本机（RTX 3050 Ti Laptop, 4GB）无法本地生成满足抖音 1080×1920 口播质量的人物一致性图像。本地定位应下调为「编排 + 质检 + 合成」，生成走云 API。</strong></p>
+<h3 id="31-可行性表">3.1 可行性表</h3>
+<div aria-label="可横向滚动的表格" class="table-scroll" tabindex="0"><table>
+<thead>
+<tr>
+<th>方案</th>
+<th>显存需求</th>
+<th>4GB 能否跑</th>
+<th>降级手段</th>
+<th>出图分辨率上限</th>
+<th>速度估计</th>
+<th>依据</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>SD1.5 文生图（现有 demo）</td>
+<td>2.5–3.5GB</td>
+<td>✅ 能</td>
+<td>fp16、<code>--lowvram</code>、无 refiner</td>
+<td>512×768（更高即崩）</td>
+<td>秒级～数十秒/张</td>
+<td>用户既有实测：放大到 1080×1920 脸部崩坏</td>
+</tr>
+<tr>
+<td>SD1.5 + LoRA 推理</td>
+<td>3–3.5GB</td>
+<td>✅ 能</td>
+<td>同上</td>
+<td>512×768</td>
+<td>同上</td>
+<td><code>[工程估算]</code></td>
+</tr>
+<tr>
+<td>SD1.5 + IP-Adapter（图像提示）</td>
+<td>3–4GB</td>
+<td>⚠️ 勉强</td>
+<td>关 T5/CLIP 部分、分步 offload</td>
+<td>512×512</td>
+<td>慢</td>
+<td><code>[工程估算]</code></td>
+</tr>
+<tr>
+<td>SD1.5 + IP-Adapter-FaceID</td>
+<td>3.5–4.5GB（含 InsightFace ONNX）</td>
+<td>❌ 基本 OOM</td>
+<td>无法有效降级</td>
+<td>——</td>
+<td>——</td>
+<td><code>[工程估算]</code> + 非商用许可</td>
+</tr>
+<tr>
+<td>SDXL 文生图 / + LoRA</td>
+<td>~8–12GB</td>
+<td>❌ 不能</td>
+<td>需 8bit/4bit 量化 + 512 分辨率，收益极差</td>
+<td>——</td>
+<td>——</td>
+<td><code>[工程估算，待核验]</code></td>
+</tr>
+<tr>
+<td>SDXL + IP-Adapter</td>
+<td>~10–14GB</td>
+<td>❌ 不能</td>
+<td>——</td>
+<td>——</td>
+<td>——</td>
+<td><code>[工程估算]</code></td>
+</tr>
+<tr>
+<td>InstantID（SDXL + ControlNet + 人脸编码器）</td>
+<td>~10–16GB</td>
+<td>❌ 不能（官方仅提供 CPU offloading 省显存选项）</td>
+<td>——</td>
+<td>——</td>
+<td>——</td>
+<td>InstantID README 提及 CPU offloading <code>[实测]</code></td>
+</tr>
+<tr>
+<td>PuLID（SDXL 版）</td>
+<td>~12GB+</td>
+<td>❌ 不能</td>
+<td>——</td>
+<td>——</td>
+<td>——</td>
+<td><code>[工程估算]</code></td>
+</tr>
+<tr>
+<td>PuLID-FLUX</td>
+<td><strong>16GB</strong>（官方 README）</td>
+<td>❌ 不能</td>
+<td>——</td>
+<td>——</td>
+<td>——</td>
+<td><strong>官方 README 原文</strong> <code>[实测]</code></td>
+</tr>
+<tr>
+<td>PhotoMaker</td>
+<td><strong>11GB</strong>（官方 README）</td>
+<td>❌ 不能</td>
+<td>——</td>
+<td>——</td>
+<td>——</td>
+<td><strong>官方 README 原文</strong> <code>[实测]</code></td>
+</tr>
+<tr>
+<td>Flux.1-dev fp16 / fp8 / GGUF-Q4</td>
+<td>24GB / ~12GB / ~6–8GB</td>
+<td>❌ 不能</td>
+<td>逐层 offload 到内存后理论上可跑，但速度不可用</td>
+<td>——</td>
+<td>——</td>
+<td><code>[工程估算]</code>；ComfyUI-GGUF 存在但 4GB 仍不足</td>
+</tr>
+<tr>
+<td><strong>Qwen-Image / Qwen-Image-Edit（20B 级）</strong></td>
+<td>fp16 40GB+；<strong>官方 README 称 DiffSynth-Studio 逐层 offload 可在 4GB 显存内推理</strong></td>
+<td>⚠️ <strong>理论可行、工程不建议</strong></td>
+<td>逐层 offload + CPU 推理文本编码器</td>
+<td>2048×2048（慢）</td>
+<td>分钟～十分钟级/张</td>
+<td><strong>官方 README 原句</strong> <code>[实测]</code>；速度未实测，标 <code>[待核验]</code></td>
+</tr>
+<tr>
+<td>人脸检测 + ArcFace 相似度（InsightFace CPU/ONNX）</td>
+<td>&lt;1GB（GPU）或纯 CPU</td>
+<td>✅ 能</td>
+<td>CPU 推理</td>
+<td>——</td>
+<td>百毫秒级</td>
+<td>质检用途，非生成</td>
+</tr>
+<tr>
+<td>GFPGAN / CodeFormer 人脸修复</td>
+<td>~1.5–3GB</td>
+<td>✅ 能</td>
+<td>512 输入、tile</td>
+<td>512 面部</td>
+<td>秒级</td>
+<td>但<strong>身份漂移</strong>，不推荐纳入链路</td>
+</tr>
+<tr>
+<td>BiRefNet 抠图</td>
+<td><strong>3.45GB @1024（fp16, 4090）</strong></td>
+<td>✅ 能（ONNX/CPU 更稳）</td>
+<td>ONNX Runtime + CPU</td>
+<td>1024–2048</td>
+<td>秒级</td>
+<td><strong>官方 README</strong> <code>[实测]</code></td>
+</tr>
+<tr>
+<td>rembg（u2net/isnet/birefnet）</td>
+<td>CPU 可跑 / GPU &lt;2GB</td>
+<td>✅ 能</td>
+<td>CPU</td>
+<td>原图分辨率</td>
+<td>秒级</td>
+<td>README</td>
+</tr>
+<tr>
+<td>Real-ESRGAN x2/x4（tile）</td>
+<td>2–4GB（tile 可再降）</td>
+<td>✅ 能</td>
+<td><code>-t</code> tile、ncnn-vulkan/CPU</td>
+<td>输出 ≤2048 较稳</td>
+<td>十秒级</td>
+<td>README</td>
+</tr>
+<tr>
+<td>背景合成 / 图层合成（PIL/ffmpeg）</td>
+<td>不计（CPU）</td>
+<td>✅ 能</td>
+<td>——</td>
+<td>1080×1920</td>
+<td>毫秒级</td>
+<td>——</td>
+</tr>
+</tbody>
+</table></div>
+<h3 id="32-裁决">3.2 裁决</h3>
+<ul>
+<li><strong>能跑</strong>：SD1.5 文本出图（质量不达标）、人脸指纹质检、抠图、图层合成、小幅度放大。</li>
+<li><strong>不能跑</strong>：一切能满足「身份高保真 + 高分辨率」的生成方案（SDXL/Flux/Qwen 全系列）。</li>
+<li><strong>结论</strong>：本机角色 = <strong>编排调度引擎 + 质检门禁 + 后处理合成</strong>；生成环节外包给云 API。这与用户「愿意为云 API 付费换取质量，本地只做编排调度」的决策一致，<strong>无需更换硬件即可开工</strong>。</li>
+</ul>
+<hr/>
+<h2 id="4-推荐技术路线">4. 推荐技术路线</h2>
+<h3 id="41-主路线云-api参考图驱动单次生成推荐">4.1 主路线：云 API「参考图驱动」单次生成（推荐）</h3>
+<pre><code>[离线一次性] 铸造 Base Avatar
+  1) 用云 API 文生图，反复迭代出「定妆照」（正脸、胸像、干净背景）
+  2) 生成 4 张变体参考图：正脸 / 3-4 侧 / 微笑露齿（供唇形驱动）+ 上半身
+  3) 本地算 ArcFace embedding 基线（3~5 张取均值 + 记录类内最小余弦）
+  4) 资产落盘（avatar_hero.png / avatar_ref_*.png / avatar_face.npz）
+
+[日常] 每条视频按 outfit × background 组合生成
+  5) prompt 模板 + 参考图数组 → 云 API 单次调用 → 2K 竖屏图
+  6) 本地质检：人脸检测 → 对齐 → embedding → 余弦相似度 ≥ 阈值？
+       是 → 通过；否 → 换 seed / 调整提示词重生成（最多 N 次）
+  7) （可选）抠图 + 背景合成（若需背景与人物严格分层）
+  8) 交付 1080×1920 PNG（直接缩放，不重绘）
+</code></pre>
+<p><strong>推荐模型排序</strong>（按「身份一致性 + 换装换背景能力 + 成本」综合）：</p>
+<div aria-label="可横向滚动的表格" class="table-scroll" tabindex="0"><table>
+<thead>
+<tr>
+<th>顺位</th>
+<th>模型</th>
+<th>单张成本 <code>[实测]</code></th>
+<th>选择理由</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>主 1</td>
+<td><strong>Gemini 3 Pro Image（Nano Banana Pro）</strong></td>
+<td>$0.134（1K–2K）</td>
+<td>当前世代质量档，参考图驱动的身份一致性是强项</td>
+</tr>
+<tr>
+<td>主 2</td>
+<td><strong>阿里 wan2.7-image-pro</strong></td>
+<td>0.50 元/张</td>
+<td>官方明示「多图参考最多 9 张 + 角色一致性多图生成」，国内直连、有中文文档与发票</td>
+</tr>
+<tr>
+<td>备 1</td>
+<td>阿里 z-image-turbo</td>
+<td>0.1 元/张</td>
+<td>写实人像定位、成本 1/5，用于草稿与大批量试错</td>
+</tr>
+<tr>
+<td>备 2</td>
+<td>Nano Banana 2 / 2 Lite</td>
+<td>$0.067 / $0.0336</td>
+<td>同族降本</td>
+</tr>
+<tr>
+<td>备 3</td>
+<td>fal.ai Seedream V4 / Flux Kontext Pro</td>
+<td>$0.03 / $0.04</td>
+<td>海外聚合，价格低</td>
+</tr>
+</tbody>
+</table></div>
+<blockquote>
+<p>双通道（国内 + 海外）并行的意义：规避单一供应商的模型热更新导致身份漂移、以及可用性/合规风险。</p>
+</blockquote>
+<h3 id="42-备路线本地-sd15-兜底">4.2 备路线：本地 SD1.5 兜底</h3>
+<p>仅在云 API 不可用时使用，<strong>用于内部草稿与提示词调试，不用于终稿</strong>。参数建议（沿用现有 demo 基线并加固）：</p>
+<ul>
+<li>分辨率：512×768，不要尝试超过 640×960。</li>
+<li><code>seed</code>：固定 seed 仅用于「同提示词反复出图比对」，不作为身份锁定手段。</li>
+<li>若必须本地出终稿：<strong>不要在 512 图上升采样到 1080×1920</strong>（这是当前崩坏的直接原因）。改为：512 出图 → 只保留人脸区域 → 由云 API 以该脸为参考重绘整图。</li>
+</ul>
+<h3 id="43-参数级建议云-api-侧">4.3 参数级建议（云 API 侧）</h3>
+<div aria-label="可横向滚动的表格" class="table-scroll" tabindex="0"><table>
+<thead>
+<tr>
+<th>参数</th>
+<th>建议</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>参考图数量</td>
+<td>2–4 张（正脸必选 + 3/4 侧 + 露齿微笑）</td>
+<td>wan2.7-image-pro 上限 9 张；张数过多会稀释指令遵循</td>
+</tr>
+<tr>
+<td>参考图分辨率</td>
+<td>1024–2048，人脸占比 ≥ 30%</td>
+<td>过低导致身份信息损失</td>
+</tr>
+<tr>
+<td>输出尺寸</td>
+<td>竖屏：优先 9:16（如 928×1664 / 1024×1536 / 2048×2048 后裁）</td>
+<td>Qwen 系支持 928×1664；GPT-Image 推荐 1024×1536</td>
+</tr>
+<tr>
+<td><code>seed</code></td>
+<td><strong>记录但不要依赖</strong>；每张成功图都记录 seed + prompt + 模型版本号</td>
+<td>用于故障复盘，不用于身份锁定</td>
+</tr>
+<tr>
+<td><code>n</code>（候选数）</td>
+<td>≥ 2（同请求多候选，本地挑相似度最高的一张）</td>
+<td>单位成本不变或线性增加，但<strong>一次调用内的一致性更好</strong></td>
+</tr>
+<tr>
+<td>提示词结构</td>
+<td><code>[身份锚定句] + [服装] + [背景] + [构图/镜头] + [画质]</code></td>
+<td>身份锚定句写死，只替换中段两段</td>
+</tr>
+<tr>
+<td>身份锚定句示例</td>
+<td>「保持参考图中人物的五官、脸型、发型、肤色、年龄与性别完全一致，不要改变或美化面部」</td>
+<td>中英各存一份</td>
+</tr>
+<tr>
+<td>构图锚定</td>
+<td>「正面半身胸像，双眼平视镜头，嘴部无遮挡，肩部完整入画」</td>
+<td>为下游唇形驱动预留</td>
+</tr>
+</tbody>
+</table></div>
+<p><strong>提示词模板（可直接落地）</strong></p>
+<pre><code class="language-yaml">identity_lock: &gt;
+  严格保持参考图中人物的面部身份：脸型、五官比例、眼型、鼻型、唇形、发型与发色、
+  肤色、年龄感、性别呈现完全一致，不得美化、不得换脸、不得改变脸型。
+outfit:  "穿着{outfit_name}，{outfit_detail}"
+background: "背景为{background_name}，{background_detail}"
+composition: &gt;
+  竖构图半身胸像，人物居中，正面/微侧脸，双眼平视镜头，嘴部清晰无遮挡，
+  肩部完整入画，与背景分离清晰，柔和均匀的正面光
+quality: "写实摄影质感，皮肤纹理自然，1080×1920 竖屏构图，高清"
+negative: "换脸, 变形, 多手多指, 遮挡嘴部, 侧头过大, 逆光黑脸, 低分辨率, 水印"
+</code></pre>
+<h3 id="44-为什么-不-选三段分别生成再拼">4.4 为什么<strong>不</strong>选「三段分别生成再拼」</h3>
+<div aria-label="可横向滚动的表格" class="table-scroll" tabindex="0"><table>
+<thead>
+<tr>
+<th>拼接法</th>
+<th>问题</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>背景 A + 人物 B + 抠图合成</td>
+<td>三处瑕疵：颈部/发丝合成边缘、光照方向不一致（背景光源与人物受光不匹配）、色温/景深不匹配</td>
+</tr>
+<tr>
+<td>人体 inpaint 换装</td>
+<td>需要精确保护头部 mask（发际线、耳后、颈部），mask 边缘处理不当会出现「脸贴在别人身体上」的割裂感</td>
+</tr>
+<tr>
+<td>人脸修复保人</td>
+<td>CodeFormer/GFPGAN 会按网络先验「重建」五官，<strong>主动引入身份漂移</strong>，与目标相反</td>
+</tr>
+</tbody>
+</table></div>
+<p>云 API 单次生成把「人物 + 服装 + 背景」放在同一次去噪过程中联合求解，光照与色温自洽，这是当前性价比最高的做法。</p>
+<hr/>
+<h2 id="5-换装-换背景解耦实现">5. 换装 / 换背景解耦实现</h2>
+<h3 id="51-三条技术路径对比">5.1 三条技术路径对比</h3>
+<div aria-label="可横向滚动的表格" class="table-scroll" tabindex="0"><table>
+<thead>
+<tr>
+<th>路径</th>
+<th>做法</th>
+<th>身份保持</th>
+<th>换装自由度</th>
+<th>工程复杂度</th>
+<th>推荐度</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>P1 参考图整体重生成</strong></td>
+<td>参考图（人物）× 提示词（新服装/新背景）→ 一次出图</td>
+<td>高（取决于模型）</td>
+<td>高</td>
+<td>低</td>
+<td>⭐⭐⭐⭐⭐ 主推</td>
+</tr>
+<tr>
+<td><strong>P2 局部 inpaint</strong></td>
+<td>原图 + mask（覆盖躯干与背景，头部与手部保护）→ 重绘</td>
+<td>最高（脸部像素可不变）</td>
+<td>中（姿态被锁死，服装与人体轮廓强耦合）</td>
+<td>中高（mask 需逐张调）</td>
+<td>⭐⭐⭐ 备选</td>
+</tr>
+<tr>
+<td><strong>P3 分层合成</strong></td>
+<td>人物层（云 API 生成，绿幕或纯色背景）→ 抠图 → 与独立背景合成</td>
+<td>最高（人物层整层复用）</td>
+<td>高</td>
+<td>中（需要边缘质量过关）</td>
+<td>⭐⭐⭐⭐ 需要严格分层时用</td>
+</tr>
+</tbody>
+</table></div>
+<p><strong>典型组合</strong>：<code>P1 出图 → 若需换背景再叠加 P3 抠图合成</code>。</p>
+<h3 id="52-p3-的抠图与边缘质量对比发丝边缘是决胜点">5.2 P3 的抠图与边缘质量对比（发丝边缘是决胜点）</h3>
+<div aria-label="可横向滚动的表格" class="table-scroll" tabindex="0"><table>
+<thead>
+<tr>
+<th>手段</th>
+<th>发丝边缘表现</th>
+<th>速度</th>
+<th>显存</th>
+<th>License</th>
+<th>结论</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>绿幕 / 色度键（chroma key）</strong></td>
+<td>对纯色幕布快且干净，但<strong>对 AI 生成图不可靠</strong>：生成的「绿幕」很难保证均匀无色溢，且发丝半透明像素与幕布色混合时易出现绿边</td>
+<td>极快（ffmpeg 内置）</td>
+<td>0</td>
+<td>取决于工具</td>
+<td>❌ 不作为主手段</td>
+</tr>
+<tr>
+<td><strong>rembg + 老模型（u2net/u2netp/silueta）</strong></td>
+<td>README 原文：这些模型「tend to produce firmer, blockier edges」，发丝场景需加 <code>-a</code> alpha matting（慢）</td>
+<td>中</td>
+<td>低</td>
+<td>MIT（模型许可另计）</td>
+<td>⚠️ 可用但要加 matting</td>
+</tr>
+<tr>
+<td><em><em>rembg + 新模型（birefnet-</em> / bria-rmbg / isnet-general-use）</em>*</td>
+<td>README 原文：新模型「already [handle] the <em>soft</em> pixels along an edge — hair, fur, fabric, motion blur」</td>
+<td>中</td>
+<td>低</td>
+<td>MIT（封装）</td>
+<td>✅ 推荐入口</td>
+</tr>
+<tr>
+<td><strong>BiRefNet（native，含 matting 专用权重）</strong></td>
+<td>官方提供 <code>BiRefNet-matting</code> / <code>BiRefNet_HR-matting</code>（2048 训练）与 portrait matting 权重；README 报 1024×1024 下 17 FPS / 3.45GB</td>
+<td>快</td>
+<td>3.45GB@1024</td>
+<td><strong>MIT</strong></td>
+<td>✅✅ 首选</td>
+</tr>
+<tr>
+<td><strong>RMBG-2.0（BRIA）</strong></td>
+<td>人气最高（HF 621,979 downloads），但为 <code>license: other</code> 且 gated</td>
+<td>快</td>
+<td>中</td>
+<td>⚠️ 需读全文</td>
+<td>⚠️ 商用前复核</td>
+</tr>
+<tr>
+<td><strong>BackgroundMattingV2</strong></td>
+<td>需要额外拍一张「无人物背景板」，AI 生成场景不适用</td>
+<td>——</td>
+<td>中</td>
+<td>MIT</td>
+<td>❌ 不适用本场景</td>
+</tr>
+<tr>
+<td><strong>vitmatte（rembg <code>-x</code> 内置）</strong></td>
+<td>rembg README 明示可配 <code>base-distinctions-646</code> 做 trimap-free matting</td>
+<td>中</td>
+<td>低</td>
+<td>——</td>
+<td>⚠️ 备选</td>
+</tr>
+</tbody>
+</table></div>
+<p><strong>工程建议</strong>：抠图统一走 <code>rembg -m birefnet-portrait</code>（或直接 BiRefNet）→ 输出 RGBA → 用 <code>-a</code>（alpha matting）仅在发丝问题明显时开启。AI 生成的人物图建议<strong>主动要求纯色/极简背景</strong>，可显著降低抠图难度。</p>
+<h3 id="53-背景生成">5.3 背景生成</h3>
+<ul>
+<li>背景与人物<strong>同一次生成</strong>（P1 路径）：性价比最高。</li>
+<li>需要长期复用的固定背景（如固定演播厅）：先生成一张 2K 背景底图 → 归档 → 后续用 P3 合成，保证背景 100% 稳定。</li>
+<li>背景无需人物一致性校验，可放心用最便宜的通道（z-image-turbo 0.1 元/张）。</li>
+</ul>
+<hr/>
+<h2 id="6-身份一致性校验工程手段">6. 身份一致性校验工程手段</h2>
+<h3 id="61-seed-固定够不够-不够原因有三">6.1 seed 固定够不够？—— 不够，原因有三</h3>
+<ol>
+<li><strong>语义冲突</strong>：seed 的可复现性建立在「同模型 + 同版本 + 同 prompt + 同参数」之上。而本项目的核心动作恰恰是<strong>改 prompt（换装换背景）</strong>，此时 seed 已经失去锁定意义。</li>
+<li><strong>服务端不可控</strong>：云 API 的模型会热更新（阿里文档中同一模型 ID 存在多个日期快照，如 <code>qwen-image-2.0-pro-2026-03-03</code> / <code>-2026-04-22</code> / <code>-2026-06-22</code> 即可见其版本演进模式）<code>[实测]</code>；本地模型换量化/换依赖同样漂移。</li>
+<li><strong>它管的是「随机噪声」而不是「身份」</strong>：seed 固定能让同一 prompt 输出稳定，但不能阻止模型在不同 prompt 下把鼻子换个形状。</li>
+</ol>
+<p><strong>正确姿势</strong>：seed 只是<strong>故障复盘用的日志字段</strong>；身份锁定靠「参考图条件 + 指纹门禁」。</p>
+<h3 id="62-人脸指纹faceid-embedding校验链路">6.2 人脸指纹（FaceID embedding）校验链路</h3>
+<pre><code>候选图 → 人脸检测（RetinaFace/SCRFD）
+      → 关键点对齐（5 点仿射，统一到 112×112）
+      → ArcFace 提 512-d embedding
+      → L2 归一化后与 Avatar 基线做余弦相似度
+      → 阈值判定 → 通过 / 拒收重生成
+</code></pre>
+<p><strong>基线建立</strong>：对 Base Avatar 的 3–5 张参考图各提 embedding，计算两两余弦，取</p>
+<ul>
+<li>中心向量 <code>c = mean(e_i)</code>（归一化）</li>
+<li>类内最小相似度 <code>s_min</code>（作为「同一人」的经验下界）</li>
+<li>类内平均相似度 <code>s_avg</code></li>
+</ul>
+<p><strong>阈值设计（工程建议，需用自有数据校准，标 <code>[待核验]</code>）</strong></p>
+<div aria-label="可横向滚动的表格" class="table-scroll" tabindex="0"><table>
+<thead>
+<tr>
+<th>相似度（余弦）</th>
+<th>判定</th>
+<th>动作</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>≥ 0.60</td>
+<td>强一致</td>
+<td>直接放行（推荐作为上线初始硬阈值）</td>
+</tr>
+<tr>
+<td>0.50 – 0.60</td>
+<td>一致</td>
+<td>放行但记录；连续出现则收紧</td>
+</tr>
+<tr>
+<td>0.40 – 0.50</td>
+<td>灰区</td>
+<td>人工抽检；批量场景自动重生成（换 seed）</td>
+</tr>
+<tr>
+<td>&lt; 0.40</td>
+<td>判定为不同人</td>
+<td>拒收 + 重生成；同一素材连续 3 次拒收则报警（提示词/参考图有问题）</td>
+</tr>
+</tbody>
+</table></div>
+<blockquote>
+<p>阈值不是通用常数，取决于人脸模型版本（buffalo_l / antelopev2 / 其他）、图像分辨率、姿态与遮挡。<strong>上线前必须用你自己的 Avatar 图跑一遍类内/类间分布</strong>，取类内 P1 与类间 P99 之间的分位点作阈值。
+另注：<strong>阈值校准用的 ArcFace 模型（InsightFace）为非商用许可</strong> —— 用于内部质检不对外分发权重通常可控，但若未来把质检能力做成对外产品 / 用于训练可商用模型，必须替换为许可干净的模型（如自训或 Apache-2.0 的替代方案）。<code>[待核验：法务意见]</code></p>
+</blockquote>
+<h3 id="63-多层门禁推荐流水线">6.3 多层门禁（推荐流水线）</h3>
+<div aria-label="可横向滚动的表格" class="table-scroll" tabindex="0"><table>
+<thead>
+<tr>
+<th>层级</th>
+<th>检查项</th>
+<th>实现</th>
+<th>失败动作</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>L0</td>
+<td>人脸可检出、正脸度、人脸像素高度</td>
+<td>人脸检测器</td>
+<td>直接丢弃（构图不合格，不必算指纹）</td>
+</tr>
+<tr>
+<td>L1</td>
+<td>身份 embedding 相似度</td>
+<td>ArcFace</td>
+<td>重生成（换 seed / 微调提示词）</td>
+</tr>
+<tr>
+<td>L2</td>
+<td>发型/肤色粗校验</td>
+<td>面部区域色直方图 + 人工抽检</td>
+<td>人工复核</td>
+</tr>
+<tr>
+<td>L3</td>
+<td>嘴部可用性（下游唇形驱动前置）</td>
+<td>嘴部关键点可见性 + 是否遮挡</td>
+<td>重生成</td>
+</tr>
+<tr>
+<td>L4</td>
+<td>内容合规</td>
+<td>云服务内容审核（阿里文档明示 prompt 会过审、违规返回 <code>DataInspectionFailed</code>）+ 抖音 AI 生成标识</td>
+<td>丢弃 / 补标识</td>
+</tr>
+</tbody>
+</table></div>
+<h3 id="64-换装换背景不改人的可落地工程手段按优先级">6.4 「换装换背景不改人」的可落地工程手段（按优先级）</h3>
+<ol>
+<li><strong>参考图条件 + 全身重生成</strong>（P1）：成本最低、效果最好；配合 L1 门禁兜底。</li>
+<li><strong>面部区域保留式 inpaint</strong>（P2）：若必须复用某张已通过门禁的图，用 mask 只重绘「躯干 + 背景」，mask 以羽化边缘覆盖颈线以下，头部与发际线以上完全保护。<strong>这是像素级零漂移方案</strong>，代价是姿态被锁死。</li>
+<li><strong>分层合成</strong>（P3）：人物层不变 + 背景层更换，用 BiRefNet 抠图 → 合成；对「同一张人物图换 N 个背景」的批量场景效率最高。</li>
+<li><strong>禁止</strong>：对未来要用的图做人脸修复（CodeFormer/GFPGAN）、禁用带人脸先验的放大链路。</li>
+</ol>
+<hr/>
+<h2 id="7-输出规格与放大链路">7. 输出规格与放大链路</h2>
+<h3 id="71-目标与来源规格">7.1 目标与来源规格</h3>
+<div aria-label="可横向滚动的表格" class="table-scroll" tabindex="0"><table>
+<thead>
+<tr>
+<th>环节</th>
+<th>建议规格</th>
+<th>理由</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>终稿目标</td>
+<td>1080×1920（9:16）</td>
+<td>抖音竖屏</td>
+</tr>
+<tr>
+<td>生成阶段</td>
+<td><strong>直接生成 2K 级竖屏</strong>（如 1024×1536 或 1536×2048，或 2048×2048 后裁 9:16），wan2.7-image-pro 可到 4096×4096</td>
+<td>云 API 已原生支持，不需要「先小后放大」</td>
+</tr>
+<tr>
+<td>构图</td>
+<td><strong>半身胸像（胸线以上）为主，正脸或 ≤15° 微侧</strong></td>
+<td>下游唇形驱动需要清晰稳定的嘴部几何；半身也为换装留出领口/肩部信息</td>
+</tr>
+<tr>
+<td>人脸占比</td>
+<td>人脸高度建议占画幅高度 1/4 以上（<code>[待核验]</code>，需按 03 的嘴部驱动要求定稿）</td>
+<td>人脸过小则驱动后嘴部形变细节不足</td>
+</tr>
+<tr>
+<td>背景</td>
+<td>优先纯色/极简或强分离背景</td>
+<td>便于抠图与分层合成</td>
+</tr>
+<tr>
+<td>安全带</td>
+<td>面部上方、下颚下方各留出余量，避免裁切到发顶/下巴</td>
+<td>后续裁切与嘴部对齐容错</td>
+</tr>
+</tbody>
+</table></div>
+<h3 id="72-放大链路对比">7.2 放大链路对比</h3>
+<div aria-label="可横向滚动的表格" class="table-scroll" tabindex="0"><table>
+<thead>
+<tr>
+<th>手段</th>
+<th>是否改变人脸</th>
+<th>质量</th>
+<th>速度</th>
+<th>适用</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Lanczos / 双三次插值</strong></td>
+<td>❌ 不改（纯插值）</td>
+<td>锐度低、细节不加，但<strong>绝对安全</strong></td>
+<td>毫秒</td>
+<td>✅ 小倍率（1.5× 以内）缩放首选</td>
+</tr>
+<tr>
+<td><strong>Real-ESRGAN（BSD-3）</strong></td>
+<td>⚠️ 会「重绘」纹理，人脸细节可能被改写</td>
+<td>高（有幻觉细节）</td>
+<td>十秒级</td>
+<td>⚠️ 仅用于背景/无人物区域；README 自带 <code>--face_enhance</code> 会接 GFPGAN = 换脸风险</td>
+</tr>
+<tr>
+<td><strong>ncnn-vulkan 版 Real-ESRGAN</strong></td>
+<td>同上，且 README 原文提示分块处理会引入<strong>块间不一致</strong></td>
+<td>中高</td>
+<td>快（CPU/iGPU 可跑）</td>
+<td>⚠️ 同上</td>
+</tr>
+<tr>
+<td><strong>云超分（云厂商的超分/画质增强）</strong></td>
+<td>⚠️ 需确认是否带人脸先验</td>
+<td>高</td>
+<td>秒级</td>
+<td>⚠️ 落地前需做「放大前后 embedding 相似度」回归测试</td>
+</tr>
+<tr>
+<td><strong>不放大，直接生成高分</strong></td>
+<td>❌ 不改</td>
+<td>最高</td>
+<td>与生成同</td>
+<td>✅✅ <strong>首选</strong></td>
+</tr>
+</tbody>
+</table></div>
+<p><strong>结论</strong>：把分辨率需求前置到生成阶段；放大只做 Lanczos 小倍率缩放。若确需超分，必须做「超分前后人脸 embedding 相似度」回归测试，相似度下降超阈值即禁用该链路。</p>
+<hr/>
+<h2 id="8-成本对比表">8. 成本对比表</h2>
+<blockquote>
+<p>所有价格为 2026-09-21 采集的官方页原币值 <code>[实测]</code>，标 <code>[待核验]</code> 者未取得。落地前须复核官方计费页。
+人民币折算仅为量级参考，按 <strong>1 USD ≈ 7.2 CNY</strong> 的假设折算（<strong>该汇率为假设值，非采集事实，使用时请按当日汇率重算</strong>）。</p>
+</blockquote>
+<h3 id="81-单张成本">8.1 单张成本</h3>
+<div aria-label="可横向滚动的表格" class="table-scroll" tabindex="0"><table>
+<thead>
+<tr>
+<th>通道</th>
+<th>模型</th>
+<th>原币单价</th>
+<th>折算人民币（假设汇率 7.2）</th>
+<th>备注</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>阿里百炼</td>
+<td>z-image-turbo</td>
+<td>0.1 元/张（关 prompt 改写）</td>
+<td>¥0.10</td>
+<td>仅文生图，写实人像定位</td>
+</tr>
+<tr>
+<td>阿里百炼</td>
+<td>wan2.2-t2i-flash</td>
+<td>0.14 元/张</td>
+<td>¥0.14</td>
+<td>老一代</td>
+</tr>
+<tr>
+<td>阿里百炼</td>
+<td>wanx2.1-imageedit（Legacy）</td>
+<td>0.14 元/张</td>
+<td>¥0.14</td>
+<td>局部重绘</td>
+</tr>
+<tr>
+<td>阿里百炼</td>
+<td>qwen-image-3.0</td>
+<td>0.02（输入）+ 0.18（输出）元/张</td>
+<td>¥0.20</td>
+<td>编辑+文生图</td>
+</tr>
+<tr>
+<td>阿里百炼</td>
+<td>wan2.7-image / wan2.6-image</td>
+<td>0.20 元/张</td>
+<td>¥0.20</td>
+<td>2K 级</td>
+</tr>
+<tr>
+<td>阿里百炼</td>
+<td>qwen-image-3.0-pro</td>
+<td>0.02（输入）+ 0.25（输出）元/张</td>
+<td>¥0.27</td>
+<td>质量档</td>
+</tr>
+<tr>
+<td>阿里百炼</td>
+<td><strong>wan2.7-image-pro</strong></td>
+<td>0.50 元/张</td>
+<td>¥0.50</td>
+<td>角色一致性多图生成</td>
+</tr>
+<tr>
+<td>阿里百炼</td>
+<td>qwen-image-edit-max</td>
+<td>0.50 元/张</td>
+<td>¥0.50</td>
+<td>编辑档</td>
+</tr>
+<tr>
+<td>Google</td>
+<td>Nano Banana 2 Lite（3.1 Flash Lite Image）</td>
+<td>$0.0336/张（1K）</td>
+<td>≈¥0.24</td>
+<td>最低价档</td>
+</tr>
+<tr>
+<td>Google</td>
+<td>Nano Banana 2（3.1 Flash Image）</td>
+<td>$0.045 / $0.067 / ≈$0.10（0.5K/1K/2K）</td>
+<td>≈¥0.32 / 0.48 / 0.72</td>
+<td></td>
+</tr>
+<tr>
+<td>Google</td>
+<td><strong>Nano Banana Pro（3 Pro Image）</strong></td>
+<td><strong>$0.134（1K–2K）/ $0.24（4K）</strong></td>
+<td>≈¥0.96 / ¥1.73</td>
+<td>质量档首选</td>
+</tr>
+<tr>
+<td>Google</td>
+<td>Nano Banana（2.5 Flash Image）</td>
+<td>$0.039/张（≤1K）</td>
+<td>≈¥0.28</td>
+<td>上一代</td>
+</tr>
+<tr>
+<td>fal.ai</td>
+<td>Seedream V4</td>
+<td>$0.03/张</td>
+<td>≈¥0.22</td>
+<td>第三方托管</td>
+</tr>
+<tr>
+<td>fal.ai</td>
+<td>Flux Kontext Pro</td>
+<td>$0.04/张</td>
+<td>≈¥0.29</td>
+<td></td>
+</tr>
+<tr>
+<td>fal.ai</td>
+<td>Nanobanana</td>
+<td>$0.0398/张</td>
+<td>≈¥0.29</td>
+<td></td>
+</tr>
+<tr>
+<td>fal.ai</td>
+<td>Qwen-Image</td>
+<td>$0.02/百万像素</td>
+<td>≈¥0.14/MP</td>
+<td>按像素计</td>
+</tr>
+<tr>
+<td>BFL 官方</td>
+<td>Flux 系</td>
+<td>$0.014–$0.045/百万像素 <code>[模型对应未核验]</code></td>
+<td>≈¥0.10–0.32/MP</td>
+<td></td>
+</tr>
+<tr>
+<td>OpenAI</td>
+<td>gpt-image-2.5-sunburst / -flare</td>
+<td>图片输入 $8/1M tok，图片输出 $30/1M tok</td>
+<td><strong>单张成本需官方计算器，未核验</strong></td>
+<td>官方文档明示需计算器估算</td>
+</tr>
+<tr>
+<td>火山引擎</td>
+<td>即梦 / Seedream</td>
+<td><strong>[未核验]</strong></td>
+<td>——</td>
+<td>文档页 JS 渲染，curl 取不到；定价计算器需登录</td>
+</tr>
+<tr>
+<td>快手</td>
+<td>可灵 / 可图</td>
+<td><strong>[未核验]</strong></td>
+<td>——</td>
+<td></td>
+</tr>
+<tr>
+<td>Midjourney</td>
+<td>——</td>
+<td><strong>[未核验]</strong>（<code>midjourney.com/plans</code> 返回 403）</td>
+<td>——</td>
+<td>订阅制，无官方 API</td>
+</tr>
+</tbody>
+</table></div>
+<h3 id="82-按产能估算单条视频口径">8.2 按产能估算（单条视频口径）</h3>
+<p>假设一条 1–3 分钟口播视频需要 <strong>N 张通过门禁的成图</strong>（单镜口播 N=1；多分镜教学 N≈8–15）。</p>
+<div aria-label="可横向滚动的表格" class="table-scroll" tabindex="0"><table>
+<thead>
+<tr>
+<th>场景</th>
+<th>通道</th>
+<th>单张</th>
+<th>100 张</th>
+<th>1000 张</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>批量试错 / 草稿</td>
+<td>z-image-turbo</td>
+<td>¥0.10</td>
+<td>¥10</td>
+<td>¥100</td>
+<td>便宜但无编辑能力</td>
+</tr>
+<tr>
+<td>日常主力</td>
+<td>wan2.7-image / qwen-image-3.0</td>
+<td>¥0.20</td>
+<td>¥20</td>
+<td>¥200</td>
+<td>2K 级</td>
+</tr>
+<tr>
+<td>质量档（国内）</td>
+<td>wan2.7-image-pro / qwen-image-3.0-pro</td>
+<td>¥0.50 / ¥0.27</td>
+<td>¥50 / ¥27</td>
+<td>¥500 / ¥270</td>
+<td>角色一致性最强</td>
+</tr>
+<tr>
+<td>质量档（海外）</td>
+<td>Nano Banana Pro</td>
+<td>≈¥0.96</td>
+<td>≈¥96</td>
+<td>≈¥960</td>
+<td>4K 时 ≈¥1.73/张</td>
+</tr>
+<tr>
+<td>极省（海外）</td>
+<td>Nano Banana 2 Lite</td>
+<td>≈¥0.24</td>
+<td>≈¥24</td>
+<td>≈¥240</td>
+<td></td>
+</tr>
+</tbody>
+</table></div>
+<p>按「每条视频平均消耗 6 张（含重生成损耗）」、日产 1 条、月产 30 条估算：</p>
+<ul>
+<li>走 z-image-turbo：约 <strong>¥18/月</strong>（草稿级）</li>
+<li>走 qwen-image-3.0：约 <strong>¥36/月</strong></li>
+<li>走 wan2.7-image-pro：约 <strong>¥90/月</strong></li>
+<li>走 Nano Banana Pro（1K–2K）：约 <strong>¥173/月</strong></li>
+</ul>
+<p>结论：<strong>图像成本在项目总成本中占比极低</strong>，不应为省钱牺牲身份一致性。真正的成本是<strong>你的调参时间</strong>与<strong>返工重生成率</strong>。</p>
+<h3 id="83-本地方案的时间成本对比">8.3 本地方案的时间成本（对比）</h3>
+<div aria-label="可横向滚动的表格" class="table-scroll" tabindex="0"><table>
+<thead>
+<tr>
+<th>本地方案</th>
+<th>单张耗时（估算）</th>
+<th>是否达标</th>
+<th>隐性成本</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>SD1.5 512×768</td>
+<td>秒级～数十秒</td>
+<td>❌ 放大到 1080×1920 崩脸</td>
+<td>调试成本高、天花板低</td>
+</tr>
+<tr>
+<td>Qwen-Image 4GB 逐层 offload</td>
+<td>分钟～十分钟级 <code>[待核验]</code></td>
+<td>⚠️ 理论可行</td>
+<td>系统内存占用大、反复换模型、工程复杂</td>
+</tr>
+<tr>
+<td>本地 SDXL/Flux/PuLID/InstantID</td>
+<td>——</td>
+<td>❌ 不可用（显存不足）</td>
+<td>——</td>
+</tr>
+<tr>
+<td>云 API 调用（一次生成 + 下载）</td>
+<td>10–60 秒 <code>[待核验]</code></td>
+<td>✅ 达标</td>
+<td>网络依赖、内容审核拦截</td>
+</tr>
+</tbody>
+</table></div>
+<p><strong>本地时间成本 ≠ 零成本</strong>：按你自己的时间价值折算，本地跑通 Qwen-Image offload 方案的数十小时工程投入，远超按量付费的云成本。</p>
+<hr/>
+<h2 id="9-风险与坑">9. 风险与坑</h2>
+<div aria-label="可横向滚动的表格" class="table-scroll" tabindex="0"><table>
+<thead>
+<tr>
+<th>#</th>
+<th>风险</th>
+<th>影响</th>
+<th>缓解措施</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>R1</td>
+<td><strong>云 API 模型热更新导致身份漂移</strong></td>
+<td>上一批视频与这一批「不像同一个人」</td>
+<td>双通道并行；每次生成记录「模型 ID + 快照版本 + seed + prompt」；上线前做回归：用固定参考图生成 N 张，比对 embedding 分布是否劣化</td>
+</tr>
+<tr>
+<td>R2</td>
+<td><strong>参考图被内容审核拦截</strong></td>
+<td>生成失败（阿里文档明示返回 <code>DataInspectionFailed</code>）</td>
+<td>参考图与提示词避免敏感元素；预置失败重试与备用通道</td>
+</tr>
+<tr>
+<td>R3</td>
+<td><strong>生成图 URL 24 小时过期</strong>（阿里文档明示）</td>
+<td>素材丢失</td>
+<td>拿到 URL 立即下载并转存到自建存储</td>
+</tr>
+<tr>
+<td>R4</td>
+<td><strong><code>insightface</code> 非商用许可</strong></td>
+<td>法务风险（若对外分发质检能力/用于训练）</td>
+<td>质检链路仅内部使用；商用化前替换许可干净的人脸模型；法务复核 <code>[待核验]</code></td>
+</tr>
+<tr>
+<td>R5</td>
+<td><strong>FLUX.1-dev / InfiniteYou / CodeFormer 非商用</strong></td>
+<td>若误用则整条产线不可商用</td>
+<td>白名单式选型：只允许 Apache-2.0 / MIT / 商业授权模型进产线</td>
+</tr>
+<tr>
+<td>R6</td>
+<td><strong>GPL-3.0 传染</strong>（ComfyUI / IPAdapter_plus / Impact-Pack）</td>
+<td>若打包分发客户端需开源</td>
+<td>自用无分发风险可控；若将来做产品化，隔离或替换</td>
+</tr>
+<tr>
+<td>R7</td>
+<td><strong>人脸修复引入身份漂移</strong></td>
+<td>越修越不像</td>
+<td>全线禁用 CodeFormer/GFPGAN 于身份链路上</td>
+</tr>
+<tr>
+<td>R8</td>
+<td><strong>重绘型放大破坏嘴部几何</strong></td>
+<td>下游唇形驱动崩坏</td>
+<td>只做 Lanczos；超分必须做前后 embedding 回归</td>
+</tr>
+<tr>
+<td>R9</td>
+<td><strong>换装导致姿态/发型连带变化</strong></td>
+<td>「不像同一人」的观感来源往往是发型与肩宽，而非五官</td>
+<td>提示词把「发型、发长、发色、肩宽比例」写进身份锚定句；门禁增加发型一致性检查</td>
+</tr>
+<tr>
+<td>R10</td>
+<td><strong>本地 SD1.5 被误当终稿</strong></td>
+<td>画质失败已发生一次</td>
+<td>流程上把 SD1.5 定位为草稿；终稿必须过云通道</td>
+</tr>
+<tr>
+<td>R11</td>
+<td><strong>抖音 AI 标注与合规</strong></td>
+<td>未标注可能限流</td>
+<td>阿里 API 自带 <code>watermark</code> 参数（右下角「AI生成」文案）；按平台规则显式声明（细节归 05）</td>
+</tr>
+<tr>
+<td>R12</td>
+<td><strong>虚拟人形象侵权</strong></td>
+<td>若与真实明星/受保护 IP 相似</td>
+<td>阿里文档明示「生成包含品牌商标、名人肖像、受版权保护的 IP 形象等内容可能涉及侵权风险」；建立「生成图与名人脸库相似度」反向筛查</td>
+</tr>
+<tr>
+<td>R13</td>
+<td><strong>汇率与价格变动</strong></td>
+<td>预算偏差</td>
+<td>本文价格为采集日快照，落地前复核官方计费页</td>
+</tr>
+<tr>
+<td>R14</td>
+<td><strong>4GB 显存下 numba/torch 版本冲突</strong>（工程性坑）</td>
+<td>环境反复崩溃</td>
+<td>Anaconda 环境已锁定 torch 2.12.1 + diffusers 0.40.0；新增依赖前先做一次环境快照（<code>conda list --export</code>）</td>
+</tr>
+</tbody>
+</table></div>
+<hr/>
+<h2 id="10-待核验-清单">10. [待核验] 清单</h2>
+<div aria-label="可横向滚动的表格" class="table-scroll" tabindex="0"><table>
+<thead>
+<tr>
+<th>编号</th>
+<th>待核验项</th>
+<th>为何未核验</th>
+<th>建议复核方式</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>V1</td>
+<td>即梦 / Seedream 4.0 的官方 API 计费</td>
+<td>火山引擎文档与定价页为 JS 渲染，curl 取不到正文；价格计算器需登录</td>
+<td>登录火山引擎控制台查「模型价格」页，或联系商务</td>
+</tr>
+<tr>
+<td>V2</td>
+<td>可灵 / 可图 API 计费与人物一致性能力</td>
+<td>官网/文档需登录，未取得公开计费正文</td>
+<td>登录快手可灵开放平台文档</td>
+</tr>
+<tr>
+<td>V3</td>
+<td>Midjourney 订阅与 <code>--cref</code> 商用条款</td>
+<td><code>midjourney.com/plans</code> 返回 HTTP 403</td>
+<td>登录后查看订阅页与 ToS</td>
+</tr>
+<tr>
+<td>V4</td>
+<td>OpenAI gpt-image-2.5 的单张均价</td>
+<td>官方文档要求用其计算器；仅公开 token 单价</td>
+<td>用官方 image generation 计算器按 1024×1536 + high/xhigh 质量试算</td>
+</tr>
+<tr>
+<td>V5</td>
+<td>BFL 各 FLUX 模型的「每百万像素」单价对应关系</td>
+<td>定价页可见价格档位但模型↔单价映射未取到</td>
+<td>复核 bfl.ai/pricing 与各模型 API 文档</td>
+</tr>
+<tr>
+<td>V6</td>
+<td>全表人民币折算汇率假设</td>
+<td>我用 1 USD ≈ 7.2 CNY 为假设值，非采集事实</td>
+<td>按当日汇率重算</td>
+</tr>
+<tr>
+<td>V7</td>
+<td>SDXL/Flux/PuLID/InstantID 的精确显存门槛</td>
+<td>除 PhotoMaker(11GB)、PuLID-FLUX(16GB) 为官方 README 数字外，其余为工程估算</td>
+<td>用 diffusers 官方 optimal memory 文档 + 社区实测帖交叉验证</td>
+</tr>
+<tr>
+<td>V8</td>
+<td>Qwen-Image 在 4GB 显存的实际速度与是否可用</td>
+<td>仅见官方 README 的能力声明，未实测</td>
+<td>用 DiffSynth-Studio 在本机实跑计时（建议作为独立 spike）</td>
+</tr>
+<tr>
+<td>V9</td>
+<td>ArcFace 相似度阈值的具体数值</td>
+<td>阈值强依赖模型与数据分布，我给出的是工程建议区间</td>
+<td>用自有 Avatar 图跑类内/类间分布，取分位点定阈值</td>
+</tr>
+<tr>
+<td>V10</td>
+<td>RMBG-1.4 / RMBG-2.0 的商用许可全文</td>
+<td>HF 卡为 <code>license: other</code> + gated</td>
+<td>读 BRIA 许可全文</td>
+</tr>
+<tr>
+<td>V11</td>
+<td>阿里百炼生成内容的商用条款与素材授权</td>
+<td>未逐条读服务条款</td>
+<td>读百炼服务条款 + 生成内容版权条款</td>
+</tr>
+<tr>
+<td>V12</td>
+<td>各「模型快照版本」的实际行为差异（如 <code>qwen-image-2.0-pro-2026-04-22</code> vs <code>-06-22</code>）</td>
+<td>仅从定价页见到快照命名</td>
+<td>固定参考图跑 A/B 回归</td>
+</tr>
+<tr>
+<td>V13</td>
+<td>人脸占比阈值（§7.1 的 1/4 建议）</td>
+<td>该数值为经验建议，需与 03 唇形驱动方案对齐</td>
+<td>与 03 的输出要求联合定稿</td>
+</tr>
+<tr>
+<td>V14</td>
+<td>ComfyUI 生态在本机的可用性（GPL 与 4GB 双重限制）</td>
+<td>未实测</td>
+<td>明确是否需要图形化工作流；若纯 API 编排则不需要 ComfyUI</td>
+</tr>
+</tbody>
+</table></div>
+<hr/>
+<h2 id="附录-a本次核验的原始返回片段证据留痕">附录 A：本次核验的原始返回片段（证据留痕）</h2>
+<p><strong>A-1 GitHub API（<code>gh api repos/&lt;repo&gt;</code>，2026-09-21）</strong></p>
+<pre><code>REPO                                      |STARS    |LICENSE       |LAST_PUSH   |ISS     |CREATED
+InstantID/InstantID                       |11993|Apache-2.0|2024-07-18|187|2023-12-11
+ToTheBeginning/PuLID                      |3551|Apache-2.0|2025-07-31|160|2024-04-17
+TencentARC/PhotoMaker                     |10089|NOASSERTION|2024-10-31|159|2023-12-06
+tencent-ailab/IP-Adapter                  |6689|Apache-2.0|2024-06-28|301|2023-08-16
+cubiq/ComfyUI_IPAdapter_plus              |6134|GPL-3.0|2025-04-14|226|2023-08-30
+sczhou/CodeFormer                         |18141|NOASSERTION|2025-11-18|283|2022-06-21
+TencentARC/GFPGAN                         |37675|NOASSERTION|2024-07-26|402|2021-03-19
+xinntao/Real-ESRGAN                       |36856|BSD-3-Clause|2024-08-06|647|2021-07-19
+danielgatis/rembg                         |24823|MIT|2026-09-20|1|2020-08-10
+ZhengPeng7/BiRefNet                       |4211|MIT|2026-09-02|30|2022-08-17
+comfyanonymous/ComfyUI                    |134121|GPL-3.0|2026-09-21|4901|2023-01-17
+serengil/deepface                         |23463|MIT|2026-09-16|7|2020-02-08
+levihsu/OOTDiffusion                      |6597|NOASSERTION|2024-05-13|88|2024-01-24
+yisol/IDM-VTON                            |5180|NOASSERTION|2025-03-07|155|2024-03-20
+Zheng-Chong/CatVTON                       |1845|NOASSERTION|2025-12-16|72|2024-07-02
+Kwai-Kolors/Kolors                        |4606|Apache-2.0|2024-11-13|145|2024-07-05
+QwenLM/Qwen-Image                         |8342|Apache-2.0|2026-02-10|238|2025-08-03
+xuebinqin/U-2-Net                         |9864|Apache-2.0|2024-06-26|249|2020-05-04
+PeterL1n/BackgroundMattingV2              |7192|MIT|2024-06-19|47|2020-12-01
+ltdrdata/ComfyUI-Impact-Pack              |3317|GPL-3.0|2026-04-19|254|2023-03-30
+ali-vilab/ACE_plus                        |1364|NOASSERTION|2025-04-21|55|2025-01-03
+Tencent/InstantCharacter                  |1043|NOASSERTION|2025-05-14|36|2025-04-16
+bytedance/DreamO                          |1649|Apache-2.0|2025-08-14|81|2025-04-21
+stepfun-ai/Step1X-Edit                    |2264|Apache-2.0|2026-04-29|34|2025-04-23
+Wan-Video/Wan2.2                          |17572|Apache-2.0|2026-03-17|302|2025-07-28
+Stability-AI/generative-models            |27288|MIT|2025-12-16|339|2023-06-22
+lllyasviel/Fooocus                        |53121|GPL-3.0|2025-12-01|314|2023-08-09
+microsoft/Bringing-Old-Photos-Back-to-Life|15716|MIT|2023-10-26|109|2020-06-24
+OpenBMB/MiniCPM-V                         |26427|Apache-2.0|2026-09-08|59|2024-01-29
+black-forest-labs/flux                    |25971|Apache-2.0|2025-07-31|—|—
+ostris/ai-toolkit                         |12068|MIT|2026-09-20|—|—
+kohya-ss/sd-scripts                       |7239|Apache-2.0|2026-09-09|—|—
+huggingface/diffusers                     |34552|Apache-2.0|2026-09-20|—|—
+lllyasviel/ControlNet                     |34115|Apache-2.0|2024-02-25|—|—
+Akegarasu/lora-scripts                    |6137|AGPL-3.0|2026-08-21|—|—
+deepinsight/insightface                   |29788|NOASSERTION|2026-09-09|—|—
+city96/ComfyUI-GGUF                       |4030|Apache-2.0|2026-01-12|—|—
+deepbeepmeep/Wan2GP                       |9538|NOASSERTION|2026-09-21|—|—
+ByteDance/InfiniteYou                     |2683|Apache-2.0|2025-08-22|—|—
+Tencent-Hunyuan/HunyuanImage-3.0          |3267|NOASSERTION|2026-06-23|—|—
+bytedance/UNO                             |1362|Apache-2.0|2025-09-12|—|—
+CompVis/stable-diffusion                  |73451|NOASSERTION|2024-06-18|—|—
+guozinan/PuLID                            → HTTP 404（主仓库已迁至 ToTheBeginning/PuLID）
+h94/IP-Adapter                            → HTTP 404（HF 模型仓，非 GitHub 仓）
+</code></pre>
+<p>最近提交（<code>gh api repos/&lt;repo&gt;/commits?per_page=1</code>）：</p>
+<pre><code>InstantID/InstantID  2024-07-18 | kolor demo
+ToTheBeginning/PuLID 2025-07-31 | support FLUX.1-Krea-dev
+TencentARC/PhotoMaker 2024-10-31 | Update README.md (#198)
+tencent-ailab/IP-Adapter 2024-06-28 | add sd3_attention_processor.py
+QwenLM/Qwen-Image    2026-02-10 | update
+ZhengPeng7/BiRefNet  2026-09-02 | Add a note of recommending the latest version of ONNX in the
+comfyanonymous/ComfyUI 2026-09-20 | Allow model files to contain which attention should be used for each b
+danielgatis/rembg    2026-09-20 | Update u2net_cloth_seg.py (#853)
+sczhou/CodeFormer    2025-11-18 | add ecosystem applications &amp; deployments.
+xinntao/Real-ESRGAN  2024-04-02 | Delete .github/workflows/no-response.yml
+</code></pre>
+<p><strong>A-2 许可证原文摘录（<code>raw.githubusercontent.com</code>）</strong></p>
+<p><code>deepinsight/insightface</code> README：</p>
+<pre><code>34: The code of InsightFace is released under the MIT License. There is no limitation for both academic and commercial usage.
+36: The training data containing the annotation (and the models trained with these data) are available for non-commercial research purposes only.
+38: Both manual-downloading models from our github repo and auto-downloading models with our python-library follow the above license policy(which is for non-commercial research purposes only).
+</code></pre>
+<p><code>InstantID/InstantID</code> README：</p>
+<pre><code>262: The code of InstantID is released under Apache License for both academic and commercial usage.
+     However, both manual-downloading and auto-downloading face models from insightface are for
+     non-commercial research purposes only according to their license.
+     Our released checkpoints are also for research purposes only.
+</code></pre>
+<p><code>sczhou/CodeFormer</code> LICENSE：</p>
+<pre><code>S-Lab License 1.0
+Copyright 2022 S-Lab
+Redistribution and use for non-commercial purpose in source and binary forms, ... are permitted ...
+</code></pre>
+<p><code>TencentARC/GFPGAN</code> LICENSE：<code>GFPGAN is licensed under the Apache License Version 2.0 except for the third-party components listed below.</code>
+<code>TencentARC/PhotoMaker</code> LICENSE：<code>PhotoMaker is licensed under the Apache License Version 2.0 except for the third-party components listed below.</code></p>
+<p><strong>A-3 显存门槛官方原文（README）</strong></p>
+<pre><code>PhotoMaker README: "The minimum GPU memory requirement for PhotoMaker is 11G"
+PuLID README:      "PuLID-FLUX can run on a 16GB graphic card"  /  "Local gradio demo supports 12GB graphic card now"
+InstantID README:  "To save VRAM, you can enable CPU offloading"
+Qwen-Image README: "DiffSynth-Studio provides comprehensive support for Qwen-Image, including
+                    low-GPU-memory layer-by-layer offload (inference within 4GB VRAM), FP8 quantization, LoRA / full training."
+BiRefNet README:   "the standard BiRefNet can run in 17 FPS with resolution==1024x1024 with 3.45GB GPU memory on a single RTX 4090"
+</code></pre>
+<p><strong>A-4 抠图边缘质量原文（rembg README）</strong></p>
+<pre><code>351: treat the *soft* pixels along an edge — hair, fur, fabric, motion blur.
+357: | Alpha matting | `-a` | Yes | Yes | Slow |
+394: The newer models (`bria-rmbg`, `birefnet-*`, `isnet-general-use`) already ...
+399: The older models (`u2net`, `u2netp`, `silueta`) tend to produce firmer, blockier
+     edges. They benefit most from `-a` on hair-heavy portraits ...
+</code></pre>
+<p><strong>A-5 HuggingFace 模型卡（<code>huggingface.co/api/models/...</code>）</strong></p>
+<pre><code>black-forest-labs/FLUX.1-dev        license:license:other (gated:auto)  downloads:751072  likes:14857  lastMod:2025-06-27
+black-forest-labs/FLUX.1-schnell     apache-2.0   downloads:574406   likes:5944
+SG161222/Realistic_Vision_V6.0_B1_noVAE  creativeml-openrail-m  downloads:62096  likes:323  lastMod:2024-10-08
+stabilityai/stable-diffusion-xl-base-1.0 openrail++  downloads:3088510  likes:8202
+Qwen/Qwen-Image-Edit-2509            apache-2.0   downloads:473808   likes:1243  lastMod:2025-09-22
+Qwen/Qwen-Image-Edit                 apache-2.0   downloads:128251   likes:2521
+h94/IP-Adapter-FaceID                （无 license 字段）  downloads:185226  likes:1886  lastMod:2024-04-16
+InstantX/InstantID                   apache-2.0   downloads:57508    likes:879
+briaai/RMBG-2.0                      license:other (gated:auto)  downloads:621979  likes:1459
+ZhengPeng7/BiRefNet                  mit          downloads:997619   likes:640
+ByteDance/InfiniteYou                cc-by-nc-4.0 downloads:970     likes:645
+</code></pre>
+<p><strong>A-6 阿里百炼价格与能力（<code>help.aliyun.com/zh/model-studio/model-pricing</code>，页面更新时间 2026-09-02）</strong></p>
+<pre><code>图片生成与编辑（模型选型页原文摘录）
+  「如果你正在使用 Nano Banana、GPT Image、Midjourney 或 Seedream，可参考下表选择对应的百炼模型」
+    高质量档：Nano Banana Pro、GPT Image、Seedream 4.0  →  qwen-image-3.0-pro、wan2.7-image-pro
+    平衡档：Imagen 4 Ultra、Midjourney v7              →  qwen-image-3.0、wan2.7-image
+    快速低成本档：FLUX.2                                →  z-image-turbo
+  「wan2.7-image-pro：支持多图参考（最多9张输入图片）、边界框交互式编辑以及角色一致性多图生成」
+  「wan2.7-image-pro 文生图最高支持4096x4096分辨率」
+  「z-image-turbo：生成速度快10倍，价格约为1/5；写实人像和产品照片」
+  qwen-image 系 9:16 输出尺寸示例：928*1664；16:9：1664*928（默认）
+  「n 直接影响费用：费用 = 单价 × 成功生成的图片张数」
+  「parameters.seed（integer，可选，取值范围 [0, 2147483647]）... 使用相同 seed 可使生成结果保持相对稳定」
+
+计费表（元/张）
+  qwen-image-3.0-pro        1k | 0.02元/张 | 0.25元/张 | 输入输出共10张
+  qwen-image-3.0            1k | 0.02元/张 | 0.18元/张 | 输入输出共10张
+  qwen-image-2.0-pro        0.5元/张 | 免费100张
+  qwen-image-2.0            0.2元/张 | 免费100张
+  qwen-image-max            0.5元/张   | qwen-image-plus / qwen-image 0.2 / 0.25元/张
+  qwen-image-edit-max       0.5元/张 | 免费100张
+  wan2.7-image-pro          0.50元/张 | 免费50张
+  wan2.7-image              0.20元/张 | 免费50张
+  wan2.6-image / wan2.6-t2i 0.20元/张 | 免费50张
+  wan2.2-t2i-flash          0.14元/张 | 免费100张
+  wanx2.1-imageedit         0.14元/张 | 免费500张
+  z-image-turbo             关闭prompt改写 0.1元/张；开启 0.2元/张 | 免费100张
+
+生产环境提示（原文）
+  「图片 URL 的有效期为 24 小时。您必须在获取到 URL 后，立即通过程序下载图片，并转存至您自己的持久化存储」
+  「所有 prompt 和 negative_prompt 都会经过内容安全审核。若输入内容不合规，请求将被拦截并返回 DataInspectionFailed 错误」
+  「生成包含品牌商标、名人肖像、受版权保护的 IP 形象等内容可能涉及侵权风险，请您自行评估并承担相应责任」
+</code></pre>
+<p><strong>A-7 Google Gemini 价格（<code>ai.google.dev/gemini-api/docs/pricing</code> zh-cn，2026-09-21 采集）</strong></p>
+<pre><code>Gemini 3 Pro Image (Nano Banana Pro)
+  「图片输入计费标准为每张图片 560 个 token 或 0.0011 美元」
+  「图片输出的价格为 120 美元/100 万个 token。分辨率介于 1024x1024px (1K) 到 2048x2048px (2K) 之间的
+    输出图片会消耗 1120 个 token，相当于每张图片 0.134 美元。分辨率最高为 4096x4096px (4K) 的
+    输出图片会消耗 2000 个 token，相当于每张图片 0.24 美元」
+Gemini 3.1 Flash Image (Nano Banana 2)
+  「图片输出的价格为 60 美元/100 万个 token。0.5K (512px) 消耗 747 个 token，相当于每张 0.045 美元。
+    1K (1024x1024px) 消耗 1120 个 token，相当于每张 0.067 美元。2K (2048x2048px) 消耗 1680 个 token ...」
+Gemini 3.1 Flash Lite Image (Nano Banana 2 Lite)
+  「图片输出的价格为 30 美元/100 万个 token。1K 消耗 1120 个 token，相当于每张 0.0336 美元」
+Gemini 2.5 Flash Image (Nano Banana)
+  「图片输出的价格为 30 美元/100 万个 token。分辨率最高为 1024x1024px 的输出图片会消耗 1290 个 token，
+    相当于每张 0.039 美元」
+</code></pre>
+<p><strong>A-8 OpenAI（<code>developers.openai.com/api/docs/pricing</code> 与 <code>.../guides/image-generation.md</code>，2026-09-21）</strong></p>
+<pre><code>定价页：gpt-image-2.5-sunburst | Image | 输入 $8.00 | cached $2.00 | 输出 $30.00
+        gpt-image-2.5-flare    | Image | 输入 $8.00 | cached $2.00 | 输出 $30.00
+        （Text 输入 $5.00 / cached $1.25）
+图像指南：「For image generation cost estimates, use the calculator in the image generation guide.」
+        「Choose Sunburst for workflows where editing precision matters most, and Flare for fast,
+          high-quality everyday image generation.」
+        「Recommended sizes: 1024x1024 (square), 1536x1024 (landscape), 1024x1536 (portrait)」
+        「Quality: low, medium, high, xhigh, max, auto」
+        「Width and height must be multiples of 16, the aspect ratio must be between 1:3 and 3:1,
+          and neither edge may exceed 3840 pixels. The total pixel count must be between 655,360 and 8,294,400 (4K).」
+        「The input_fidelity parameter controls how strongly a model preserves details from input images
+          during edits and reference-image workflows. For gpt-image-2, omit this parameter; the API
+          doesn't allow changing it because the model processes every image input at high fidelity automatically.」
+</code></pre>
+<p><strong>A-9 fal.ai 与 BFL（<code>fal.ai/pricing</code>、<code>bfl.ai/pricing</code>，2026-09-21）</strong></p>
+<pre><code>fal.ai  Image Models（按 1MP 归一化）：
+  Seedream V4 (fal-ai/bytedance/seedream/v4/text-to-image)  $0.03 / image   → 33 images per $1
+  Flux Kontext Pro (fal-ai/flux-pro/kontext)                $0.04 / image   → 25 images per $1
+  Nanobanana (fal-ai/nano-banana)                           $0.0398 / image → 25 images per $1
+  Qwen (fal-ai/qwen-image)                                  $0.02 / megapixel → 50 megapixels per $1
+bfl.ai/pricing  Image models 按输出百万像素计费，页面出现档位：$0.014 / $0.015 / $0.03 / $0.0375 / $0.045
+  （原文片段示例：「megapixel is charged $0.014 Each subsequent megapixel ...」）——模型↔单价映射未取到，标 [待核验]
+Midjourney：https://www.midjourney.com/plans → HTTP 403，未取得
+火山引擎：https://www.volcengine.com/docs/82379/1544106 与 /1330310 → HTTP 200 但正文为 JS 壳（4606 bytes），未取得
+</code></pre>
+<hr/>
+<h2 id="附录-b与-03-04-05-的接口约定衔接用">附录 B：与 03 / 04 / 05 的接口约定（衔接用）</h2>
+<div aria-label="可横向滚动的表格" class="table-scroll" tabindex="0"><table>
+<thead>
+<tr>
+<th>交接口</th>
+<th>本文承诺输出</th>
+<th>下游依赖</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>→ 03 唇形驱动</td>
+<td>1080×1920 PNG，正脸/微侧半身胸像，嘴部无遮挡、未经重绘型放大；另存 1 张「露齿微笑」参考图</td>
+<td>人脸对齐与嘴部关键点可稳定检出</td>
+</tr>
+<tr>
+<td>→ 03（如需序列）</td>
+<td>同一套 Base Avatar 资产 + 同 seed 策略说明</td>
+<td>多帧一致性</td>
+</tr>
+<tr>
+<td>→ 04 TTS</td>
+<td>不涉及（仅确认人物身份与语音身份需视觉/听觉一致）</td>
+<td>——</td>
+</tr>
+<tr>
+<td>→ 05 发布</td>
+<td>素材元数据：模型 ID、快照版本、参考图哈希、seed、prompt、embedding 相似度</td>
+<td>可追溯、可回归、平台 AI 标识</td>
+</tr>
+</tbody>
+</table></div>
+<hr/>
+<p><em>文档版本 v1.0 ｜ 采集日期 2026-09-21 ｜ 所有 <code>[实测]</code> 数据来自 gh api / 官方文档 / 官方 README 直连核验；价格与许可证为当日快照，落地前请复核官方计费页与 LICENSE 全文。</em></p>
+</article>
+    <nav class="document-pager" aria-label="相邻文档"><a rel="prev" href="01-%E4%BA%A7%E5%93%81%E5%BD%A2%E6%80%81%E4%B8%8E%E6%8A%96%E9%9F%B3%E7%94%9F%E6%80%81.html"><span>上一篇</span>01-产品形态与抖音生态</a><a rel="next" href="03-%E6%95%B0%E5%AD%97%E4%BA%BA%E5%8F%A3%E6%92%AD%E9%80%89%E5%9E%8B.html"><span>下一篇</span>03-数字人口播选型</a></nav>
+    <footer class="page-footer">与同名 Markdown 对应的阅读版 · 可离线阅读与打印</footer>
+  </main>
+  <aside class="toc-panel" aria-label="本文章节"><p class="group-title">本页目录</p><nav id="toc"><a class="toc-h2" href="#0-%E7%BB%93%E8%AE%BA%E9%80%9F%E8%A7%88">0. 结论速览</a><a class="toc-h2" href="#1-%E9%9C%80%E6%B1%82%E6%8B%86%E8%A7%A3%E8%BA%AB%E4%BB%BD%E9%94%81%E5%AE%9A%E7%9A%84%E6%8A%80%E6%9C%AF%E5%AE%9A%E4%B9%89">1. 需求拆解：身份锁定的技术定义</a><a class="toc-h3" href="#11-%E5%BF%85%E9%A1%BB%E9%94%81%E6%AD%BB%E4%B8%8D%E5%8F%AF%E9%9A%8F%E6%9C%BA%E5%8F%98">1.1 必须锁死（不可随机变）</a><a class="toc-h3" href="#12-%E5%85%81%E8%AE%B8%E5%8F%98%E5%8C%96">1.2 允许变化</a><a class="toc-h3" href="#13-%E4%B8%89%E6%AE%B5%E8%A7%A3%E8%80%A6%E7%9A%84%E5%8F%AF%E8%90%BD%E5%9C%B0%E5%AE%9A%E4%B9%89">1.3 「三段解耦」的可落地定义</a><a class="toc-h3" href="#14-%E4%B8%8B%E6%B8%B8%E5%94%87%E5%BD%A2%E9%A9%B1%E5%8A%A8%E7%9A%84%E7%A1%AC%E7%BA%A6%E6%9D%9F%E5%86%99%E7%BB%99-03-%E7%9A%84%E6%8E%A5%E5%8F%A3%E7%BA%A6%E5%AE%9A">1.4 下游唇形驱动的硬约束（写给 03 的接口约定）</a><a class="toc-h2" href="#2-%E6%96%B9%E6%A1%88%E5%85%A8%E6%99%AF%E5%AF%B9%E6%AF%94%E8%A1%A8">2. 方案全景对比表</a><a class="toc-h3" href="#21-%E6%9C%AC%E5%9C%B0%E5%BC%80%E6%BA%90%E6%96%B9%E6%A1%88">2.1 本地开源方案</a><a class="toc-h3" href="#22-%E4%BA%91%E7%AB%AF-api-%E6%96%B9%E6%A1%88">2.2 云端 API 方案</a><a class="toc-h3" href="#23-%E6%94%AF%E6%92%91%E7%BB%84%E4%BB%B6%E6%8A%A0%E5%9B%BE-%E6%94%BE%E5%A4%A7-%E4%BF%AE%E5%A4%8D-%E8%AE%AD%E7%BB%83">2.3 支撑组件（抠图 / 放大 / 修复 / 训练）</a><a class="toc-h2" href="#3-4gb-%E6%98%BE%E5%AD%98%E5%8F%AF%E8%A1%8C%E6%80%A7%E8%A3%81%E5%86%B3%E6%AD%A3%E9%9D%A2%E5%9B%9E%E7%AD%94">3. 4GB 显存可行性裁决（正面回答）</a><a class="toc-h3" href="#31-%E5%8F%AF%E8%A1%8C%E6%80%A7%E8%A1%A8">3.1 可行性表</a><a class="toc-h3" href="#32-%E8%A3%81%E5%86%B3">3.2 裁决</a><a class="toc-h2" href="#4-%E6%8E%A8%E8%8D%90%E6%8A%80%E6%9C%AF%E8%B7%AF%E7%BA%BF">4. 推荐技术路线</a><a class="toc-h3" href="#41-%E4%B8%BB%E8%B7%AF%E7%BA%BF%E4%BA%91-api%E5%8F%82%E8%80%83%E5%9B%BE%E9%A9%B1%E5%8A%A8%E5%8D%95%E6%AC%A1%E7%94%9F%E6%88%90%E6%8E%A8%E8%8D%90">4.1 主路线：云 API「参考图驱动」单次生成（推荐）</a><a class="toc-h3" href="#42-%E5%A4%87%E8%B7%AF%E7%BA%BF%E6%9C%AC%E5%9C%B0-sd15-%E5%85%9C%E5%BA%95">4.2 备路线：本地 SD1.5 兜底</a><a class="toc-h3" href="#43-%E5%8F%82%E6%95%B0%E7%BA%A7%E5%BB%BA%E8%AE%AE%E4%BA%91-api-%E4%BE%A7">4.3 参数级建议（云 API 侧）</a><a class="toc-h3" href="#44-%E4%B8%BA%E4%BB%80%E4%B9%88-%E4%B8%8D-%E9%80%89%E4%B8%89%E6%AE%B5%E5%88%86%E5%88%AB%E7%94%9F%E6%88%90%E5%86%8D%E6%8B%BC">4.4 为什么 不 选「三段分别生成再拼」</a><a class="toc-h2" href="#5-%E6%8D%A2%E8%A3%85-%E6%8D%A2%E8%83%8C%E6%99%AF%E8%A7%A3%E8%80%A6%E5%AE%9E%E7%8E%B0">5. 换装 / 换背景解耦实现</a><a class="toc-h3" href="#51-%E4%B8%89%E6%9D%A1%E6%8A%80%E6%9C%AF%E8%B7%AF%E5%BE%84%E5%AF%B9%E6%AF%94">5.1 三条技术路径对比</a><a class="toc-h3" href="#52-p3-%E7%9A%84%E6%8A%A0%E5%9B%BE%E4%B8%8E%E8%BE%B9%E7%BC%98%E8%B4%A8%E9%87%8F%E5%AF%B9%E6%AF%94%E5%8F%91%E4%B8%9D%E8%BE%B9%E7%BC%98%E6%98%AF%E5%86%B3%E8%83%9C%E7%82%B9">5.2 P3 的抠图与边缘质量对比（发丝边缘是决胜点）</a><a class="toc-h3" href="#53-%E8%83%8C%E6%99%AF%E7%94%9F%E6%88%90">5.3 背景生成</a><a class="toc-h2" href="#6-%E8%BA%AB%E4%BB%BD%E4%B8%80%E8%87%B4%E6%80%A7%E6%A0%A1%E9%AA%8C%E5%B7%A5%E7%A8%8B%E6%89%8B%E6%AE%B5">6. 身份一致性校验工程手段</a><a class="toc-h3" href="#61-seed-%E5%9B%BA%E5%AE%9A%E5%A4%9F%E4%B8%8D%E5%A4%9F-%E4%B8%8D%E5%A4%9F%E5%8E%9F%E5%9B%A0%E6%9C%89%E4%B8%89">6.1 seed 固定够不够？—— 不够，原因有三</a><a class="toc-h3" href="#62-%E4%BA%BA%E8%84%B8%E6%8C%87%E7%BA%B9faceid-embedding%E6%A0%A1%E9%AA%8C%E9%93%BE%E8%B7%AF">6.2 人脸指纹（FaceID embedding）校验链路</a><a class="toc-h3" href="#63-%E5%A4%9A%E5%B1%82%E9%97%A8%E7%A6%81%E6%8E%A8%E8%8D%90%E6%B5%81%E6%B0%B4%E7%BA%BF">6.3 多层门禁（推荐流水线）</a><a class="toc-h3" href="#64-%E6%8D%A2%E8%A3%85%E6%8D%A2%E8%83%8C%E6%99%AF%E4%B8%8D%E6%94%B9%E4%BA%BA%E7%9A%84%E5%8F%AF%E8%90%BD%E5%9C%B0%E5%B7%A5%E7%A8%8B%E6%89%8B%E6%AE%B5%E6%8C%89%E4%BC%98%E5%85%88%E7%BA%A7">6.4 「换装换背景不改人」的可落地工程手段（按优先级）</a><a class="toc-h2" href="#7-%E8%BE%93%E5%87%BA%E8%A7%84%E6%A0%BC%E4%B8%8E%E6%94%BE%E5%A4%A7%E9%93%BE%E8%B7%AF">7. 输出规格与放大链路</a><a class="toc-h3" href="#71-%E7%9B%AE%E6%A0%87%E4%B8%8E%E6%9D%A5%E6%BA%90%E8%A7%84%E6%A0%BC">7.1 目标与来源规格</a><a class="toc-h3" href="#72-%E6%94%BE%E5%A4%A7%E9%93%BE%E8%B7%AF%E5%AF%B9%E6%AF%94">7.2 放大链路对比</a><a class="toc-h2" href="#8-%E6%88%90%E6%9C%AC%E5%AF%B9%E6%AF%94%E8%A1%A8">8. 成本对比表</a><a class="toc-h3" href="#81-%E5%8D%95%E5%BC%A0%E6%88%90%E6%9C%AC">8.1 单张成本</a><a class="toc-h3" href="#82-%E6%8C%89%E4%BA%A7%E8%83%BD%E4%BC%B0%E7%AE%97%E5%8D%95%E6%9D%A1%E8%A7%86%E9%A2%91%E5%8F%A3%E5%BE%84">8.2 按产能估算（单条视频口径）</a><a class="toc-h3" href="#83-%E6%9C%AC%E5%9C%B0%E6%96%B9%E6%A1%88%E7%9A%84%E6%97%B6%E9%97%B4%E6%88%90%E6%9C%AC%E5%AF%B9%E6%AF%94">8.3 本地方案的时间成本（对比）</a><a class="toc-h2" href="#9-%E9%A3%8E%E9%99%A9%E4%B8%8E%E5%9D%91">9. 风险与坑</a><a class="toc-h2" href="#10-%E5%BE%85%E6%A0%B8%E9%AA%8C-%E6%B8%85%E5%8D%95">10. [待核验] 清单</a><a class="toc-h2" href="#%E9%99%84%E5%BD%95-a%E6%9C%AC%E6%AC%A1%E6%A0%B8%E9%AA%8C%E7%9A%84%E5%8E%9F%E5%A7%8B%E8%BF%94%E5%9B%9E%E7%89%87%E6%AE%B5%E8%AF%81%E6%8D%AE%E7%95%99%E7%97%95">附录 A：本次核验的原始返回片段（证据留痕）</a><a class="toc-h2" href="#%E9%99%84%E5%BD%95-b%E4%B8%8E-03-04-05-%E7%9A%84%E6%8E%A5%E5%8F%A3%E7%BA%A6%E5%AE%9A%E8%A1%94%E6%8E%A5%E7%94%A8">附录 B：与 03 / 04 / 05 的接口约定（衔接用）</a></nav></aside>
+</div>
+<button type="button" class="sidebar-scrim" aria-label="关闭文档目录" hidden></button>
+<button type="button" class="back-top" aria-label="返回顶部">顶部</button>
+<script>(() => {
+  'use strict';
+
+  function initializeReader() {
+    const article = document.getElementById('document-body');
+    if (!article) return;
+    const root = document.documentElement;
+    const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
+    const scrollBehavior = () => reducedMotion.matches ? 'instant' : 'smooth';
+
+    // Local files and privacy settings can deny storage; controls remain usable.
+    const fontKey = 'document-reader-font-size';
+    let fontSize = 17;
+    try {
+      const savedSize = Number(localStorage.getItem(fontKey));
+      if (Number.isFinite(savedSize) && savedSize >= 14 && savedSize <= 22) fontSize = savedSize;
+    } catch (_) { /* Storage is optional. */ }
+    const smaller = document.querySelector('.font-smaller');
+    const reset = document.querySelector('.font-reset');
+    const larger = document.querySelector('.font-larger');
+    function setFontSize(value) {
+      fontSize = Math.max(14, Math.min(22, value));
+      root.style.setProperty('--reader-font-size', `${fontSize}px`);
+      if (smaller) smaller.disabled = fontSize === 14;
+      if (larger) larger.disabled = fontSize === 22;
+      if (reset) reset.title = `恢复默认字号（当前 ${fontSize}px）`;
+      try { localStorage.setItem(fontKey, String(fontSize)); } catch (_) { /* Optional. */ }
+    }
+    setFontSize(fontSize);
+    smaller?.addEventListener('click', () => setFontSize(fontSize - 1));
+    reset?.addEventListener('click', () => setFontSize(17));
+    larger?.addEventListener('click', () => setFontSize(fontSize + 1));
+    document.querySelector('.print-button')?.addEventListener('click', () => window.print());
+
+    const menu = document.querySelector('.mobile-menu');
+    const sidebar = document.getElementById('doc-sidebar');
+    const scrim = document.querySelector('.sidebar-scrim');
+    const mobileWidth = window.matchMedia('(max-width: 800px)');
+    function setMenu(open, returnFocus = false) {
+      const visible = open && mobileWidth.matches;
+      document.body.classList.toggle('menu-open', visible);
+      menu?.setAttribute('aria-expanded', String(visible));
+      if (scrim) scrim.hidden = !visible;
+      if (visible) {
+        sidebar?.querySelector('[aria-current="page"], a, button')?.focus();
+      } else if (returnFocus) menu?.focus();
+    }
+    menu?.addEventListener('click', () => setMenu(!document.body.classList.contains('menu-open')));
+    scrim?.addEventListener('click', () => setMenu(false, true));
+    sidebar?.addEventListener('click', (event) => {
+      if (event.target.closest('a')) setMenu(false);
+    });
+    mobileWidth.addEventListener('change', () => setMenu(false));
+    document.addEventListener('keydown', (event) => {
+      if (!document.body.classList.contains('menu-open')) return;
+      if (event.key === 'Escape') {
+        event.preventDefault();
+        setMenu(false, true);
+      }
+      if (event.key === 'Tab') {
+        const focusable = [menu, ...sidebar.querySelectorAll('a[href], button:not([disabled]), [tabindex="0"]')].filter(Boolean);
+        const first = focusable[0];
+        const last = focusable[focusable.length - 1];
+        if (event.shiftKey && document.activeElement === first) {
+          event.preventDefault();
+          last?.focus();
+        } else if (!event.shiftKey && document.activeElement === last) {
+          event.preventDefault();
+          first?.focus();
+        }
+      }
+    });
+    setMenu(false);
+
+    const searchForm = document.getElementById('search-form');
+    const searchInput = document.getElementById('search-input');
+    const searchNext = document.getElementById('search-next');
+    const searchClear = document.getElementById('search-clear');
+    const searchStatus = document.getElementById('search-status');
+    let searchResults = [];
+    let currentResult = -1;
+    let currentQuery = '';
+    let searchTimer;
+
+    function clearHighlights() {
+      article.querySelectorAll('mark.reader-match').forEach((mark) => {
+        const parent = mark.parentNode;
+        mark.replaceWith(document.createTextNode(mark.textContent));
+        parent.normalize();
+      });
+      article.querySelectorAll('.search-block-current').forEach((block) => block.classList.remove('search-block-current'));
+      searchResults = [];
+      currentResult = -1;
+    }
+
+    function showResult(index, shouldScroll) {
+      searchResults.forEach((result) => {
+        result.block.classList.remove('search-block-current');
+        result.marks.forEach((mark) => mark.classList.remove('is-current'));
+      });
+      currentResult = (index + searchResults.length) % searchResults.length;
+      const result = searchResults[currentResult];
+      result.block.classList.add('search-block-current');
+      result.marks.forEach((mark) => mark.classList.add('is-current'));
+      if (searchStatus) searchStatus.textContent = `第 ${currentResult + 1} / ${searchResults.length} 处匹配 · Enter 下一处`;
+      if (shouldScroll) {
+        let container = result.block.parentElement;
+        while (container && container !== article) {
+          if (container.tagName === 'DETAILS') container.open = true;
+          container = container.parentElement;
+        }
+        result.marks[0].scrollIntoView({ behavior: scrollBehavior(), block: 'center', inline: 'nearest' });
+      }
+    }
+
+    function runSearch(shouldScroll = false) {
+      clearTimeout(searchTimer);
+      clearHighlights();
+      const query = searchInput?.value.trim() || '';
+      currentQuery = query;
+      if (searchClear) searchClear.disabled = !query;
+      if (!query) {
+        if (searchStatus) searchStatus.textContent = '';
+        if (searchNext) searchNext.disabled = true;
+        return;
+      }
+      const queryLower = query.toLocaleLowerCase();
+      const blockResults = new Map();
+      // Walk original text nodes, preserving links, emphasis, tables and code.
+      const walker = document.createTreeWalker(article, NodeFilter.SHOW_TEXT, {
+        acceptNode(node) {
+          if (!node.nodeValue.trim()) return NodeFilter.FILTER_REJECT;
+          if (node.parentElement.closest('script, style, button, svg, mark, [aria-hidden="true"]')) return NodeFilter.FILTER_REJECT;
+          return node.nodeValue.toLocaleLowerCase().includes(queryLower) ? NodeFilter.FILTER_ACCEPT : NodeFilter.FILTER_REJECT;
+        }
+      });
+      const nodes = [];
+      while (walker.nextNode()) nodes.push(walker.currentNode);
+      nodes.forEach((node) => {
+        const original = node.nodeValue;
+        const normalized = original.toLocaleLowerCase();
+        const block = node.parentElement.closest('p, li, td, th, h2, h3, h4, h5, h6, pre, summary, figcaption') || node.parentElement;
+        let result = blockResults.get(block);
+        if (!result) {
+          result = { block, marks: [] };
+          blockResults.set(block, result);
+        }
+        const fragment = document.createDocumentFragment();
+        let position = 0;
+        let matchPosition;
+        while ((matchPosition = normalized.indexOf(queryLower, position)) !== -1) {
+          fragment.append(document.createTextNode(original.slice(position, matchPosition)));
+          const mark = document.createElement('mark');
+          mark.className = 'reader-match';
+          mark.textContent = original.slice(matchPosition, matchPosition + query.length);
+          fragment.append(mark);
+          result.marks.push(mark);
+          position = matchPosition + query.length;
+        }
+        fragment.append(document.createTextNode(original.slice(position)));
+        node.replaceWith(fragment);
+      });
+      searchResults = [...blockResults.values()];
+      if (searchNext) searchNext.disabled = !searchResults.length;
+      if (!searchResults.length) {
+        if (searchStatus) searchStatus.textContent = '未找到匹配内容';
+      } else showResult(0, shouldScroll);
+    }
+
+    searchInput?.addEventListener('input', (event) => {
+      if (event.isComposing) return;
+      clearTimeout(searchTimer);
+      searchTimer = setTimeout(() => runSearch(false), 180);
+    });
+    searchInput?.addEventListener('compositionend', () => {
+      clearTimeout(searchTimer);
+      searchTimer = setTimeout(() => runSearch(false), 180);
+    });
+    searchForm?.addEventListener('submit', (event) => {
+      event.preventDefault();
+      const queryChanged = currentQuery !== searchInput.value.trim();
+      if (queryChanged) runSearch(true);
+      else if (searchResults.length) showResult(currentResult + 1, true);
+    });
+    if (searchNext && searchNext.type !== 'submit') {
+      searchNext.addEventListener('click', () => {
+        if (currentQuery !== searchInput.value.trim()) runSearch(true);
+        else if (searchResults.length) showResult(currentResult + 1, true);
+      });
+    }
+    function resetSearch() {
+      clearTimeout(searchTimer);
+      if (searchInput) searchInput.value = '';
+      currentQuery = '';
+      clearHighlights();
+      if (searchStatus) searchStatus.textContent = '';
+      if (searchNext) searchNext.disabled = true;
+      if (searchClear) searchClear.disabled = true;
+    }
+    searchClear?.addEventListener('click', (event) => {
+      event.preventDefault();
+      resetSearch();
+      searchInput?.focus();
+    });
+    searchInput?.addEventListener('keydown', (event) => {
+      if (event.key === 'Escape' && !event.isComposing) {
+        event.preventDefault();
+        resetSearch();
+      }
+      if (event.key === 'Enter' && event.isComposing) event.preventDefault();
+    });
+    resetSearch();
+
+    async function copyText(text) {
+      try {
+        if (navigator.clipboard?.writeText) {
+          await navigator.clipboard.writeText(text);
+          return true;
+        }
+      } catch (_) { /* File URLs may reject the modern Clipboard API. */ }
+      const previousFocus = document.activeElement;
+      const selection = window.getSelection();
+      const savedRanges = selection ? Array.from({ length: selection.rangeCount }, (_, i) => selection.getRangeAt(i).cloneRange()) : [];
+      const field = document.createElement('textarea');
+      field.value = text;
+      field.readOnly = true;
+      field.style.cssText = 'position:fixed;left:-9999px;top:0;opacity:0;font-size:16px';
+      document.body.append(field);
+      field.select();
+      let copied = false;
+      try { copied = document.execCommand('copy'); } catch (_) { /* Show the failure state. */ }
+      field.remove();
+      if (selection) {
+        selection.removeAllRanges();
+        savedRanges.forEach((range) => selection.addRange(range));
+      }
+      previousFocus?.focus({ preventScroll: true });
+      return copied;
+    }
+
+    article.querySelectorAll('pre').forEach((pre) => {
+      const code = pre.querySelector('code');
+      if (!code || pre.querySelector('.copy-code')) return;
+      const button = document.createElement('button');
+      button.type = 'button';
+      button.className = 'copy-code';
+      button.textContent = '复制代码';
+      button.setAttribute('aria-label', '复制代码');
+      button.setAttribute('aria-live', 'polite');
+      pre.append(button);
+      let labelTimer;
+      button.addEventListener('click', async () => {
+        clearTimeout(labelTimer);
+        const copied = await copyText(code.textContent);
+        button.textContent = copied ? '已复制' : '请选中后复制';
+        labelTimer = setTimeout(() => { button.textContent = '复制代码'; }, 2200);
+      });
+    });
+
+    // Scroll-spy works without observers and avoids changing browser history.
+    const tocLinks = Array.from(document.querySelectorAll('#toc a[href^="#"]'));
+    const sections = tocLinks.map((link) => {
+      let id;
+      try { id = decodeURIComponent(link.getAttribute('href').slice(1)); } catch (_) { return null; }
+      const heading = document.getElementById(id);
+      return heading ? { link, heading } : null;
+    }).filter(Boolean);
+    let activeLink = null;
+    const backTop = document.querySelector('.back-top');
+    let framePending = false;
+    function updateScrollState() {
+      framePending = false;
+      if (backTop) backTop.hidden = window.scrollY < 480;
+      let active = sections[0];
+      const header = document.querySelector('.topbar');
+      const threshold = (header?.getBoundingClientRect().height || 76) + 38;
+      for (const section of sections) {
+        if (section.heading.getBoundingClientRect().top <= threshold) active = section;
+        else break;
+      }
+      if (!active || active.link === activeLink) return;
+      activeLink?.removeAttribute('aria-current');
+      activeLink?.classList.remove('is-active');
+      activeLink = active.link;
+      activeLink.setAttribute('aria-current', 'location');
+      activeLink.classList.add('is-active');
+      const panel = document.querySelector('.toc-panel');
+      if (panel && panel.clientHeight) {
+        const linkRect = activeLink.getBoundingClientRect();
+        const panelRect = panel.getBoundingClientRect();
+        if (linkRect.top < panelRect.top + 25 || linkRect.bottom > panelRect.bottom - 25) {
+          panel.scrollTop += linkRect.top - panelRect.top - panel.clientHeight / 3;
+        }
+      }
+    }
+    function queueScrollUpdate() {
+      if (!framePending) {
+        framePending = true;
+        requestAnimationFrame(updateScrollState);
+      }
+    }
+    window.addEventListener('scroll', queueScrollUpdate, { passive: true });
+    window.addEventListener('resize', queueScrollUpdate, { passive: true });
+    backTop?.addEventListener('click', () => window.scrollTo({ top: 0, behavior: scrollBehavior() }));
+    updateScrollState();
+  }
+
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', initializeReader, { once: true });
+  else initializeReader();
+})();
+</script>
+</body>
+</html>

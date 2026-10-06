@@ -1,0 +1,3 @@
+Loads checkpoint by local backend from path: ./models/dwpose/dw-ll_ucoco_384.pth
+cuda start
+PREPROCESS_IMPORT_OK

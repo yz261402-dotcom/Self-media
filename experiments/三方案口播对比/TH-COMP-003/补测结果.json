@@ -1,0 +1,14 @@
+{
+  "finished_at": "2026-09-21T13:47:04.155232+00:00",
+  "state": "accepted",
+  "http_status": 200,
+  "business_code": 10000,
+  "message": "Success",
+  "request_id": "20260921214703E552A5181B29561D4D7A",
+  "task_id": "eec24b86b5c211f197771c34da482ebc",
+  "submit_http_seconds": 4.186999999998079,
+  "generation_seconds": null,
+  "actual_cost_cny": null,
+  "accepted": true,
+  "automatic_retry": false
+}

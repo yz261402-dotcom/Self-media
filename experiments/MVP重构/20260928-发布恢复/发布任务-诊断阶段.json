@@ -1,0 +1,37 @@
+{
+  "id": "publish_9073988ae1f7",
+  "work_id": "work_d4d9544a45e0",
+  "platform": "douyin",
+  "adapter": "playwright",
+  "is_mock": false,
+  "state": "failed",
+  "idempotency_key": "be646dd724bea92e052b2813ae105147f3326cd75c8ad63074149ed665cc8553",
+  "package_id": "pkg_fd31e76ebaffacef221173f9",
+  "package_digest": "051c87b4deacd339b14d923f4044436d81118d2c863086e8338521f0a238c933",
+  "title": "它不只是会聊天，它开始动手了",
+  "description": "用聊天机器人和 agent 的差别做对比，讲清 agent 从回答到完成的转变。",
+  "tags": [
+    "agent",
+    "科普",
+    "对比"
+  ],
+  "scheduled_at": null,
+  "revision": 14,
+  "metadata_history": [],
+  "confirmation_digest": null,
+  "auto_submit": false,
+  "requires_user_confirmation": true,
+  "session_dir": "C:\\Users\\22346\\Desktop\\自媒体视频生成\\production\\backend\\runtime\\publish\\douyin-profile",
+  "account_id": null,
+  "account_label": null,
+  "created_at": "2026-09-27T22:22:08.849998+08:00",
+  "updated_at": "2026-09-28T09:32:32.933186+08:00",
+  "provider_ref": null,
+  "provider_url": null,
+  "error": {
+    "code": "DOUYIN_AI_LABEL_FAILED",
+    "message": "AI 声明选择失败。"
+  },
+  "attempt_started_at": null,
+  "preparation": null
+}

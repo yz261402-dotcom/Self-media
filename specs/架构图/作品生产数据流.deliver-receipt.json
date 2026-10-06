@@ -1,0 +1,24 @@
+{
+  "schemaVersion": 1,
+  "ok": true,
+  "command": "deliver",
+  "type": "dataflow",
+  "input": "C:\\Users\\22346\\Desktop\\自媒体视频生成\\specs\\架构图\\作品生产数据流.json",
+  "output": "C:\\Users\\22346\\Desktop\\自媒体视频生成\\specs\\架构图\\作品生产数据流.html",
+  "specification": {
+    "sha256": "ea9448d4c0355a195e1adbf14da96799bf12a9f845e1c80ca91ccc70fde019ed",
+    "bytes": 8154
+  },
+  "artifact": {
+    "sha256": "84270856a5b14f2389a774fc335279613dbf72e8bd675b106bf5c2ed31415a12",
+    "bytes": 648721
+  },
+  "validation": {
+    "checksPassed": 9,
+    "checkCount": 9,
+    "compositionProfile": "showcase",
+    "compositionStatus": "pass",
+    "errors": 0,
+    "warnings": 0
+  }
+}

@@ -1,0 +1,1162 @@
+<!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="description" content="AI 数字人工作台项目汇报：七入口、DeepAgents、数据流、模型、核心评估与进度。"><link rel="icon" href="data:,"><title>AI 数字人工作台 · 项目方案汇报</title><style>
+.chart-head{flex-wrap:wrap}.chart-actions{flex-shrink:0}.chart-actions button{white-space:nowrap}
+:root{--bg:#f7f7f8;--paper:#fff;--ink:#171c27;--muted:#5b6575;--line:#dfe3e9;--accent:#002fa7;--soft:#eef2fc;--font:Arial,'Microsoft YaHei','PingFang SC',sans-serif}
+*{box-sizing:border-box}html{scroll-behavior:smooth;scroll-padding-top:20px}body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.75 var(--font)}button,input{font:inherit}button{cursor:pointer}a{color:var(--accent);text-underline-offset:4px}button,a,input,summary,[tabindex]{outline-offset:4px}:focus-visible{outline:3px solid #577cdb}[hidden]{display:none!important}p{margin:0 0 14px}h1,h2,h3{line-height:1.25;margin:0 0 15px}h1{font-size:clamp(34px,3.5vw,56px);letter-spacing:-.04em;font-weight:700}h1 em{font-style:normal;color:var(--accent)}h2{font-size:26px;letter-spacing:-.02em}h3{font-size:18px}code{font-size:12px;background:#eef0f4;padding:2px 5px;overflow-wrap:anywhere}small,.muted{color:var(--muted)}button{color:var(--ink);border:1px solid #cbd2df;background:#fff;padding:8px 14px;font-size:13px}button:hover{border-color:var(--accent);color:var(--accent)}button[aria-pressed=true]{background:var(--accent);color:#fff;border-color:var(--accent)}
+.skip{position:fixed;top:-80px;left:16px;background:white;padding:12px;z-index:30}.skip:focus{top:10px}.sidebar{position:fixed;inset:0 auto 0 0;width:236px;background:#fff;border-right:1px solid var(--line);padding:32px 22px;display:flex;flex-direction:column;z-index:10}.brand{margin:0 6px 42px;border-top:5px solid var(--accent);padding-top:15px}.brand strong{display:block;font-size:20px;line-height:1.35}.brand span{font-size:11px;color:var(--muted);letter-spacing:.06em}.nav-caption{margin:0 8px 12px;color:var(--muted);font-size:11px}.nav-button{display:flex;width:100%;gap:14px;text-align:left;align-items:center;padding:13px 10px;margin:3px 0;border:0;border-left:3px solid transparent;background:transparent;font-size:14px}.nav-button[aria-selected=true]{border-left-color:var(--accent);background:var(--soft);color:var(--accent);font-weight:700}.nav-num{font-size:12px;color:#6e7890;min-width:20px}.side-bottom{margin-top:auto;padding-top:24px;font-size:12px;color:var(--muted)}.side-bottom strong{color:var(--ink)}.side-bottom p{padding-top:8px}.side-bottom a{font-size:12px}.main{margin-left:236px;padding:0 44px 35px;max-width:1870px}.topbar{min-height:82px;display:flex;justify-content:space-between;align-items:center;gap:18px;border-bottom:1px solid var(--line);font-size:12px;color:var(--muted)}.topbar strong{color:var(--ink)}.top-actions{display:flex;gap:8px;align-items:center}.top-actions button{padding:7px 10px;font-size:12px}.status-line{margin-right:6px;color:var(--muted)}.view{padding-top:37px}.eyebrow{font-size:12px;letter-spacing:.08em;color:var(--accent);margin-bottom:16px;font-weight:700}.hero{display:grid;grid-template-columns:1fr 240px;align-items:end;gap:32px}.intro{font-size:16px;color:var(--muted);max-width:750px;margin-bottom:0}.hero-note{border-left:2px solid var(--accent);padding:8px 0 4px 22px}.hero-note span{font-size:12px;color:var(--muted)}.hero-note strong{display:block;font-size:24px;margin:6px 0}.hero-note p{font-size:12px;color:var(--muted);margin:0}.stats{display:grid;grid-template-columns:repeat(4,1fr);border-top:1px solid var(--line);border-bottom:1px solid var(--line);margin:32px 0 24px;background:#fff}.stats>div{padding:20px 22px;border-right:1px solid var(--line)}.stats>div:last-child{border:0}.stats b{float:left;font-size:44px;line-height:1.1;color:var(--accent);letter-spacing:-.06em;margin-right:18px;font-variant-numeric:tabular-nums}.stats strong{display:block;font-size:14px;margin-top:2px}.stats span{display:block;font-size:11px;color:var(--muted)}.scope-line{display:flex;gap:15px;align-items:center;flex-wrap:wrap;margin:22px 0;font-size:13px}.scope-line strong{color:var(--accent)}.flow-arrow{color:#8b95a7;font-size:24px}.section-head{margin:0 0 22px}.section-head:not(:first-child){margin-top:40px}.section-head p{color:var(--muted);max-width:1000px}.section-head .eyebrow{color:var(--accent)}.feature-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:1px;background:var(--line);border:1px solid var(--line)}.feature{padding:22px;background:#fff;display:flex;flex-direction:column}.feature p{font-size:13px;color:var(--muted)}.feature-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:18px}.number{font-size:12px;color:var(--muted);font-variant-numeric:tabular-nums}.badge{display:inline-block;white-space:nowrap;font-size:11px;padding:3px 8px;border:1px solid #d6dce6;color:#5d677a;background:#fff}.badge.accent{color:var(--accent);background:var(--soft);border-color:#c7d3f1}.feature-foot{border-top:1px solid var(--line);padding-top:12px;margin-top:auto;font-size:12px;color:#596980}.note,.principle{border-left:3px solid var(--accent);background:var(--soft);padding:18px 22px;margin:24px 0}.note strong,.principle strong{font-size:15px;color:var(--accent)}.note p,.principle p{font-size:13px;margin:6px 0 0;color:#465573}.chart-card{border:1px solid var(--line);background:#fff;margin:24px 0}.chart-head{display:flex;justify-content:space-between;align-items:center;padding:15px 20px;border-bottom:1px solid var(--line);gap:12px;font-size:15px}.chart-actions{display:flex;gap:8px}.chart-actions button{font-size:12px;padding:5px 11px}.diagram-scroll{overflow:auto;padding:12px;scrollbar-width:thin}.diagram{width:100%;min-width:930px;height:auto;display:block}.diagram-scroll.enlarged .diagram{width:145%;min-width:1300px}.chart-caption{padding:13px 20px;border-top:1px solid var(--line);font-size:12px;color:var(--muted)}.node-detail{border-top:1px solid var(--line);padding:14px 20px;background:#fafbff;font-size:13px}.node-detail strong{display:block;color:var(--accent)}.detail-label{float:right;font-size:11px;color:var(--muted)}.node-detail p{margin:4px 0 0;color:var(--muted)}.decision-strip{display:flex;border:1px solid var(--line);background:#fff;margin:24px 0}.decision-strip span{flex:1;padding:14px 16px;font-size:14px;border-right:1px solid var(--line);color:var(--accent);text-align:center}.decision-strip span:last-child{border:0}.routes,.deploy{display:grid;grid-template-columns:1fr 1fr;gap:22px;margin:28px 0}.routes article,.deploy article{border:1px solid var(--line);background:#fff;padding:26px}.routes h2{font-size:22px;margin-top:18px}.routes p{font-size:13px;color:var(--muted)}.routes .route-chain{font-size:16px;color:var(--ink);line-height:2;padding:12px 0}.routes p:last-child{margin:0}.change-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:24px;border-top:1px solid var(--line);padding-top:22px}.change-grid h3{font-size:17px}.change-grid p{font-size:13px;color:var(--muted)}.wide-details{border:1px solid var(--line);padding:18px 20px;margin:25px 0;background:#fff}.wide-details>summary{font-size:15px;font-weight:700;cursor:pointer;color:var(--accent)}.wide-details[open]>summary{margin-bottom:18px}.wide-details p,.wide-details li{font-size:13px;color:var(--muted)}.wide-details .table-scroll{margin-bottom:0}.role-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));border:1px solid var(--line);background:var(--line);gap:1px;margin:28px 0}.role{padding:24px;background:#fff}.role-head{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:16px}.role-head h3{margin:0}.role p{font-size:14px;margin-bottom:10px}.role small{font-size:12px}.skills{display:grid;grid-template-columns:1fr 1fr;gap:12px}.skill{background:#fff;border:1px solid var(--line);padding:0 18px}.skill summary{cursor:pointer;padding:15px 0;font-weight:600;font-size:14px}.skill p{font-size:13px}.skill p b{font-size:12px;color:var(--accent);display:block}.memory-grid{display:grid;grid-template-columns:1fr 1fr;gap:26px}.memory{display:flex;gap:18px;border-top:1px solid var(--line);padding-top:20px}.memory .number{font-size:26px;color:var(--accent)}.memory h3{margin-bottom:8px}.memory strong{font-size:13px;font-weight:500}.memory p{font-size:13px;color:var(--muted);margin-top:8px}.table-scroll{overflow:auto;border:1px solid var(--line);background:#fff;margin:18px 0;scrollbar-width:thin}table{width:100%;min-width:950px;border-collapse:collapse;text-align:left;font-size:13px;line-height:1.7}th{background:#eff2f7;font-weight:600;font-size:12px;color:#536079;border-bottom:1px solid var(--line);padding:14px 16px;white-space:nowrap}td{padding:15px 16px;border-bottom:1px solid var(--line);vertical-align:top;color:#445169}tbody tr:last-child td{border-bottom:0}td:first-child{color:var(--ink);font-weight:600}td strong{color:var(--ink)}td code{display:block;margin-top:6px;font-size:11px;background:transparent;padding:0;color:#687487}#model-table{min-width:1120px}#model-table th:nth-child(2){width:25%}#model-table th:last-child{width:27%}.table-tools{display:flex;justify-content:space-between;align-items:end;gap:20px;margin-top:28px}.table-tools label{display:flex;flex-direction:column;gap:6px;font-size:12px;color:var(--muted)}input[type=search]{border:1px solid #cbd2df;padding:10px 14px;width:310px;background:#fff;font-size:14px}.filters{display:flex;gap:7px;flex-wrap:wrap}.filters button{font-size:12px}.result-count{font-size:12px;color:var(--muted);margin:9px 0}dl{margin:18px 0 0}dt{float:left;width:58px;font-size:12px;color:var(--muted)}dd{margin:0 0 10px 64px;font-size:13px}.deploy .number{display:block;margin-bottom:12px;color:var(--accent)}.quality-legend{display:flex;flex-wrap:wrap;gap:24px;font-size:13px;margin:24px 0}.quality-legend b{color:var(--accent);margin-right:6px}#core-metrics{table-layout:fixed;min-width:1000px}#core-metrics th:nth-child(1){width:9%}#core-metrics th:nth-child(2){width:19%}#core-metrics th:nth-child(3){width:17%}#core-metrics th:nth-child(4){width:25%}#core-metrics th:nth-child(5){width:30%}#core-metrics td:nth-child(2) strong{color:var(--accent)}.review-steps{display:grid;grid-template-columns:repeat(4,1fr);gap:24px;margin:30px 0}.review-steps b{display:block;font-size:28px;color:#9aa7bf}.review-steps strong{display:block;font-size:16px;margin:8px 0}.review-steps p{font-size:13px;color:var(--muted)}.source-link{font-size:13px}.evidence-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:18px;margin:30px 0}.evidence-grid article{background:#fff;border:1px solid var(--line);padding:25px}.evidence-grid h3{margin-top:18px}.evidence-grid p{font-size:13px;color:var(--muted)}.evidence-grid a{font-size:13px}.cost-evidence{background:#172134;color:#fff;padding:24px 28px;display:grid;grid-template-columns:260px 1fr;gap:25px}.cost-evidence span,.cost-evidence small{font-size:12px;color:#c8d0e0;display:block}.cost-evidence strong{font-size:38px;font-weight:600;display:block;letter-spacing:-.02em}.cost-evidence p{font-size:14px;margin:0;align-self:center;line-height:1.9;color:#e6eaf3}.roadmap{list-style:none;margin:24px 0;padding:0;border-top:1px solid var(--line)}.roadmap li{display:grid;grid-template-columns:120px 1fr 70px;gap:24px;padding:25px 0;border-bottom:1px solid var(--line)}.roadmap li>span{font-size:13px;font-variant-numeric:tabular-nums;color:var(--accent)}.roadmap h3{font-size:19px;margin-bottom:10px}.roadmap p{font-size:13px;color:var(--muted);margin:0}.roadmap em{font-size:12px;font-style:normal;color:var(--muted)}.milestones{display:grid;grid-template-columns:repeat(4,1fr);border:1px solid var(--line);background:#fff;margin:25px 0}.milestones>div{padding:18px;border-right:1px solid var(--line)}.milestones>div:last-child{border:0}.milestones b{font-size:23px;color:var(--accent);display:block}.milestones strong{font-size:14px}.milestones p{font-size:12px;margin:5px 0 0;color:var(--muted)}.footer{border-top:1px solid var(--line);margin-top:40px;padding-top:18px;display:flex;justify-content:space-between;gap:20px;font-size:11px;color:var(--muted)}.toast{position:fixed;right:25px;bottom:25px;padding:12px 18px;background:#172134;color:white;font-size:13px;z-index:25}.presenting .sidebar{display:none}.presenting .main{margin:0 auto;max-width:1680px}.presenting .topbar{position:sticky;top:0;z-index:11;background:var(--bg)}.presenting .present-nav{display:flex}.present-nav{display:none;gap:7px}.present-nav button{font-size:12px}
+@media(min-width:1800px){.main{padding-left:60px;padding-right:60px}}
+@media(max-width:1250px){.main{padding-left:28px;padding-right:28px}.hero{grid-template-columns:1fr}.hero-note{display:none}.stats>div{padding:17px 12px}.stats b{font-size:34px;margin-right:12px}.stats span{font-size:10px}.feature-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.status-line{display:none}.role-head{display:block}.role-head code{display:inline-block;margin-top:8px}.evidence-grid article{padding:18px}.table-tools{align-items:start;flex-direction:column}}
+@media(max-width:760px){.sidebar{position:sticky;inset:auto;top:0;width:100%;padding:8px;border-right:0;border-bottom:1px solid var(--line)}.brand,.nav-caption,.side-bottom{display:none}.sidebar nav{display:flex;overflow:auto;gap:3px}.nav-button{width:auto;flex-shrink:0;padding:10px 12px;gap:7px;font-size:12px;white-space:nowrap;margin:0;border:0;border-bottom:2px solid transparent}.nav-button[aria-selected=true]{border-bottom-color:var(--accent)}.main{margin:0;padding:0 18px 28px}.topbar{min-height:65px}.topbar .crumb-prefix{display:none}.top-actions{gap:5px}.top-actions button{font-size:10px;padding:6px 8px}.view{padding-top:27px}h1{font-size:36px}.intro{font-size:14px}.stats{grid-template-columns:1fr 1fr;margin-top:24px}.stats>div{padding:17px 14px;border-bottom:1px solid var(--line)}.stats>div:nth-child(2){border-right:0}.stats>div:nth-child(3){border-bottom:0}.stats b{font-size:38px}.stats span{font-size:11px}.scope-line{gap:9px}.scope-line .flow-arrow{display:none}.feature-grid,.role-grid,.skills,.memory-grid,.routes,.deploy,.evidence-grid{grid-template-columns:1fr}.section-head h2{font-size:23px}.section-head p{font-size:13px}.chart-head{padding:12px;font-size:13px}.chart-actions button{font-size:11px;padding:5px 8px}.diagram-scroll{padding:6px}.chart-caption,.node-detail{padding:12px}.decision-strip{display:grid;grid-template-columns:1fr 1fr}.decision-strip span{font-size:12px;border-bottom:1px solid var(--line)}.change-grid,.review-steps,.milestones{grid-template-columns:1fr 1fr;gap:18px}.milestones{gap:0}.milestones>div{border-bottom:1px solid var(--line)}.quality-legend{gap:12px;font-size:12px}.cost-evidence{grid-template-columns:1fr;padding:22px;gap:14px}.roadmap li{grid-template-columns:80px 1fr;gap:12px}.roadmap em{grid-column:2}.wide-details{padding:14px}.wide-details>summary{font-size:13px}.footer{flex-direction:column;gap:8px}.present-nav button{font-size:10px;padding:6px}.table-tools,input[type=search]{width:100%}.filters{gap:5px}.filters button{padding:7px 10px}.routes article,.deploy article{padding:20px}.note,.principle{padding:16px}.role-head{display:flex}.role-head code{margin:0}}
+@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
+@media print{@page{size:A3 landscape;margin:13mm}body{background:white;font-size:11px}.sidebar,.top-actions,.present-nav,.chart-actions,.table-tools,.toast,.skip,.node-detail{display:none!important}.main,.presenting .main{margin:0;padding:0;max-width:none}.topbar{min-height:35px}.view{padding:20px 0;break-before:page}.view:first-of-type{break-before:auto}body.print-all .view[hidden]{display:block!important}.hero{display:block}.hero-note{display:none}h1{font-size:32px}h2{font-size:23px}.chart-card,.feature,.role,.routes article,.deploy article,.evidence-grid article,.cost-evidence,.roadmap li{break-inside:avoid}.diagram-scroll,.table-scroll{overflow:visible}.diagram{min-width:0!important;width:100%!important}.chart-caption{font-size:10px}table,#core-metrics,#model-table{min-width:0;font-size:10px}th,td{padding:8px;font-size:10px}thead{display:table-header-group}tr{break-inside:avoid}#model-table tr[hidden]{display:table-row!important}.stats b{font-size:30px}.feature-grid{grid-template-columns:repeat(4,1fr)}.role-grid{grid-template-columns:repeat(3,1fr)}.evidence-grid{grid-template-columns:repeat(3,1fr)}.footer{font-size:9px}.source-link{display:none}.wide-details,.skill{break-inside:auto}.cost-evidence{background:#f0f2f7;color:#171c27}.cost-evidence p,.cost-evidence span,.cost-evidence small{color:#445169}a{color:#171c27}}
+</style></head><body>
+<a class="skip" href="#content">跳转到汇报内容</a><aside class="sidebar"><div class="brand"><strong>AI 数字人<br>内容工作台</strong><span>项目方案汇报 · 2026.09</span></div><div class="nav-caption">六个视图，讲清一条生产线</div><nav role="tablist" aria-label="汇报章节" aria-orientation="vertical"><button id="tab-system" class="nav-button" data-view="system" role="tab" aria-controls="view-system" aria-selected="true" tabindex="0"><span class="nav-num">01</span>总览与分层架构</button><button id="tab-flow" class="nav-button" data-view="flow" role="tab" aria-controls="view-flow" aria-selected="false" tabindex="-1"><span class="nav-num">02</span>生产与数据流</button><button id="tab-agents" class="nav-button" data-view="agents" role="tab" aria-controls="view-agents" aria-selected="false" tabindex="-1"><span class="nav-num">03</span>Agent 协作框架</button><button id="tab-stack" class="nav-button" data-view="stack" role="tab" aria-controls="view-stack" aria-selected="false" tabindex="-1"><span class="nav-num">04</span>技术与模型</button><button id="tab-quality" class="nav-button" data-view="quality" role="tab" aria-controls="view-quality" aria-selected="false" tabindex="-1"><span class="nav-num">05</span>质量评估</button><button id="tab-progress" class="nav-button" data-view="progress" role="tab" aria-controls="view-progress" aria-selected="false" tabindex="-1"><span class="nav-num">06</span>进度与验收</button></nav><div class="side-bottom"><strong>每天 5 条 × 约 60 秒</strong><p>生产验收目标，尚未达标验证。<br>首版做到预览与下载。</p><a class="" href="../0001-douyin-ai-studio/00-%E6%96%87%E6%A1%A3%E5%AF%BC%E8%88%AA.html">打开开发文档</a></div></aside>
+<main class="main" id="content"><header class="topbar"><div><span class="crumb-prefix">项目方案 / </span><strong id="breadcrumb">总览与分层架构</strong></div><div class="present-nav"><button id="previous">上一节</button><button id="next">下一节</button></div><div class="top-actions"><span class="status-line">方案与实验阶段</span><button id="present" aria-pressed="false">汇报模式</button><button id="print-current">打印本页</button><button id="print-all">全部 / PDF</button></div></header><section class="view" id="view-system" role="tabpanel" aria-labelledby="tab-system" tabindex="0" >
+<div class="hero"><div><p class="eyebrow">01 / 总览与分层架构</p><h1>让同一位主播，<br><em>持续产出好内容。</em></h1><p class="intro">面向 AI 科普与教学的单用户数字人口播工作台。把选题、文案、声音、人物和后期串成可审核、可返工、可追溯的生产流程。</p></div><div class="hero-note"><span>首版目标</span><strong>制作闭环</strong><p>从需求到成片预览、下载<br>平台发布与运营能力后续开放</p></div></div>
+<div class="stats"><div><b>07</b><strong>产品入口</strong><span>四项制作＋三项后续</span></div><div><b>04</b><strong>首版核心功能</strong><span>人物／文案／声音／合成</span></div><div><b>05</b><strong>Agent 角色</strong><span>一总控＋四类专家</span></div><div><b>07</b><strong>拟建业务 Skill</strong><span>规范方法，受控执行</span></div></div>
+<div class="note"><strong>本轮 MVP：固定人物＋MiniMax 音频 → OmniHuman 1.5</strong><p>目标是让同一个主播按既定声音和口播内容产生自然身体表演。Grok 退出当前路线；M2 保留为低成本本地选项。专门的数字人接口也须验证身体动作、音轨保持与身份稳定。</p></div>
+<div class="scope-line"><strong>输入</strong><span>“生成一期关于 RAG 的 AI 科普视频”</span><span class="flow-arrow" aria-hidden="true">→</span><strong>输出</strong><span>竖屏 MP4＋字幕＋封面＋投稿文案＋质量与来源清单</span></div>
+<div class="section-head"><h2>整体架构：系统由哪些层组成</h2><p>工作台与 API、Agent 协作、业务执行、能力支撑、模型与 Worker、数据与媒体。各层分工如下；执行先后顺序见“生产与数据流”。</p></div>
+<div class="chart-card"><div class="chart-head"><strong>整体技术架构 · 六层职责</strong><div class="chart-actions"><button data-zoom="system" aria-pressed="false">放大</button><button data-export="system">下载 SVG</button></div></div>
+    <div class="diagram-scroll" id="scroll-system" tabindex="0" aria-label="整体技术架构 · 六层职责，可横向滚动"><svg aria-label="整体技术架构 · 六层职责；点击节点查看说明" class="diagram" data-preset="classic" data-quality-profile="showcase" id="svg-system" role="group" viewbox="0 0 1160 620" xmlns="http://www.w3.org/2000/svg"><style>
+svg{font-family:'Microsoft YaHei','PingFang SC',Arial,sans-serif;background:#fff}
+.c-grid{fill:none;stroke:#f1f3f6}.c-mask{fill:#fff;stroke:none}
+.c-frontend,.c-backend,.c-database,.c-cloud,.c-security,.c-messagebus,.c-external{fill:#f3f6ff;stroke:#657eb8}
+.c-security{fill:#eef2ff;stroke:#002fa7}.c-backend{fill:#fff;stroke:#8093bf}
+.c-region,.c-lane,.c-security-group{fill:#fbfcff;stroke:#d9e1f0;stroke-dasharray:6 5}
+.t-primary{fill:#172134}.t-muted{fill:#58657a}.t-dim{fill:#68748a}
+.t-frontend,.t-backend,.t-database,.t-cloud,.t-security,.t-messagebus,.t-external{fill:#315398}
+.m-default,.m-dashed{fill:#8290aa}.m-emphasis,.m-security{fill:#002fa7}
+.a-default,.a-dashed{fill:none;stroke:#8290aa}.a-emphasis,.a-security{fill:none;stroke:#002fa7}
+.a-security,.a-dashed{stroke-dasharray:5 4}
+.s-frontend,.s-backend,.s-database,.s-cloud,.s-security,.s-messagebus,.s-external{fill:none;stroke:#526fa9}
+.sigil-fill{fill:#526fa9;stroke:none}
+[data-node-id]{cursor:pointer}[data-node-id]:hover>rect:not(.c-mask),[data-node-id][aria-pressed=true]>rect:not(.c-mask){stroke:#002fa7;stroke-width:2.5}
+[data-node-id]:focus{outline:none}[data-node-id]:focus-visible>rect:not(.c-mask){stroke:#002fa7;stroke-width:3}
+</style>
+<title id="system-archify-diagram-title">整体技术架构 · 六层职责</title>
+<desc id="system-archify-diagram-description">A architecture diagram generated by Archify.</desc>
+<!-- Definitions -->
+<defs>
+<marker id="system-arrowhead" markerheight="7" markerwidth="10" orient="auto" refx="9" refy="3.5">
+<polygon class="m-default" points="0 0, 10 3.5, 0 7"></polygon>
+</marker>
+<marker id="system-arrowhead-emphasis" markerheight="7" markerwidth="10" orient="auto" refx="9" refy="3.5">
+<polygon class="m-emphasis" points="0 0, 10 3.5, 0 7"></polygon>
+</marker>
+<marker id="system-arrowhead-security" markerheight="7" markerwidth="10" orient="auto" refx="9" refy="3.5">
+<polygon class="m-security" points="0 0, 10 3.5, 0 7"></polygon>
+</marker>
+<marker id="system-arrowhead-dashed" markerheight="7" markerwidth="10" orient="auto" refx="9" refy="3.5">
+<polygon class="m-dashed" points="0 0, 10 3.5, 0 7"></polygon>
+</marker>
+<pattern height="40" id="system-grid" patternunits="userSpaceOnUse" width="40">
+<path class="c-grid" d="M 40 0 L 0 0 0 40" stroke-width="0.5"></path>
+</pattern>
+</defs>
+<!-- Background Grid -->
+<rect fill="url(#system-grid)" height="100%" width="100%"></rect>
+<!-- Boundaries (behind everything) -->
+<!-- Connection paths (before components for correct z-order) -->
+<!-- Components -->
+<g aria-label="查看：01  工作台与 API 层" aria-pressed="false" data-chart="system" data-node-context="架构模块" data-node-id="layer-workbench" data-node-kind="frontend" data-node-label="01  工作台与 API 层" data-node-sublabel="人物形象 · 口播稿 · TTS · 视频合成｜发布 · 指标监控 · 模型选择（后续）" data-node-tag="单用户 · Work 贯穿七入口 · Vue / React、FastAPI 仍待选型" id="system-node-layer-workbench" role="button" tabindex="0">
+<title>01  工作台与 API 层 · 人物形象 · 口播稿 · TTS · 视频合成｜发布 · 指标监控 · 模型选择（后续） · Architecture component · 单用户 · Work 贯穿七入口 · Vue / React、FastAPI 仍待选型</title>
+<rect class="c-mask" height="80" rx="6" width="1040" x="60" y="20"></rect>
+<rect class="c-frontend" height="80" rx="6" stroke-width="1.5" width="1040" x="60" y="20"></rect>
+<g aria-hidden="true" class="semantic-sigil s-frontend" data-semantic-sigil="frontend" transform="translate(66 26) scale(0.6875)">
+<rect height="10" rx="2" width="12" x="2" y="3"></rect>
+<path d="M2 6.5h12"></path>
+<circle class="sigil-fill" cx="4.1" cy="4.8" r=".7"></circle>
+<circle class="sigil-fill" cx="6.3" cy="4.8" r=".7"></circle>
+</g>
+<text class="t-primary" data-detail-anchor="" font-size="21" font-weight="600" text-anchor="middle" x="580" y="45.0">01  工作台与 API 层</text>
+<text class="t-muted" data-detail="context" font-size="16" text-anchor="middle" x="580" y="68.0">人物形象 · 口播稿 · TTS · 视频合成｜发布 · 指标监控 · 模型选择（后续）</text>
+<text class="t-frontend" data-detail="fine" font-size="14" text-anchor="middle" x="580" y="88.0">单用户 · Work 贯穿七入口 · Vue / React、FastAPI 仍待选型</text>
+</g>
+<g aria-label="查看：02  DeepAgents 协作层" aria-pressed="false" data-chart="system" data-node-context="架构模块" data-node-id="layer-agents" data-node-kind="backend" data-node-label="02  DeepAgents 协作层" data-node-sublabel="总控 supervisor ＋ 策划 content · 审核 quality · 数字人 avatar · 声音 audio" data-node-tag="按提示直接生成三稿；quality 负责内部查重与已有材料核对；LangGraph 承载状态与恢复" id="system-node-layer-agents" role="button" tabindex="0">
+<title>02  DeepAgents 协作层 · 总控 supervisor ＋ 策划 content · 审核 quality · 数字人 avatar · 声音 audio · Architecture component · 按提示直接生成三稿；quality 负责内部查重与已有材料核对；LangGraph 承载状态与恢复</title>
+<rect class="c-mask" height="80" rx="6" width="1040" x="60" y="118"></rect>
+<rect class="c-backend" height="80" rx="6" stroke-width="1.5" width="1040" x="60" y="118"></rect>
+<g aria-hidden="true" class="semantic-sigil s-backend" data-semantic-sigil="backend" transform="translate(66 124) scale(0.6875)">
+<path d="M6 3 3 8l3 5M10 3l3 5-3 5"></path>
+</g>
+<text class="t-primary" data-detail-anchor="" font-size="21" font-weight="600" text-anchor="middle" x="580" y="143.0">02  DeepAgents 协作层</text>
+<text class="t-muted" data-detail="context" font-size="16" text-anchor="middle" x="580" y="166.0">总控 supervisor ＋ 策划 content · 审核 quality · 数字人 avatar · 声音 audio</text>
+<text class="t-backend" data-detail="fine" font-size="14" text-anchor="middle" x="580" y="186.0">按提示直接生成三稿；quality 负责内部查重与已有材料核对；LangGraph 承载状态与恢复</text>
+</g>
+<g aria-label="查看：03  业务执行层" aria-pressed="false" data-chart="system" data-node-context="架构模块" data-node-id="layer-business" data-node-kind="security" data-node-label="03  业务执行层" data-node-sublabel="作品与版本 · 用户选择 · 质量放行 · 预算预留 · 持久作业 · 幂等与恢复" data-node-tag="两路统一门禁：固定人物版本＋最终 TTS 已审且用户确认＋路线与适用预算，才能提交生成" id="system-node-layer-business" role="button" tabindex="0">
+<title>03  业务执行层 · 作品与版本 · 用户选择 · 质量放行 · 预算预留 · 持久作业 · 幂等与恢复 · Architecture component · 两路统一门禁：固定人物版本＋最终 TTS 已审且用户确认＋路线与适用预算，才能提交生成</title>
+<rect class="c-mask" height="80" rx="6" width="1040" x="60" y="216"></rect>
+<rect class="c-security" height="80" rx="6" stroke-width="1.5" width="1040" x="60" y="216"></rect>
+<g aria-hidden="true" class="semantic-sigil s-security" data-semantic-sigil="security" transform="translate(66 222) scale(0.6875)">
+<path d="M8 2.2 13 4v3.5c0 3.1-1.8 5.4-5 6.5-3.2-1.1-5-3.4-5-6.5V4Z"></path>
+<path d="m5.8 8 1.5 1.5 3-3"></path>
+</g>
+<text class="t-primary" data-detail-anchor="" font-size="21" font-weight="600" text-anchor="middle" x="580" y="241.0">03  业务执行层</text>
+<text class="t-muted" data-detail="context" font-size="16" text-anchor="middle" x="580" y="264.0">作品与版本 · 用户选择 · 质量放行 · 预算预留 · 持久作业 · 幂等与恢复</text>
+<text class="t-security" data-detail="fine" font-size="14" text-anchor="middle" x="580" y="284.0">两路统一门禁：固定人物版本＋最终 TTS 已审且用户确认＋路线与适用预算，才能提交生成</text>
+</g>
+<g aria-label="查看：04  Skill / MCP / 记忆支撑层" aria-pressed="false" data-chart="system" data-node-context="架构模块" data-node-id="layer-capabilities" data-node-kind="messagebus" data-node-label="04  Skill / MCP / 记忆支撑层" data-node-sublabel="7 个业务 Skill · 4 组 MCP 能力（初期拟建 2 个服务）· 四层记忆" data-node-tag="M01 仅供 quality 查历史；其余提供角色记忆、媒体生产与质量检测；无联网搜索抓取工具" id="system-node-layer-capabilities" role="button" tabindex="0">
+<title>04  Skill / MCP / 记忆支撑层 · 7 个业务 Skill · 4 组 MCP 能力（初期拟建 2 个服务）· 四层记忆 · Architecture component · M01 仅供 quality 查历史；其余提供角色记忆、媒体生产与质量检测；无联网搜索抓取工具</title>
+<rect class="c-mask" height="80" rx="6" width="1040" x="60" y="314"></rect>
+<rect class="c-messagebus" height="80" rx="6" stroke-width="1.5" width="1040" x="60" y="314"></rect>
+<g aria-hidden="true" class="semantic-sigil s-messagebus" data-semantic-sigil="messagebus" transform="translate(66 320) scale(0.6875)">
+<path d="M2.5 4.5h11M2.5 8h11M2.5 11.5h11"></path>
+<circle class="sigil-fill" cx="5" cy="4.5" r="1"></circle>
+<circle class="sigil-fill" cx="10.5" cy="8" r="1"></circle>
+<circle class="sigil-fill" cx="7" cy="11.5" r="1"></circle>
+</g>
+<text class="t-primary" data-detail-anchor="" font-size="21" font-weight="600" text-anchor="middle" x="580" y="339.0">04  Skill / MCP / 记忆支撑层</text>
+<text class="t-muted" data-detail="context" font-size="16" text-anchor="middle" x="580" y="362.0">7 个业务 Skill · 4 组 MCP 能力（初期拟建 2 个服务）· 四层记忆</text>
+<text class="t-messagebus" data-detail="fine" font-size="14" text-anchor="middle" x="580" y="382.0">M01 仅供 quality 查历史；其余提供角色记忆、媒体生产与质量检测；无联网搜索抓取工具</text>
+</g>
+<g aria-label="查看：05  Provider 与 Worker 层" aria-pressed="false" data-chart="system" data-node-context="架构模块" data-node-id="layer-execution" data-node-kind="cloud" data-node-label="05  Provider 与 Worker 层" data-node-sublabel="DeepSeek · GPT Image 2 · MiniMax｜OmniHuman 1.5（MVP）｜M2 可选：LivePortrait → MuseTalk" data-node-tag="后期代码：确认音频后字幕可并行；原片通过＋字幕就绪后合成/清晰度/封面；终审后内部打包" id="system-node-layer-execution" role="button" tabindex="0">
+<title>05  Provider 与 Worker 层 · DeepSeek · GPT Image 2 · MiniMax｜OmniHuman 1.5（MVP）｜M2 可选：LivePortrait → MuseTalk · Architecture component · 后期代码：确认音频后字幕可并行；原片通过＋字幕就绪后合成/清晰度/封面；终审后内部打包</title>
+<rect class="c-mask" height="80" rx="6" width="1040" x="60" y="412"></rect>
+<rect class="c-cloud" height="80" rx="6" stroke-width="1.5" width="1040" x="60" y="412"></rect>
+<g aria-hidden="true" class="semantic-sigil s-cloud" data-semantic-sigil="cloud" transform="translate(66 418) scale(0.6875)">
+<path d="M4.3 12.5h7.3a2.4 2.4 0 0 0 .2-4.8 4 4 0 0 0-7.5-1.3A3.1 3.1 0 0 0 4.3 12.5Z"></path>
+</g>
+<text class="t-primary" data-detail-anchor="" font-size="21" font-weight="600" text-anchor="middle" x="580" y="437.0">05  Provider 与 Worker 层</text>
+<text class="t-muted" data-detail="context" font-size="16" text-anchor="middle" x="580" y="460.0">DeepSeek · GPT Image 2 · MiniMax｜OmniHuman 1.5（MVP）｜M2 可选：LivePortrait → MuseTalk</text>
+<text class="t-cloud" data-detail="fine" font-size="14" text-anchor="middle" x="580" y="480.0">后期代码：确认音频后字幕可并行；原片通过＋字幕就绪后合成/清晰度/封面；终审后内部打包</text>
+</g>
+<g aria-label="查看：06  数据与媒体层" aria-pressed="false" data-chart="system" data-node-context="架构模块" data-node-id="layer-data" data-node-kind="database" data-node-label="06  数据与媒体层" data-node-sublabel="作品与费用账本 · 检查点 / Store · 内容索引 · 固定人物 / 音色与最终音频版本 · 原片与质检证据" data-node-tag="PostgreSQL / pgvector 为候选；Agent 传递 ID、版本与摘要，媒体文件独立保存" id="system-node-layer-data" role="button" tabindex="0">
+<title>06  数据与媒体层 · 作品与费用账本 · 检查点 / Store · 内容索引 · 固定人物 / 音色与最终音频版本 · 原片与质检证据 · Architecture component · PostgreSQL / pgvector 为候选；Agent 传递 ID、版本与摘要，媒体文件独立保存</title>
+<rect class="c-mask" height="80" rx="6" width="1040" x="60" y="510"></rect>
+<rect class="c-database" height="80" rx="6" stroke-width="1.5" width="1040" x="60" y="510"></rect>
+<g aria-hidden="true" class="semantic-sigil s-database" data-semantic-sigil="database" transform="translate(66 516) scale(0.6875)">
+<ellipse cx="8" cy="4" rx="5" ry="2"></ellipse>
+<path d="M3 4v8c0 1.1 2.2 2 5 2s5-.9 5-2V4M3 8c0 1.1 2.2 2 5 2s5-.9 5-2"></path>
+</g>
+<text class="t-primary" data-detail-anchor="" font-size="21" font-weight="600" text-anchor="middle" x="580" y="535.0">06  数据与媒体层</text>
+<text class="t-muted" data-detail="context" font-size="16" text-anchor="middle" x="580" y="558.0">作品与费用账本 · 检查点 / Store · 内容索引 · 固定人物 / 音色与最终音频版本 · 原片与质检证据</text>
+<text class="t-database" data-detail="fine" font-size="14" text-anchor="middle" x="580" y="578.0">PostgreSQL / pgvector 为候选；Agent 传递 ID、版本与摘要，媒体文件独立保存</text>
+</g>
+<!-- Connection labels -->
+<!-- Legend -->
+</svg></div>
+    <div class="chart-caption">六层展示系统组成与职责，不表示逐层流水线。Agent 经 MCP 和业务校验调用模型；后期 Worker 由业务服务直接调度，Skill 和记忆按需访问。当前为目标设计。</div><div class="node-detail" id="detail-system" aria-live="polite"><span class="detail-label">节点说明</span><strong>点击图中模块</strong><p>查看该模块的职责和交接要求；支持 Tab、Enter 和空格操作。</p></div></div>
+<p class="source-link">继续查看：<a href="#agents">Agent 协作框架</a> · <a href="#flow">作品生产数据流</a> · <a class="" href="../0001-douyin-ai-studio/03-%E6%80%BB%E4%BD%93%E6%8A%80%E6%9C%AF%E6%96%B9%E6%A1%88.html">总体技术方案</a></p>
+<div class="section-head"><h2>七个入口，共用一条作品记录。</h2><p>Work 连接候选、选择、媒体版本、任务与费用；页面数量不等于 Agent 或服务数量。</p></div>
+<div class="feature-grid"><article class="feature"><div class="feature-top"><span class="number">01</span><span class="badge accent">V1</span></div><h3>人物形象</h3><p>用关键词与自由描述创建写实人物；固定身份后换衣、换景，表演要求可编辑。</p><div class="feature-foot">已选人物 B 是初始预设；新角色须审核。</div></article><article class="feature"><div class="feature-top"><span class="number">02</span><span class="badge accent">V1</span></div><h3>口播稿生成</h3><p>输入类型、主题与受众，按用户提示直接生成三个不同角度的候选稿；不联网抓取。</p><div class="feature-foot">quality 内部查重和材料核对 → 用户选一篇。</div></article><article class="feature"><div class="feature-top"><span class="number">03</span><span class="badge accent">V1</span></div><h3>TTS 语音</h3><p>同一句话试听选声，再合成全文；检查发音、情绪和实际时长。</p><div class="feature-foot">用户确认最终音频，才能进入口型生成。</div></article><article class="feature"><div class="feature-top"><span class="number">04</span><span class="badge accent">V1</span></div><h3>视频合成</h3><p>选择路线与预算生成口播；音频确认后字幕可并行，原片通过后代码合成、清晰度处理和封面制作，终审后内部打包。</p><div class="feature-foot">预览、下载成片与完整发布就绪包。</div></article><article class="feature"><div class="feature-top"><span class="number">05</span><span class="badge ">后续</span></div><h3>发布</h3><p>抖音、B站、快手、小红书、视频号分别接入官方或获准发布方式。</p><div class="feature-foot">V1 显示开发状态；不假装已投稿。</div></article><article class="feature"><div class="feature-top"><span class="number">06</span><span class="badge ">后续</span></div><h3>指标监控</h3><p>取得权限后读取真实播放、完播、点赞和收藏，记录来源与统计窗口。</p><div class="feature-foot">不可获取不填 0；不展示虚构运营成绩。</div></article><article class="feature"><div class="feature-top"><span class="number">07</span><span class="badge ">后续</span></div><h3>领域模型选择</h3><p>提供已适配供应商的 URL、密钥和模型名设置，检查能力与错误原因。</p><div class="feature-foot">基础服务端配置与脱敏报错仍属于 V1。</div></article></div>
+<div class="note"><strong>当前状态</strong><p>方案与独立资产/短片实验已有证据。七入口应用、DeepAgents 编排、MCP 和记忆服务尚未完成开发；这是一份方案汇报页。</p></div>
+</section><section class="view" id="view-flow" role="tabpanel" aria-labelledby="tab-flow" tabindex="0" hidden>
+<div class="section-head"><p class="eyebrow">02 / 生产与数据流</p><h1>每一步都知道，<br><em>接收什么，交出什么。</em></h1><p>固定人物先准备，三篇稿件分别审核；用户选稿、选声并确认最终音频后，再进入视频合成。</p></div>
+<div class="decision-strip"><span>人物确认</span><span>三稿选一</span><span>全文音频确认</span><span>路线与预算确认</span></div>
+<div class="chart-card"><div class="chart-head"><strong>从用户需求到发布就绪包</strong><div class="chart-actions"><button data-zoom="flow" aria-pressed="false">放大</button><button data-export="flow">下载 SVG</button></div></div>
+    <div class="diagram-scroll" id="scroll-flow" tabindex="0" aria-label="从用户需求到发布就绪包，可横向滚动"><svg aria-label="从用户需求到发布就绪包；点击节点查看说明" class="diagram" data-preset="classic" data-quality-profile="showcase" id="svg-flow" role="group" viewbox="0 0 1080 620" xmlns="http://www.w3.org/2000/svg"><style>
+svg{font-family:'Microsoft YaHei','PingFang SC',Arial,sans-serif;background:#fff}
+.c-grid{fill:none;stroke:#f1f3f6}.c-mask{fill:#fff;stroke:none}
+.c-frontend,.c-backend,.c-database,.c-cloud,.c-security,.c-messagebus,.c-external{fill:#f3f6ff;stroke:#657eb8}
+.c-security{fill:#eef2ff;stroke:#002fa7}.c-backend{fill:#fff;stroke:#8093bf}
+.c-region,.c-lane,.c-security-group{fill:#fbfcff;stroke:#d9e1f0;stroke-dasharray:6 5}
+.t-primary{fill:#172134}.t-muted{fill:#58657a}.t-dim{fill:#68748a}
+.t-frontend,.t-backend,.t-database,.t-cloud,.t-security,.t-messagebus,.t-external{fill:#315398}
+.m-default,.m-dashed{fill:#8290aa}.m-emphasis,.m-security{fill:#002fa7}
+.a-default,.a-dashed{fill:none;stroke:#8290aa}.a-emphasis,.a-security{fill:none;stroke:#002fa7}
+.a-security,.a-dashed{stroke-dasharray:5 4}
+.s-frontend,.s-backend,.s-database,.s-cloud,.s-security,.s-messagebus,.s-external{fill:none;stroke:#526fa9}
+.sigil-fill{fill:#526fa9;stroke:none}
+[data-node-id]{cursor:pointer}[data-node-id]:hover>rect:not(.c-mask),[data-node-id][aria-pressed=true]>rect:not(.c-mask){stroke:#002fa7;stroke-width:2.5}
+[data-node-id]:focus{outline:none}[data-node-id]:focus-visible>rect:not(.c-mask){stroke:#002fa7;stroke-width:3}
+</style>
+<title id="flow-archify-diagram-title">作品生产数据流 · 固定音频驱动</title>
+<desc id="flow-archify-diagram-description">A data-flow diagram generated by Archify.</desc>
+<!-- Definitions -->
+<defs>
+<marker id="flow-arrowhead" markerheight="7" markerwidth="10" orient="auto" refx="9" refy="3.5">
+<polygon class="m-default" points="0 0, 10 3.5, 0 7"></polygon>
+</marker>
+<marker id="flow-arrowhead-emphasis" markerheight="7" markerwidth="10" orient="auto" refx="9" refy="3.5">
+<polygon class="m-emphasis" points="0 0, 10 3.5, 0 7"></polygon>
+</marker>
+<marker id="flow-arrowhead-security" markerheight="7" markerwidth="10" orient="auto" refx="9" refy="3.5">
+<polygon class="m-security" points="0 0, 10 3.5, 0 7"></polygon>
+</marker>
+<marker id="flow-arrowhead-dashed" markerheight="7" markerwidth="10" orient="auto" refx="9" refy="3.5">
+<polygon class="m-dashed" points="0 0, 10 3.5, 0 7"></polygon>
+</marker>
+<pattern height="40" id="flow-grid" patternunits="userSpaceOnUse" width="40">
+<path class="c-grid" d="M 40 0 L 0 0 0 40" stroke-width="0.5"></path>
+</pattern>
+</defs>
+<!-- Background Grid -->
+<rect fill="url(#flow-grid)" height="100%" width="100%"></rect>
+<!-- Data Stages -->
+<rect class="c-lane" data-composition-frame-id="0" data-composition-frame-kind="stage" data-graph-role="structural-frame" height="500" rx="10" stroke-width="1" width="168" x="16" y="46"></rect>
+<text class="t-dim" font-size="9" font-weight="600" text-anchor="middle" x="100" y="68">01 / 作品与输入</text>
+<rect class="c-lane" data-composition-frame-id="1" data-composition-frame-kind="stage" data-graph-role="structural-frame" height="500" rx="10" stroke-width="1" width="168" x="231" y="46"></rect>
+<text class="t-dim" font-size="9" font-weight="600" text-anchor="middle" x="315" y="68">02 / 稿件与固定声音</text>
+<rect class="c-lane" data-composition-frame-id="2" data-composition-frame-kind="stage" data-graph-role="structural-frame" height="500" rx="10" stroke-width="1" width="168" x="446" y="46"></rect>
+<text class="t-dim" font-size="9" font-weight="600" text-anchor="middle" x="530" y="68">03 / 确认与并行</text>
+<rect class="c-lane" data-composition-frame-id="3" data-composition-frame-kind="stage" data-graph-role="structural-frame" height="500" rx="10" stroke-width="1" width="168" x="661" y="46"></rect>
+<text class="t-dim" font-size="9" font-weight="600" text-anchor="middle" x="745" y="68">04 / 口播与交付</text>
+<rect class="c-lane" data-composition-frame-id="4" data-composition-frame-kind="stage" data-graph-role="structural-frame" height="500" rx="10" stroke-width="1" width="168" x="876" y="46"></rect>
+<text class="t-dim" font-size="9" font-weight="600" text-anchor="middle" x="960" y="68">05 / 原片审核与代码后期</text>
+<!-- Flow paths -->
+<path class="a-emphasis" d="M 176 407 L 225 407" data-composition-points="176,407;225,407" data-edge-from="drafts" data-edge-id="evidence-script" data-edge-key="0" data-edge-label="三稿与材料引用" data-edge-to="script" marker-end="url(#flow-arrowhead-emphasis)" stroke-width="1.8"></path>
+<path class="a-security" d="M 315 378 L 315 378 L 315 256 L 315 256" data-composition-points="315,378;315,378;315,256;315,256" data-edge-from="script" data-edge-id="script-audio" data-edge-key="1" data-edge-label="所选稿件版本" data-edge-to="audio" marker-end="url(#flow-arrowhead-security)" stroke-width="1.4"></path>
+<path class="a-default" d="M 176 137 L 530 137 L 530 198" data-composition-points="176,137;530,137;530,198" data-edge-from="avatar" data-edge-id="avatar-route" data-edge-key="2" data-edge-label="人物图版本" data-edge-to="route" marker-end="url(#flow-arrowhead)" stroke-width="1.4"></path>
+<path class="a-security" d="M 405 227 L 440 227" data-composition-points="405,227;440,227" data-edge-from="audio" data-edge-id="audio-route" data-edge-key="3" data-edge-label="最终 WAV" data-edge-to="route" marker-end="url(#flow-arrowhead-security)" stroke-width="1.4"></path>
+<path class="a-security" d="M 620 227 L 637.5 227 L 637.5 137 L 655 137" data-composition-points="620,227;637.5,227;637.5,137;655,137" data-edge-from="route" data-edge-id="route-m2" data-edge-key="4" data-edge-label="M2 输入快照" data-edge-to="m2" marker-end="url(#flow-arrowhead-security)" stroke-width="1.4"></path>
+<path class="a-security" d="M 620 227 L 637.5 227 L 637.5 317 L 655 317" data-composition-points="620,227;637.5,227;637.5,317;655,317" data-edge-from="route" data-edge-id="route-omni" data-edge-key="5" data-edge-label="Omni 输入快照" data-edge-to="omni" marker-end="url(#flow-arrowhead-security)" stroke-width="1.4"></path>
+<path class="a-emphasis" d="M 835 137 L 852.5 137 L 852.5 227 L 870 227" data-composition-points="835,137;852.5,137;852.5,227;870,227" data-edge-from="m2" data-edge-id="m2-raw" data-edge-key="6" data-edge-label="M2 原片" data-edge-to="rawreview" marker-end="url(#flow-arrowhead-emphasis)" stroke-width="1.8"></path>
+<path class="a-emphasis" d="M 835 317 L 852.5 317 L 852.5 227 L 870 227" data-composition-points="835,317;852.5,317;852.5,227;870,227" data-edge-from="omni" data-edge-id="omni-raw" data-edge-key="7" data-edge-label="Omni 原片" data-edge-to="rawreview" marker-end="url(#flow-arrowhead-emphasis)" stroke-width="1.8"></path>
+<path class="a-default" d="M 960 436 L 960 436 L 960 478 L 960 478" data-composition-points="960,436;960,436;960,478;960,478" data-edge-from="postprocess" data-edge-id="subtitle-post" data-edge-key="8" data-edge-label="成片提交终审" data-edge-to="post" marker-end="url(#flow-arrowhead)" stroke-width="1.4"></path>
+<path class="a-security" d="M 870 507 L 835 507" data-composition-points="870,507;835,507" data-edge-from="post" data-edge-id="post-package" data-edge-key="9" data-edge-label="终审通过" data-edge-to="package" marker-end="url(#flow-arrowhead-security)" stroke-width="1.4"></path>
+<path class="a-security" d="M 960 256 L 960 256 L 960 378 L 960 378" data-composition-points="960,256;960,256;960,378;960,378" data-edge-from="rawreview" data-edge-id="raw-worker" data-edge-key="10" data-edge-label="合格原片" data-edge-to="postprocess" marker-end="url(#flow-arrowhead-security)" stroke-width="1.4"></path>
+<path class="a-default" d="M 405 227 L 422.5 227 L 422.5 407 L 440 407" data-composition-points="405,227;422.5,227;422.5,407;440,407" data-edge-from="audio" data-edge-id="audio-subtitle" data-edge-key="11" data-edge-label="最终音频／原文" data-edge-to="subtitle" marker-end="url(#flow-arrowhead)" stroke-width="1.4"></path>
+<path class="a-default" d="M 620 407 L 870 407" data-composition-points="620,407;870,407" data-edge-from="subtitle" data-edge-id="subtitle-postprocess" data-edge-key="12" data-edge-label="字幕时间线" data-edge-to="postprocess" marker-end="url(#flow-arrowhead)" stroke-width="1.4"></path>
+<!-- Nodes -->
+<g aria-label="查看：已审人物版本" aria-pressed="false" data-chart="flow" data-node-context="01 / 作品与输入" data-node-id="avatar" data-node-kind="database" data-node-label="已审人物版本" data-node-sublabel="选人／参考编辑＋用户确认" data-node-tag="独立准备；人物页不做口型" id="flow-node-avatar" role="button" tabindex="0">
+<title>已审人物版本 · 选人／参考编辑＋用户确认 · 01 / 作品与输入 · 独立准备；人物页不做口型</title>
+<rect class="c-mask" height="58" rx="6" width="152" x="24" y="108"></rect>
+<rect class="c-database" height="58" rx="6" stroke-width="1.5" width="152" x="24" y="108"></rect>
+<g aria-hidden="true" class="semantic-sigil s-database" data-semantic-sigil="database" transform="translate(30 114) scale(0.6875)">
+<ellipse cx="8" cy="4" rx="5" ry="2"></ellipse>
+<path d="M3 4v8c0 1.1 2.2 2 5 2s5-.9 5-2V4M3 8c0 1.1 2.2 2 5 2s5-.9 5-2"></path>
+</g>
+<text class="t-primary" data-detail-anchor="" font-size="11" font-weight="600" text-anchor="middle" x="100" y="129.0">已审人物版本</text>
+<text class="t-muted" data-detail="context" font-size="9" text-anchor="middle" x="100" y="144.0">选人／参考编辑＋用户确认</text>
+<text class="t-database" data-detail="fine" font-size="8" text-anchor="middle" x="100" y="158.0">独立准备；人物页不做口型</text>
+</g>
+<g aria-label="查看：提示 → content 生成三稿" aria-pressed="false" data-chart="flow" data-node-context="01 / 作品与输入" data-node-id="drafts" data-node-kind="backend" data-node-label="提示 → content 生成三稿" data-node-sublabel="用户提示＋可选自带材料" data-node-tag="Work 记录用户输入；不联网" id="flow-node-drafts" role="button" tabindex="0">
+<title>提示 → content 生成三稿 · 用户提示＋可选自带材料 · 01 / 作品与输入 · Work 记录用户输入；不联网</title>
+<rect class="c-mask" height="58" rx="6" width="152" x="24" y="378"></rect>
+<rect class="c-backend" height="58" rx="6" stroke-width="1.5" width="152" x="24" y="378"></rect>
+<g aria-hidden="true" class="semantic-sigil s-backend" data-semantic-sigil="backend" transform="translate(30 384) scale(0.6875)">
+<path d="M6 3 3 8l3 5M10 3l3 5-3 5"></path>
+</g>
+<text class="t-primary" data-detail-anchor="" font-size="11" font-weight="600" text-anchor="middle" x="100" y="399.0">提示 → content 生成三稿</text>
+<text class="t-muted" data-detail="context" font-size="9" text-anchor="middle" x="100" y="414.0">用户提示＋可选自带材料</text>
+<text class="t-backend" data-detail="fine" font-size="8" text-anchor="middle" x="100" y="428.0">Work 记录用户输入；不联网</text>
+</g>
+<g aria-label="查看：quality 审核 → 用户选稿" aria-pressed="false" data-chart="flow" data-node-context="02 / 稿件与固定声音" data-node-id="script" data-node-kind="security" data-node-label="quality 审核 → 用户选稿" data-node-sublabel="内部查重／已有材料核对" data-node-tag="无依据事实转人工复核" id="flow-node-script" role="button" tabindex="0">
+<title>quality 审核 → 用户选稿 · 内部查重／已有材料核对 · 02 / 稿件与固定声音 · 无依据事实转人工复核</title>
+<rect class="c-mask" height="58" rx="6" width="180" x="225" y="378"></rect>
+<rect class="c-security" height="58" rx="6" stroke-width="1.5" width="180" x="225" y="378"></rect>
+<g aria-hidden="true" class="semantic-sigil s-security" data-semantic-sigil="security" transform="translate(231 384) scale(0.6875)">
+<path d="M8 2.2 13 4v3.5c0 3.1-1.8 5.4-5 6.5-3.2-1.1-5-3.4-5-6.5V4Z"></path>
+<path d="m5.8 8 1.5 1.5 3-3"></path>
+</g>
+<text class="t-primary" data-detail-anchor="" font-size="11" font-weight="600" text-anchor="middle" x="315" y="399.0">quality 审核 → 用户选稿</text>
+<text class="t-muted" data-detail="context" font-size="9" text-anchor="middle" x="315" y="414.0">内部查重／已有材料核对</text>
+<text class="t-security" data-detail="fine" font-size="8" text-anchor="middle" x="315" y="428.0">无依据事实转人工复核</text>
+</g>
+<g aria-label="查看：TTS → 质检 → 用户确认" aria-pressed="false" data-chart="flow" data-node-context="02 / 稿件与固定声音" data-node-id="audio" data-node-kind="security" data-node-label="TTS → 质检 → 用户确认" data-node-sublabel="固定 MiniMax 音色与 WAV" data-node-tag="两路统一最终音频确认门" id="flow-node-audio" role="button" tabindex="0">
+<title>TTS → 质检 → 用户确认 · 固定 MiniMax 音色与 WAV · 02 / 稿件与固定声音 · 两路统一最终音频确认门</title>
+<rect class="c-mask" height="58" rx="6" width="180" x="225" y="198"></rect>
+<rect class="c-security" height="58" rx="6" stroke-width="1.5" width="180" x="225" y="198"></rect>
+<g aria-hidden="true" class="semantic-sigil s-security" data-semantic-sigil="security" transform="translate(231 204) scale(0.6875)">
+<path d="M8 2.2 13 4v3.5c0 3.1-1.8 5.4-5 6.5-3.2-1.1-5-3.4-5-6.5V4Z"></path>
+<path d="m5.8 8 1.5 1.5 3-3"></path>
+</g>
+<text class="t-primary" data-detail-anchor="" font-size="11" font-weight="600" text-anchor="middle" x="315" y="219.0">TTS → 质检 → 用户确认</text>
+<text class="t-muted" data-detail="context" font-size="9" text-anchor="middle" x="315" y="234.0">固定 MiniMax 音色与 WAV</text>
+<text class="t-security" data-detail="fine" font-size="8" text-anchor="middle" x="315" y="248.0">两路统一最终音频确认门</text>
+</g>
+<g aria-label="查看：用户选路线与预算" aria-pressed="false" data-chart="flow" data-node-context="03 / 确认与并行" data-node-id="route" data-node-kind="security" data-node-label="用户选路线与预算" data-node-sublabel="人物＋最终音频版本汇合" data-node-tag="OmniHuman 与 M2 均须通过" id="flow-node-route" role="button" tabindex="0">
+<title>用户选路线与预算 · 人物＋最终音频版本汇合 · 03 / 确认与并行 · OmniHuman 与 M2 均须通过</title>
+<rect class="c-mask" height="58" rx="6" width="180" x="440" y="198"></rect>
+<rect class="c-security" height="58" rx="6" stroke-width="1.5" width="180" x="440" y="198"></rect>
+<g aria-hidden="true" class="semantic-sigil s-security" data-semantic-sigil="security" transform="translate(446 204) scale(0.6875)">
+<path d="M8 2.2 13 4v3.5c0 3.1-1.8 5.4-5 6.5-3.2-1.1-5-3.4-5-6.5V4Z"></path>
+<path d="m5.8 8 1.5 1.5 3-3"></path>
+</g>
+<text class="t-primary" data-detail-anchor="" font-size="11" font-weight="600" text-anchor="middle" x="530" y="219.0">用户选路线与预算</text>
+<text class="t-muted" data-detail="context" font-size="9" text-anchor="middle" x="530" y="234.0">人物＋最终音频版本汇合</text>
+<text class="t-security" data-detail="fine" font-size="8" text-anchor="middle" x="530" y="248.0">OmniHuman 与 M2 均须通过</text>
+</g>
+<g aria-label="查看：确定性后期 Worker" aria-pressed="false" data-chart="flow" data-node-context="05 / 原片审核与代码后期" data-node-id="postprocess" data-node-kind="backend" data-node-label="确定性后期 Worker" data-node-sublabel="合格原片＋字幕时间线" data-node-tag="FFmpeg／清晰度／封面" id="flow-node-postprocess" role="button" tabindex="0">
+<title>确定性后期 Worker · 合格原片＋字幕时间线 · 05 / 原片审核与代码后期 · FFmpeg／清晰度／封面</title>
+<rect class="c-mask" height="58" rx="6" width="180" x="870" y="378"></rect>
+<rect class="c-backend" height="58" rx="6" stroke-width="1.5" width="180" x="870" y="378"></rect>
+<g aria-hidden="true" class="semantic-sigil s-backend" data-semantic-sigil="backend" transform="translate(876 384) scale(0.6875)">
+<path d="M6 3 3 8l3 5M10 3l3 5-3 5"></path>
+</g>
+<text class="t-primary" data-detail-anchor="" font-size="11" font-weight="600" text-anchor="middle" x="960" y="399.0">确定性后期 Worker</text>
+<text class="t-muted" data-detail="context" font-size="9" text-anchor="middle" x="960" y="414.0">合格原片＋字幕时间线</text>
+<text class="t-backend" data-detail="fine" font-size="8" text-anchor="middle" x="960" y="428.0">FFmpeg／清晰度／封面</text>
+</g>
+<g aria-label="查看：M2 · 低成本可选" aria-pressed="false" data-chart="flow" data-node-context="04 / 口播与交付" data-node-id="m2" data-node-kind="backend" data-node-label="M2 · 低成本可选" data-node-sublabel="LivePortrait → MuseTalk 1.5" data-node-tag="动作底片＋同一最终音频" id="flow-node-m2" role="button" tabindex="0">
+<title>M2 · 低成本可选 · LivePortrait → MuseTalk 1.5 · 04 / 口播与交付 · 动作底片＋同一最终音频</title>
+<rect class="c-mask" height="58" rx="6" width="180" x="655" y="108"></rect>
+<rect class="c-backend" height="58" rx="6" stroke-width="1.5" width="180" x="655" y="108"></rect>
+<g aria-hidden="true" class="semantic-sigil s-backend" data-semantic-sigil="backend" transform="translate(661 114) scale(0.6875)">
+<path d="M6 3 3 8l3 5M10 3l3 5-3 5"></path>
+</g>
+<text class="t-primary" data-detail-anchor="" font-size="11" font-weight="600" text-anchor="middle" x="745" y="129.0">M2 · 低成本可选</text>
+<text class="t-muted" data-detail="context" font-size="9" text-anchor="middle" x="745" y="144.0">LivePortrait → MuseTalk 1.5</text>
+<text class="t-backend" data-detail="fine" font-size="8" text-anchor="middle" x="745" y="158.0">动作底片＋同一最终音频</text>
+</g>
+<g aria-label="查看：OmniHuman 1.5" aria-pressed="false" data-chart="flow" data-node-context="04 / 口播与交付" data-node-id="omni" data-node-kind="cloud" data-node-label="OmniHuman 1.5" data-node-sublabel="人物图＋最终音频＋动作描述" data-node-tag="MVP 必验；不再接 MuseTalk" id="flow-node-omni" role="button" tabindex="0">
+<title>OmniHuman 1.5 · 人物图＋最终音频＋动作描述 · 04 / 口播与交付 · MVP 必验；不再接 MuseTalk</title>
+<rect class="c-mask" height="58" rx="6" width="180" x="655" y="288"></rect>
+<rect class="c-cloud" height="58" rx="6" stroke-width="1.5" width="180" x="655" y="288"></rect>
+<g aria-hidden="true" class="semantic-sigil s-cloud" data-semantic-sigil="cloud" transform="translate(661 294) scale(0.6875)">
+<path d="M4.3 12.5h7.3a2.4 2.4 0 0 0 .2-4.8 4 4 0 0 0-7.5-1.3A3.1 3.1 0 0 0 4.3 12.5Z"></path>
+</g>
+<text class="t-primary" data-detail-anchor="" font-size="11" font-weight="600" text-anchor="middle" x="745" y="309.0">OmniHuman 1.5</text>
+<text class="t-muted" data-detail="context" font-size="9" text-anchor="middle" x="745" y="324.0">人物图＋最终音频＋动作描述</text>
+<text class="t-cloud" data-detail="fine" font-size="8" text-anchor="middle" x="745" y="338.0">MVP 必验；不再接 MuseTalk</text>
+</g>
+<g aria-label="查看：口播原片审核" aria-pressed="false" data-chart="flow" data-node-context="05 / 原片审核与代码后期" data-node-id="rawreview" data-node-kind="security" data-node-label="口播原片审核" data-node-sublabel="身份、口型、身体与音轨" data-node-tag="仅接收所选路线的合格结果" id="flow-node-rawreview" role="button" tabindex="0">
+<title>口播原片审核 · 身份、口型、身体与音轨 · 05 / 原片审核与代码后期 · 仅接收所选路线的合格结果</title>
+<rect class="c-mask" height="58" rx="6" width="180" x="870" y="198"></rect>
+<rect class="c-security" height="58" rx="6" stroke-width="1.5" width="180" x="870" y="198"></rect>
+<g aria-hidden="true" class="semantic-sigil s-security" data-semantic-sigil="security" transform="translate(876 204) scale(0.6875)">
+<path d="M8 2.2 13 4v3.5c0 3.1-1.8 5.4-5 6.5-3.2-1.1-5-3.4-5-6.5V4Z"></path>
+<path d="m5.8 8 1.5 1.5 3-3"></path>
+</g>
+<text class="t-primary" data-detail-anchor="" font-size="11" font-weight="600" text-anchor="middle" x="960" y="219.0">口播原片审核</text>
+<text class="t-muted" data-detail="context" font-size="9" text-anchor="middle" x="960" y="234.0">身份、口型、身体与音轨</text>
+<text class="t-security" data-detail="fine" font-size="8" text-anchor="middle" x="960" y="248.0">仅接收所选路线的合格结果</text>
+</g>
+<g aria-label="查看：quality 成片终审" aria-pressed="false" data-chart="flow" data-node-context="05 / 原片审核与代码后期" data-node-id="post" data-node-kind="security" data-node-label="quality 成片终审" data-node-sublabel="检查字幕、音轨与视频规格" data-node-tag="不通过返回对应环节修正" id="flow-node-post" role="button" tabindex="0">
+<title>quality 成片终审 · 检查字幕、音轨与视频规格 · 05 / 原片审核与代码后期 · 不通过返回对应环节修正</title>
+<rect class="c-mask" height="58" rx="6" width="180" x="870" y="478"></rect>
+<rect class="c-security" height="58" rx="6" stroke-width="1.5" width="180" x="870" y="478"></rect>
+<g aria-hidden="true" class="semantic-sigil s-security" data-semantic-sigil="security" transform="translate(876 484) scale(0.6875)">
+<path d="M8 2.2 13 4v3.5c0 3.1-1.8 5.4-5 6.5-3.2-1.1-5-3.4-5-6.5V4Z"></path>
+<path d="m5.8 8 1.5 1.5 3-3"></path>
+</g>
+<text class="t-primary" data-detail-anchor="" font-size="11" font-weight="600" text-anchor="middle" x="960" y="499.0">quality 成片终审</text>
+<text class="t-muted" data-detail="context" font-size="9" text-anchor="middle" x="960" y="514.0">检查字幕、音轨与视频规格</text>
+<text class="t-security" data-detail="fine" font-size="8" text-anchor="middle" x="960" y="528.0">不通过返回对应环节修正</text>
+</g>
+<g aria-label="查看：内部打包 → 预览下载" aria-pressed="false" data-chart="flow" data-node-context="04 / 口播与交付" data-node-id="package" data-node-kind="frontend" data-node-label="内部打包 → 预览下载" data-node-sublabel="成片／文案／清单／证据" data-node-tag="终审通过才生成发布就绪包" id="flow-node-package" role="button" tabindex="0">
+<title>内部打包 → 预览下载 · 成片／文案／清单／证据 · 04 / 口播与交付 · 终审通过才生成发布就绪包</title>
+<rect class="c-mask" height="58" rx="6" width="180" x="655" y="478"></rect>
+<rect class="c-frontend" height="58" rx="6" stroke-width="1.5" width="180" x="655" y="478"></rect>
+<g aria-hidden="true" class="semantic-sigil s-frontend" data-semantic-sigil="frontend" transform="translate(661 484) scale(0.6875)">
+<rect height="10" rx="2" width="12" x="2" y="3"></rect>
+<path d="M2 6.5h12"></path>
+<circle class="sigil-fill" cx="4.1" cy="4.8" r=".7"></circle>
+<circle class="sigil-fill" cx="6.3" cy="4.8" r=".7"></circle>
+</g>
+<text class="t-primary" data-detail-anchor="" font-size="11" font-weight="600" text-anchor="middle" x="745" y="499.0">内部打包 → 预览下载</text>
+<text class="t-muted" data-detail="context" font-size="9" text-anchor="middle" x="745" y="514.0">成片／文案／清单／证据</text>
+<text class="t-frontend" data-detail="fine" font-size="8" text-anchor="middle" x="745" y="528.0">终审通过才生成发布就绪包</text>
+</g>
+<g aria-label="查看：字幕代码识别与对齐" aria-pressed="false" data-chart="flow" data-node-context="03 / 确认与并行" data-node-id="subtitle" data-node-kind="backend" data-node-label="字幕代码识别与对齐" data-node-sublabel="最终音频＋批准稿原文" data-node-tag="音频确认后与口播生成并行" id="flow-node-subtitle" role="button" tabindex="0">
+<title>字幕代码识别与对齐 · 最终音频＋批准稿原文 · 03 / 确认与并行 · 音频确认后与口播生成并行</title>
+<rect class="c-mask" height="58" rx="6" width="180" x="440" y="378"></rect>
+<rect class="c-backend" height="58" rx="6" stroke-width="1.5" width="180" x="440" y="378"></rect>
+<g aria-hidden="true" class="semantic-sigil s-backend" data-semantic-sigil="backend" transform="translate(446 384) scale(0.6875)">
+<path d="M6 3 3 8l3 5M10 3l3 5-3 5"></path>
+</g>
+<text class="t-primary" data-detail-anchor="" font-size="11" font-weight="600" text-anchor="middle" x="530" y="399.0">字幕代码识别与对齐</text>
+<text class="t-muted" data-detail="context" font-size="9" text-anchor="middle" x="530" y="414.0">最终音频＋批准稿原文</text>
+<text class="t-backend" data-detail="fine" font-size="8" text-anchor="middle" x="530" y="428.0">音频确认后与口播生成并行</text>
+</g>
+<!-- Flow labels -->
+<g data-detail="context" data-edge-from="drafts" data-edge-id="evidence-script" data-edge-key="0" data-edge-label="三稿与材料引用" data-edge-to="script">
+<rect class="c-mask" height="16" rx="4" width="80.6" x="167.7" y="439"></rect>
+<text class="t-backend" font-size="8" text-anchor="middle" x="208" y="450">三稿与材料引用</text>
+</g>
+<g data-detail="context" data-edge-from="script" data-edge-id="script-audio" data-edge-key="1" data-edge-label="所选稿件版本" data-edge-to="audio">
+<rect class="c-mask" height="16" rx="4" width="70.8" x="279.6" y="296"></rect>
+<text class="t-security" font-size="8" text-anchor="middle" x="315" y="307">所选稿件版本</text>
+</g>
+<g data-detail="context" data-edge-from="avatar" data-edge-id="avatar-route" data-edge-key="2" data-edge-label="人物图版本" data-edge-to="route">
+<rect class="c-mask" height="16" rx="4" width="61" x="499.5" y="146.5"></rect>
+<text class="t-muted" font-size="8" text-anchor="middle" x="530" y="157.5">人物图版本</text>
+</g>
+<g data-detail="context" data-edge-from="audio" data-edge-id="audio-route" data-edge-key="3" data-edge-label="最终 WAV" data-edge-to="route">
+<rect class="c-mask" height="16" rx="4" width="51.2" x="397.4" y="173"></rect>
+<text class="t-security" font-size="8" text-anchor="middle" x="423" y="184">最终 WAV</text>
+</g>
+<g data-detail="context" data-edge-from="route" data-edge-id="route-m2" data-edge-key="4" data-edge-label="M2 输入快照" data-edge-to="m2">
+<rect class="c-mask" height="16" rx="4" width="65.9" x="605.05" y="169"></rect>
+<text class="t-security" font-size="8" text-anchor="middle" x="638" y="180">M2 输入快照</text>
+</g>
+<g data-detail="context" data-edge-from="route" data-edge-id="route-omni" data-edge-key="5" data-edge-label="Omni 输入快照" data-edge-to="omni">
+<rect class="c-mask" height="16" rx="4" width="75.7" x="600.15" y="259"></rect>
+<text class="t-security" font-size="8" text-anchor="middle" x="638" y="270">Omni 输入快照</text>
+</g>
+<g data-detail="context" data-edge-from="m2" data-edge-id="m2-raw" data-edge-key="6" data-edge-label="M2 原片" data-edge-to="rawreview">
+<rect class="c-mask" height="16" rx="4" width="46.3" x="829.85" y="169"></rect>
+<text class="t-backend" font-size="8" text-anchor="middle" x="853" y="180">M2 原片</text>
+</g>
+<g data-detail="context" data-edge-from="omni" data-edge-id="omni-raw" data-edge-key="7" data-edge-label="Omni 原片" data-edge-to="rawreview">
+<rect class="c-mask" height="16" rx="4" width="56.1" x="824.95" y="259"></rect>
+<text class="t-backend" font-size="8" text-anchor="middle" x="853" y="270">Omni 原片</text>
+</g>
+<g data-detail="context" data-edge-from="postprocess" data-edge-id="subtitle-post" data-edge-key="8" data-edge-label="成片提交终审" data-edge-to="post">
+<rect class="c-mask" height="16" rx="4" width="70.8" x="924.6" y="436"></rect>
+<text class="t-muted" font-size="8" text-anchor="middle" x="960" y="447">成片提交终审</text>
+</g>
+<g data-detail="context" data-edge-from="post" data-edge-id="post-package" data-edge-key="9" data-edge-label="终审通过" data-edge-to="package">
+<rect class="c-mask" height="16" rx="4" width="51.2" x="827.4" y="539"></rect>
+<text class="t-security" font-size="8" text-anchor="middle" x="853" y="550">终审通过</text>
+</g>
+<g data-detail="context" data-edge-from="rawreview" data-edge-id="raw-worker" data-edge-key="10" data-edge-label="合格原片" data-edge-to="postprocess">
+<rect class="c-mask" height="16" rx="4" width="51.2" x="934.4" y="309"></rect>
+<text class="t-security" font-size="8" text-anchor="middle" x="960" y="320">合格原片</text>
+</g>
+<g data-detail="context" data-edge-from="audio" data-edge-id="audio-subtitle" data-edge-key="11" data-edge-label="最终音频／原文" data-edge-to="subtitle">
+<rect class="c-mask" height="16" rx="4" width="80.6" x="382.2" y="296"></rect>
+<text class="t-muted" font-size="8" text-anchor="middle" x="422.5" y="307">最终音频／原文</text>
+</g>
+<g data-detail="context" data-edge-from="subtitle" data-edge-id="subtitle-postprocess" data-edge-key="12" data-edge-label="字幕时间线" data-edge-to="postprocess">
+<rect class="c-mask" height="16" rx="4" width="61" x="714.5" y="386"></rect>
+<text class="t-muted" font-size="8" text-anchor="middle" x="745" y="397">字幕时间线</text>
+</g>
+<!-- Legend -->
+<g data-legend="" data-legend-bridge="">
+<text class="t-primary" font-size="12" font-weight="650" x="40" y="564">图例</text>
+<g data-legend-baseline="584" data-legend-semantic-kind="emphasis" data-legend-width="83" data-legend-x="40">
+<path class="a-emphasis" d="M 40 581 L 74 581" marker-end="url(#flow-arrowhead-emphasis)" stroke-width="1.8"></path>
+<text class="t-muted" font-size="10" font-weight="500" x="83" y="584">主要产物</text>
+</g>
+<g data-legend-baseline="584" data-legend-semantic-kind="security" data-legend-width="113" data-legend-x="145">
+<path class="a-security" d="M 145 581 L 179 581" marker-end="url(#flow-arrowhead-security)" stroke-width="1.4"></path>
+<text class="t-muted" font-size="10" font-weight="500" x="188" y="584">确认或审核门禁</text>
+</g>
+<g data-legend-baseline="584" data-legend-kind="database" data-legend-label="版本资产" data-legend-semantic-kind="database" data-legend-width="83" data-legend-x="280">
+<rect class="c-database" height="9" rx="2" stroke-width="1" width="14" x="280" y="576"></rect>
+<text class="t-muted" font-size="10" font-weight="500" x="302" y="584">版本资产</text>
+</g>
+<g data-legend-baseline="584" data-legend-semantic-kind="default" data-legend-width="83" data-legend-x="385">
+<path class="a-default" d="M 385 581 L 419 581" marker-end="url(#flow-arrowhead)" stroke-width="1.4"></path>
+<text class="t-muted" font-size="10" font-weight="500" x="428" y="584">数据引用</text>
+</g>
+</g>
+</svg></div>
+    <div class="chart-caption">按提示直接生成三稿，quality 内部查重并核对已有材料；最终音频确认后字幕可与口播并行；原片通过＋字幕就绪后代码合成，再由 quality 终审，最后内部打包。</div><div class="node-detail" id="detail-flow" aria-live="polite"><span class="detail-label">节点说明</span><strong>点击图中模块</strong><p>查看该模块的职责和交接要求；支持 Tab、Enter 和空格操作。</p></div></div>
+<div class="routes"><article><span class="badge">本地可选 · M2</span><h2>把动作和嘴型分开驱动</h2><p class="route-chain">人物图＋动作参考 → LivePortrait 底片<br>底片＋最终 TTS → MuseTalk 1.5 原片</p><p>底片按实际音频检查时长、覆盖与接缝。依赖动作参考，不能仅凭提示词生成任意肢体动作。</p></article><article><span class="badge accent">MVP 必交付 · OmniHuman 1.5</span><h2>图片与声音直接生成表演</h2><p class="route-chain">人物图＋最终 TTS＋表演描述<br>→ 云端口播原片 → 共同后期</p><p>保持已选人物与 MiniMax 最终音频，改善身体表演；无需 LivePortrait 或 MuseTalk。身体动作、人物 B 与长片仍待验收。</p></article></div>
+<div class="note"><strong>对口型在第 4 步“视频合成”执行</strong><p>TTS 质检通过并经用户试听确认后才提交。人物页只准备身份、衣景和表演要求；Agent 可并行，单 GPU 的重型推理按资源租约排队。</p></div>
+<div class="cost-evidence"><div><span>OmniHuman · 用户确认费率</span><strong>¥1 / 生成秒</strong><small>60 秒约 ¥60 · 5 条约 ¥300 / 天</small></div><p>30 天、每天 5 条一分钟视频，视频生成费约 ¥9,000。另计 TTS、图像、存储、后期和重做；分段取整与实际账单待核，不使用 Grok 的 ¥0.38 / 秒报价。</p></div>
+<div class="section-head"><h2>数据交接与返工</h2><p>传递 ID、版本和摘要；媒体文件留在资产库，用户选择与质量审批分别保存。</p></div>
+<div class="change-grid"><article><h3>改稿／换声</h3><p>音频、口型、字幕及成片重新生成或审核；旧结果和费用保留。</p></article><article><h3>换衣／换景</h3><p>重新检查身份和画面；未变化且仍获准的音频可复用。</p></article><article><h3>只改字幕样式</h3><p>复用原片与已对齐时间轴，只重渲染并重审成片。</p></article></div>
+<details class="wide-details"><summary>展开 12 个数据交接点：输入、产物、存储和放行条件</summary><div class="table-scroll" tabindex="0" aria-label="可横向滚动的表格"><table id="handoff-table">
+<thead>
+<tr>
+<th scope="col">数据流</th>
+<th scope="col">输入 → 输出</th>
+<th scope="col">校验与落库</th>
+<th scope="col">下一环节放行条件</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>D01 需求进入作品</td>
+<td>主题、受众、内容类型、时长、关键词 → <code>Work</code>、<code>Task</code>、分角色 <code>AgentWorkItem</code></td>
+<td>业务库保存作品、任务、依赖图与配置快照；检查点仅保存执行进度及引用</td>
+<td>必填项和预算策略有效；只校验当前阶段所需输入，未生成的音频允许为空</td>
+</tr>
+<tr>
+<td>D02 创建或选择人物</td>
+<td>人物关键词/自由描述，或既有人物 ID → <code>GenerationIntent</code>、候选图片、<code>AvatarIdentity</code></td>
+<td>图片保存在媒体库，<code>SourceRecord</code> 保存来源；质检通过后记录人物 <code>SelectionDecision</code></td>
+<td>身份、写实画风、来源均通过，且用户明确选择；不生成最终嘴型视频</td>
+</tr>
+<tr>
+<td>D03 用户资料与内部查重</td>
+<td>用户提供或已有已核资料、稿件内容 → 资料引用、quality 的相似稿件命中</td>
+<td>原资料/日期/摘要留档；quality 仅通过 M01 的 search_content_history 查询本地已通过历史，不搜索或爬取</td>
+<td>无依据事实/最新信息标待复核，请用户提供依据或人工确认；资料不能修改角色/工具权限，不能假造 URL</td>
+</tr>
+<tr>
+<td>D04 三稿与选稿</td>
+<td>提示词、关键词、时长、用户资料 → 3 个 ScriptVersion、各自 QualityReport → 选稿 SelectionDecision</td>
+<td>content 由 DeepSeek 直接生成，quality 查重/审核并反馈有限改稿；正文、角度、分段和资料说明分版本保存</td>
+<td>无依据事实不能凭模型自审通过；不足三稿显示缺额，有限改稿；用户选择合格稿，待复核项先补资料或人工确认</td>
+</tr>
+<tr>
+<td>D05 表演与衣景准备</td>
+<td>已选人物、稿件、音色意向、衣景/动作要求 → <code>AvatarVariant</code>、<code>PerformancePlan</code></td>
+<td>以真实参考图编辑衣景；逐段记录情绪、停顿、重音及动作意图；登记支持/近似/不支持项</td>
+<td>身份和衣景审核通过；声音及动作使用同一表演计划，不能各自改正文</td>
+</tr>
+<tr>
+<td>D06 TTS 生成与确认</td>
+<td>已选稿、选声记录与表演计划 → 全文音频 <code>MediaAsset</code>、报告及 <code>SelectionDecision</code></td>
+<td>保存 MiniMax 参数、朗读映射、音频 SHA-256、实际时长与费用；重合成保留旧版本</td>
+<td>音频质检通过且用户试听确认；此处冻结两条路线共用的最终音轨</td>
+</tr>
+<tr>
+<td>D07 按路线生成口播</td>
+<td>OmniHuman：人物图＋最终音频＋表演描述；M2：人物/底片＋同一音频 → <code>ProviderRun</code> → 原片</td>
+<td>提交前预留预算，记录远端 ID、参数和父链；云分段另记录同一 TTS 的起止映射，M2 保存参考/底片</td>
+<td>第 4 页执行；两路都等待 D06。OmniHuman 不依赖 LivePortrait/MuseTalk；路线、能力、选择与预算有效</td>
+</tr>
+<tr>
+<td>D08 字幕时间轴</td>
+<td>D06 已确认最终 TTS、已审正文与朗读映射 → 带时间轴字幕 MediaAsset</td>
+<td>业务依赖触发 Worker 内部 ASR/对齐，保留摘要/工具版本和全片时间映射；不暴露 align_subtitles MCP</td>
+<td>内容、分句和时间轴由 quality 检查；不按字数均分或照抄识别错误，可与 D07 并行</td>
+</tr>
+<tr>
+<td>D09 原片与音轨审核</td>
+<td>原片、人物参考、D06 音频与表演计划 → <code>QualityReport</code>、必要的 <code>ReviewDecision</code></td>
+<td>检身份、身体运动、表情、嘴型、段间连续、同步；比对云输出音轨与最终 TTS 的内容、声音和时间</td>
+<td>硬项全部通过；缺测进入复核。不以重新配音或换声掩盖音轨不符，不因输入带音频就免验</td>
+</tr>
+<tr>
+<td>D10 后期与终审</td>
+<td>合格原片、字幕时间轴、用户样式和封面要求 → 竖屏成片/封面、最终报告</td>
+<td>依赖满足后代码 Worker 内部 FFmpeg＋libass、FFprobe、清晰度处理和封面生成；保留最终时间线；不暴露 render_video MCP</td>
+<td>quality 检查最终编码、字幕、响度、画面、身份和标识；审核交付文件，不只检查原片</td>
+</tr>
+<tr>
+<td>D11 预览与下载</td>
+<td>同一有效版本的成片、字幕、封面、文案和报告 → PublishPackage、manifest</td>
+<td>最终 quality 通过后代码 Worker 生成并登记包，业务库冻结清单、媒体库保存文件及摘要/来源；无 M05 交付 MCP</td>
+<td>所有门禁与选择有效；V1 到 ready 和下载结束，不显示已投稿</td>
+</tr>
+<tr>
+<td>D12 审核经验回流</td>
+<td>真实审核修正、术语读法、用户偏好 → <code>MemoryCandidate</code> → 经审经验</td>
+<td>候选经验隔离保存，经审核才进入长期检索；保留来源、版本与失效条件</td>
+<td>只读当前有效经验；失败稿不能自动写为已验证事实，模型输出不能自行改人物或预算</td>
+</tr>
+</tbody>
+</table></div></details>
+</section><section class="view" id="view-agents" role="tabpanel" aria-labelledby="tab-agents" tabindex="0" hidden>
+<div class="section-head"><p class="eyebrow">03 / Agent 协作框架</p><h1>一个总控，<br><em>四类专业分工。</em></h1><p>这张图展开整体架构的协作层。DeepAgents 是主框架，LangGraph 是底层运行机制；总控按依赖委派并汇合结果，专业角色共享规范、工具与记忆。</p></div>
+<div class="chart-card"><div class="chart-head"><strong>Agent 协作框架 · 一总控、四类专家</strong><div class="chart-actions"><button data-zoom="agents" aria-pressed="false">放大</button><button data-export="agents">下载 SVG</button></div></div>
+    <div class="diagram-scroll" id="scroll-agents" tabindex="0" aria-label="Agent 协作框架 · 一总控、四类专家，可横向滚动"><svg aria-label="Agent 协作框架 · 一总控、四类专家；点击节点查看说明" class="diagram" data-preset="classic" data-quality-profile="showcase" id="svg-agents" role="group" viewbox="0 0 1180 600" xmlns="http://www.w3.org/2000/svg"><style>
+svg{font-family:'Microsoft YaHei','PingFang SC',Arial,sans-serif;background:#fff}
+.c-grid{fill:none;stroke:#f1f3f6}.c-mask{fill:#fff;stroke:none}
+.c-frontend,.c-backend,.c-database,.c-cloud,.c-security,.c-messagebus,.c-external{fill:#f3f6ff;stroke:#657eb8}
+.c-security{fill:#eef2ff;stroke:#002fa7}.c-backend{fill:#fff;stroke:#8093bf}
+.c-region,.c-lane,.c-security-group{fill:#fbfcff;stroke:#d9e1f0;stroke-dasharray:6 5}
+.t-primary{fill:#172134}.t-muted{fill:#58657a}.t-dim{fill:#68748a}
+.t-frontend,.t-backend,.t-database,.t-cloud,.t-security,.t-messagebus,.t-external{fill:#315398}
+.m-default,.m-dashed{fill:#8290aa}.m-emphasis,.m-security{fill:#002fa7}
+.a-default,.a-dashed{fill:none;stroke:#8290aa}.a-emphasis,.a-security{fill:none;stroke:#002fa7}
+.a-security,.a-dashed{stroke-dasharray:5 4}
+.s-frontend,.s-backend,.s-database,.s-cloud,.s-security,.s-messagebus,.s-external{fill:none;stroke:#526fa9}
+.sigil-fill{fill:#526fa9;stroke:none}
+[data-node-id]{cursor:pointer}[data-node-id]:hover>rect:not(.c-mask),[data-node-id][aria-pressed=true]>rect:not(.c-mask){stroke:#002fa7;stroke-width:2.5}
+[data-node-id]:focus{outline:none}[data-node-id]:focus-visible>rect:not(.c-mask){stroke:#002fa7;stroke-width:3}
+</style>
+<title id="agents-archify-diagram-title">Agent 协作框架 · 目标设计</title>
+<desc id="agents-archify-diagram-description">A architecture diagram generated by Archify.</desc>
+<!-- Definitions -->
+<defs>
+<marker id="agents-arrowhead" markerheight="7" markerwidth="10" orient="auto" refx="9" refy="3.5">
+<polygon class="m-default" points="0 0, 10 3.5, 0 7"></polygon>
+</marker>
+<marker id="agents-arrowhead-emphasis" markerheight="7" markerwidth="10" orient="auto" refx="9" refy="3.5">
+<polygon class="m-emphasis" points="0 0, 10 3.5, 0 7"></polygon>
+</marker>
+<marker id="agents-arrowhead-security" markerheight="7" markerwidth="10" orient="auto" refx="9" refy="3.5">
+<polygon class="m-security" points="0 0, 10 3.5, 0 7"></polygon>
+</marker>
+<marker id="agents-arrowhead-dashed" markerheight="7" markerwidth="10" orient="auto" refx="9" refy="3.5">
+<polygon class="m-dashed" points="0 0, 10 3.5, 0 7"></polygon>
+</marker>
+<pattern height="40" id="agents-grid" patternunits="userSpaceOnUse" width="40">
+<path class="c-grid" d="M 40 0 L 0 0 0 40" stroke-width="0.5"></path>
+</pattern>
+</defs>
+<!-- Background Grid -->
+<rect fill="url(#agents-grid)" height="100%" width="100%"></rect>
+<!-- Boundaries (behind everything) -->
+<rect class="c-region" data-composition-frame-id="0" data-composition-frame-kind="region" data-graph-role="structural-frame" height="122" rx="12" stroke-width="1" width="1154" x="13" y="253"></rect>
+<text class="t-cloud" font-size="12" font-weight="600" x="21" y="371">4 类专业角色：直接写稿、逐环节审核、固定人物与声音；独立准备可并行</text>
+<rect class="c-region" data-composition-frame-id="1" data-composition-frame-kind="region" data-graph-role="structural-frame" height="127" rx="12" stroke-width="1" width="869" x="13" y="448"></rect>
+<text class="t-cloud" font-size="12" font-weight="600" x="21" y="466">共享知识与受控工具 · 按角色授权</text>
+<!-- Connection paths (before components for correct z-order) -->
+<path class="a-emphasis" d="M 590 72 L 590 115" data-composition-points="590,72;590,115" data-edge-from="human-decisions" data-edge-id="human-to-supervisor" data-edge-key="0" data-edge-to="deepagents-supervisor" marker-end="url(#agents-arrowhead-emphasis)" stroke-width="1.8"></path>
+<path class="a-dashed" d="M 280 152.5 L 430 152.5" data-composition-points="280,152.5;430,152.5" data-edge-from="runtime-foundation" data-edge-id="runtime-to-supervisor" data-edge-key="1" data-edge-label="运行承载" data-edge-to="deepagents-supervisor" marker-end="url(#agents-arrowhead-dashed)" stroke-width="1.5"></path>
+<path class="a-security" d="M 750 152.5 L 895 152.5" data-composition-points="750,152.5;895,152.5" data-edge-from="deepagents-supervisor" data-edge-id="supervisor-to-guards" data-edge-key="2" data-edge-label="请求校验" data-edge-to="business-guards" marker-end="url(#agents-arrowhead-security)" stroke-width="1.5"></path>
+<path class="a-default" d="M 569 190 L 569 224.5 Q 569 232.5 561 232.5 L 163 232.5 Q 155 232.5 155 240.5 L 155 275" data-composition-points="569,190;569,232.5;155,232.5;155,275" data-edge-from="deepagents-supervisor" data-edge-id="delegate-content" data-edge-key="3" data-edge-to="content-agent" marker-end="url(#agents-arrowhead)" stroke-width="1.5"></path>
+<path class="a-default" d="M 583 190 L 583 224.5 Q 583 232.5 575 232.5 L 453 232.5 Q 445 232.5 445 240.5 L 445 275" data-composition-points="583,190;583,232.5;445,232.5;445,275" data-edge-from="deepagents-supervisor" data-edge-id="delegate-avatar" data-edge-key="4" data-edge-to="avatar-agent" marker-end="url(#agents-arrowhead)" stroke-width="1.5"></path>
+<path class="a-security" d="M 611 190 L 611 224.5 Q 611 232.5 619 232.5 L 1017 232.5 Q 1025 232.5 1025 240.5 L 1025 275" data-composition-points="611,190;611,232.5;1025,232.5;1025,275" data-edge-from="deepagents-supervisor" data-edge-id="delegate-quality" data-edge-key="5" data-edge-to="quality-agent" marker-end="url(#agents-arrowhead-security)" stroke-width="1.5"></path>
+<path class="a-default" d="M 597 190 L 597 224.5 Q 597 232.5 605 232.5 L 727 232.5 Q 735 232.5 735 240.5 L 735 275" data-composition-points="597,190;597,232.5;735,232.5;735,275" data-edge-from="deepagents-supervisor" data-edge-id="delegate-audio" data-edge-key="6" data-edge-to="audio-agent" marker-end="url(#agents-arrowhead)" stroke-width="1.5"></path>
+<path class="a-security" d="M 1025 355 L 1025 470" data-composition-points="1025,355;1025,470" data-edge-from="quality-agent" data-edge-id="approved-raw-triggers-worker" data-edge-key="7" data-edge-label="原片通过＋字幕就绪" data-edge-to="postprocess-worker" marker-end="url(#agents-arrowhead-security)" stroke-width="1.5"></path>
+<!-- Components -->
+<g aria-label="查看：用户选择与确认" aria-pressed="false" data-chart="agents" data-node-context="架构模块" data-node-id="human-decisions" data-node-kind="frontend" data-node-label="用户选择与确认" data-node-sublabel="选人物 · 选稿 · 确认音频与路线" id="agents-node-human-decisions" role="button" tabindex="0">
+<title>用户选择与确认 · 选人物 · 选稿 · 确认音频与路线 · Architecture component</title>
+<rect class="c-mask" height="60" rx="6" width="320" x="430" y="12"></rect>
+<rect class="c-frontend" height="60" rx="6" stroke-width="1.5" width="320" x="430" y="12"></rect>
+<g aria-hidden="true" class="semantic-sigil s-frontend" data-semantic-sigil="frontend" transform="translate(436 18) scale(0.6875)">
+<rect height="10" rx="2" width="12" x="2" y="3"></rect>
+<path d="M2 6.5h12"></path>
+<circle class="sigil-fill" cx="4.1" cy="4.8" r=".7"></circle>
+<circle class="sigil-fill" cx="6.3" cy="4.8" r=".7"></circle>
+</g>
+<text class="t-primary" data-detail-anchor="" font-size="17" font-weight="600" text-anchor="middle" x="590" y="36.0">用户选择与确认</text>
+<text class="t-muted" data-detail="context" font-size="14" text-anchor="middle" x="590" y="57.0">选人物 · 选稿 · 确认音频与路线</text>
+</g>
+<g aria-label="查看：LangGraph 运行底座" aria-pressed="false" data-chart="agents" data-node-context="架构模块" data-node-id="runtime-foundation" data-node-kind="backend" data-node-label="LangGraph 运行底座" data-node-sublabel="状态 · 中断 · 恢复" data-node-tag="DeepAgents 底层机制" id="agents-node-runtime-foundation" role="button" tabindex="0">
+<title>LangGraph 运行底座 · 状态 · 中断 · 恢复 · Architecture component · DeepAgents 底层机制</title>
+<rect class="c-mask" height="75" rx="6" width="235" x="45" y="115"></rect>
+<rect class="c-backend" height="75" rx="6" stroke-width="1.5" width="235" x="45" y="115"></rect>
+<g aria-hidden="true" class="semantic-sigil s-backend" data-semantic-sigil="backend" transform="translate(51 121) scale(0.6875)">
+<path d="M6 3 3 8l3 5M10 3l3 5-3 5"></path>
+</g>
+<text class="t-primary" data-detail-anchor="" font-size="17" font-weight="600" text-anchor="middle" x="162.5" y="139.0">LangGraph 运行底座</text>
+<text class="t-muted" data-detail="context" font-size="14" text-anchor="middle" x="162.5" y="160.0">状态 · 中断 · 恢复</text>
+<text class="t-backend" data-detail="fine" font-size="12" text-anchor="middle" x="162.5" y="180.0">DeepAgents 底层机制</text>
+</g>
+<g aria-label="查看：DeepAgents 总控" aria-pressed="false" data-chart="agents" data-node-context="架构模块" data-node-id="deepagents-supervisor" data-node-kind="backend" data-node-label="DeepAgents 总控" data-node-sublabel="supervisor · 规划、委派与汇总" data-node-tag="按依赖调度，有限返工" id="agents-node-deepagents-supervisor" role="button" tabindex="0">
+<title>DeepAgents 总控 · supervisor · 规划、委派与汇总 · Architecture component · 按依赖调度，有限返工</title>
+<rect class="c-mask" height="75" rx="6" width="320" x="430" y="115"></rect>
+<rect class="c-backend" height="75" rx="6" stroke-width="1.5" width="320" x="430" y="115"></rect>
+<g aria-hidden="true" class="semantic-sigil s-backend" data-semantic-sigil="backend" transform="translate(436 121) scale(0.6875)">
+<path d="M6 3 3 8l3 5M10 3l3 5-3 5"></path>
+</g>
+<text class="t-primary" data-detail-anchor="" font-size="17" font-weight="600" text-anchor="middle" x="590" y="139.0">DeepAgents 总控</text>
+<text class="t-muted" data-detail="context" font-size="14" text-anchor="middle" x="590" y="160.0">supervisor · 规划、委派与汇总</text>
+<text class="t-backend" data-detail="fine" font-size="12" text-anchor="middle" x="590" y="180.0">按依赖调度，有限返工</text>
+</g>
+<g aria-label="查看：确定性业务门禁" aria-pressed="false" data-chart="agents" data-node-context="架构模块" data-node-id="business-guards" data-node-kind="security" data-node-label="确定性业务门禁" data-node-sublabel="依赖 / 版本 / 质量 / 预算 / 幂等" data-node-tag="代码执行，Agent 不能绕过" id="agents-node-business-guards" role="button" tabindex="0">
+<title>确定性业务门禁 · 依赖 / 版本 / 质量 / 预算 / 幂等 · Architecture component · 代码执行，Agent 不能绕过</title>
+<rect class="c-mask" height="75" rx="6" width="240" x="895" y="115"></rect>
+<rect class="c-security" height="75" rx="6" stroke-width="1.5" width="240" x="895" y="115"></rect>
+<g aria-hidden="true" class="semantic-sigil s-security" data-semantic-sigil="security" transform="translate(901 121) scale(0.6875)">
+<path d="M8 2.2 13 4v3.5c0 3.1-1.8 5.4-5 6.5-3.2-1.1-5-3.4-5-6.5V4Z"></path>
+<path d="m5.8 8 1.5 1.5 3-3"></path>
+</g>
+<text class="t-primary" data-detail-anchor="" font-size="17" font-weight="600" text-anchor="middle" x="1015" y="139.0">确定性业务门禁</text>
+<text class="t-muted" data-detail="context" font-size="14" text-anchor="middle" x="1015" y="160.0">依赖 / 版本 / 质量 / 预算 / 幂等</text>
+<text class="t-security" data-detail="fine" font-size="12" text-anchor="middle" x="1015" y="180.0">代码执行，Agent 不能绕过</text>
+</g>
+<g aria-label="查看：策划文案" aria-pressed="false" data-chart="agents" data-node-context="4 类专业角色：直接写稿、逐环节审核、固定人物与声音；独立准备可并行" data-node-id="content-agent" data-node-kind="backend" data-node-label="策划文案" data-node-sublabel="content · 按提示直接生成三稿" data-node-tag="不联网；稿件交 quality 审核" id="agents-node-content-agent" role="button" tabindex="0">
+<title>策划文案 · content · 按提示直接生成三稿 · 4 类专业角色：直接写稿、逐环节审核、固定人物与声音；独立准备可并行 · 不联网；稿件交 quality 审核</title>
+<rect class="c-mask" height="80" rx="6" width="240" x="35" y="275"></rect>
+<rect class="c-backend" height="80" rx="6" stroke-width="1.5" width="240" x="35" y="275"></rect>
+<g aria-hidden="true" class="semantic-sigil s-backend" data-semantic-sigil="backend" transform="translate(41 281) scale(0.6875)">
+<path d="M6 3 3 8l3 5M10 3l3 5-3 5"></path>
+</g>
+<text class="t-primary" data-detail-anchor="" font-size="17" font-weight="600" text-anchor="middle" x="155" y="299.0">策划文案</text>
+<text class="t-muted" data-detail="context" font-size="14" text-anchor="middle" x="155" y="320.0">content · 按提示直接生成三稿</text>
+<text class="t-backend" data-detail="fine" font-size="12" text-anchor="middle" x="155" y="345.0">不联网；稿件交 quality 审核</text>
+</g>
+<g aria-label="查看：数字人导演" aria-pressed="false" data-chart="agents" data-node-context="4 类专业角色：直接写稿、逐环节审核、固定人物与声音；独立准备可并行" data-node-id="avatar-agent" data-node-kind="backend" data-node-label="数字人导演" data-node-sublabel="avatar · 人物、衣景与表演" data-node-tag="同图同声：OmniHuman 或 M2" id="agents-node-avatar-agent" role="button" tabindex="0">
+<title>数字人导演 · avatar · 人物、衣景与表演 · 4 类专业角色：直接写稿、逐环节审核、固定人物与声音；独立准备可并行 · 同图同声：OmniHuman 或 M2</title>
+<rect class="c-mask" height="80" rx="6" width="240" x="325" y="275"></rect>
+<rect class="c-backend" height="80" rx="6" stroke-width="1.5" width="240" x="325" y="275"></rect>
+<g aria-hidden="true" class="semantic-sigil s-backend" data-semantic-sigil="backend" transform="translate(331 281) scale(0.6875)">
+<path d="M6 3 3 8l3 5M10 3l3 5-3 5"></path>
+</g>
+<text class="t-primary" data-detail-anchor="" font-size="17" font-weight="600" text-anchor="middle" x="445" y="299.0">数字人导演</text>
+<text class="t-muted" data-detail="context" font-size="14" text-anchor="middle" x="445" y="320.0">avatar · 人物、衣景与表演</text>
+<text class="t-backend" data-detail="fine" font-size="12" text-anchor="middle" x="445" y="345.0">同图同声：OmniHuman 或 M2</text>
+</g>
+<g aria-label="查看：质量审核" aria-pressed="false" data-chart="agents" data-node-context="4 类专业角色：直接写稿、逐环节审核、固定人物与声音；独立准备可并行" data-node-id="quality-agent" data-node-kind="security" data-node-label="质量审核" data-node-sublabel="quality · 内部查重与全程审核" data-node-tag="核对已有材料；无依据转人工" id="agents-node-quality-agent" role="button" tabindex="0">
+<title>质量审核 · quality · 内部查重与全程审核 · 4 类专业角色：直接写稿、逐环节审核、固定人物与声音；独立准备可并行 · 核对已有材料；无依据转人工</title>
+<rect class="c-mask" height="80" rx="6" width="240" x="905" y="275"></rect>
+<rect class="c-security" height="80" rx="6" stroke-width="1.5" width="240" x="905" y="275"></rect>
+<g aria-hidden="true" class="semantic-sigil s-security" data-semantic-sigil="security" transform="translate(911 281) scale(0.6875)">
+<path d="M8 2.2 13 4v3.5c0 3.1-1.8 5.4-5 6.5-3.2-1.1-5-3.4-5-6.5V4Z"></path>
+<path d="m5.8 8 1.5 1.5 3-3"></path>
+</g>
+<text class="t-primary" data-detail-anchor="" font-size="17" font-weight="600" text-anchor="middle" x="1025" y="299.0">质量审核</text>
+<text class="t-muted" data-detail="context" font-size="14" text-anchor="middle" x="1025" y="320.0">quality · 内部查重与全程审核</text>
+<text class="t-security" data-detail="fine" font-size="12" text-anchor="middle" x="1025" y="345.0">核对已有材料；无依据转人工</text>
+</g>
+<g aria-label="查看：声音导演" aria-pressed="false" data-chart="agents" data-node-context="4 类专业角色：直接写稿、逐环节审核、固定人物与声音；独立准备可并行" data-node-id="audio-agent" data-node-kind="backend" data-node-label="声音导演" data-node-sublabel="audio · 音色、情绪与停顿" data-node-tag="固定 MiniMax 音色与最终音频" id="agents-node-audio-agent" role="button" tabindex="0">
+<title>声音导演 · audio · 音色、情绪与停顿 · 4 类专业角色：直接写稿、逐环节审核、固定人物与声音；独立准备可并行 · 固定 MiniMax 音色与最终音频</title>
+<rect class="c-mask" height="80" rx="6" width="240" x="615" y="275"></rect>
+<rect class="c-backend" height="80" rx="6" stroke-width="1.5" width="240" x="615" y="275"></rect>
+<g aria-hidden="true" class="semantic-sigil s-backend" data-semantic-sigil="backend" transform="translate(621 281) scale(0.6875)">
+<path d="M6 3 3 8l3 5M10 3l3 5-3 5"></path>
+</g>
+<text class="t-primary" data-detail-anchor="" font-size="17" font-weight="600" text-anchor="middle" x="735" y="299.0">声音导演</text>
+<text class="t-muted" data-detail="context" font-size="14" text-anchor="middle" x="735" y="320.0">audio · 音色、情绪与停顿</text>
+<text class="t-backend" data-detail="fine" font-size="12" text-anchor="middle" x="735" y="345.0">固定 MiniMax 音色与最终音频</text>
+</g>
+<g aria-label="查看：7 个业务 Skill" aria-pressed="false" data-chart="agents" data-node-context="共享知识与受控工具 · 按角色授权" data-node-id="shared-skills" data-node-kind="backend" data-node-label="7 个业务 Skill" data-node-sublabel="角色规范 · 输出契约 · 拒收规则" data-node-tag="S01–S06 / S08；无后期 Skill" id="agents-node-shared-skills" role="button" tabindex="0">
+<title>7 个业务 Skill · 角色规范 · 输出契约 · 拒收规则 · 共享知识与受控工具 · 按角色授权 · S01–S06 / S08；无后期 Skill</title>
+<rect class="c-mask" height="85" rx="6" width="245" x="35" y="470"></rect>
+<rect class="c-backend" height="85" rx="6" stroke-width="1.5" width="245" x="35" y="470"></rect>
+<g aria-hidden="true" class="semantic-sigil s-backend" data-semantic-sigil="backend" transform="translate(41 476) scale(0.6875)">
+<path d="M6 3 3 8l3 5M10 3l3 5-3 5"></path>
+</g>
+<text class="t-primary" data-detail-anchor="" font-size="17" font-weight="600" text-anchor="middle" x="157.5" y="494.0">7 个业务 Skill</text>
+<text class="t-muted" data-detail="context" font-size="14" text-anchor="middle" x="157.5" y="515.0">角色规范 · 输出契约 · 拒收规则</text>
+<text class="t-backend" data-detail="fine" font-size="12" text-anchor="middle" x="157.5" y="545.0">S01–S06 / S08；无后期 Skill</text>
+</g>
+<g aria-label="查看：MCP 受控工具" aria-pressed="false" data-chart="agents" data-node-context="共享知识与受控工具 · 按角色授权" data-node-id="controlled-mcp" data-node-kind="messagebus" data-node-label="MCP 受控工具" data-node-sublabel="4 组能力 · 拟建 2 个服务" data-node-tag="不暴露联网、后期与打包工具" id="agents-node-controlled-mcp" role="button" tabindex="0">
+<title>MCP 受控工具 · 4 组能力 · 拟建 2 个服务 · 共享知识与受控工具 · 按角色授权 · 不暴露联网、后期与打包工具</title>
+<rect class="c-mask" height="85" rx="6" width="245" x="325" y="470"></rect>
+<rect class="c-messagebus" height="85" rx="6" stroke-width="1.5" width="245" x="325" y="470"></rect>
+<g aria-hidden="true" class="semantic-sigil s-messagebus" data-semantic-sigil="messagebus" transform="translate(331 476) scale(0.6875)">
+<path d="M2.5 4.5h11M2.5 8h11M2.5 11.5h11"></path>
+<circle class="sigil-fill" cx="5" cy="4.5" r="1"></circle>
+<circle class="sigil-fill" cx="10.5" cy="8" r="1"></circle>
+<circle class="sigil-fill" cx="7" cy="11.5" r="1"></circle>
+</g>
+<text class="t-primary" data-detail-anchor="" font-size="17" font-weight="600" text-anchor="middle" x="447.5" y="494.0">MCP 受控工具</text>
+<text class="t-muted" data-detail="context" font-size="14" text-anchor="middle" x="447.5" y="515.0">4 组能力 · 拟建 2 个服务</text>
+<text class="t-messagebus" data-detail="fine" font-size="12" text-anchor="middle" x="447.5" y="545.0">不暴露联网、后期与打包工具</text>
+</g>
+<g aria-label="查看：四层记忆" aria-pressed="false" data-chart="agents" data-node-context="共享知识与受控工具 · 按角色授权" data-node-id="four-memories" data-node-kind="database" data-node-label="四层记忆" data-node-sublabel="任务 / 人设声音 / 历史 / 经验" data-node-tag="经验先审核，固定人设只读" id="agents-node-four-memories" role="button" tabindex="0">
+<title>四层记忆 · 任务 / 人设声音 / 历史 / 经验 · 共享知识与受控工具 · 按角色授权 · 经验先审核，固定人设只读</title>
+<rect class="c-mask" height="85" rx="6" width="245" x="615" y="470"></rect>
+<rect class="c-database" height="85" rx="6" stroke-width="1.5" width="245" x="615" y="470"></rect>
+<g aria-hidden="true" class="semantic-sigil s-database" data-semantic-sigil="database" transform="translate(621 476) scale(0.6875)">
+<ellipse cx="8" cy="4" rx="5" ry="2"></ellipse>
+<path d="M3 4v8c0 1.1 2.2 2 5 2s5-.9 5-2V4M3 8c0 1.1 2.2 2 5 2s5-.9 5-2"></path>
+</g>
+<text class="t-primary" data-detail-anchor="" font-size="17" font-weight="600" text-anchor="middle" x="737.5" y="494.0">四层记忆</text>
+<text class="t-muted" data-detail="context" font-size="14" text-anchor="middle" x="737.5" y="515.0">任务 / 人设声音 / 历史 / 经验</text>
+<text class="t-database" data-detail="fine" font-size="12" text-anchor="middle" x="737.5" y="545.0">经验先审核，固定人设只读</text>
+</g>
+<g aria-label="查看：确定性后期 Worker" aria-pressed="false" data-chart="agents" data-node-context="架构模块" data-node-id="postprocess-worker" data-node-kind="messagebus" data-node-label="确定性后期 Worker" data-node-sublabel="字幕 · 合成 · 清晰度 · 封面" data-node-tag="quality 终审通过后由内部代码打包" id="agents-node-postprocess-worker" role="button" tabindex="0">
+<title>确定性后期 Worker · 字幕 · 合成 · 清晰度 · 封面 · Architecture component · quality 终审通过后由内部代码打包</title>
+<rect class="c-mask" height="85" rx="6" width="240" x="905" y="470"></rect>
+<rect class="c-messagebus" height="85" rx="6" stroke-width="1.5" width="240" x="905" y="470"></rect>
+<g aria-hidden="true" class="semantic-sigil s-messagebus" data-semantic-sigil="messagebus" transform="translate(911 476) scale(0.6875)">
+<path d="M2.5 4.5h11M2.5 8h11M2.5 11.5h11"></path>
+<circle class="sigil-fill" cx="5" cy="4.5" r="1"></circle>
+<circle class="sigil-fill" cx="10.5" cy="8" r="1"></circle>
+<circle class="sigil-fill" cx="7" cy="11.5" r="1"></circle>
+</g>
+<text class="t-primary" data-detail-anchor="" font-size="17" font-weight="600" text-anchor="middle" x="1025" y="494.0">确定性后期 Worker</text>
+<text class="t-muted" data-detail="context" font-size="14" text-anchor="middle" x="1025" y="515.0">字幕 · 合成 · 清晰度 · 封面</text>
+<text class="t-messagebus" data-detail="fine" font-size="12" text-anchor="middle" x="1025" y="545.0">quality 终审通过后由内部代码打包</text>
+</g>
+<!-- Connection labels -->
+<g data-detail="context" data-edge-from="runtime-foundation" data-edge-id="runtime-to-supervisor" data-edge-key="1" data-edge-label="运行承载" data-edge-to="deepagents-supervisor">
+<rect class="c-mask" height="14" rx="3" width="48.4" x="330.8" y="132.5"></rect>
+<text class="t-messagebus" font-size="8" text-anchor="middle" x="355" y="142.5">运行承载</text>
+</g>
+<g data-detail="context" data-edge-from="deepagents-supervisor" data-edge-id="supervisor-to-guards" data-edge-key="2" data-edge-label="请求校验" data-edge-to="business-guards">
+<rect class="c-mask" height="14" rx="3" width="48.4" x="798.3" y="132.5"></rect>
+<text class="t-security" font-size="8" text-anchor="middle" x="822.5" y="142.5">请求校验</text>
+</g>
+<g data-detail="context" data-edge-from="quality-agent" data-edge-id="approved-raw-triggers-worker" data-edge-key="7" data-edge-label="原片通过＋字幕就绪" data-edge-to="postprocess-worker">
+<rect class="c-mask" height="14" rx="3" width="96.39999999999999" x="976.8" y="404"></rect>
+<text class="t-security" font-size="8" text-anchor="middle" x="1025" y="414">原片通过＋字幕就绪</text>
+</g>
+<!-- Legend -->
+</svg></div>
+    <div class="chart-caption">展开整体架构中的 DeepAgents 协作层及其支撑：总控负责委派与汇合，四类子 Agent 按角色使用 Skill、MCP 和记忆；后期 Worker 属于代码执行层，成片返回 quality 终审。</div><div class="node-detail" id="detail-agents" aria-live="polite"><span class="detail-label">节点说明</span><strong>点击图中模块</strong><p>查看该模块的职责和交接要求；支持 Tab、Enter 和空格操作。</p></div></div>
+<div class="principle"><strong>可并行的是独立工作，有依赖的任务必须等待</strong><p>人物准备、文案与声音方案可按条件并行；最终音频审核确认后才提交口播生成。字幕与口播可并行，原片通过且字幕就绪后由代码合成；quality 终审后内部打包。单 GPU 重型推理排队。</p></div>
+<div class="role-grid"><article class="role"><div class="role-head"><h3>总控</h3><code>supervisor</code></div><p>分解任务、并行委派、等待用户、汇总结果</p><small>不代选人物、稿件或收费路线。</small></article><article class="role"><div class="role-head"><h3>策划文案</h3><code>content</code></div><p>按用户提示提出新角度，直接生成三稿</p><small>不联网；自带材料保留引用，无依据不伪称已核实。</small></article><article class="role"><div class="role-head"><h3>质量审核</h3><code>quality</code></div><p>内部历史查重、已有材料核对及媒体终审</p><small>事实缺依据转人工；原片通过后触发代码后期。</small></article><article class="role"><div class="role-head"><h3>数字人导演</h3><code>avatar</code></div><p>管理人物和衣景，匹配表情动作，执行口播</p><small>保持身份；不能承诺任意动作。</small></article><article class="role"><div class="role-head"><h3>声音导演</h3><code>audio</code></div><p>编译停顿、重音、语速与情绪，生成 TTS</p><small>锁定所选音色；产物交用户试听确认。</small></article></div>
+<div class="note"><strong>确定性后期 Worker：代码执行，不是子智能体</strong><p>最终音频确认后，字幕代码可与视频生成并行；原片审核通过且字幕就绪后，业务服务自动调度 FFmpeg 合成、清晰度处理和封面制作，再交 quality 终审，通过后才由内部代码打包。后期不设独立 Skill，也不通过 MCP 开放渲染或打包工具。</p></div>
+<div class="principle"><strong>统一表演说明 PerformancePlan</strong><p>同一稿件的分段、情绪、语速、重音与动作意图共享给声音、数字人及后期代码。真实时间轴来自最终音频，不能按目标时长提前编造。</p></div>
+<div class="section-head"><h2>7 个 Skill：怎样把任务做好</h2><p>以下是项目拟建规范；权限、预算和硬质量门禁仍由代码执行。</p></div><div class="skills"><details class="skill"><summary>S01 选题与新意</summary><p><b>负责角色</b> 策划文案</p><p>用户提示词、受众、风格 → 直接提出不同问题/案例角度 → 三种候选切入点</p><p class="muted">检查：仅换标题；编造热度和收益；自行联网搜索</p></details><details class="skill"><summary>S02 口播写作</summary><p><b>负责角色</b> 策划文案；声音/数字人读取产物</p><p>提示词、三种角度、时长与可选用户材料 → 写开头、解释、例子与收尾 → 三稿、标题/简介/标签、表演意图和待核断言</p><p class="muted">检查：论文腔、标题正文不一致、虚构来源、表达标记污染正文</p></details><details class="skill"><summary>S03 事实与重复审核</summary><p><b>负责角色</b> 质量审核</p><p>三稿、内部历史、用户材料/已审知识 → 查重复、错字、逻辑、易懂性、吸引力及事实依据 → 逐稿报告</p><p class="muted">检查：用模型自审冒充事实证明；无依据的时效或关键断言直接通过；查重不可用仍放行</p></details><details class="skill"><summary>S04 固定人物与衣景</summary><p><b>负责角色</b> 数字人导演；质量审核检查</p><p>关键词/自由描述或固定身份、衣景要求 → 创建候选或参考编辑 → 人物变体与来源链</p><p class="muted">检查：换装换成另一个人；未经批准覆盖基础人物</p></details><details class="skill"><summary>S05 动作表情匹配</summary><p><b>负责角色</b> 数字人导演；质量审核检查</p><p>人物、表演描述、最终 TTS、路线 → 按能力/预算组织 OmniHuman 或 M2 → 口播原片</p><p class="muted">检查：未确认音频就生成；承诺任意动作；静默换路线；身体/嘴部/段间异常</p></details><details class="skill"><summary>S06 固定声音与情绪</summary><p><b>负责角色</b> 声音导演；质量审核检查</p><p>已选稿、MiniMax 音色、表演意图 → 编译表达并合成 → 待用户确认音频、朗读映射与真实时间</p><p class="muted">检查：擅自换声；错读漏读；重新配音掩盖原片声音不符</p></details><details class="skill"><summary>S08 分阶段媒体质量验收</summary><p><b>负责角色</b> 质量审核；代码读取报告</p><p>人物/音频/原片/成片及检测证据 → 定位问题并复核 → 阶段报告与返工目标</p><p class="muted">检查：只看日志判通过；缺检测证据；把待复核当通过</p></details></div>
+<div class="section-head"><h2>4 组 MCP 能力，建议先落两个服务</h2><p><code>studio-core</code> 管历史、角色记忆与质量登记；<code>studio-media</code> 管媒体生产与检测。M01 内部历史查重只授权 quality；quality 同时调用 M04 媒体检测与审核登记。联网抓取、后期渲染和打包不暴露为 MCP 工具。</p></div>
+<div class="table-scroll" tabindex="0" aria-label="可横向滚动的表格"><table id="mcp-table">
+<thead>
+<tr>
+<th scope="col">编号／能力组</th>
+<th scope="col">主要工具举例</th>
+<th scope="col">使用角色</th>
+<th scope="col">输出</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>M01 历史内容查重</td>
+<td><code>search_content_history</code></td>
+<td>仅质量审核</td>
+<td>内部历史稿件、主题/观点/片段命中和相似度证据；不获取外网资料</td>
+</tr>
+<tr>
+<td>M02 角色与记忆</td>
+<td><code>get_presenter_profile</code>、<code>list_approved_assets</code>、<code>search_memory</code>、<code>propose_memory</code></td>
+<td>各角色按作用域使用</td>
+<td>人物/声音档案、已审资产、相关经验或待审候选</td>
+</tr>
+<tr>
+<td>M03 媒体生产</td>
+<td><code>submit_image_generation</code>、<code>submit_image_edit</code>、<code>submit_tts</code>、<code>submit_avatar_video</code>；M2 的 <code>submit_motion</code>、<code>submit_lipsync</code></td>
+<td>数字人导演、声音导演</td>
+<td>生成作业及产物引用；人物、最终音轨、底片/原片与分段来源链</td>
+</tr>
+<tr>
+<td>M04 质量检测</td>
+<td><code>inspect_image</code>、<code>inspect_audio</code>、<code>inspect_video</code>、<code>submit_quality_report</code></td>
+<td>质量审核；生成角色按职责预检</td>
+<td>测量值、问题时间码和审核报告；不生成字幕或渲染成片</td>
+</tr>
+</tbody>
+</table></div>
+<div class="section-head"><h2>四层记忆，各有权威来源</h2><p>任务隔离写入，共享经验审核合并；检查点不能代替媒体、审批和计费账本。</p></div><div class="memory-grid"><article class="memory"><span class="number">01</span><div><h3>任务状态</h3><strong>检查点与业务任务表</strong><p>恢复工作图、等待位置和输入版本；外部任务仍须单独对账。</p></div></article><article class="memory"><span class="number">02</span><div><h3>人设与声音</h3><strong>不可变资产＋版本配置</strong><p>人物和音色只读引用；用户显式换人、换声后更新版本。</p></div></article><article class="memory"><span class="number">03</span><div><h3>内容历史</h3><strong>稿件与来源＋检索索引</strong><p>已审未发布稿也参与查重；主题、观点、案例可追溯。</p></div></article><article class="memory"><span class="number">04</span><div><h3>长期经验</h3><strong>持久 Store＋审核记录</strong><p>术语读法、偏好和纠错先提候选，审核后进入长期记忆。</p></div></article></div>
+<div class="note"><strong>这部分仍是待实现能力</strong><p>先用无付费模拟工具验证委派、前置依赖、重启恢复与幂等，再按授权接入真实模型。文件存在或 Mock 跑通不代表真实生产验收通过。</p></div>
+</section><section class="view" id="view-stack" role="tabpanel" aria-labelledby="tab-stack" tabindex="0" hidden>
+<div class="section-head"><p class="eyebrow">04 / 技术与模型</p><h1>先明确模型，<br><em>再验证每个接入。</em></h1><p>已选型号、已有实验和生产验收分开记录。供应商通过 Provider Interface 接入，替换服务时保持业务契约稳定。</p></div>
+<div class="table-tools"><label for="model-search">查找模型<input id="model-search" type="search" placeholder="模型、渠道或用途"></label><div class="filters" aria-label="模型状态筛选"><button data-filter="all" aria-pressed="true">全部</button><button data-filter="evidence" aria-pressed="false">已有实验</button><button data-filter="selected" aria-pressed="false">已选待测</button><button data-filter="pending" aria-pressed="false">待选型</button></div></div><p class="result-count" id="model-count" aria-live="polite">共 8 类能力</p>
+<div class="table-scroll" tabindex="0" aria-label="模型及验证状态"><table id="model-table"><thead><tr><th>能力</th><th>模型与请求 ID</th><th>调用渠道</th><th>证据状态</th><th>输出用途</th><th>尚需验证</th></tr></thead><tbody><tr data-status="selected"><td>文本与决策</td><td><strong>DeepSeek V4.1 Flash</strong><code>deepseek-flash</code></td><td>DeepSeek 官方 API</td><td><span class="badge ">已选 · 未实测</span></td><td>策划、写稿与 Agent 决策</td><td>工具调用、结构输出、多轮协作和 DeepAgents 兼容。</td></tr><tr data-status="evidence"><td>人物图片</td><td><strong>GPT Image 2</strong><code>gpt-image-2</code></td><td>用户指定 GPT 中转</td><td><span class="badge accent">已有生图证据</span></td><td>新建人物；参考图编辑衣景</td><td>已有 B/C 候选并选 B；图生图身份保持待验，上游型号未独立核验。</td></tr><tr data-status="evidence"><td>TTS</td><td><strong>MiniMax Speech 2.8 HD</strong><code>speech-2.8-hd</code></td><td>MiniMax 官方 API</td><td><span class="badge accent">已有样音证据</span></td><td>固定音色、发音和情绪</td><td>音色 3 已选；长稿、其他情绪及时间信息待验。</td></tr><tr data-status="evidence"><td>本地可选</td><td><strong>M2 · LivePortrait → MuseTalk 1.5</strong><code>LivePortrait / MuseTalk 1.5</code></td><td>算力云 GPU 自部署</td><td><span class="badge accent">已有短片证据</span></td><td>动作底片 → 最终音频驱动嘴型</td><td>人物 B 的 15.20 秒样片；正式动作母版、60 秒和日产五条待验。</td></tr><tr data-status="evidence"><td>MVP 数字人</td><td><strong>OmniHuman 1.5</strong><code>jimeng_realman_avatar_picture_omni_v15</code></td><td>火山视觉 API</td><td><span class="badge accent">历史短片证据</span></td><td>人物图＋最终音频＋可选动作描述</td><td>人物 B、身体动作、输入音轨保持和长片待验；用户确认 1 元/秒，MVP 必须验收。</td></tr><tr data-status="pending"><td>字幕与对齐</td><td><strong>FunASR / faster-whisper 等</strong><code>待同输入对比</code></td><td>待选型</td><td><span class="badge ">候选待测试</span></td><td>按最终音轨确定字幕边界</td><td>不能把 MuseTalk 内部音频特征模型当作字幕模块。</td></tr><tr data-status="pending"><td>内部历史查重</td><td><strong>BGE-M3 / text-embedding-v4 等</strong><code>待同语料对比</code></td><td>待选型</td><td><span class="badge ">候选待测试</span></td><td>仅 quality 查询内部主题、观点与正文</td><td>用人工金标分别测准确率、精确率和召回率。</td></tr><tr data-status="pending"><td>感知质量审核</td><td><strong>身份 / 声音 / 视听审核模型</strong><code>尚未定版</code></td><td>待选型与标定</td><td><span class="badge ">候选待测试</span></td><td>身份漂移、音色、口型和画面</td><td>检测器未标定时转人工复核；纯文本模型不能替代看画面。</td></tr></tbody></table></div><p id="model-empty" hidden>没有匹配结果，请调整关键词或筛选条件。</p>
+<div class="section-head"><h2>本机管理作品，按路线调用云端能力。</h2></div><div class="deploy"><article><span class="number">本机控制面</span><h3>工作台、业务服务与资产管理</h3><dl><dt>前端</dt><dd>Vue 3 / React，待同流程选型</dd><dt>API</dt><dd>Python＋FastAPI＋Pydantic，建议首测</dd><dt>存储</dt><dd>PostgreSQL＋SQLAlchemy，按需 pgvector；待验证</dd><dt>作业</dt><dd>持久任务表＋独立 Worker，建议首测</dd></dl></article><article><span class="number">M2 可选 GPU 执行面</span><h3>LivePortrait 与 MuseTalk 独立环境</h3><dl><dt>调度</dt><dd>受控提交、查询、登记；重型任务互斥</dd><dt>媒体</dt><dd>FFmpeg／FFprobe／libass／Pillow</dd><dt>恢复</dt><dd>检查租约、输入摘要与原任务，不盲目重复提交</dd><dt>密钥</dt><dd>服务端保管，前端与 Agent 只持引用</dd></dl></article></div>
+<div class="note"><strong>费用控制贯穿所有 Provider</strong><p>OmniHuman 按用户确认的 1 元/生成秒估价；提交前展示路线、模型、时长、分辨率与预算。生成成功但效果不满意，重做仍可能收费；两路线均不自动切换，超时未知先核对原任务。</p></div>
+</section><section class="view" id="view-quality" role="tabpanel" aria-labelledby="tab-quality" tabindex="0" hidden>
+<div class="section-head"><p class="eyebrow">05 / 质量评估</p><h1>汇报只看重点，<br><em>标准仍然可追溯。</em></h1><p>11 项覆盖内容、声音、人物、成片、交付率与成本。公式和标准来自同一份验收文档；所有值均为待执行基线，当前没有完整系统评测成绩。</p></div>
+<div class="quality-legend"><span><b>★</b> 首版汇报重点</span><span><b>硬</b> 失败不得放行</span><span><b>建议</b> 测试前冻结</span><span><b>观察</b> 尚未设通过上限</span></div>
+<div class="table-scroll" tabindex="0" aria-label="可横向滚动的表格"><table id="core-metrics">
+<thead>
+<tr>
+<th scope="col">环节</th>
+<th scope="col">核心指标</th>
+<th scope="col">指标含义</th>
+<th scope="col">计算方法（简版）</th>
+<th scope="col">标准基线（简版）</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>选题策划</td>
+<td><strong>★ E02 内容新意</strong></td>
+<td>有新问题、论证或案例，三稿角度不同</td>
+<td>3 人逐稿盲评 1–5 分，取中位数，并写明新增点</td>
+<td>建议 ≥4/5 且至少 1 个实质增量；3 个合格候选须各自过审</td>
+</tr>
+<tr>
+<td>内容事实</td>
+<td><strong>★ E04 事实支持率</strong></td>
+<td>关键事实有适用、有效的用户提供依据</td>
+<td>完整获支持的关键断言数 ÷ 全部关键断言数</td>
+<td>硬：100%；关键事实无证据、未解决矛盾为 0；无事实分母不填满分</td>
+</tr>
+<tr>
+<td>口播稿</td>
+<td><strong>★ E06 易懂、易读与信息价值</strong></td>
+<td>听得懂、有收获、读得顺，文字准确</td>
+<td>3 人评理解/收益/口语，各取中位数；逐稿校对错误</td>
+<td>建议各维 ≥4/5；硬：交付稿错别字/术语误写为 0</td>
+</tr>
+<tr>
+<td>TTS</td>
+<td><strong>★ E07 音色一致性</strong></td>
+<td>与本作品选定声音版本一致</td>
+<td>正确声音引用数 ÷ 全部音频数；2 人对照基准盲听</td>
+<td>硬：引用 100% 正确，确认换声/漂移为 0</td>
+</tr>
+<tr>
+<td>TTS</td>
+<td><strong>★ E08 发音完整性</strong></td>
+<td>没有错读、漏读、重读和标记读出</td>
+<td>CER＝(替换＋删除＋插入字符数) ÷ 批准朗读文本字符数；人工核听</td>
+<td>建议原始 CER ≤2%；硬：人名/术语/数字 100% 准确，漏句/重句/额外句/标记读出为 0</td>
+</tr>
+<tr>
+<td>人物资产</td>
+<td><strong>★ E10 身份一致性</strong></td>
+<td>衣景和动作变化后仍是同一人</td>
+<td>对照所选人物；漂移样本数 ÷ 已审样本数</td>
+<td>硬：确认身份漂移为 0；无法判断待复核</td>
+</tr>
+<tr>
+<td>数字人口播</td>
+<td><strong>★ E14 嘴型同步误差</strong></td>
+<td>嘴型跟得上最终音轨</td>
+<td>逐片标 ≥30 个有效事件，计算音画事件绝对时间差的中位数/P95</td>
+<td>建议中位数 ≤120ms、P95 ≤200ms；硬：持续明显错位不得交付</td>
+</tr>
+<tr>
+<td>成片画面</td>
+<td><strong>★ E15 严重缺陷数</strong></td>
+<td>无异常黑帧、冻结、贴片嘴或融合异常</td>
+<td>完整解码＋全片复核，计未解决严重缺陷片段数</td>
+<td>硬：0 段；有意黑场/停顿须有时间线依据</td>
+</tr>
+<tr>
+<td>字幕与封面</td>
+<td><strong>★ E16 正文覆盖与同步</strong></td>
+<td>字幕准确同步，封面/重点词可读</td>
+<td>正确正文字符数 ÷ 应呈现字符数；字幕边界绝对偏移 P95；手机检查</td>
+<td>硬：覆盖 100%，漏错重句/越界/关键遮挡为 0、封面同人同题；建议 P95 ≤200ms</td>
+</tr>
+<tr>
+<td>生产稳定性</td>
+<td><strong>★ E25 合格交付率</strong></td>
+<td>已启动任务最终产出合格包的比例</td>
+<td>合格包任务数 ÷ 预登记已启动任务数；重试不增分母</td>
+<td>建议 ≥18/20；失败、阻塞、启动后取消均计分母；不足 20 次仅作观察</td>
+</tr>
+<tr>
+<td>成本</td>
+<td><strong>★ E27 合格包成本</strong></td>
+<td>包括失败返工后每条合格视频的花费</td>
+<td>批次全部实际支出 ÷ 合格包数，含视频 API、GPU 空闲和返工</td>
+<td>观察：单条上限待定；硬：不超授权预算；无合格包或缺账不报 0 元</td>
+</tr>
+</tbody>
+</table></div>
+<div class="note"><strong>不做加权总分，不用平均分掩盖硬问题</strong><p>本轮身体动作是重点：E12 检查身体、肩臂、手势与构图，云原片另核输入音轨保持。未列入速览的格式、响度、权限和预算仍须执行。文案至少 3 人盲评，媒体至少 2 人逐项核验；无样本、缺测不能算通过。</p></div>
+<div class="review-steps"><div><b>01</b><strong>固定输入</strong><p>同稿、同人物、同音频；对照试验一次只改一项。</p></div><div><b>02</b><strong>分阶段测量</strong><p>工具检测＋人工盲评，记录版本与原始分子分母。</p></div><div><b>03</b><strong>失败定位返工</strong><p>保留原片和费用，只重做受影响的环节。</p></div><div><b>04</b><strong>带证据签收</strong><p>区分 Mock、真实 Provider、生产与后续发布。</p></div></div>
+<details class="wide-details" id="all-metrics"><summary>完整技术验收：31 项（28 项生产与运行＋3 项后续扩展）</summary><p>以下 ★ 是完整表的技术核心标记。E13、Agent/MCP/记忆指标用于工程验收，F01～F03 在后续阶段执行。</p><div class="table-scroll" tabindex="0" aria-label="可横向滚动的表格"><table id="full-metrics">
+<thead>
+<tr>
+<th scope="col">环节</th>
+<th scope="col">指标（★核心）</th>
+<th scope="col">指标含义</th>
+<th scope="col">计算方法</th>
+<th scope="col">标准基线</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>任务预检与基础配置</td>
+<td>E01 契约、配置与版本</td>
+<td>V1 服务配置、有效选择及必需输入是否可用；两路线均须最终音频确认和适用预算</td>
+<td>全部已启动执行记录（AgentWorkItem 与 worker StageExecution 按执行种类分报、不重复计数）：结构校验首次合法结果数/已启动数；按AC-UI正反例核缺配置、认证/额度/型号/能力/网络错误、旧选择、未确认全文音频及预算，错误正确处置数/全部注入例；核日志与脱敏</td>
+<td>建议首次合法率≥90%；硬：错误正确处置100%，非法/陈旧输入、样音/未确认音频进入口型、密钥泄露、静默换收费模型=0；失败阻断该步骤</td>
+</tr>
+<tr>
+<td>选题策划</td>
+<td><strong>★ E02 三稿新意</strong></td>
+<td>相对历史有实质增量，且同一主题三个候选并非同义改写</td>
+<td>至少10主题×3稿；3人对照冻结历史逐稿盲评1–5分并写新增问题/论证/案例；三稿两两核验不同角度</td>
+<td>建议每稿中位数≥4/5且至少1个可核对增量；硬：呈现的3个“合格”候选必须逐稿过审；不足3稿明示缺额，有限补写，不凑数</td>
+</tr>
+<tr>
+<td>选题策划</td>
+<td><strong>★ E03 开头吸引力</strong></td>
+<td>开头约3秒的问题或收益具体，且正文兑现</td>
+<td>同批30稿，3人只看开头独立打1–5分，逐稿取中位数；再阅读全文逐项核对开头/标题承诺</td>
+<td>建议每稿≥4/5；硬：虚假收益/标题承诺=0；不通过改写开头并重新核对正文</td>
+</tr>
+<tr>
+<td>内容事实</td>
+<td><strong>★ E04 事实支持率</strong></td>
+<td>关键断言获得适用、有效、完整的用户资料支持；生成不要求资料必填</td>
+<td>审核者逐稿列出全部关键可验证断言并核原文；获完整支持断言数/全部关键断言数，部分支持不算完整；保留用户资料版本、摘录和判定；模型自审不计获支持</td>
+<td>硬：100%，未解决矛盾或无证据关键事实=0；缺证转review、补充用户资料/删改后重审；无事实分母不填满分</td>
+</tr>
+<tr>
+<td>内容去重</td>
+<td>E05 去重准确性</td>
+<td>识别文本、主题和观点重复，也保留同题新角度</td>
+<td>每层≥50对人工金标（正负各25）；三层分别算Precision=TP/(TP+FP)、Recall=TP/(TP+FN)、Accuracy=(TP+TN)/总数；记录混淆样本</td>
+<td>建议各层三项均≥90%；硬：逐字复制漏放=0，内部历史查重不可用须阻断；未达标调策略后用新保留集复验</td>
+</tr>
+<tr>
+<td>口播稿</td>
+<td><strong>★ E06 易懂、易读与信息价值</strong></td>
+<td>听一次能复述主旨，有具体收获，朗读不拗口，文字准确</td>
+<td>同批30稿；3人先听后复述主旨/收获，再朗读打理解/收益/口语分，各取中位数；逐稿人工校对错别字、术语误写、歧义及拗口句，记录位置和数量</td>
+<td>建议各维≥4/5，不平均抵消差项；硬：交付稿未解决错别字/术语误写=0；不达标定位句子改写，事实/去重重新审核</td>
+</tr>
+<tr>
+<td>TTS</td>
+<td><strong>★ E07 音色一致性</strong></td>
+<td>实际声音属于本作品确认的 VoiceAsset；音色3为默认</td>
+<td>至少10段＋3全文，校验provider/model/region/voice_id/参数摘要；正确引用数/全部音频数；2人对照所选基准逐段盲听，试听与全文分报</td>
+<td>硬：引用一致率100%，确认换声/漂移=0；声纹阈值待标定，不用字符串相同替代听感；失败暂停或重合成，不自动换声</td>
+</tr>
+<tr>
+<td>TTS</td>
+<td><strong>★ E08 发音完整性</strong></td>
+<td>无错读、漏读、重读、控制标记读出</td>
+<td>同批音频由人工校订转写并核术语/数字；CER=(替换+删除+插入字符数)/批准朗读文本字符数，预先冻结数字/缩写读法；ASR只辅助定位</td>
+<td>建议原始CER≤2%；硬：交付人名/术语/数字100%准确，漏句/重句/额外句/标记读出=0；定位片段返工，不能改字幕掩盖错读</td>
+</tr>
+<tr>
+<td>TTS</td>
+<td><strong>★ E09 自然度与情绪匹配</strong></td>
+<td>情绪、重音、停顿和语速符合逐段 PerformancePlan</td>
+<td>至少10段覆盖拟开放表达；2人各对清晰/自然/情绪匹配打1–5分并标timecode；意图、实际参数、听感逐段对照，未支持/近似项单列</td>
+<td>建议每人每项≥4/5；硬：必需情绪不支持不能静默忽略；近似须有已批准能力依据；不达标修改表达后试听重审</td>
+</tr>
+<tr>
+<td>人物资产</td>
+<td><strong>★ E10 身份一致性</strong></td>
+<td>换衣、换景、动作迁移和后期后仍是所选人物</td>
+<td>每身份6变体及各真实口播：2人对照冻结参考，全片观看并取首中末/转头/剪点帧；漂移样本数/已审样本数，另报无法判断数</td>
+<td>硬：确认身份漂移=0，无法判断待复核；人脸阈值待许可确认与独立标定；失败变体/成片隔离，不能默认所有角色都是B</td>
+</tr>
+<tr>
+<td>人物资产</td>
+<td>E11 关键词与衣景符合率</td>
+<td>首次生成人物遵循输入，衣景编辑保留身份与来源</td>
+<td>≥3组关键词/自由描述＋每身份6变体；审核者逐项核输入→编译提示→候选/参考图→批准版本；符合全部必需要求的输出数/全部测试输出数，初始候选与变体分报</td>
+<td>建议首次符合率≥90%；硬：允许投产的资产100%满足身份/必需衣景/来源，冲突身份词提交前说明或拒绝；缺项重做或保留为未批准</td>
+</tr>
+<tr>
+<td>动作表情</td>
+<td><strong>★ E12 动作表情自然度</strong></td>
+<td>表情、肩臂/身体/手势匹配已选表演要求并自然接续，构图容纳所需动作</td>
+<td>各路线≥3真实片；2人对表情/头动、肩臂身体与所需手势自然度、指令遵循、颈肩/接缝各打1–5分；核遮脸/出框/肢体伪影并标timecode；M2核参考迁移，OmniHuman核受支持描述</td>
+<td>建议每人每项≥4/5；硬：严重肢体伪影、持续遮脸/出框=0；要求手势则输入构图须容纳手臂/手；无手势要求不强迫动作，有意停顿不判废；不支持动作明示，失败返工</td>
+</tr>
+<tr>
+<td>M2口播</td>
+<td>E13 两阶段可追溯率</td>
+<td>LivePortrait动作迁移和MuseTalk配嘴均有可核对记录；云路线记录其独立来源</td>
+<td>全部M2任务核两阶段产物/输入输出哈希/作业/费用；两阶段齐全成功数÷声称成功M2数，已尝试阶段记录齐全数÷全部已尝试阶段数</td>
+<td>硬：两种完整率100%；底片未审、音频未确认或UNKNOWN不放行；OmniHuman不伪造M2底片，其人物图＋确认TTS＋描述与真实任务按AC-TH-01/05/06核验</td>
+</tr>
+<tr>
+<td>口播</td>
+<td><strong>★ E14 嘴型同步误差</strong></td>
+<td>口型事件与对应音频事件的时间差</td>
+<td>每片正常速全看；2人逐帧标至少30个有效闭唇/圆唇等对应事件，覆盖首中末/切段；Δ=abs(视频事件−对应音频事件)，逐片报中位数/P95、帧率和标注分歧</td>
+<td>建议中位数≤120ms、P95≤200ms；硬：持续明显错位不得交付；事件不足补样本，无法标注不填0；失败回查音轨版本/偏移或重生成</td>
+</tr>
+<tr>
+<td>成片画面</td>
+<td>E15 严重缺陷数</td>
+<td>无异常黑帧、冻结、贴片嘴、融合异常、身份被增强改变</td>
+<td>所有最终成片用FFmpeg完整解码及黑场/冻结告警，2人全片复核并核后期前后画面；计未解决严重缺陷片段，记录起止时间与类别</td>
+<td>硬：0段；刻意黑场/停顿需时间轴说明，不能删掉检测告警就过关；失败回退有问题的增强/剪辑或重生成并复验</td>
+</tr>
+<tr>
+<td>字幕与封面</td>
+<td><strong>★ E16 正文覆盖、同步与可读性</strong></td>
+<td>字幕忠实正文并对齐最终音轨，封面/重点词可读且同题同人</td>
+<td>每片全量比对批准正文/朗读映射：正确正文字符数/应呈现字符数；2人标≥30个首尾边界（不足则全测并报n）求绝对偏移P95，覆盖剪点；手机尺寸检查全字幕与封面、安全区/遮嘴/重点词</td>
+<td>硬：覆盖100%，漏错重句/越界/遮挡关键内容=0，封面同人同题；建议边界P95≤200ms；改剪辑重算时间轴，只改样式仅重渲染复审</td>
+</tr>
+<tr>
+<td>成片规格</td>
+<td>E17 格式符合率</td>
+<td>最终交付文件满足统一竖屏规格</td>
+<td>每个最终文件用FFprobe读取分辨率/流/逐帧时间戳、FFmpeg完整解码；全部项目合格文件数/全部所检文件数</td>
+<td>硬：100%；1080×1920、9:16、MP4/H.264/AAC、30fps CFR；不只看平均fps，不合格重封装/编码后复测</td>
+</tr>
+<tr>
+<td>成片音频</td>
+<td>E18 响度与音画时长差</td>
+<td>音量稳定不过载，最终音画及有声正文完整</td>
+<td>每片对最终AAC解码，用FFmpeg ebur128/等价工具测LUFS与true peak；按批准的剪辑时间线核音画时长差D=abs(视频−对应音轨时长)，另听首尾和剪点</td>
+<td>硬：−14 LUFS±1、true peak≤−1.5dBTP、无截字；建议D≤250ms；失败重混音/校正时间线后再测最终编码文件</td>
+</tr>
+<tr>
+<td>质量审核</td>
+<td><strong>★ E19 漏放、误拒与自动覆盖</strong></td>
+<td>审核准确且不靠全部转人工回避判断</td>
+<td>≥20合格＋20缺陷金标；漏放=放过缺陷/缺陷数，误拒=错拒合格/合格数；自动覆盖=预登记可自动判定集合内直接通过及拒绝数/该集合样本数，按两类分报；集合外自动放行和全样本待复核率另报</td>
+<td>硬：严重缺陷漏放=0；建议误拒≤10%、各类覆盖≥80%；不能事后更改集合或用集合外判定刷高覆盖；漏放暂停对应自动放行规则</td>
+</tr>
+<tr>
+<td>Agent协作</td>
+<td>E20 角色任务合格率</td>
+<td>总控加四类专职角色在权限、前置依赖和修正次数内交付</td>
+<td>仅审核全部已启动 AgentWorkItem：合格数/已启动 AgentWorkItem 数，按总控与四类专职角色分报首次与返工后；代码后期 StageExecution 不进入角色分母，其执行/质量归 E15～E18、E22、E24；两路线均核选择/预算/最终音频摘要与确认先于口型提交；核并行汇合、单GPU互斥和上游改动后的失效范围</td>
+<td>建议每角色最终≥90%；硬：缺依赖提前执行、超预算/超限续跑、旧版本覆盖=0；OmniHuman 1.5核直接生成实际回执，不能以M2记录替代；失败有限重派且只重跑受影响后代</td>
+</tr>
+<tr>
+<td>MCP工具</td>
+<td>E21 越权拦截率</td>
+<td>拒绝越权读取、提示注入和未授权写入</td>
+<td>按工具权限清单每类正反请求；被拒的越权注入数/全部越权注入数；执行者核工具审计及实际文件/网络副作用，审核者复核</td>
+<td>硬：100%，泄露与未授权副作用=0；合法请求须另证可用，不能全部拒绝假达标；失败停用相应工具并复验</td>
+</tr>
+<tr>
+<td>MCP及代码Worker恢复</td>
+<td>E22 重复副作用与故障处置</td>
+<td>超时、并发、刷新和重启不产生重复扣费/提交</td>
+<td>对Agent工具调用及代码后期任务分组离线注入已受理超时、重复触发、UNKNOWN、下载失败/重启；额外受理及预算预留次数；正确核对/安全阻断数/全部注入故障数；已知可恢复用例单列</td>
+<td>硬：额外副作用0、正确处置100%；可恢复必须恢复，UNKNOWN不得盲重提；故障未闭合保留阻塞和原外部ID；V1不以Mock证明真实投稿</td>
+</tr>
+<tr>
+<td>记忆层</td>
+<td>E23 召回与有效性</td>
+<td>召回相关记忆且排除越界、过期、冲突和未审记录</td>
+<td>≥20有答案查询，每查询1–5个金标；Recall@5=前5条有效命中/该查询金标数，再宏平均；另≥10无答案查询统计错误采用及冲突审核</td>
+<td>建议Recall@5≥90%；硬：无效记忆进入决策、未审写入、冲突静默覆盖=0；失败停用受影响索引/记忆并复验，不能把空检索当合格</td>
+</tr>
+<tr>
+<td>下载就绪包</td>
+<td>E24 交付完整与真实状态</td>
+<td>用户可预览下载完整合格包，AI标识和状态有证据</td>
+<td>全部导出请求：文件/哈希/版本/来源/质量/AI声明合格包数/全部实际导出包数；程序重算manifest摘要，审核者检查最终文件标识、预览、下载及缺项负例</td>
+<td>硬：已导出包100%完整，缺项/未审包导出和虚报发布=0；V1只就绪/下载；失败阻断导出并修复，官方回执留给F01</td>
+</tr>
+<tr>
+<td>生产稳定性</td>
+<td><strong>★ E25 合格交付率</strong></td>
+<td>真实任务能否在预算内得到合格包</td>
+<td>预登记20次真实任务；合格包任务数/已启动任务数，同任务重试不增分母；执行者汇总任务/审核/账本，按路线分报，取消原因另列</td>
+<td>建议试运营目标≥18/20；失败/阻塞/启动后取消均留分母；不足20仅阶段观察，单次硬门禁仍逐包执行；不达标先定位瓶颈</td>
+</tr>
+<tr>
+<td>生产产能</td>
+<td><strong>★ E26 日产能</strong></td>
+<td>冻结的每日生产窗口中完成5条约60秒视频</td>
+<td>预登记5条独立任务和允许时长区间，按真实单GPU队列运行；窗口内完成合格包数/计划5条；记录排队、用户等待和重试，成本计E27</td>
+<td>建议目标5/5；不足或超窗未通过该批，单日不能证明长期；短片不折算60秒产能，未审包不计数</td>
+</tr>
+<tr>
+<td>成本</td>
+<td><strong>★ E27 合格包成本</strong></td>
+<td>含失败、返工与空闲后每条合格视频的真实成本</td>
+<td>批次文本、图像、TTS、OmniHuman 1.5/云视频API、算力及存储传输实付总支出/合格包数，含失败返工；分路线列估价/预留/实付，GPU不重复计费，未知账单列待结算</td>
+<td>观察：元/合格包上限待定；硬：总支出≤批次授权预算；无合格包不报0元、缺账不报完整成本；超限停止新增付费并对账</td>
+</tr>
+<tr>
+<td>生产效率</td>
+<td>E28 端到端耗时</td>
+<td>任务受理至用户可预览下载合格包的实际等待</td>
+<td>以单调时间/服务事件测T=package.ready时间−受理时间；完成任务报中位数/P95，拆排队/生成/审核/用户等待；失败未完成数与已等待时间另报</td>
+<td>观察：无每条分钟数承诺；含用户等待主口径不剔除，净处理时长另报；按E26窗口判产能，不用短片外推；异常定位阶段</td>
+</tr>
+<tr>
+<td>后续·发布</td>
+<td>F01 官方发布与排期真实性</td>
+<td>逐平台确认受理、过审/公开及排期，不以本地定时或人工回填充当官方成功</td>
+<td>后续获准范围内，每平台准备成功、拒绝、超时未知、重复、取消/错过排期用例；正确状态及证据用例数/已执行用例数，核账号/作品ID/回执；官方公开数/已启动发布任务另报</td>
+<td>后续计划硬项：状态/来源正确100%，重复投稿/虚报成功=0；成功率先观察；未有权限或授权记BLOCKED/NOT_RUN，不阻塞V1下载闭环</td>
+</tr>
+<tr>
+<td>后续·指标监控</td>
+<td>F02 运营数据准确与可追溯</td>
+<td>展示有来源、有时间窗的真实数据，未知与真实零值可区分</td>
+<td>后续每平台对同一账号/作品/统计窗口逐字段核官方或获准导入原记录；值、单位、窗口、来源、采集时间全一致字段数/抽检字段数；另测空值、回撤、重复采集</td>
+<td>后续计划硬项：记录对应率100%，伪数/未知填0=0；数据本身变化不算错误；未开放字段标不可获取，禁用取数；播放/完播不设“必爆”目标</td>
+</tr>
+<tr>
+<td>后续·领域模型选择</td>
+<td>F03 完整配置与能力适配</td>
+<td>可编辑模型页只开放实际适配能力，切换配置有版本且保密</td>
+<td>后续对每个已支持文本/图像/音频/视频配置测保存、脱敏、能力校验、实际调用及失败回滚；正确用例数/已执行用例数，核新旧配置快照和产物引用</td>
+<td>后续计划硬项：正确率100%，泄密/无声切模/未验能力放行=0；不支持的接口明确拒绝；V1基础配置和报错已在E01，不等待本项</td>
+</tr>
+</tbody>
+</table></div></details>
+<p class="source-link"><a class="" href="../%E9%98%85%E8%AF%BB%E5%99%A8/%E8%AF%84%E4%BC%B0%E6%8C%87%E6%A0%87%E6%80%BB%E8%A1%A8.html">打开带搜索和筛选的独立指标页</a> · <a class="" href="../0001-douyin-ai-studio/06-%E9%AA%8C%E6%94%B6%E6%A0%87%E5%87%86%E4%B8%8E%E6%B5%8B%E8%AF%95%E6%96%B9%E6%A1%88.html">查看 69 个验收用例</a></p>
+</section><section class="view" id="view-progress" role="tabpanel" aria-labelledby="tab-progress" tabindex="0" hidden>
+<div class="section-head"><p class="eyebrow">06 / 进度与验收</p><h1>已经验证到哪里，<br><em>下一步就从哪里开始。</em></h1><p>已有工作台骨架、基础资产和独立短片实验。本轮同步四角色、7 个 Skill、4 组 MCP 与代码后期入口；离线回归通过不代表真实媒体链路已实现。</p></div>
+<div class="evidence-grid"><article><span class="badge accent">资产证据</span><h3>人物 B＋音色 3</h3><p>固定人物已选，MiniMax 预设音色已试听。原图 941×1672；其他人物与音色可经独立审批成为新预设。</p><a class="" href="../0001-douyin-ai-studio/09-%E6%A8%A1%E5%9E%8B%E9%80%89%E5%9E%8B%E5%86%B3%E7%AD%96%E4%B8%8E%E6%8E%A5%E5%85%A5%E6%96%B9%E6%A1%88.html">查看模型与资产记录</a></article><article><span class="badge accent">M2 短片证据</span><h3>15.20 秒真人口播</h3><p>LivePortrait 与 MuseTalk 两阶段共 235.177 秒；眼睑、轻微表情及头姿改善。正式动作母版与长片待验。</p><a class="" href="../../experiments/%E8%A1%A8%E6%83%85%E5%8A%A8%E4%BD%9C%E6%94%B9%E5%96%84/EXP-001/%E4%BA%BA%E7%89%A9B%E8%A1%A8%E6%83%85%E5%8A%A8%E4%BD%9C%E5%AF%B9%E6%AF%94.html">查看三条样片与处理方式</a></article><article><span class="badge">历史云端证据</span><h3>OmniHuman 1.5</h3><p>已有 9.48 秒历史原片及输入音轨保持证据。当前人物 B、身体动作、口型和约 60 秒衔接尚未验收；纳入本轮 MVP。</p><a class="" href="../selection/01-%E6%95%B0%E5%AD%97%E4%BA%BA%E5%8F%A3%E6%92%AD/05-OmniHuman%E5%BC%80%E9%80%9A%E5%90%8E%E5%AE%9E%E6%B5%8B%E7%BB%93%E6%9E%9C.html">查看历史实测结果</a></article></div>
+<div class="cost-evidence"><div><span>历史 M2 作业估算</span><strong>¥0.1032</strong><small>按 1.58 元 / GPU 小时折算</small></div><p>仅对应上述 <b>15.20 秒</b>实验的两阶段 GPU 作业，不是实际账单，也不是一分钟视频的完整生产成本。安装、空闲、素材、其他 API、存储及返工须在生产批次重新统计。</p></div>
+<div class="section-head"><h2>按可验证的切片推进</h2><p>以下按完整目标列出后续验收；已有代码、离线验证和媒体实验分别记录，不混报生产完成。</p></div>
+<ol class="roadmap"><li><span>T00—T02</span><div><h3>契约与离线编排</h3><p>已有离线骨架；本轮四角色、工具边界及后期阻断回归通过，真实模型兼容待验。</p></div><em>部分验证</em></li><li><span>T03—T06</span><div><h3>人物、声音、口播与三稿</h3><p>登记已选资产；实现参考编辑、试听确认、逐稿审核；OmniHuman 身体表演与音轨保持必须在 MVP 验收，M2 保留本地选项。</p></div><em>待实施</em></li><li><span>T07—T11</span><div><h3>字幕后期与七入口闭环</h3><p>确定性后期 Worker、quality 终审、预览下载、真实进度及局部返工；完成空环境部署和备份恢复。</p></div><em>待实施</em></li><li><span>T12</span><div><h3>真实 RAG 与生产验收</h3><p>按获准预算测试约 60 秒成片、每天 5 条和 20 次真实任务，记录质量、产能与完整成本。</p></div><em>待实施</em></li><li><span>T13</span><div><h3>发布、运营与完整模型设置</h3><p>取得各平台适用权限后逐一接入；提醒、回填、指标读取和配置页分别验收。</p></div><em>后续</em></li></ol>
+<div class="milestones"><div><b>G0</b><strong>文档基线</strong><p>方案、契约与验收对齐</p></div><div><b>G1</b><strong>真实核心能力</strong><p>身份、声音及口播单项验证</p></div><div><b>G2</b><strong>完整生产闭环</strong><p>合格成片可预览、下载</p></div><div><b>G3</b><strong>官方发布</strong><p>权限、回执和实际效果独立验收</p></div></div>
+<details class="wide-details"><summary>汇报依据与文档入口</summary><ul><li><a class="" href="../0001-douyin-ai-studio/00-%E6%96%87%E6%A1%A3%E5%AF%BC%E8%88%AA.html">开发文档导航</a></li><li><a class="" href="../0001-douyin-ai-studio/03-%E6%80%BB%E4%BD%93%E6%8A%80%E6%9C%AF%E6%96%B9%E6%A1%88.html">总体技术方案</a></li><li><a class="" href="../0001-douyin-ai-studio/05-%E5%BC%80%E5%8F%91%E5%AE%9E%E6%96%BD%E8%AE%A1%E5%88%92.html">T00～T13 实施计划</a></li><li><a class="" href="../0001-douyin-ai-studio/08-%E7%AB%AF%E5%88%B0%E7%AB%AF%E6%8A%80%E6%9C%AF%E6%B5%81%E7%A8%8B%E4%B8%8E%E6%A8%A1%E5%9E%8B%E9%80%89%E5%9E%8B%E5%9C%B0%E5%9B%BE.html">数据流与返工依赖</a></li><li><a class="" href="../0001-douyin-ai-studio/09-%E6%A8%A1%E5%9E%8B%E9%80%89%E5%9E%8B%E5%86%B3%E7%AD%96%E4%B8%8E%E6%8E%A5%E5%85%A5%E6%96%B9%E6%A1%88.html">模型、渠道与实验边界</a></li><li><a class="" href="../0001-douyin-ai-studio/10-Agent%E7%BC%96%E6%8E%92%E9%80%89%E5%9E%8B%E4%B8%8E%E6%95%B4%E4%BD%93%E6%9E%B6%E6%9E%84.html">Agent、Skill、MCP 和记忆规划</a></li></ul><p>本页所有图形、表格和交互均内嵌，可离线展示；上述文档和样片链接需保留项目目录。</p></details>
+</section><footer class="footer"><span>2026-09-23 · v2.4 · 按当前权威文档整理，模型已选与实测通过分别记录。</span><span>离线 HTML · 无外部脚本与字体</span></footer></main><div class="toast" id="toast" role="status" hidden></div><script>
+(() => {
+ 'use strict';
+ const nav=Array.from(document.querySelectorAll('[data-view]'));
+ const names={system:'总览与分层架构',flow:'生产与数据流',agents:'Agent 协作框架',stack:'技术与模型',quality:'质量评估',progress:'进度与验收'};
+ let active='system';
+ function activate(id,hash=true,focus=false){
+  if(!Object.hasOwn(names,id))id='system';active=id;
+  nav.forEach(b=>{const on=b.dataset.view===id;b.setAttribute('aria-selected',String(on));b.tabIndex=on?0:-1;});
+  document.querySelectorAll('.view').forEach(p=>p.hidden=p.id!=='view-'+id);
+  document.querySelector('#breadcrumb').textContent=names[id];
+  document.title=names[id]+' · AI 数字人工作台项目汇报';
+  if(hash&&location.hash!=='#'+id)location.hash=id;
+  if(focus)document.querySelector('#tab-'+id).focus();
+  window.scrollTo({top:0,behavior:'instant'});
+ }
+ nav.forEach((b,i)=>{b.addEventListener('click',()=>activate(b.dataset.view));b.addEventListener('keydown',e=>{
+  let j=i;if(['ArrowDown','ArrowRight'].includes(e.key))j=(i+1)%nav.length;else if(['ArrowUp','ArrowLeft'].includes(e.key))j=(i+nav.length-1)%nav.length;else if(e.key==='Home')j=0;else if(e.key==='End')j=nav.length-1;else return;
+  e.preventDefault();activate(nav[j].dataset.view,true,true);
+ });});
+ window.addEventListener('hashchange',()=>activate(location.hash.slice(1),false));activate(location.hash.slice(1),false);
+ function presentation(enabled){document.body.classList.toggle('presenting',enabled);const b=document.querySelector('#present');b.setAttribute('aria-pressed',String(enabled));b.textContent=enabled?'退出汇报模式':'汇报模式';}
+ document.querySelector('#present').addEventListener('click',()=>presentation(!document.body.classList.contains('presenting')));
+ document.addEventListener('keydown',e=>{if(e.key==='Escape')presentation(false);});
+ document.querySelector('#previous').addEventListener('click',()=>{const ids=Object.keys(names),i=ids.indexOf(active);activate(ids[(i+ids.length-1)%ids.length]);});
+ document.querySelector('#next').addEventListener('click',()=>{const ids=Object.keys(names),i=ids.indexOf(active);activate(ids[(i+1)%ids.length]);});
+ document.querySelectorAll('[data-node-id]').forEach(node=>{
+  function show(){const key=node.dataset.chart;document.querySelectorAll('[data-chart="'+key+'"]').forEach(n=>n.setAttribute('aria-pressed',String(n===node)));const target=document.querySelector('#detail-'+key);target.replaceChildren();
+   const title=document.createElement('strong');title.textContent=node.dataset.nodeLabel;target.append(title);
+   for(const text of [node.dataset.nodeSublabel,node.dataset.nodeTag,node.dataset.nodeContext])if(text){const p=document.createElement('p');p.textContent=text;target.append(p);}
+   target.scrollIntoView({block:'nearest',behavior:window.matchMedia('(prefers-reduced-motion: reduce)').matches?'instant':'smooth'});
+  }node.addEventListener('click',show);node.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();show();}});
+ });
+ document.querySelectorAll('[data-zoom]').forEach(b=>b.addEventListener('click',()=>{const enabled=b.getAttribute('aria-pressed')!=='true';b.setAttribute('aria-pressed',String(enabled));b.textContent=enabled?'适应宽度':'放大';document.querySelector('#scroll-'+b.dataset.zoom).classList.toggle('enlarged',enabled);}));
+ let toastTimer;
+ function toast(text){const el=document.querySelector('#toast');el.textContent=text;el.hidden=false;clearTimeout(toastTimer);toastTimer=setTimeout(()=>el.hidden=true,2800);}
+ document.querySelectorAll('[data-export]').forEach(b=>b.addEventListener('click',()=>{const svg=document.querySelector('#svg-'+b.dataset.export).cloneNode(true);svg.removeAttribute('class');const box=svg.viewBox.baseVal;svg.setAttribute('width',box.width);svg.setAttribute('height',box.height);svg.querySelectorAll('[tabindex]').forEach(e=>{e.removeAttribute('tabindex');e.removeAttribute('role');e.removeAttribute('aria-pressed');});const blob=new Blob(['<?xml version="1.0" encoding="UTF-8"?>\n'+new XMLSerializer().serializeToString(svg)],{type:'image/svg+xml;charset=utf-8'});const url=URL.createObjectURL(blob);const a=document.createElement('a');a.href=url;a.download=({system:'整体分层架构',agents:'Agent协作框架',flow:'作品生产数据流'}[b.dataset.export])+'.svg';document.body.append(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),3000);toast('已请求下载 SVG');}));
+ const opened=[];
+ function restorePrint(){document.body.classList.remove('print-all');opened.splice(0).forEach(d=>d.open=false);}
+ document.querySelector('#print-current').addEventListener('click',()=>{restorePrint();window.print();});
+ document.querySelector('#print-all').addEventListener('click',()=>{restorePrint();document.body.classList.add('print-all');document.querySelectorAll('.skill:not([open])').forEach(d=>{opened.push(d);d.open=true;});window.print();});
+ window.addEventListener('afterprint',restorePrint);
+ let filter='all';const rows=Array.from(document.querySelectorAll('#model-table tbody tr'));
+ function filterModels(){const q=document.querySelector('#model-search').value.trim().toLowerCase();let n=0;rows.forEach(r=>{r.hidden=!(filter==='all'||r.dataset.status===filter)||!r.textContent.toLowerCase().includes(q);if(!r.hidden)n++;});document.querySelector('#model-count').textContent='显示 '+n+' / '+rows.length+' 类能力';document.querySelector('#model-empty').hidden=n!==0;}
+ document.querySelector('#model-search').addEventListener('input',filterModels);
+ document.querySelectorAll('[data-filter]').forEach(b=>b.addEventListener('click',()=>{filter=b.dataset.filter;document.querySelectorAll('[data-filter]').forEach(x=>x.setAttribute('aria-pressed',String(x===b)));filterModels();}));filterModels();
+})();
+</script></body></html>

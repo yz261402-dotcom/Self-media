@@ -1,0 +1,68 @@
+{
+  "schema_version": 1,
+  "verified_on": "2026-09-22",
+  "repository": "https://github.com/OpenTalker/SadTalker",
+  "commit": "cd4c0465ae0b54a6f85af57f5c65fec9fe23e7f8",
+  "remote_root": "/root/autodl-tmp/avatar-motion/EXP-001",
+  "default_profile": {"size": 256, "preprocess": "crop", "enhancer": null},
+  "default_profile_total_bytes": 1183756176,
+  "sha256_status": "GitHub release API digest is null for every listed asset. No model file was downloaded during preparation. Compute and retain actual SHA-256 after download; this is not a match against an upstream signed digest.",
+  "source_apis": [
+    "https://api.github.com/repos/OpenTalker/SadTalker/releases/tags/v0.0.2-rc",
+    "https://api.github.com/repos/xinntao/facexlib/releases/tags/v0.1.0"
+  ],
+  "assets": [
+    {
+      "role": "renderer",
+      "size_profile": 256,
+      "path": "checkpoints/SadTalker_V0.0.2_256.safetensors",
+      "bytes": 725066984,
+      "sha256": null,
+      "upstream_digest": null,
+      "url": "https://github.com/OpenTalker/SadTalker/releases/download/v0.0.2-rc/SadTalker_V0.0.2_256.safetensors"
+    },
+    {
+      "role": "renderer",
+      "size_profile": 512,
+      "path": "checkpoints/SadTalker_V0.0.2_512.safetensors",
+      "bytes": 725066984,
+      "sha256": null,
+      "upstream_digest": null,
+      "url": "https://github.com/OpenTalker/SadTalker/releases/download/v0.0.2-rc/SadTalker_V0.0.2_512.safetensors"
+    },
+    {
+      "role": "mapping",
+      "preprocess_profiles": ["crop", "extcrop", "resize"],
+      "path": "checkpoints/mapping_00229-model.pth.tar",
+      "bytes": 155521183,
+      "sha256": null,
+      "upstream_digest": null,
+      "url": "https://github.com/OpenTalker/SadTalker/releases/download/v0.0.2-rc/mapping_00229-model.pth.tar"
+    },
+    {
+      "role": "mapping",
+      "preprocess_profiles": ["full", "extfull"],
+      "path": "checkpoints/mapping_00109-model.pth.tar",
+      "bytes": 155779231,
+      "sha256": null,
+      "upstream_digest": null,
+      "url": "https://github.com/OpenTalker/SadTalker/releases/download/v0.0.2-rc/mapping_00109-model.pth.tar"
+    },
+    {
+      "role": "required_alignment",
+      "path": "gfpgan/weights/alignment_WFLW_4HG.pth",
+      "bytes": 193670248,
+      "sha256": null,
+      "upstream_digest": null,
+      "url": "https://github.com/xinntao/facexlib/releases/download/v0.1.0/alignment_WFLW_4HG.pth"
+    },
+    {
+      "role": "required_detection",
+      "path": "gfpgan/weights/detection_Resnet50_Final.pth",
+      "bytes": 109497761,
+      "sha256": null,
+      "upstream_digest": null,
+      "url": "https://github.com/xinntao/facexlib/releases/download/v0.1.0/detection_Resnet50_Final.pth"
+    }
+  ]
+}

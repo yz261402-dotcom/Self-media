@@ -1,0 +1,22 @@
+{
+  "documents": {
+    "05-开发实施计划": "12e3271376b861b596dcee8bdb89c692e5f17b72d469c0c4f6af4640fbb065ac",
+    "10-Agent编排选型与整体架构": "656a53a41b269c6102f0f7643586be4e0cfd7ec3628c1c44d208077f30829959"
+  },
+  "skill_count": 8,
+  "mcp_capability_groups": 5,
+  "proposed_mcp_services": [
+    "studio-core",
+    "studio-media"
+  ],
+  "checked_local_references": 117,
+  "html_source_hashes_checked": 30,
+  "review_fixes": [
+    "媒体接入同步启用前置质检",
+    "区分提前规划和素材就绪后执行",
+    "业务Skill目录统一production/skills"
+  ],
+  "errors": [],
+  "status": "PASS",
+  "scope": "规划文档与HTML；没有创建业务Skill或MCP服务"
+}

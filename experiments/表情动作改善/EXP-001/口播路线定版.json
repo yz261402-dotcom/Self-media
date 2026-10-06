@@ -1,0 +1,100 @@
+{
+  "schema_version": 1,
+  "decision_id": "exp001_m2_selection_v1",
+  "recorded_at": "2026-09-22T02:07:36.000696+00:00",
+  "decision_source": "用户在本会话明确选择",
+  "user_statement": "那就选用M2吧",
+  "selection_status": "SELECTED_BY_USER",
+  "approval_scope": "talking_head_route_selection",
+  "route_id": "M2",
+  "route_name": "LivePortrait动作迁移＋MuseTalk 1.5嘴型同步",
+  "deployment": "existing_rented_cloud_gpu",
+  "identity_id": "av_base_b_v1",
+  "voice_asset_id": "voice_minimax_warm_bestie_v1",
+  "voice_id": "Chinese (Mandarin)_Warm_Bestie",
+  "stages": [
+    {
+      "order": 1,
+      "model": "LivePortrait",
+      "source_commit": "9b294b3d0536135442ea73cb01e6cb3ca7029dd3",
+      "input": "固定人物B/已审同身份变体＋动作参考",
+      "output": "人物B动作底片",
+      "evidence_path": "执行证据/LP1/result.json"
+    },
+    {
+      "order": 2,
+      "model": "MuseTalk-1.5",
+      "source_commit": "0a89dec45a0192b824e3cf4daf96c239440c5ed8",
+      "input": "人物B动作底片＋最终固定音色旁白",
+      "output": "数字人口播原片",
+      "evidence_path": "执行证据/M2/result.json"
+    }
+  ],
+  "selected_sample": {
+    "path": "样片/M2-LivePortrait加MuseTalk.mp4",
+    "sha256": "3ad897bab67700583aad7c6908c61d4040bb3c58ce9cbb4d8d33caf065a668d5"
+  },
+  "motion_reference_status": "EXPERIMENT_ONLY",
+  "approved_production_motion_reference": null,
+  "production_acceptance": "PENDING_ACCEPTANCE",
+  "production_enabled": false,
+  "pending_acceptance": [
+    "足够长且可用的动作参考；循环接缝、头颈融合与肩膀/躯干观感",
+    "真实60秒口播的身份、口型、音轨与自然度",
+    "字幕、后处理与1080×1920成片质量",
+    "每天5条的批量产能、合格率及实际总成本",
+    "LivePortrait默认InsightFace预训练权重的商用许可或替代方案"
+  ],
+  "other_routes": {
+    "M1": "BASELINE_ONLY",
+    "M3": "COMPARISON_ONLY"
+  },
+  "automatic_route_fallback": false,
+  "product_route_policy": {
+    "policy_id": "route_policy_body_motion_toggle_v1",
+    "recorded_at": "2026-09-24T11:36:44+08:00",
+    "decision_source": "用户在本会话明确口径",
+    "user_statement": "M2整体效果可以，我们可以在前端加一个选项卡，是否加入肢体动作，如果用户没有选择就默认使用M2，只有面部表情+对口型，如果用户选择加入肢体动作，就弹出提示：该举措将会调用API，大幅增加成本，用户如果确认，就可以输入身体动作提示词，就走OmniHuman",
+    "applies_to": "口播路线的人机交互口径。本段不改写上面的 exp001_m2_selection_v1 选型结论，只规定用户怎么选。",
+    "toggle_question": "是否加入肢体动作",
+    "default_route": "M2",
+    "default_is_authorization": false,
+    "default_note": "界面默认**指向** M2，不是替用户登记选择。未点击前 route_confirmed=false，提交会被后端 ROUTE_NOT_CONFIRMED 拦下——assert_route_selected 明确不接受把默认值当授权。",
+    "options": [
+      {
+        "choice": "不加入肢体动作（默认指向）",
+        "route": "M2",
+        "body_motion": false,
+        "scope": "只有面部表情 + 对口型；动作沿用该人物已获准的动作参考",
+        "cost": "低成本：占用本机 GPU 卡时，无云单价",
+        "extra_gate": "无"
+      },
+      {
+        "choice": "加入肢体动作",
+        "route": "OMNIHUMAN_1_5",
+        "body_motion": true,
+        "scope": "画面含头肩以外的肢体动作，由模型自由生成",
+        "cost": "高成本：调用云端 API，按生成秒计费",
+        "extra_gate": "先弹费用提示（写明将调用 API、成本大幅增加），勾选确认后才写入路线；未确认即选会被后端 409 COST_NOTICE_NOT_ACKNOWLEDGED 拦下。费用提示版本 COST_NOTICE_VERSION 变更会让旧确认失效。"
+      }
+    ],
+    "body_motion_prompt": {
+      "enabled_for": "OMNIHUMAN_1_5",
+      "field_label": "身体动作提示词",
+      "shown_after": "费用提示确认、路线写入成功之后",
+      "honesty_note": "动作由模型自由生成，不是逐帧指定；填写不承诺照做"
+    },
+    "no_automatic_fallback": true,
+    "implementation_refs": [
+      "production/frontend/src/views/VideoView.vue：分段选项卡 + 费用弹窗 + 身体动作提示词输入",
+      "production/backend/app/digital_human/routes.py：ROUTE_SPEC / cost_notice_required / COST_NOTICE_VERSION / assert_route_selected",
+      "production/backend/app/main.py：GET /talking-head/routes?work_id= 返回 route_confirmed",
+      "production/backend/tests/digital_human/test_talking_head_http.py：钉住未选报 false、选后报 true"
+    ]
+  },
+  "notes": [
+    "现有约9.13秒参考动作循环是实验条件，未登记为正式动作母版。",
+    "模型选型不等于生产验收通过；不回写原执行结果中的历史审核状态。",
+    "2026-09-24 追加 product_route_policy（route_policy_body_motion_toggle_v1）：默认指向 M2，只有用户主动选择「加入肢体动作」并确认费用提示后才走 OmniHuman。该口径是交互口径，未改动本记录的选型结论，也未放开 production_enabled。"
+  ]
+}

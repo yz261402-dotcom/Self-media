@@ -1,0 +1,8 @@
+{
+  "stage": "image_A",
+  "state": "UNKNOWN_OR_FAILED",
+  "error_type": "APIConnectionError",
+  "elapsed_seconds": 11.485000000000582,
+  "finished_at": "2026-09-21T15:33:34.473089+00:00",
+  "automatic_retry": false
+}

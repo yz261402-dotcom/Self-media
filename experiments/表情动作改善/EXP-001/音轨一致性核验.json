@@ -1,0 +1,23 @@
+{
+  "M1": {
+    "best_audio_lag_ms": 0.0,
+    "overlap_correlation": 0.9996312682320899,
+    "source_seconds": 15.218875,
+    "decoded_video_audio_seconds": 15.232,
+    "scope": "只比较实际音轨与原TTS波形，不代表嘴型同步或自然度评分"
+  },
+  "M2": {
+    "best_audio_lag_ms": 0.0,
+    "overlap_correlation": 0.9996312682320899,
+    "source_seconds": 15.218875,
+    "decoded_video_audio_seconds": 15.232,
+    "scope": "只比较实际音轨与原TTS波形，不代表嘴型同步或自然度评分"
+  },
+  "M3": {
+    "best_audio_lag_ms": 0.0,
+    "overlap_correlation": 0.9985692184976676,
+    "source_seconds": 15.218875,
+    "decoded_video_audio_seconds": 15.232,
+    "scope": "仅音轨波形，不是嘴型同步测量；原输出按25fps取整到15.2秒"
+  }
+}

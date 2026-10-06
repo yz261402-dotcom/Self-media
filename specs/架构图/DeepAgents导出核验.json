@@ -1,0 +1,35 @@
+{
+  "artifact": {
+    "file": "DeepAgents多智能体架构.html",
+    "sha256": "db6f14ac0a9fbff02bd426a7c8ec8756bbedacd348b00c38a669f5ed9bc420bc"
+  },
+  "export": {
+    "file": "DeepAgents多智能体架构.png",
+    "bytes": 662537,
+    "sha256": "0face5dc16269368e332b2c6bf18ecf140e2aee7fd547c6063d16dc49f3a7677",
+    "method": "viewer-native-png-export"
+  },
+  "screenshots": [
+    {
+      "width": 1600,
+      "height": 1000,
+      "file": "DeepAgents多智能体架构.visual-check.1600x1000.light.png",
+      "innerWidth": 1600,
+      "innerHeight": 1000,
+      "scrollWidth": 1600,
+      "scrollHeight": 1000,
+      "resolvedTheme": "light"
+    },
+    {
+      "width": 1920,
+      "height": 1080,
+      "file": "DeepAgents多智能体架构.visual-check.1920x1080.light.png",
+      "innerWidth": 1920,
+      "innerHeight": 1080,
+      "scrollWidth": 1920,
+      "scrollHeight": 1080,
+      "resolvedTheme": "light"
+    }
+  ],
+  "visualReview": "pending"
+}

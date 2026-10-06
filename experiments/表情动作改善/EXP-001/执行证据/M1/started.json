@@ -1,0 +1,45 @@
+{
+  "started_at": "2026-09-22T00:51:00.884798+00:00",
+  "spec": {
+    "job_dir": "/root/autodl-tmp/avatar-motion/EXP-001/jobs/M1",
+    "cwd": "/root/autodl-tmp/avatar-musetalk/MT-001/source",
+    "command": [
+      "/root/autodl-tmp/avatar-musetalk/MT-001/env/bin/python",
+      "-m",
+      "scripts.inference_mt001",
+      "--inference_config",
+      "/root/autodl-tmp/avatar-motion/EXP-001/specs/M1.yaml",
+      "--result_dir",
+      "/root/autodl-tmp/avatar-motion/EXP-001/results/M1",
+      "--unet_model_path",
+      "models/musetalkV15/unet.pth",
+      "--unet_config",
+      "models/musetalkV15/musetalk.json",
+      "--version",
+      "v15",
+      "--fps",
+      "25",
+      "--batch_size",
+      "4",
+      "--use_float16"
+    ],
+    "environment": {
+      "OMP_NUM_THREADS": "8",
+      "MKL_NUM_THREADS": "8",
+      "HF_HUB_OFFLINE": "1",
+      "TRANSFORMERS_OFFLINE": "1",
+      "TORCH_HOME": "/root/autodl-tmp/avatar-musetalk/MT-001/torch-cache"
+    },
+    "outputs": [
+      "/root/autodl-tmp/avatar-motion/EXP-001/results/M1/v15/M1_original.mp4"
+    ],
+    "inputs": {
+      "/root/autodl-tmp/avatar-motion/EXP-001/inputs/person_B.png": "b66feb11d62559a632def9f86e0915645a70fa4dbb38c6a2cd2f7cb50b607b48",
+      "/root/autodl-tmp/avatar-motion/EXP-001/inputs/voice3.wav": "a6945eac9e317ea3643151e039f3de1a929277aceb605a2d13dee708f815fc81"
+    },
+    "timeout_seconds": 1200,
+    "sample_gpu": true,
+    "hourly_cny": 1.58
+  },
+  "automatic_retry": false
+}

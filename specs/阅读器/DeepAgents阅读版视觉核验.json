@@ -1,0 +1,58 @@
+{
+  "records": [
+    {
+      "file": "00-文档导航.html",
+      "width": 1440,
+      "height": 900,
+      "title": "开发文档导航 · AI 自媒体文档",
+      "scrollWidth": 1440,
+      "images": [],
+      "heading": "开发文档导航"
+    },
+    {
+      "file": "03-总体技术方案.html",
+      "width": 1440,
+      "height": 900,
+      "title": "总体技术方案：DeepAgents 多智能体视频生产 · AI 自媒体文档",
+      "scrollWidth": 1440,
+      "images": [
+        {
+          "loaded": true,
+          "width": 4920
+        }
+      ],
+      "heading": "总体技术方案：DeepAgents 多智能体视频生产"
+    },
+    {
+      "file": "03-总体技术方案.html",
+      "width": 390,
+      "height": 844,
+      "title": "总体技术方案：DeepAgents 多智能体视频生产 · AI 自媒体文档",
+      "scrollWidth": 390,
+      "images": [
+        {
+          "loaded": true,
+          "width": 4920
+        }
+      ],
+      "heading": "总体技术方案：DeepAgents 多智能体视频生产"
+    },
+    {
+      "file": "10-Agent编排选型与整体架构.html",
+      "width": 1440,
+      "height": 900,
+      "title": "DeepAgents 编排、Skill、MCP 和记忆设计 · AI 自媒体文档",
+      "scrollWidth": 1440,
+      "images": [],
+      "heading": "DeepAgents 编排、Skill、MCP 和记忆设计"
+    }
+  ],
+  "errors": [],
+  "searchStatus": "第 2 / 4 处匹配 · Enter 下一处",
+  "screenshots": [
+    "DeepAgents技术方案-桌面预览.png",
+    "DeepAgents技术方案-手机预览.png"
+  ],
+  "visual_review": "已实际查看桌面与手机截图，正文、目录、链接及图片显示正常，无页面横向溢出。",
+  "scope": "文档阅读页面，不是生产应用验收。"
+}

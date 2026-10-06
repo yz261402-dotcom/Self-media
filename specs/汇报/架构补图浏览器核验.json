@@ -1,0 +1,381 @@
+{
+  "standalone_viewport_checks": [{"name":"整体分层架构","width":1440,"height":900,"scrollWidth":1440,"scrollHeight":900,"pass":true},{"name":"整体分层架构","width":1600,"height":1000,"scrollWidth":1600,"scrollHeight":1000,"pass":true},{"name":"整体分层架构","width":1920,"height":1080,"scrollWidth":1920,"scrollHeight":1080,"pass":true},{"name":"整体分层架构","width":2048,"height":1320,"scrollWidth":2048,"scrollHeight":1320,"pass":true},{"name":"Agent协作框架","width":1440,"height":900,"scrollWidth":1440,"scrollHeight":900,"pass":true},{"name":"Agent协作框架","width":1600,"height":1000,"scrollWidth":1600,"scrollHeight":1000,"pass":true},{"name":"Agent协作框架","width":1920,"height":1080,"scrollWidth":1920,"scrollHeight":1080,"pass":true},{"name":"Agent协作框架","width":2048,"height":1320,"scrollWidth":2048,"scrollHeight":1320,"pass":true}],
+  "at": "2026-09-22T12:14:01.366Z",
+  "checks": [
+    {
+      "name": "three_distinct_diagrams",
+      "pass": true
+    },
+    {
+      "name": "six_architecture_layers",
+      "pass": true
+    },
+    {
+      "name": "five_specialist_agents",
+      "pass": true
+    },
+    {
+      "name": "unique_dom_ids",
+      "pass": true
+    },
+    {
+      "name": "page_containment_system_1440",
+      "pass": true,
+      "details": {
+        "width": 1440,
+        "scrollWidth": 1440
+      }
+    },
+    {
+      "name": "diagram_text_containment_system_1440",
+      "pass": true,
+      "details": []
+    },
+    {
+      "name": "page_containment_flow_1440",
+      "pass": true,
+      "details": {
+        "width": 1440,
+        "scrollWidth": 1440
+      }
+    },
+    {
+      "name": "page_containment_agents_1440",
+      "pass": true,
+      "details": {
+        "width": 1440,
+        "scrollWidth": 1440
+      }
+    },
+    {
+      "name": "diagram_text_containment_agents_1440",
+      "pass": true,
+      "details": []
+    },
+    {
+      "name": "page_containment_stack_1440",
+      "pass": true,
+      "details": {
+        "width": 1440,
+        "scrollWidth": 1440
+      }
+    },
+    {
+      "name": "page_containment_quality_1440",
+      "pass": true,
+      "details": {
+        "width": 1440,
+        "scrollWidth": 1440
+      }
+    },
+    {
+      "name": "page_containment_progress_1440",
+      "pass": true,
+      "details": {
+        "width": 1440,
+        "scrollWidth": 1440
+      }
+    },
+    {
+      "name": "page_containment_system_1600",
+      "pass": true,
+      "details": {
+        "width": 1600,
+        "scrollWidth": 1600
+      }
+    },
+    {
+      "name": "diagram_text_containment_system_1600",
+      "pass": true,
+      "details": []
+    },
+    {
+      "name": "page_containment_flow_1600",
+      "pass": true,
+      "details": {
+        "width": 1600,
+        "scrollWidth": 1600
+      }
+    },
+    {
+      "name": "page_containment_agents_1600",
+      "pass": true,
+      "details": {
+        "width": 1600,
+        "scrollWidth": 1600
+      }
+    },
+    {
+      "name": "diagram_text_containment_agents_1600",
+      "pass": true,
+      "details": []
+    },
+    {
+      "name": "page_containment_stack_1600",
+      "pass": true,
+      "details": {
+        "width": 1600,
+        "scrollWidth": 1600
+      }
+    },
+    {
+      "name": "page_containment_quality_1600",
+      "pass": true,
+      "details": {
+        "width": 1600,
+        "scrollWidth": 1600
+      }
+    },
+    {
+      "name": "page_containment_progress_1600",
+      "pass": true,
+      "details": {
+        "width": 1600,
+        "scrollWidth": 1600
+      }
+    },
+    {
+      "name": "page_containment_system_1920",
+      "pass": true,
+      "details": {
+        "width": 1920,
+        "scrollWidth": 1920
+      }
+    },
+    {
+      "name": "diagram_text_containment_system_1920",
+      "pass": true,
+      "details": []
+    },
+    {
+      "name": "page_containment_flow_1920",
+      "pass": true,
+      "details": {
+        "width": 1920,
+        "scrollWidth": 1920
+      }
+    },
+    {
+      "name": "page_containment_agents_1920",
+      "pass": true,
+      "details": {
+        "width": 1920,
+        "scrollWidth": 1920
+      }
+    },
+    {
+      "name": "diagram_text_containment_agents_1920",
+      "pass": true,
+      "details": []
+    },
+    {
+      "name": "page_containment_stack_1920",
+      "pass": true,
+      "details": {
+        "width": 1920,
+        "scrollWidth": 1920
+      }
+    },
+    {
+      "name": "page_containment_quality_1920",
+      "pass": true,
+      "details": {
+        "width": 1920,
+        "scrollWidth": 1920
+      }
+    },
+    {
+      "name": "page_containment_progress_1920",
+      "pass": true,
+      "details": {
+        "width": 1920,
+        "scrollWidth": 1920
+      }
+    },
+    {
+      "name": "page_containment_system_2048",
+      "pass": true,
+      "details": {
+        "width": 2048,
+        "scrollWidth": 2048
+      }
+    },
+    {
+      "name": "diagram_text_containment_system_2048",
+      "pass": true,
+      "details": []
+    },
+    {
+      "name": "page_containment_flow_2048",
+      "pass": true,
+      "details": {
+        "width": 2048,
+        "scrollWidth": 2048
+      }
+    },
+    {
+      "name": "page_containment_agents_2048",
+      "pass": true,
+      "details": {
+        "width": 2048,
+        "scrollWidth": 2048
+      }
+    },
+    {
+      "name": "diagram_text_containment_agents_2048",
+      "pass": true,
+      "details": []
+    },
+    {
+      "name": "page_containment_stack_2048",
+      "pass": true,
+      "details": {
+        "width": 2048,
+        "scrollWidth": 2048
+      }
+    },
+    {
+      "name": "page_containment_quality_2048",
+      "pass": true,
+      "details": {
+        "width": 2048,
+        "scrollWidth": 2048
+      }
+    },
+    {
+      "name": "page_containment_progress_2048",
+      "pass": true,
+      "details": {
+        "width": 2048,
+        "scrollWidth": 2048
+      }
+    },
+    {
+      "name": "page_containment_system_390",
+      "pass": true,
+      "details": {
+        "width": 390,
+        "scrollWidth": 390
+      }
+    },
+    {
+      "name": "diagram_text_containment_system_390",
+      "pass": true,
+      "details": []
+    },
+    {
+      "name": "page_containment_flow_390",
+      "pass": true,
+      "details": {
+        "width": 390,
+        "scrollWidth": 390
+      }
+    },
+    {
+      "name": "page_containment_agents_390",
+      "pass": true,
+      "details": {
+        "width": 390,
+        "scrollWidth": 390
+      }
+    },
+    {
+      "name": "diagram_text_containment_agents_390",
+      "pass": true,
+      "details": []
+    },
+    {
+      "name": "page_containment_stack_390",
+      "pass": true,
+      "details": {
+        "width": 390,
+        "scrollWidth": 390
+      }
+    },
+    {
+      "name": "page_containment_quality_390",
+      "pass": true,
+      "details": {
+        "width": 390,
+        "scrollWidth": 390
+      }
+    },
+    {
+      "name": "page_containment_progress_390",
+      "pass": true,
+      "details": {
+        "width": 390,
+        "scrollWidth": 390
+      }
+    },
+    {
+      "name": "keyboard_node_detail_system",
+      "pass": true
+    },
+    {
+      "name": "zoom_system",
+      "pass": true
+    },
+    {
+      "name": "svg_export_system",
+      "pass": true,
+      "details": "整体分层架构.svg"
+    },
+    {
+      "name": "keyboard_node_detail_agents",
+      "pass": true
+    },
+    {
+      "name": "zoom_agents",
+      "pass": true
+    },
+    {
+      "name": "svg_export_agents",
+      "pass": true,
+      "details": "Agent协作框架.svg"
+    },
+    {
+      "name": "core_metrics_preserved",
+      "pass": true
+    },
+    {
+      "name": "full_metrics_preserved",
+      "pass": true
+    },
+    {
+      "name": "presentation_mode",
+      "pass": true
+    },
+    {
+      "name": "presentation_exit",
+      "pass": true
+    },
+    {
+      "name": "print_current",
+      "pass": true
+    },
+    {
+      "name": "print_all_views",
+      "pass": true
+    },
+    {
+      "name": "no_javascript_errors",
+      "pass": true,
+      "details": []
+    }
+  ],
+  "screenshots": [
+    "架构补图-system-1440.png",
+    "架构补图-agents-1440.png",
+    "架构补图-system-390.png",
+    "架构补图-agents-390.png"
+  ],
+  "errors": [],
+  "failures": [],
+  "output_sha256": "12b43cf46afafb45277678248fc77805a2ef3177c9785cf48bba69c73d789539",
+  "local_links_verified": 13,
+  "source_hashes_verified": 14,
+  "svg_exports_parsed": 2,
+  "visual_review": "inspected",
+  "review_note": "已检查主页面两张图及手机截图；节点文字未出框，分组说明未覆盖连线。"
+}

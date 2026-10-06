@@ -1,0 +1,18 @@
+{
+  "version": 1,
+  "authorization_id": "TH-COMP-003-user-omnihuman-service-enabled",
+  "maximum_fen": 2000,
+  "total_reserved_fen": 2000,
+  "stages": {
+    "volc_video": {
+      "state": "succeeded",
+      "reserve_fen": 2000,
+      "request_digest": "78c51f18cf18995e1f448eea97bc0bc27e24a4cbc42d24a89903b127570d8b52",
+      "evidence_path": "生成结果.json",
+      "remote_id": "eec24b86b5c211f197771c34da482ebc",
+      "estimated_fen": 948,
+      "actual_fen": null,
+      "updated_at": "2026-09-21T13:53:16.033411+00:00"
+    }
+  }
+}

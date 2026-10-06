@@ -1,0 +1,63 @@
+{
+  "scope": "OmniHuman恢复及费率更新",
+  "documents": [
+    {
+      "file": "00-文档导航.md",
+      "sha256": "8d2a00bf85a620e7764ba7eb4bd2951dac1a4159a2507017e8d1d33eaf914a4c"
+    },
+    {
+      "file": "01-产品需求文档.md",
+      "sha256": "ccd2102ab96120deb4169c796f5bafe4e5b0234206d1fc4df8af3209f6360a35"
+    },
+    {
+      "file": "02-技术选型对比.md",
+      "sha256": "68a5ca0af532519ab3ae773e4340ca88010635f0b862fedfdc8ee18dbde2d13a"
+    },
+    {
+      "file": "03-总体技术方案.md",
+      "sha256": "23d2a4b8d04048afd8729317d487b52f66839b16d119c9db574838e3b6aceeb2"
+    },
+    {
+      "file": "04-接口契约与数据字典.md",
+      "sha256": "fa4d6a055a413b481f2e24a409be0d69c8391e79348a645279869b4b5671914c"
+    },
+    {
+      "file": "05-开发实施计划.md",
+      "sha256": "2ec086a45bb0b8ab5e75c2a036fca8f5573390adbc49196aabdf8e336fd19e24"
+    },
+    {
+      "file": "06-验收标准与测试方案.md",
+      "sha256": "46b6a2ed6994e9188dec784010737961dbce1788fce950cb0473ab6444d123df"
+    },
+    {
+      "file": "07-技术选型与实测流程.md",
+      "sha256": "07bfe334a8560a21b3faa9cd0148362c4935892c663b700c7e780225f3b455c5"
+    },
+    {
+      "file": "08-端到端技术流程与模型选型地图.md",
+      "sha256": "f5f28bc3d8d63db307f80d47273d03dd6a4b831a0038c690baa267dd3dc93c40"
+    },
+    {
+      "file": "09-模型选型决策与接入方案.md",
+      "sha256": "4d48b41799587712796e61f3aa4176a5820d21a7a52cd56fe62b7ebd89e686b5"
+    },
+    {
+      "file": "10-Agent编排选型与整体架构.md",
+      "sha256": "02c8deed63860c404f348e02564bfca797a37335555561cdcfd08f693454295c"
+    }
+  ],
+  "local_links_checked": 762,
+  "anchors_checked": 230,
+  "core_metrics": 11,
+  "full_metrics": 31,
+  "acceptance_cases": 69,
+  "graph_count": 5,
+  "generation_enabled": false,
+  "budget_cny": 0,
+  "errors": [],
+  "presentation_sha256": "4e5f7ed3b401ea6b48da83839330ba2e4e907b76fdb94ec4ffc7b808d1107fe8",
+  "config_sha256": "c37b72b0d12e545a9c1555a577f63227fc464a9ecec5a38469e9b668f64803b5",
+  "presentation_browser_checks": 41,
+  "presentation_browser_failures": 0,
+  "svg_export_parsed": "0 0 1080 620"
+}

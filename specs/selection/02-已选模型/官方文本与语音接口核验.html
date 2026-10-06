@@ -1,0 +1,737 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="light">
+<link rel="icon" href="data:,">
+<meta name="source-sha256" content="7c428d435f5cd504286a14eb8cf3020d373b9cef331b4ca8e56f1afc8be7a6b8">
+<title>官方文本与语音接口核验 · AI 自媒体文档</title>
+<style>:root {
+  color-scheme: light;
+  --paper: #ffffff;
+  --surface: #f7f7f8;
+  --ink: #202126;
+  --muted: #666970;
+  --line: #dedfe3;
+  --blue: #002fa7;
+  --reader-font-size: 17px;
+  --header-height: 76px;
+  font-family: "Helvetica Neue", Helvetica, Arial, "PingFang SC", "Microsoft YaHei", sans-serif;
+  font-synthesis: none;
+}
+
+* { box-sizing: border-box; }
+.sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; border: 0; }
+.source-notice { margin-top: 22px; padding: 12px 14px; border-left: 3px solid var(--blue); background: var(--surface); color: var(--muted); font-size: 13px; }
+html { scroll-padding-top: 104px; }
+body { margin: 0; min-width: 320px; color: var(--ink); background: var(--surface); font-size: 14px; line-height: 1.6; }
+body.menu-open { overflow: hidden; }
+a { color: var(--blue); text-underline-offset: 3px; }
+button, input { font: inherit; }
+button { color: inherit; cursor: pointer; }
+button, input[type="search"] { border: 1px solid var(--line); border-radius: 3px; background: var(--paper); }
+button { min-height: 36px; padding: 6px 11px; line-height: 1.4; }
+button:hover { border-color: var(--blue); color: var(--blue); }
+button:disabled { opacity: .42; cursor: default; }
+button:disabled:hover { color: inherit; border-color: var(--line); }
+:focus-visible { outline: 2px solid var(--blue); outline-offset: 3px; }
+[hidden] { display: none !important; }
+::selection { background: #dbe4ff; color: #151c32; }
+
+.skip-link { position: fixed; z-index: 100; top: -70px; left: 16px; padding: 10px 18px; background: var(--blue); color: white; }
+.skip-link:focus { top: 10px; }
+.topbar { position: sticky; z-index: 30; top: 0; min-height: var(--header-height); display: flex; align-items: center; gap: 24px; padding: 15px 32px; border-bottom: 1px solid var(--line); background: var(--paper); }
+.brand { min-width: 0; color: var(--ink); font-size: 17px; font-weight: 700; line-height: 1.35; letter-spacing: -.02em; text-decoration: none; }
+.brand small, .brand span { display: block; margin-top: 4px; font-size: 11px; font-weight: 400; letter-spacing: .08em; color: var(--muted); }
+.toolbar { display: flex; align-items: center; gap: 6px; margin-left: auto; flex-shrink: 0; }
+.toolbar .font-smaller, .toolbar .font-reset, .toolbar .font-larger { min-width: 36px; padding: 5px 8px; font-variant-numeric: tabular-nums; }
+.toolbar .print-button { margin-left: 8px; }
+.mobile-menu { display: none; }
+.layout { display: grid; grid-template-columns: 244px minmax(0, 1fr) 208px; max-width: 1536px; margin: 0 auto; align-items: start; background: var(--paper); }
+.sidebar { position: sticky; top: var(--header-height); height: calc(100dvh - var(--header-height)); overflow-y: auto; overscroll-behavior: contain; padding: 32px 20px 36px 24px; border-right: 1px solid var(--line); scrollbar-width: thin; background: var(--surface); }
+.nav-group + .nav-group { margin-top: 32px; padding-top: 26px; border-top: 1px solid var(--line); }
+.group-title { margin: 0 10px 12px; color: var(--muted); font-size: 11px; font-weight: 600; letter-spacing: .11em; }
+.doc-nav { display: flex; flex-direction: column; gap: 4px; }
+.doc-nav a { display: block; padding: 9px 10px; border-left: 2px solid transparent; color: #55575d; font-size: 13px; line-height: 1.65; text-decoration: none; overflow-wrap: anywhere; }
+.doc-nav a:hover { color: var(--blue); background: #eeeeef; }
+.doc-nav a[aria-current="page"] { border-left-color: var(--blue); background: #eaf0ff; color: var(--blue); font-weight: 600; }
+.doc-nav .doc-number { display: inline-block; min-width: 25px; color: var(--muted); font-variant-numeric: tabular-nums; }
+
+#main { min-width: 0; padding: 46px clamp(28px, 3.7vw, 60px) 56px; }
+.document-header { margin-bottom: 29px; }
+.eyebrow { margin: 0 0 18px; color: var(--blue); font-size: 12px; font-weight: 600; letter-spacing: .08em; }
+.document-header h1 { margin: 0 0 21px; font-size: clamp(30px, 2.8vw, 42px); font-weight: 700; letter-spacing: -.045em; line-height: 1.3; overflow-wrap: anywhere; }
+.doc-meta { display: flex; flex-wrap: wrap; align-items: baseline; gap: 6px 18px; color: var(--muted); font-size: 12px; }
+.doc-meta a { color: var(--muted); }
+.doc-meta a:hover { color: var(--blue); }
+.reader-tools { margin: 0 0 36px; padding: 16px 0; border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); }
+#search-form { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; }
+#search-input { flex: 1 1 160px; min-width: 100px; width: 0; height: 36px; padding: 6px 10px; color: var(--ink); }
+#search-input::placeholder { color: #777a82; }
+#search-next, #search-clear { flex: 0 0 auto; font-size: 12px; }
+#search-status { flex: 1 0 100%; color: var(--muted); font-size: 11px; line-height: 1.5; }
+#search-status:empty { display: none; }
+
+#document-body { font-size: var(--reader-font-size); line-height: 1.9; overflow-wrap: anywhere; }
+#document-body > :first-child { margin-top: 0; }
+#document-body h2, #document-body h3, #document-body h4, #document-body h5, #document-body h6 { scroll-margin-top: 106px; font-weight: 650; line-height: 1.45; color: #15171c; }
+#document-body h2 { margin: 2.8em 0 1.05em; padding-top: 1.25em; border-top: 1px solid var(--line); font-size: 1.5em; letter-spacing: -.035em; }
+#document-body h3 { margin: 2em 0 .85em; font-size: 1.18em; letter-spacing: -.025em; }
+#document-body h4 { margin: 1.65em 0 .7em; font-size: 1.03em; }
+#document-body h5, #document-body h6 { margin: 1.4em 0 .6em; font-size: 1em; }
+#document-body p { margin: .9em 0; }
+#document-body ul, #document-body ol { margin: 1em 0; padding-left: 1.55em; }
+#document-body li { margin: .38em 0; padding-left: .15em; }
+#document-body li > p { margin: .4em 0; }
+#document-body li > ul, #document-body li > ol { margin: .35em 0 .6em; }
+#document-body strong { color: #14161b; font-weight: 650; }
+#document-body hr { margin: 2.1em 0; border: 0; border-top: 1px solid var(--line); }
+#document-body blockquote { margin: 1.5em 0; padding: .25em 1.15em; border-left: 3px solid var(--blue); background: var(--surface); color: #4c4f57; }
+#document-body blockquote p { margin: .55em 0; }
+#document-body a { overflow-wrap: anywhere; }
+#document-body a:hover { text-decoration-thickness: 2px; }
+#document-body img { max-width: 100%; height: auto; }
+#document-body code { padding: .12em .32em; border: 1px solid #e7e7ea; border-radius: 3px; background: var(--surface); font-family: Consolas, "SFMono-Regular", "Liberation Mono", monospace; font-size: .82em; overflow-wrap: anywhere; }
+#document-body pre { position: relative; margin: 1.5em 0; padding: 44px 0 0; max-width: 100%; overflow: hidden; border: 1px solid var(--line); border-radius: 4px; background: var(--surface); line-height: 1.7; }
+#document-body pre > code { display: block; max-width: 100%; overflow-x: auto; padding: 0 19px 18px; border: 0; border-radius: 0; font-size: .79em; line-height: 1.75; white-space: pre; overflow-wrap: normal; tab-size: 2; }
+.copy-code { position: absolute; top: 7px; right: 8px; min-height: 28px; padding: 4px 9px; color: var(--muted); font-size: 11px; background: var(--paper); }
+.table-scroll { max-width: 100%; margin: 1.5em 0; overflow-x: auto; border: 1px solid var(--line); border-radius: 3px; scrollbar-width: thin; }
+#document-body table { width: 100%; min-width: 100%; border-collapse: collapse; font-size: .82em; line-height: 1.7; }
+#document-body th, #document-body td { min-width: 105px; padding: 12px 14px; border-right: 1px solid var(--line); border-bottom: 1px solid var(--line); text-align: left; vertical-align: top; }
+#document-body th { background: var(--surface); font-weight: 600; color: #30333a; }
+#document-body tr > :last-child { border-right: 0; }
+#document-body tbody tr:last-child td { border-bottom: 0; }
+#document-body tbody tr:hover { background: #fafafb; }
+#document-body th:first-child, #document-body td:first-child { min-width: 95px; }
+#document-body input[type="checkbox"] { width: 14px; height: 14px; margin: 0 7px 0 0; vertical-align: middle; accent-color: var(--blue); }
+#document-body details { margin: 1.15em 0; padding: 12px 16px; border: 1px solid var(--line); border-radius: 3px; }
+#document-body summary { color: var(--muted); font-size: .85em; cursor: pointer; }
+#document-body details[open] summary { margin-bottom: 12px; }
+.architecture { margin: 1.8em 0; }
+.diagram-viewport { max-width: 100%; overflow-x: auto; border: 1px solid var(--line); scrollbar-width: thin; }
+.diagram-viewport > svg { display: block; min-width: 720px; width: 100%; height: auto; background: var(--paper); }
+.architecture > svg { display: block; width: 100%; height: auto; max-width: 100%; border: 1px solid var(--line); background: var(--paper); }
+.architecture figcaption { margin-top: 8px; color: var(--muted); font-size: .75em; }
+.architecture details { font-size: .85em; }
+mark.reader-match { padding: 1px 0; background: #dbe4ff; color: inherit; border-radius: 2px; scroll-margin-top: 120px; }
+mark.reader-match.is-current { background: var(--blue); color: white; box-shadow: 0 0 0 2px var(--blue); }
+.search-block-current { outline: 1px solid #b2c5f9; outline-offset: 6px; }
+
+.toc-panel { position: sticky; top: var(--header-height); max-height: calc(100dvh - var(--header-height)); overflow-y: auto; padding: 38px 20px 30px 19px; border-left: 1px solid var(--line); scrollbar-width: thin; }
+.toc-panel > h2, #toc > h2, .toc-title { margin: 0 0 15px; color: var(--muted); font-size: 11px; font-weight: 600; letter-spacing: .08em; }
+#toc ul, #toc ol { list-style: none; margin: 0; padding: 0; }
+#toc a { display: block; margin: 2px 0; padding: 5px 0 5px 12px; border-left: 2px solid transparent; color: #6c6f78; font-size: 12px; line-height: 1.65; text-decoration: none; overflow-wrap: anywhere; }
+#toc a:hover { color: var(--blue); }
+#toc a[aria-current="location"], #toc a.is-active { color: var(--blue); border-left-color: var(--blue); }
+#toc a[data-level="3"], #toc .toc-h3 a, #toc a.toc-h3, #toc li.level-3 a { padding-left: 24px; font-size: 11px; }
+.document-pager { display: flex; justify-content: space-between; gap: 20px; margin-top: 60px; padding-top: 24px; border-top: 1px solid var(--line); }
+.document-pager a { flex: 1; min-width: 0; text-decoration: none; font-size: 14px; font-weight: 600; overflow-wrap: anywhere; }
+.document-pager a:last-child { text-align: right; }
+.document-pager a:only-child { text-align: left; }
+.document-pager small, .document-pager span { display: block; margin-bottom: 4px; font-size: 11px; font-weight: 400; color: var(--muted); }
+.page-footer { max-width: 1536px; margin: auto; padding: 22px 32px; border-top: 1px solid var(--line); color: var(--muted); font-size: 11px; background: var(--surface); }
+.back-top { position: fixed; right: 24px; bottom: 24px; z-index: 20; min-height: 40px; border-color: var(--line); background: var(--paper); font-size: 12px; }
+.sidebar-scrim { display: none; }
+
+@media (min-width: 1600px) {
+  .layout { border-left: 1px solid var(--line); border-right: 1px solid var(--line); }
+  .topbar { padding-left: max(32px, calc((100vw - 1472px) / 2)); padding-right: max(32px, calc((100vw - 1472px) / 2)); }
+}
+@media (max-width: 1190px) {
+  .layout { grid-template-columns: 225px minmax(0, 1fr); }
+  .toc-panel { display: none; }
+  #main { padding-left: 42px; padding-right: 42px; }
+}
+@media (max-width: 800px) {
+  :root { --header-height: 68px; }
+  .topbar { gap: 12px; padding: 13px 18px; }
+  .brand { font-size: 15px; }
+  .brand small, .brand span { font-size: 9px; }
+  .mobile-menu { display: inline-flex; align-items: center; justify-content: center; flex-shrink: 0; min-height: 34px; padding: 6px 9px; font-size: 12px; }
+  .layout { display: block; }
+  .sidebar { position: fixed; z-index: 50; left: 0; top: var(--header-height); bottom: 0; width: min(300px, calc(100vw - 44px)); height: calc(100dvh - var(--header-height)); padding: 24px 18px; transform: translateX(-101%); visibility: hidden; transition: transform .18s ease, visibility .18s; border-right: 1px solid var(--line); }
+  .menu-open .sidebar { transform: translateX(0); visibility: visible; }
+  .sidebar-scrim:not([hidden]) { display: block; position: fixed; z-index: 40; inset: var(--header-height) 0 0; background: rgb(18 21 30 / 28%); }
+  .toolbar { gap: 3px; }
+  .toolbar .font-smaller, .toolbar .font-reset, .toolbar .font-larger { min-width: 29px; min-height: 32px; padding: 4px 5px; font-size: 12px; }
+  .toolbar .print-button { display: none; }
+  #main { padding: 33px 28px 40px; }
+  .document-header h1 { font-size: 32px; }
+  .eyebrow { margin-bottom: 13px; }
+  #document-body { line-height: 1.9; }
+  #document-body h2 { margin-top: 2.3em; font-size: 1.4em; }
+  .page-footer { padding: 18px 28px; }
+  .back-top { right: 16px; bottom: 16px; }
+}
+@media (max-width: 460px) {
+  .topbar { gap: 8px; padding-left: 12px; padding-right: 12px; }
+  .brand { font-size: 13px; letter-spacing: -.035em; }
+  .brand small, .brand span { max-width: 125px; overflow: hidden; white-space: nowrap; text-overflow: ellipsis; }
+  .mobile-menu { padding: 5px 7px; font-size: 11px; }
+  #main { padding: 29px 20px 36px; }
+  .document-header h1 { font-size: 28px; }
+  .doc-meta { gap: 4px 12px; font-size: 11px; }
+  .reader-tools { margin-bottom: 28px; }
+  #search-input { flex-basis: 110px; font-size: 12px; }
+  #search-next, #search-clear { padding-left: 8px; padding-right: 8px; }
+  #document-body { font-size: calc(var(--reader-font-size) - 1px); }
+  #document-body pre > code { padding-left: 13px; padding-right: 13px; }
+  #document-body th, #document-body td { padding: 10px 12px; }
+  .document-pager { gap: 18px; margin-top: 40px; }
+  .document-pager a { font-size: 12px; }
+  .page-footer { padding-left: 20px; padding-right: 20px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { scroll-behavior: auto !important; transition: none !important; }
+}
+@media print {
+  @page { margin: 18mm 16mm; }
+  :root { --reader-font-size: 10.5pt !important; }
+  body { min-width: 0; background: white; color: black; }
+  .topbar, .sidebar, .toc-panel, .reader-tools, .document-pager, .back-top, .sidebar-scrim, .skip-link, .copy-code { display: none !important; }
+  .layout { display: block; max-width: none; border: 0; }
+  #main { padding: 0; }
+  .document-header h1 { font-size: 24pt; }
+  .document-header { margin-bottom: 24pt; }
+  .doc-meta { font-size: 8pt; }
+  #document-body { font-size: 10.5pt; line-height: 1.65; }
+  #document-body h2, #document-body h3, #document-body h4 { break-after: avoid; }
+  #document-body h2 { margin-top: 20pt; padding-top: 12pt; font-size: 15pt; }
+  #document-body a { color: inherit; text-decoration: underline; }
+  #document-body pre { padding: 9pt; overflow: visible; background: #f7f7f8; }
+  #document-body pre > code { padding: 0; overflow: visible; white-space: pre-wrap; overflow-wrap: anywhere; font-size: 8pt; }
+  .table-scroll { overflow: visible; border-radius: 0; }
+  #document-body table { table-layout: fixed; font-size: 7.5pt; }
+  #document-body th, #document-body td, #document-body th:first-child, #document-body td:first-child { min-width: 0; padding: 5pt; overflow-wrap: anywhere; }
+  #document-body thead { display: table-header-group; }
+  #document-body tr, .architecture { break-inside: avoid; }
+  #document-body details:not([open]) { display: none; }
+  .architecture > svg { max-height: 230mm; }
+  mark.reader-match, mark.reader-match.is-current { color: inherit; background: transparent; box-shadow: none; }
+  .search-block-current { outline: none; }
+  .page-footer { margin-top: 24pt; padding: 10pt 0 0; font-size: 8pt; background: white; }
+}
+</style>
+</head>
+<body>
+<a class="skip-link" href="#main">跳到正文</a>
+<header class="topbar">
+  <button type="button" class="mobile-menu" aria-controls="doc-sidebar" aria-expanded="false">文档目录</button>
+  <a class="brand" href="../../0001-douyin-ai-studio/00-%E6%96%87%E6%A1%A3%E5%AF%BC%E8%88%AA.html">AI 自媒体<span>开发文档与调研</span></a>
+  <div class="toolbar" aria-label="阅读设置">
+    <button type="button" class="font-smaller" aria-label="缩小正文字号" title="缩小字号">A−</button>
+    <button type="button" class="font-reset" aria-label="恢复默认正文字号" title="恢复字号">默认</button>
+    <button type="button" class="font-larger" aria-label="放大正文字号" title="放大字号">A+</button>
+    <button type="button" class="print-button">打印</button>
+  </div>
+</header>
+<div class="layout">
+  <aside id="doc-sidebar" class="sidebar" aria-label="全部文档"><section class="nav-group"><h2 class="group-title">开发文档</h2><nav class="doc-nav" aria-label="开发文档"><a data-document href="../../0001-douyin-ai-studio/00-%E6%96%87%E6%A1%A3%E5%AF%BC%E8%88%AA.html">00 文档导航</a><a data-document href="../../0001-douyin-ai-studio/01-%E4%BA%A7%E5%93%81%E9%9C%80%E6%B1%82%E6%96%87%E6%A1%A3.html">01 产品需求文档</a><a data-document href="../../0001-douyin-ai-studio/02-%E6%8A%80%E6%9C%AF%E9%80%89%E5%9E%8B%E5%AF%B9%E6%AF%94.html">02 技术选型对比</a><a data-document href="../../0001-douyin-ai-studio/03-%E6%80%BB%E4%BD%93%E6%8A%80%E6%9C%AF%E6%96%B9%E6%A1%88.html">03 总体技术方案</a><a data-document href="../../0001-douyin-ai-studio/04-%E6%8E%A5%E5%8F%A3%E5%A5%91%E7%BA%A6%E4%B8%8E%E6%95%B0%E6%8D%AE%E5%AD%97%E5%85%B8.html">04 接口契约与数据字典</a><a data-document href="../../0001-douyin-ai-studio/05-%E5%BC%80%E5%8F%91%E5%AE%9E%E6%96%BD%E8%AE%A1%E5%88%92.html">05 开发实施计划</a><a data-document href="../../0001-douyin-ai-studio/06-%E9%AA%8C%E6%94%B6%E6%A0%87%E5%87%86%E4%B8%8E%E6%B5%8B%E8%AF%95%E6%96%B9%E6%A1%88.html">06 验收标准与测试方案</a><a data-document href="../../0001-douyin-ai-studio/07-%E6%8A%80%E6%9C%AF%E9%80%89%E5%9E%8B%E4%B8%8E%E5%AE%9E%E6%B5%8B%E6%B5%81%E7%A8%8B.html">07 技术选型与实测流程</a><a data-document href="../../0001-douyin-ai-studio/08-%E7%AB%AF%E5%88%B0%E7%AB%AF%E6%8A%80%E6%9C%AF%E6%B5%81%E7%A8%8B%E4%B8%8E%E6%A8%A1%E5%9E%8B%E9%80%89%E5%9E%8B%E5%9C%B0%E5%9B%BE.html">08 端到端技术流程与模型选型地图</a><a data-document href="../../0001-douyin-ai-studio/09-%E6%A8%A1%E5%9E%8B%E9%80%89%E5%9E%8B%E5%86%B3%E7%AD%96%E4%B8%8E%E6%8E%A5%E5%85%A5%E6%96%B9%E6%A1%88.html">09 模型选型决策与接入方案</a><a data-document href="../../0001-douyin-ai-studio/10-Agent%E7%BC%96%E6%8E%92%E9%80%89%E5%9E%8B%E4%B8%8E%E6%95%B4%E4%BD%93%E6%9E%B6%E6%9E%84.html">10 Agent编排选型与整体架构</a></nav></section><section class="nav-group"><h2 class="group-title">本轮选型试验</h2><nav class="doc-nav" aria-label="本轮选型试验"><a data-document href="../01-%E6%95%B0%E5%AD%97%E4%BA%BA%E5%8F%A3%E6%92%AD/01-%E9%80%89%E5%9E%8B%E8%AF%95%E9%AA%8C%E6%96%B9%E6%A1%88.html">01 选型试验方案</a><a data-document href="../01-%E6%95%B0%E5%AD%97%E4%BA%BA%E5%8F%A3%E6%92%AD/02-%E9%A6%96%E8%BD%AE%E5%AE%9E%E6%B5%8B%E7%BB%93%E6%9E%9C.html">02 首轮实测结果</a><a data-document href="../01-%E6%95%B0%E5%AD%97%E4%BA%BA%E5%8F%A3%E6%92%AD/03-MuseTalk%E4%BA%91%E7%AB%AF%E9%83%A8%E7%BD%B2%E4%B8%8E%E8%AF%95%E9%AA%8C%E6%96%B9%E6%A1%88.html">03 MuseTalk云端部署与试验方案</a><a data-document href="../01-%E6%95%B0%E5%AD%97%E4%BA%BA%E5%8F%A3%E6%92%AD/04-MuseTalk%E9%83%A8%E7%BD%B2%E4%B8%8E%E9%A6%96%E6%B5%8B%E7%BB%93%E6%9E%9C.html">04 MuseTalk部署与首测结果</a><a data-document href="../01-%E6%95%B0%E5%AD%97%E4%BA%BA%E5%8F%A3%E6%92%AD/05-OmniHuman%E5%BC%80%E9%80%9A%E5%90%8E%E5%AE%9E%E6%B5%8B%E7%BB%93%E6%9E%9C.html">05 OmniHuman开通后实测结果</a><a data-document href="../01-%E6%95%B0%E5%AD%97%E4%BA%BA%E5%8F%A3%E6%92%AD/06-%E4%BA%BA%E7%89%A9B%E8%A1%A8%E6%83%85%E5%8A%A8%E4%BD%9C%E6%94%B9%E5%96%84%E5%AE%9E%E6%B5%8B.html">06 人物B表情动作改善实测</a><a data-document href="../01-%E6%95%B0%E5%AD%97%E4%BA%BA%E5%8F%A3%E6%92%AD/MuseTalk%E5%AE%98%E6%96%B9%E8%83%BD%E5%8A%9B%E6%A0%B8%E9%AA%8C.html">MuseTalk官方能力核验</a><a data-document href="../01-%E6%95%B0%E5%AD%97%E4%BA%BA%E5%8F%A3%E6%92%AD/%E6%B5%8B%E8%AF%95%E7%B4%A0%E6%9D%90%E6%8E%A5%E5%8F%A3%E6%A0%B8%E9%AA%8C.html">测试素材接口核验</a><a data-document href="../01-%E6%95%B0%E5%AD%97%E4%BA%BA%E5%8F%A3%E6%92%AD/%E7%81%AB%E5%B1%B1%E5%80%99%E9%80%89%E6%A0%B8%E9%AA%8C.html">火山候选核验</a><a data-document href="../01-%E6%95%B0%E5%AD%97%E4%BA%BA%E5%8F%A3%E6%92%AD/%E9%98%BF%E9%87%8C%E5%80%99%E9%80%89%E6%A0%B8%E9%AA%8C.html">阿里候选核验</a></nav></section><section class="nav-group"><h2 class="group-title">已选模型接入核验</h2><nav class="doc-nav" aria-label="已选模型接入核验"><a data-document href="%E5%AE%98%E6%96%B9%E6%96%87%E6%9C%AC%E4%B8%8E%E8%AF%AD%E9%9F%B3%E6%8E%A5%E5%8F%A3%E6%A0%B8%E9%AA%8C.html" aria-current="page">官方文本与语音接口核验</a></nav></section><section class="nav-group"><h2 class="group-title">人物与音色候选</h2><nav class="doc-nav" aria-label="人物与音色候选"><a data-document href="../03-%E4%BA%BA%E7%89%A9%E4%B8%8E%E9%9F%B3%E8%89%B2/01-%E9%A6%96%E8%BD%AE%E5%80%99%E9%80%89%E4%B8%8E%E9%80%89%E6%8B%A9%E8%AF%B4%E6%98%8E.html">01 首轮候选与选择说明</a><a data-document href="../03-%E4%BA%BA%E7%89%A9%E4%B8%8E%E9%9F%B3%E8%89%B2/02-%E4%BA%BA%E7%89%A9B%E4%B8%8E%E9%9F%B3%E8%89%B23%E5%AE%9A%E7%89%88%E8%AE%B0%E5%BD%95.html">02 人物B与音色3定版记录</a></nav></section><section class="nav-group"><h2 class="group-title">调研资料</h2><nav class="doc-nav" aria-label="调研资料"><a data-document href="../../research/01-%E4%BA%A7%E5%93%81%E5%BD%A2%E6%80%81%E4%B8%8E%E6%8A%96%E9%9F%B3%E7%94%9F%E6%80%81.html">01 产品形态与抖音生态</a><a data-document href="../../research/02-%E4%BA%BA%E7%89%A9%E4%B8%80%E8%87%B4%E6%80%A7%E7%94%9F%E6%88%90.html">02 人物一致性生成</a><a data-document href="../../research/03-%E6%95%B0%E5%AD%97%E4%BA%BA%E5%8F%A3%E6%92%AD%E9%80%89%E5%9E%8B.html">03 数字人口播选型</a><a data-document href="../../research/04-TTS%E9%9F%B3%E8%89%B2%E4%B8%8E%E5%86%85%E5%AE%B9%E7%94%9F%E6%88%90%E8%B4%A8%E6%A3%80.html">04 TTS音色与内容生成质检</a><a data-document href="../../research/05-%E8%A7%86%E9%A2%91%E5%90%8E%E5%A4%84%E7%90%86%E5%8F%91%E5%B8%83%E4%B8%8E%E5%90%88%E8%A7%84.html">05 视频后处理发布与合规</a><a data-document href="../../research/06-%E5%86%B3%E7%AD%96%E6%B1%87%E6%80%BB.html">06 决策汇总</a></nav></section>
+    <p class="sidebar-note">11 份开发文档<br>10 份本轮选型试验<br>1 份已选模型接入核验<br>2 份人物与音色候选<br>6 份调研资料</p>
+  </aside>
+  <main id="main" tabindex="-1">
+    <header class="document-header">
+      <p class="eyebrow">已选模型接入核验 / 官方文本与语音接口核验</p>
+      <h1>官方文本与语音接口核验</h1>
+      <div class="doc-meta"><span>2026-09-21 核验记录</span><span>6 个章节</span><a href="%E5%AE%98%E6%96%B9%E6%96%87%E6%9C%AC%E4%B8%8E%E8%AF%AD%E9%9F%B3%E6%8E%A5%E5%8F%A3%E6%A0%B8%E9%AA%8C.md">Markdown 原文</a></div>
+      
+    </header>
+    <div class="reader-tools">
+      <form id="search-form" role="search">
+        <label class="sr-only" for="search-input">搜索本文</label>
+        <input id="search-input" type="search" placeholder="搜索本文，按 Enter 跳转" autocomplete="off">
+        <button id="search-next" type="submit">下一处</button>
+        <button id="search-clear" type="button">清除</button>
+        <span id="search-status" role="status" aria-live="polite"></span>
+      </form>
+    </div>
+    <article id="document-body">
+<p>核验日期：2026-09-21。调用渠道：各家官方 API 直连。范围：DeepSeek V4.1 Flash 与 MiniMax Speech 2.8 HD 的公开官方文档。</p>
+<p>本轮仅检索和读取文档，没有读取项目密钥、调用模型、创建音色或产生模型推理费用。以下属于文档核验，账户权限、接口连通性、实际音质、延迟与计费均尚未实测。</p>
+<h2 id="1-已确认的名称与配置">1. 已确认的名称与配置</h2>
+<ul>
+<li>用户选择的文本模型版本为 <strong>DeepSeek-V4.1-Flash</strong>。官方当前要求请求 <code>model="deepseek-flash"</code>，不能直接把用户写的 <code>deepseek-v4.1-flash</code> 当作已验证的 API ID。这是官方版本到调用名的映射，不是更换用户选择的模型。</li>
+<li>用户选择的语音模型为 <strong>MiniMax Speech 2.8 HD</strong>。官方请求 ID 为 <code>speech-2.8-hd</code>，不是 <code>minmax-speech-2.8 HD</code>。</li>
+<li>两者都是官方云 API；用户本地或算力云自部署的是 MuseTalk 数字人口播模块。本次没有选择自托管上述文本或语音模型。</li>
+</ul>
+<p>建议配置名称如下。变量名是项目建议，API 地址与请求 ID 来自官方文档；不包含真实凭据。</p>
+<pre><code class="language-dotenv">DEEPSEEK_API_KEY=
+DEEPSEEK_BASE_URL=https://api.deepseek.com
+DEEPSEEK_MODEL=deepseek-flash
+DEEPSEEK_EXPECTED_MODEL_VERSION=DeepSeek-V4.1-Flash
+
+MINIMAX_API_KEY=
+MINIMAX_BASE_URL=https://api.minimax.cn
+MINIMAX_TTS_MODEL=speech-2.8-hd
+MINIMAX_VOICE_ID=
+</code></pre>
+<p><code>MINIMAX_VOICE_ID</code> 需要试听并确认后固定，当前不填入随机示例音色，也不继承旧实验 Qwen / Cherry 的音色标识。不同厂商的音色 ID 不通用。</p>
+<h2 id="2-deepseek-官方接口与版本映射">2. DeepSeek 官方接口与版本映射</h2>
+<h3 id="21-接口">2.1 接口</h3>
+<ul>
+<li>Base URL：<code>https://api.deepseek.com</code>。</li>
+<li>请求：<code>POST /chat/completions</code>。</li>
+<li>认证：<code>Authorization: Bearer &lt;DEEPSEEK_API_KEY&gt;</code>。</li>
+<li>请求格式：<code>Content-Type: application/json</code>，兼容 OpenAI Chat Completions。</li>
+<li>账户模型列表：<code>GET /models</code>。本轮未发送带凭据的请求。</li>
+<li>本项目先采用 Chat Completions 的文本 JSON 输出路径；官方也列出 Responses API，但不因此增加第二套业务调用协议。</li>
+</ul>
+<p>官方首页原文摘录：<a href="https://api-docs.deepseek.com/" rel="noopener noreferrer" target="_blank">Your First API Call</a></p>
+<blockquote>
+<p>Use <code>deepseek-flash</code> as the model name. The legacy names <code>deepseek-v4-flash</code> and <code>deepseek-v4-flash-vision-exp</code> are still accepted, but the corresponding models have been retired, their requests are served by the DeepSeek-V4.1-Flash model and billed at the Flash price.</p>
+</blockquote>
+<p>官方价格与能力页：<a href="https://api-docs.deepseek.com/quick_start/pricing/" rel="noopener noreferrer" target="_blank">Models &amp; Pricing</a></p>
+<blockquote>
+<p>MODEL: deepseek-flash；MODEL VERSION: DeepSeek-V4.1-Flash；Json Output: ✓；Tool Calls: ✓。</p>
+</blockquote>
+<p>因此生产配置使用 <code>deepseek-flash</code>，同时在每次调用记录中保存请求 ID、请求的 model、响应 model、<code>system_fingerprint</code>（若返回）、用量和核验时的官方版本映射。该调用名是官方别名，不等于永久固定版本快照；后续若官方映射变化，应重新做回归对比，不宣称它能永久锁定 V4.1。</p>
+<h3 id="22-json-输出与质量边界">2.2 JSON 输出与质量边界</h3>
+<p>官方 <a href="https://api-docs.deepseek.com/guides/json_mode/" rel="noopener noreferrer" target="_blank">JSON Output</a> 要求：</p>
+<ol>
+<li>设置 <code>response_format={"type":"json_object"}</code>。</li>
+<li>system 或 user 提示词包含 <code>json</code>，并给出所需 JSON 示例。</li>
+<li>设置足够的 <code>max_tokens</code>，防止输出截断。</li>
+<li>需要处理偶发空内容。</li>
+</ol>
+<p>最小请求形状如下，仅供接口设计，不是已执行的请求：</p>
+<pre><code class="language-json">{
+  "model": "deepseek-flash",
+  "messages": [
+    {
+      "role": "system",
+      "content": "请根据已提供的资料输出 json 对象，字段为 title、description、tags、segments、claims。不得编造资料引用。"
+    },
+    {
+      "role": "user",
+      "content": "生成一期面向初学者的 RAG 科普口播稿，目标 60 秒。资料包和历史查重结果由业务层提供。"
+    }
+  ],
+  "response_format": {"type": "json_object"},
+  "thinking": {"type": "disabled"},
+  "stream": false,
+  "max_tokens": 4096
+}
+</code></pre>
+<p>这里关闭 thinking 是用于首个接口测试的可调整参数，不代表用户已经选定最终推理强度。生成稿件与内容评估是否启用 thinking，应通过同输入测试决定并分别记录耗时和 tokens。</p>
+<p>JSON Output 只处理 JSON 格式；业务层仍须用 Pydantic 或 JSON Schema 检查字段、类型、长度、分段和引用。出现空结果、<code>finish_reason=length</code>、缺少字段或不合法引用时，不能进入 TTS。事实判断需要检索资料与引用核对，模型自检不能作为唯一证据。</p>
+<p>官方 <a href="https://api-docs.deepseek.com/api/create-chat-completion/" rel="noopener noreferrer" target="_blank">Chat Completions API</a> 的 <code>response_format.type</code> 当前列出 <code>text</code>、<code>json_object</code>；不要假定这里支持 OpenAI 的 <code>json_schema</code> 形式。该页另有工具调用 <code>strict</code> 的 Beta 能力，这与普通 JSON 输出不同，不作为首版必需依赖。</p>
+<h3 id="23-官方页面不一致的处理">2.3 官方页面不一致的处理</h3>
+<p>同日获取的 Chat Completions 参数页仍列出旧 ID <code>deepseek-v4-flash</code>、<code>deepseek-v4-pro</code>、<code>deepseek-v4-flash-vision-exp</code>；首页和价格页已明确说明 Flash 升级映射。采用首页和价格页一致给出的 <code>deepseek-flash</code>，在首次账户连通性验证时保存 <code>/models</code> 与实际响应证据，不用旧参数页否定用户要求的 V4.1。</p>
+<p><code>thinking_mode</code> 指南抓取结果还含 <code>deepseek-chat</code>、<code>deepseek-reasoner</code> 及旧的输出上限描述。不要将这些旧示例参数上限复制成 V4.1 的当前限制；版本能力与额度以当前模型页和账户实际接口验证为准。</p>
+<h2 id="3-minimax-官方接口与固定音色">3. MiniMax 官方接口与固定音色</h2>
+<h3 id="31-同步-http-作为一分钟口播的首个接入路径">3.1 同步 HTTP 作为一分钟口播的首个接入路径</h3>
+<p>官方 <a href="https://platform.minimaxi.com/docs/api-reference/speech-t2a-http" rel="noopener noreferrer" target="_blank">同步语音合成 HTTP</a> 当前 OpenAPI 列出：</p>
+<pre><code class="language-text">servers: https://api.minimax.cn
+POST /v1/t2a_v2
+Authorization: Bearer &lt;MINIMAX_API_KEY&gt;
+Content-Type: application/json
+model: speech-2.8-hd
+</code></pre>
+<p>同一页还公布备用接口 <code>https://api-bj.minimaxi.com/v1/t2a_v2</code>。官方其他页面（例如音色列表、异步接口）仍出现 <code>https://api.minimaxi.com</code>。因此项目对地址保留配置项，首轮按同步接口文档的 <code>https://api.minimax.cn</code> 验证；不能把不同页面的域名混用后宣称全部已经测通，也不在超时后自动换地址重发计费任务。</p>
+<p>本项目一分钟口播无需为了长度使用异步接口：同步文档给出文本长度小于 10,000 字符，超过 3,000 字符建议流式。最终长度限制、超时和重试策略仍需通过真实稿件测试。</p>
+<h3 id="32-固定声音需要固定什么">3.2 固定声音需要固定什么</h3>
+<ul>
+<li><code>voice_setting.voice_id</code>：支持系统、复刻、文生音色。长期保存审核通过的具体 ID。</li>
+<li>同时锁定模型 ID、基础语速、音调、声音效果配置及样音 SHA256；仅把每句需要的停顿和情绪作为朗读计划。</li>
+<li><code>speed</code>：范围 <code>[0.5, 2]</code>，默认 <code>1.0</code>。</li>
+<li><code>vol</code>：范围 <code>(0, 10]</code>，默认 <code>1.0</code>。</li>
+<li><code>pitch</code>：范围 <code>[-12, 12]</code>，默认 <code>0</code>。</li>
+<li><code>voice_modify</code> 会改变音高、强度、音色等，应随 VoiceAsset 版本记录；首版不随机混音或调整音色。</li>
+</ul>
+<p>官方 <a href="https://platform.minimaxi.com/docs/api-reference/voice-management-get" rel="noopener noreferrer" target="_blank">查询可用音色 ID</a> 原文：</p>
+<blockquote>
+<p>该 API 支持查询当前账号下可调用的全部音色 ID（voice_id）。</p>
+</blockquote>
+<p>该页面列出 <code>POST https://api.minimaxi.com/v1/get_voice</code>，请求可以使用 <code>{"voice_type":"system"}</code>。官方返回示例包含 <code>Chinese (Mandarin)_News_Anchor</code> 等，但这里只证明文档列有该音色，不替用户选择声音，也未证明本账户已可调用。<code>voice_name</code> 是显示名，不能替代 <code>voice_id</code>。</p>
+<h3 id="33-停顿情绪与发音">3.3 停顿、情绪与发音</h3>
+<p>同步接口文档原文：</p>
+<blockquote>
+<p>在文本中增加 <code>&lt;#x#&gt;</code> 标记，<code>x</code> 为停顿时长（单位：秒），范围 <code>[0.01, 99.99]</code>，最多保留两位小数。文本间隔时间需设置在两个可以语音发音的文本之间，不可连续使用多个停顿标记。</p>
+</blockquote>
+<p>例如 TTS 文本可以写成 <code>你可能不知道。&lt;#0.35#&gt;RAG 会先查资料，再生成回答。</code>，字幕展示文本须去掉控制标记。</p>
+<p><code>emotion</code> 文档支持 happy、sad、angry、fearful、disgusted、surprised、calm，并可由模型按文本自动匹配。文档的额外枚举还包括 fluent、whisper，但说明对版本有限制，其中明确写出 <strong>Speech 2.8 不支持 whisper</strong>；fluent 也不应只凭枚举就认定 2.8 可用。首版采用明确支持的七项或不传 emotion，再用真实样音验证表现。</p>
+<p>Speech 2.8 支持 <code>(laughs)</code>、<code>(chuckle)</code>、<code>(breath)</code>、<code>(sighs)</code> 等语气词标签。它们是声音事件，不等于任意 SSML 标签或逐字重音协议。行内拼音 / IPA 以及 <code>pronunciation_dict.tone</code> 可用于 RAG、API 等术语读法；术语替换规则要保存版本，且需要试听验证。</p>
+<h3 id="34-音频字幕时间戳与返回处理">3.4 音频、字幕时间戳与返回处理</h3>
+<ul>
+<li><code>stream=false</code> 时，<code>output_format</code> 支持 <code>hex</code> 或 <code>url</code>；URL 有效期为 24 小时，不能直接当永久资产地址。</li>
+<li><code>stream=true</code> 仅返回 hex；本项目先测非流式，便于保存完整音频与时间戳。</li>
+<li>音频请求格式枚举包含 <code>mp3</code>、<code>pcm</code>、<code>flac</code>、<code>wav</code> 等；建议先请求单声道无损音频，再由 FFmpeg 统一为 MuseTalk 实际需要的 PCM WAV。该路径尚未实测。</li>
+<li><code>subtitle_enable=true</code> 开启字幕。<code>subtitle_type</code> 文档列出 <code>sentence</code>（句级）、<code>word</code>（词级）、<code>word_streaming</code>（仅流式）。优先验证 <code>word</code>，为重点词高亮提供时间戳。</li>
+<li>返回包含 <code>data.audio</code>、<code>data.subtitle_file</code>、<code>trace_id</code>、<code>extra_info</code> 与 <code>base_resp</code>。必须同时检查 HTTP 状态、<code>base_resp.status_code==0</code>、<code>data</code> 非空、音频完整解码及实际时长；HTTP 200 本身不等于合成成功。</li>
+<li><code>extra_info</code> 包含 <code>audio_length</code>（毫秒）、采样率、声道、音频大小、<code>usage_characters</code> 等，用于验收和成本台账。</li>
+</ul>
+<p>字幕文档存在一处不一致：请求支持 <code>subtitle_type=word</code>，但响应 <code>subtitle_file</code> 的字段说明仍写“精确到句（不超过 50 字），单位为毫秒，格式为 json”。因此，<strong>词级时间戳是官方声明支持、待实际响应核验的能力</strong>，不能据此删除字幕对齐的后备接口。</p>
+<p>接入时需要下载并保留原始字幕 JSON，确认字段和单位，再转换为内部时间轴、SRT / ASS。若只有句级时间戳，可生成句级字幕；逐词高亮需要另行对齐。后处理改变首尾时长、切片或拼接后，必须更新字幕时间轴。这里不新增或擅自选定 ASR / 对齐模型。</p>
+<h3 id="35-初始测试请求形状">3.5 初始测试请求形状</h3>
+<p>以下只是模板，不会在文档生成时执行，<code>&lt;审核通过的固定音色ID&gt;</code> 必须由已确认的 VoiceAsset 提供。</p>
+<pre><code class="language-json">{
+  "model": "speech-2.8-hd",
+  "text": "你可能不知道。&lt;#0.35#&gt;检索增强生成，会先查资料，再生成回答。",
+  "stream": false,
+  "voice_setting": {
+    "voice_id": "&lt;审核通过的固定音色ID&gt;",
+    "speed": 1.0,
+    "vol": 1.0,
+    "pitch": 0
+  },
+  "audio_setting": {
+    "sample_rate": 32000,
+    "format": "wav",
+    "channel": 1
+  },
+  "language_boost": "Chinese",
+  "subtitle_enable": true,
+  "subtitle_type": "word",
+  "output_format": "hex"
+}
+</code></pre>
+<h2 id="4-费用口径">4. 费用口径</h2>
+<p>官方 <a href="https://platform.minimaxi.com/docs/guides/pricing-paygo" rel="noopener noreferrer" target="_blank">MiniMax 按量计费</a> 本次读取显示 Speech 2.8 HD 同步和异步均为 <strong>3.5 元 / 万计费字符</strong>。原文说明：</p>
+<blockquote>
+<p>1 个汉字算 2 个字符，英文字母、希腊字母、标点符号、特殊符号、空格、回车等算 1 个字符。</p>
+</blockquote>
+<p>不能把“一万汉字”直接当“一万计费字符”。粗略例子：一分钟若有 250 个汉字，仅汉字部分为 500 个计费字符，对应 0.175 元；实际还要计入标点、控制文本等，以 <code>usage_characters</code> 与账单核对。该例没有证明 250 字必然读满一分钟，也没有包含返工、音色设计或复刻费用。</p>
+<p>官方 DeepSeek 价格页本次读取为美元报价，并按输入缓存命中、未命中、输出 tokens 及峰谷时段分别计价。成本记录应存输入 / 输出 tokens、缓存分类、调用时间、币种、价格核验日期和实际账单；不能将美元数字直接当人民币。当前没有账户用量证据，也不承诺单位成片文本成本。</p>
+<h2 id="5-接入验收清单">5. 接入验收清单</h2>
+<ol>
+<li>使用新模型各完成独立的、小规模真实接口测试；不复用或改写以前 Qwen / 阿里 / 火山实测的成功结论。</li>
+<li>DeepSeek 检查请求 ID 与版本映射、JSON 格式、结构字段、引用真实性、60 秒稿件长度、重复率和用量。</li>
+<li>MiniMax 先确认固定 voice_id，再检查普通话、英文术语、数字、停顿、情绪、首尾完整性、字幕 JSON 粒度和计费字符。</li>
+<li>将合格 MiniMax 音频作为唯一音频输入接入已部署 MuseTalk，保留原始音频、归一化音频、字幕和 SHA256。单个模块成功不等于全链路合格。</li>
+<li>最终记录 5 条一分钟稿件的总耗时、失败次数、返工次数及合格产出成本，之后才能替换现有基于短样片的成本假设。</li>
+</ol>
+<h2 id="6-官方证据索引">6. 官方证据索引</h2>
+<ul>
+<li>DeepSeek 官方首页与 Flash 映射：https://api-docs.deepseek.com/</li>
+<li>DeepSeek 模型能力与价格：https://api-docs.deepseek.com/quick_start/pricing/</li>
+<li>DeepSeek Chat Completions 参数：https://api-docs.deepseek.com/api/create-chat-completion/</li>
+<li>DeepSeek JSON 输出：https://api-docs.deepseek.com/guides/json_mode/</li>
+<li>DeepSeek 模型列表：https://api-docs.deepseek.com/api/list-models</li>
+<li>DeepSeek thinking 指南（含旧示例，需结合当前版本核验）：https://api-docs.deepseek.com/guides/thinking_mode</li>
+<li>MiniMax 同步 HTTP 接口：https://platform.minimaxi.com/docs/api-reference/speech-t2a-http</li>
+<li>MiniMax 可用音色查询：https://platform.minimaxi.com/docs/api-reference/voice-management-get</li>
+<li>MiniMax 计费说明：https://platform.minimaxi.com/docs/guides/pricing-paygo</li>
+<li>MiniMax 官方文档目录：https://platform.minimaxi.com/docs/llms.txt</li>
+</ul>
+</article>
+    <nav class="document-pager" aria-label="相邻文档"><a rel="prev" href="../01-%E6%95%B0%E5%AD%97%E4%BA%BA%E5%8F%A3%E6%92%AD/%E9%98%BF%E9%87%8C%E5%80%99%E9%80%89%E6%A0%B8%E9%AA%8C.html"><span>上一篇</span>阿里候选核验</a><a rel="next" href="../03-%E4%BA%BA%E7%89%A9%E4%B8%8E%E9%9F%B3%E8%89%B2/01-%E9%A6%96%E8%BD%AE%E5%80%99%E9%80%89%E4%B8%8E%E9%80%89%E6%8B%A9%E8%AF%B4%E6%98%8E.html"><span>下一篇</span>01-首轮候选与选择说明</a></nav>
+    <footer class="page-footer">与同名 Markdown 对应的阅读版 · 可离线阅读与打印</footer>
+  </main>
+  <aside class="toc-panel" aria-label="本文章节"><p class="group-title">本页目录</p><nav id="toc"><a class="toc-h2" href="#1-%E5%B7%B2%E7%A1%AE%E8%AE%A4%E7%9A%84%E5%90%8D%E7%A7%B0%E4%B8%8E%E9%85%8D%E7%BD%AE">1. 已确认的名称与配置</a><a class="toc-h2" href="#2-deepseek-%E5%AE%98%E6%96%B9%E6%8E%A5%E5%8F%A3%E4%B8%8E%E7%89%88%E6%9C%AC%E6%98%A0%E5%B0%84">2. DeepSeek 官方接口与版本映射</a><a class="toc-h3" href="#21-%E6%8E%A5%E5%8F%A3">2.1 接口</a><a class="toc-h3" href="#22-json-%E8%BE%93%E5%87%BA%E4%B8%8E%E8%B4%A8%E9%87%8F%E8%BE%B9%E7%95%8C">2.2 JSON 输出与质量边界</a><a class="toc-h3" href="#23-%E5%AE%98%E6%96%B9%E9%A1%B5%E9%9D%A2%E4%B8%8D%E4%B8%80%E8%87%B4%E7%9A%84%E5%A4%84%E7%90%86">2.3 官方页面不一致的处理</a><a class="toc-h2" href="#3-minimax-%E5%AE%98%E6%96%B9%E6%8E%A5%E5%8F%A3%E4%B8%8E%E5%9B%BA%E5%AE%9A%E9%9F%B3%E8%89%B2">3. MiniMax 官方接口与固定音色</a><a class="toc-h3" href="#31-%E5%90%8C%E6%AD%A5-http-%E4%BD%9C%E4%B8%BA%E4%B8%80%E5%88%86%E9%92%9F%E5%8F%A3%E6%92%AD%E7%9A%84%E9%A6%96%E4%B8%AA%E6%8E%A5%E5%85%A5%E8%B7%AF%E5%BE%84">3.1 同步 HTTP 作为一分钟口播的首个接入路径</a><a class="toc-h3" href="#32-%E5%9B%BA%E5%AE%9A%E5%A3%B0%E9%9F%B3%E9%9C%80%E8%A6%81%E5%9B%BA%E5%AE%9A%E4%BB%80%E4%B9%88">3.2 固定声音需要固定什么</a><a class="toc-h3" href="#33-%E5%81%9C%E9%A1%BF%E6%83%85%E7%BB%AA%E4%B8%8E%E5%8F%91%E9%9F%B3">3.3 停顿、情绪与发音</a><a class="toc-h3" href="#34-%E9%9F%B3%E9%A2%91%E5%AD%97%E5%B9%95%E6%97%B6%E9%97%B4%E6%88%B3%E4%B8%8E%E8%BF%94%E5%9B%9E%E5%A4%84%E7%90%86">3.4 音频、字幕时间戳与返回处理</a><a class="toc-h3" href="#35-%E5%88%9D%E5%A7%8B%E6%B5%8B%E8%AF%95%E8%AF%B7%E6%B1%82%E5%BD%A2%E7%8A%B6">3.5 初始测试请求形状</a><a class="toc-h2" href="#4-%E8%B4%B9%E7%94%A8%E5%8F%A3%E5%BE%84">4. 费用口径</a><a class="toc-h2" href="#5-%E6%8E%A5%E5%85%A5%E9%AA%8C%E6%94%B6%E6%B8%85%E5%8D%95">5. 接入验收清单</a><a class="toc-h2" href="#6-%E5%AE%98%E6%96%B9%E8%AF%81%E6%8D%AE%E7%B4%A2%E5%BC%95">6. 官方证据索引</a></nav></aside>
+</div>
+<button type="button" class="sidebar-scrim" aria-label="关闭文档目录" hidden></button>
+<button type="button" class="back-top" aria-label="返回顶部">顶部</button>
+<script>(() => {
+  'use strict';
+
+  function initializeReader() {
+    const article = document.getElementById('document-body');
+    if (!article) return;
+    const root = document.documentElement;
+    const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
+    const scrollBehavior = () => reducedMotion.matches ? 'instant' : 'smooth';
+
+    // Local files and privacy settings can deny storage; controls remain usable.
+    const fontKey = 'document-reader-font-size';
+    let fontSize = 17;
+    try {
+      const savedSize = Number(localStorage.getItem(fontKey));
+      if (Number.isFinite(savedSize) && savedSize >= 14 && savedSize <= 22) fontSize = savedSize;
+    } catch (_) { /* Storage is optional. */ }
+    const smaller = document.querySelector('.font-smaller');
+    const reset = document.querySelector('.font-reset');
+    const larger = document.querySelector('.font-larger');
+    function setFontSize(value) {
+      fontSize = Math.max(14, Math.min(22, value));
+      root.style.setProperty('--reader-font-size', `${fontSize}px`);
+      if (smaller) smaller.disabled = fontSize === 14;
+      if (larger) larger.disabled = fontSize === 22;
+      if (reset) reset.title = `恢复默认字号（当前 ${fontSize}px）`;
+      try { localStorage.setItem(fontKey, String(fontSize)); } catch (_) { /* Optional. */ }
+    }
+    setFontSize(fontSize);
+    smaller?.addEventListener('click', () => setFontSize(fontSize - 1));
+    reset?.addEventListener('click', () => setFontSize(17));
+    larger?.addEventListener('click', () => setFontSize(fontSize + 1));
+    document.querySelector('.print-button')?.addEventListener('click', () => window.print());
+
+    const menu = document.querySelector('.mobile-menu');
+    const sidebar = document.getElementById('doc-sidebar');
+    const scrim = document.querySelector('.sidebar-scrim');
+    const mobileWidth = window.matchMedia('(max-width: 800px)');
+    function setMenu(open, returnFocus = false) {
+      const visible = open && mobileWidth.matches;
+      document.body.classList.toggle('menu-open', visible);
+      menu?.setAttribute('aria-expanded', String(visible));
+      if (scrim) scrim.hidden = !visible;
+      if (visible) {
+        sidebar?.querySelector('[aria-current="page"], a, button')?.focus();
+      } else if (returnFocus) menu?.focus();
+    }
+    menu?.addEventListener('click', () => setMenu(!document.body.classList.contains('menu-open')));
+    scrim?.addEventListener('click', () => setMenu(false, true));
+    sidebar?.addEventListener('click', (event) => {
+      if (event.target.closest('a')) setMenu(false);
+    });
+    mobileWidth.addEventListener('change', () => setMenu(false));
+    document.addEventListener('keydown', (event) => {
+      if (!document.body.classList.contains('menu-open')) return;
+      if (event.key === 'Escape') {
+        event.preventDefault();
+        setMenu(false, true);
+      }
+      if (event.key === 'Tab') {
+        const focusable = [menu, ...sidebar.querySelectorAll('a[href], button:not([disabled]), [tabindex="0"]')].filter(Boolean);
+        const first = focusable[0];
+        const last = focusable[focusable.length - 1];
+        if (event.shiftKey && document.activeElement === first) {
+          event.preventDefault();
+          last?.focus();
+        } else if (!event.shiftKey && document.activeElement === last) {
+          event.preventDefault();
+          first?.focus();
+        }
+      }
+    });
+    setMenu(false);
+
+    const searchForm = document.getElementById('search-form');
+    const searchInput = document.getElementById('search-input');
+    const searchNext = document.getElementById('search-next');
+    const searchClear = document.getElementById('search-clear');
+    const searchStatus = document.getElementById('search-status');
+    let searchResults = [];
+    let currentResult = -1;
+    let currentQuery = '';
+    let searchTimer;
+
+    function clearHighlights() {
+      article.querySelectorAll('mark.reader-match').forEach((mark) => {
+        const parent = mark.parentNode;
+        mark.replaceWith(document.createTextNode(mark.textContent));
+        parent.normalize();
+      });
+      article.querySelectorAll('.search-block-current').forEach((block) => block.classList.remove('search-block-current'));
+      searchResults = [];
+      currentResult = -1;
+    }
+
+    function showResult(index, shouldScroll) {
+      searchResults.forEach((result) => {
+        result.block.classList.remove('search-block-current');
+        result.marks.forEach((mark) => mark.classList.remove('is-current'));
+      });
+      currentResult = (index + searchResults.length) % searchResults.length;
+      const result = searchResults[currentResult];
+      result.block.classList.add('search-block-current');
+      result.marks.forEach((mark) => mark.classList.add('is-current'));
+      if (searchStatus) searchStatus.textContent = `第 ${currentResult + 1} / ${searchResults.length} 处匹配 · Enter 下一处`;
+      if (shouldScroll) {
+        let container = result.block.parentElement;
+        while (container && container !== article) {
+          if (container.tagName === 'DETAILS') container.open = true;
+          container = container.parentElement;
+        }
+        result.marks[0].scrollIntoView({ behavior: scrollBehavior(), block: 'center', inline: 'nearest' });
+      }
+    }
+
+    function runSearch(shouldScroll = false) {
+      clearTimeout(searchTimer);
+      clearHighlights();
+      const query = searchInput?.value.trim() || '';
+      currentQuery = query;
+      if (searchClear) searchClear.disabled = !query;
+      if (!query) {
+        if (searchStatus) searchStatus.textContent = '';
+        if (searchNext) searchNext.disabled = true;
+        return;
+      }
+      const queryLower = query.toLocaleLowerCase();
+      const blockResults = new Map();
+      // Walk original text nodes, preserving links, emphasis, tables and code.
+      const walker = document.createTreeWalker(article, NodeFilter.SHOW_TEXT, {
+        acceptNode(node) {
+          if (!node.nodeValue.trim()) return NodeFilter.FILTER_REJECT;
+          if (node.parentElement.closest('script, style, button, svg, mark, [aria-hidden="true"]')) return NodeFilter.FILTER_REJECT;
+          return node.nodeValue.toLocaleLowerCase().includes(queryLower) ? NodeFilter.FILTER_ACCEPT : NodeFilter.FILTER_REJECT;
+        }
+      });
+      const nodes = [];
+      while (walker.nextNode()) nodes.push(walker.currentNode);
+      nodes.forEach((node) => {
+        const original = node.nodeValue;
+        const normalized = original.toLocaleLowerCase();
+        const block = node.parentElement.closest('p, li, td, th, h2, h3, h4, h5, h6, pre, summary, figcaption') || node.parentElement;
+        let result = blockResults.get(block);
+        if (!result) {
+          result = { block, marks: [] };
+          blockResults.set(block, result);
+        }
+        const fragment = document.createDocumentFragment();
+        let position = 0;
+        let matchPosition;
+        while ((matchPosition = normalized.indexOf(queryLower, position)) !== -1) {
+          fragment.append(document.createTextNode(original.slice(position, matchPosition)));
+          const mark = document.createElement('mark');
+          mark.className = 'reader-match';
+          mark.textContent = original.slice(matchPosition, matchPosition + query.length);
+          fragment.append(mark);
+          result.marks.push(mark);
+          position = matchPosition + query.length;
+        }
+        fragment.append(document.createTextNode(original.slice(position)));
+        node.replaceWith(fragment);
+      });
+      searchResults = [...blockResults.values()];
+      if (searchNext) searchNext.disabled = !searchResults.length;
+      if (!searchResults.length) {
+        if (searchStatus) searchStatus.textContent = '未找到匹配内容';
+      } else showResult(0, shouldScroll);
+    }
+
+    searchInput?.addEventListener('input', (event) => {
+      if (event.isComposing) return;
+      clearTimeout(searchTimer);
+      searchTimer = setTimeout(() => runSearch(false), 180);
+    });
+    searchInput?.addEventListener('compositionend', () => {
+      clearTimeout(searchTimer);
+      searchTimer = setTimeout(() => runSearch(false), 180);
+    });
+    searchForm?.addEventListener('submit', (event) => {
+      event.preventDefault();
+      const queryChanged = currentQuery !== searchInput.value.trim();
+      if (queryChanged) runSearch(true);
+      else if (searchResults.length) showResult(currentResult + 1, true);
+    });
+    if (searchNext && searchNext.type !== 'submit') {
+      searchNext.addEventListener('click', () => {
+        if (currentQuery !== searchInput.value.trim()) runSearch(true);
+        else if (searchResults.length) showResult(currentResult + 1, true);
+      });
+    }
+    function resetSearch() {
+      clearTimeout(searchTimer);
+      if (searchInput) searchInput.value = '';
+      currentQuery = '';
+      clearHighlights();
+      if (searchStatus) searchStatus.textContent = '';
+      if (searchNext) searchNext.disabled = true;
+      if (searchClear) searchClear.disabled = true;
+    }
+    searchClear?.addEventListener('click', (event) => {
+      event.preventDefault();
+      resetSearch();
+      searchInput?.focus();
+    });
+    searchInput?.addEventListener('keydown', (event) => {
+      if (event.key === 'Escape' && !event.isComposing) {
+        event.preventDefault();
+        resetSearch();
+      }
+      if (event.key === 'Enter' && event.isComposing) event.preventDefault();
+    });
+    resetSearch();
+
+    async function copyText(text) {
+      try {
+        if (navigator.clipboard?.writeText) {
+          await navigator.clipboard.writeText(text);
+          return true;
+        }
+      } catch (_) { /* File URLs may reject the modern Clipboard API. */ }
+      const previousFocus = document.activeElement;
+      const selection = window.getSelection();
+      const savedRanges = selection ? Array.from({ length: selection.rangeCount }, (_, i) => selection.getRangeAt(i).cloneRange()) : [];
+      const field = document.createElement('textarea');
+      field.value = text;
+      field.readOnly = true;
+      field.style.cssText = 'position:fixed;left:-9999px;top:0;opacity:0;font-size:16px';
+      document.body.append(field);
+      field.select();
+      let copied = false;
+      try { copied = document.execCommand('copy'); } catch (_) { /* Show the failure state. */ }
+      field.remove();
+      if (selection) {
+        selection.removeAllRanges();
+        savedRanges.forEach((range) => selection.addRange(range));
+      }
+      previousFocus?.focus({ preventScroll: true });
+      return copied;
+    }
+
+    article.querySelectorAll('pre').forEach((pre) => {
+      const code = pre.querySelector('code');
+      if (!code || pre.querySelector('.copy-code')) return;
+      const button = document.createElement('button');
+      button.type = 'button';
+      button.className = 'copy-code';
+      button.textContent = '复制代码';
+      button.setAttribute('aria-label', '复制代码');
+      button.setAttribute('aria-live', 'polite');
+      pre.append(button);
+      let labelTimer;
+      button.addEventListener('click', async () => {
+        clearTimeout(labelTimer);
+        const copied = await copyText(code.textContent);
+        button.textContent = copied ? '已复制' : '请选中后复制';
+        labelTimer = setTimeout(() => { button.textContent = '复制代码'; }, 2200);
+      });
+    });
+
+    // Scroll-spy works without observers and avoids changing browser history.
+    const tocLinks = Array.from(document.querySelectorAll('#toc a[href^="#"]'));
+    const sections = tocLinks.map((link) => {
+      let id;
+      try { id = decodeURIComponent(link.getAttribute('href').slice(1)); } catch (_) { return null; }
+      const heading = document.getElementById(id);
+      return heading ? { link, heading } : null;
+    }).filter(Boolean);
+    let activeLink = null;
+    const backTop = document.querySelector('.back-top');
+    let framePending = false;
+    function updateScrollState() {
+      framePending = false;
+      if (backTop) backTop.hidden = window.scrollY < 480;
+      let active = sections[0];
+      const header = document.querySelector('.topbar');
+      const threshold = (header?.getBoundingClientRect().height || 76) + 38;
+      for (const section of sections) {
+        if (section.heading.getBoundingClientRect().top <= threshold) active = section;
+        else break;
+      }
+      if (!active || active.link === activeLink) return;
+      activeLink?.removeAttribute('aria-current');
+      activeLink?.classList.remove('is-active');
+      activeLink = active.link;
+      activeLink.setAttribute('aria-current', 'location');
+      activeLink.classList.add('is-active');
+      const panel = document.querySelector('.toc-panel');
+      if (panel && panel.clientHeight) {
+        const linkRect = activeLink.getBoundingClientRect();
+        const panelRect = panel.getBoundingClientRect();
+        if (linkRect.top < panelRect.top + 25 || linkRect.bottom > panelRect.bottom - 25) {
+          panel.scrollTop += linkRect.top - panelRect.top - panel.clientHeight / 3;
+        }
+      }
+    }
+    function queueScrollUpdate() {
+      if (!framePending) {
+        framePending = true;
+        requestAnimationFrame(updateScrollState);
+      }
+    }
+    window.addEventListener('scroll', queueScrollUpdate, { passive: true });
+    window.addEventListener('resize', queueScrollUpdate, { passive: true });
+    backTop?.addEventListener('click', () => window.scrollTo({ top: 0, behavior: scrollBehavior() }));
+    updateScrollState();
+  }
+
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', initializeReader, { once: true });
+  else initializeReader();
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,144 @@
+"""读取真实实验记录，生成离线样片对比报告；不调用任何云模型。"""
+from __future__ import annotations
+
+from datetime import datetime, timezone
+import hashlib
+import html
+import json
+from pathlib import Path
+import shutil
+import subprocess
+
+ROOT = Path(__file__).resolve().parent
+PROJECT = ROOT.parents[2]
+ALI = PROJECT / 'experiments/数字人口播选型'
+MT = PROJECT / 'experiments/MuseTalk部署/MT-001'
+
+
+def read(path):
+    return json.loads(path.read_text(encoding='utf-8'))
+
+
+def sha(path):
+    return hashlib.sha256(path.read_bytes()).hexdigest()
+
+
+def copy_verified(source, name):
+    target = ROOT / '素材' / name
+    target.parent.mkdir(exist_ok=True)
+    if target.exists():
+        assert sha(target) == sha(source), f'拒绝覆盖不同素材: {name}'
+    else:
+        shutil.copyfile(source, target)
+    assert sha(target) == sha(source)
+    return target
+
+
+def measure(path):
+    output = subprocess.run(['ffprobe', '-v', 'error', '-show_streams', '-show_format', '-of', 'json', str(path)], check=True, capture_output=True)
+    data = json.loads(output.stdout)
+    decode = subprocess.run(['ffmpeg', '-v', 'error', '-xerror', '-i', str(path), '-f', 'null', '-'], capture_output=True, timeout=90)
+    assert decode.returncode == 0 and not decode.stderr, '媒体完整解码未通过'
+    video = next(x for x in data['streams'] if x['codec_type'] == 'video')
+    audio = next(x for x in data['streams'] if x['codec_type'] == 'audio')
+    return {'sha256': sha(path), 'width': video['width'], 'height': video['height'], 'fps': video['avg_frame_rate'],
+            'frames': int(video['nb_frames']), 'video_seconds': float(video['duration']),
+            'audio_seconds': float(audio['duration']), 'full_decode': 'PASS', 'ffprobe': data}
+
+
+def main():
+    response = read(ALI / 'runs/TH-AB-001/aliyun_video-query-20260921T084430324285-response.json')
+    deployment = read(MT / '部署记录.json')
+    failed = read(ROOT / '补测结果.json')
+    assert failed['accepted'] is False and failed['http_status'] == 401, '结果改变时应更新报告文案，禁止套旧失败模板'
+    first = copy_verified(ALI / 'runs/TH-AB-001/B/原片.mp4', '阿里万相原片.mp4')
+    second = copy_verified(MT / '单图口播原片.mp4', 'MuseTalk单图原片.mp4')
+    copy_verified(ALI / 'inputs/测试人物.png', '共用人物.png')
+    copy_verified(ALI / 'inputs/测试口播.wav', '共用口播.wav')
+    copy_verified(MT / '单图关键帧-2.jpg', 'MuseTalk预览.jpg')
+    copy_verified(ALI / 'runs/TH-AB-001/B/参考图与关键帧.jpg', '阿里关键帧对照.jpg')
+    copy_verified(MT / '单图关键帧对照.jpg', 'MuseTalk关键帧对照.jpg')
+    poster = ROOT / '素材/阿里预览.jpg'
+    if not poster.exists():
+        subprocess.run(['ffmpeg', '-v', 'error', '-ss', '4.567', '-i', str(first), '-frames:v', '1', '-q:v', '2', str(poster)], check=True)
+    a, b = measure(first), measure(second)
+    expected_a = '29e8af401d8f4701a01cf50c35d526b7ff13a159715d4d9e6627dfc05c0c2fd0'
+    assert a['sha256'] == expected_a
+    assert b['sha256'] == read(MT / '单图媒体测量.json')['sha256']
+    parse = lambda value: datetime.strptime(value, '%Y-%m-%d %H:%M:%S.%f')
+    times = response['output']
+    ali_seconds = (parse(times['end_time']) - parse(times['submit_time'])).total_seconds()
+    mt_seconds = deployment['m1']['wall_seconds']
+    ali_cost = response['usage']['duration'] * 0.9
+    mt_cost = mt_seconds / 3600 * deployment['hourly_cny_user_reported']
+    data = {
+        'measured_at': datetime.now(timezone.utc).isoformat(), 'experiment': 'TH-COMP-002',
+        'scope': 'same original image and 9.36 second TTS; two reused videos; one new rejected Volc submission',
+        'eligible_videos': 2, 'compared_providers': 3, 'human_full_reviews': 0, 'selection': 'UNSELECTED',
+        'aliyun': {**a, 'generation_seconds': ali_seconds, 'timing_scope': 'provider_submit_to_end', 'estimated_video_cny': ali_cost},
+        'musetalk': {**b, 'generation_seconds': mt_seconds, 'timing_scope': 'whole_inference_process', 'estimated_active_gpu_cny': mt_cost},
+        'volcengine': failed, 'actual_bill_verified': False,
+        'shared_asset_estimated_cny': 0.2 + 79 * 0.8 / 10000,
+        'new_calls': {'image': 0, 'tts': 0, 'aliyun_video': 0, 'musetalk': 0, 'volc_video': 1},
+    }
+    (ROOT / '对比数据.json').write_text(json.dumps(data, ensure_ascii=False, indent=2), encoding='utf-8')
+    text = TEMPLATE.replace('@@ALI_SECONDS@@', f'{ali_seconds:.2f}').replace('@@MT_SECONDS@@', str(mt_seconds))
+    text = text.replace('@@ALI_COST@@', f'{ali_cost:.3f}').replace('@@MT_COST@@', f'{mt_cost:.5f}')
+    text = text.replace('@@REQUEST_ID@@', html.escape(failed['request_id'])).replace('@@REJECTION_SECONDS@@', f"{failed['submit_http_seconds']:.3f}")
+    (ROOT / '三方案数字人口播对比报告.html').write_text(text, encoding='utf-8')
+    print(json.dumps({'html': '三方案数字人口播对比报告.html', 'eligible_videos': 2, 'full_decode': [a['full_decode'], b['full_decode']], 'selection': 'UNSELECTED'}, ensure_ascii=False))
+
+
+TEMPLATE = r'''<!doctype html>
+<html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><link rel="icon" href="data:,"><title>同一人物，三方案口播对比</title>
+<style>
+:root{--blue:#002FA7;--ink:#202127;--muted:#666974;--rule:#dddfe5;--bg:#F7F7F8}*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;color:var(--ink);background:#fff;font-family:"Helvetica Neue",Arial,"Microsoft YaHei",sans-serif;line-height:1.7}a{color:var(--blue);text-underline-offset:4px}main{max-width:1320px;margin:auto;padding:28px 36px 64px}nav{display:flex;justify-content:space-between;gap:18px;border-bottom:1px solid var(--rule);padding-bottom:18px;font-size:13px}h1{font-size:clamp(28px,4vw,46px);line-height:1.2;letter-spacing:-1.5px;margin:30px 0 15px}h2{font-size:24px;margin:38px 0 14px}h3{font-size:18px;margin:0}.lead{max-width:900px;color:var(--muted);margin:0 0 22px}.status{border:1px solid var(--rule);border-left:4px solid var(--blue);padding:14px 18px;margin:22px 0;background:var(--bg)}.status strong{color:var(--blue)}.row{display:flex;gap:14px;align-items:center;flex-wrap:wrap}.tools{justify-content:space-between;margin:24px 0 15px}button,select{font:inherit;font-size:13px;padding:8px 13px;border:1px solid var(--rule);background:white;color:var(--ink);cursor:pointer}button.primary{background:var(--blue);color:white;border-color:var(--blue)}button:focus-visible,a:focus-visible,select:focus-visible{outline:3px solid #002FA7;outline-offset:3px}.grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));border-top:1px solid var(--rule)}.sample{padding:22px 22px 0;border-right:1px solid var(--rule);min-width:0}.sample:first-child{padding-left:0}.sample:last-child{padding-right:0;border-right:0}.serial{font-size:30px;line-height:1;font-weight:700;color:var(--blue);margin-bottom:14px}.sub{font-size:12px;color:var(--muted);margin:5px 0 15px;overflow-wrap:anywhere}.screen{height:430px;background:var(--bg);width:100%;display:block;object-fit:contain}.blocked{padding:28px 24px;border:1px solid var(--rule);display:flex;flex-direction:column;justify-content:center;align-items:flex-start}.blocked .code{font-size:40px;font-weight:700;color:var(--blue)}.blocked p{margin:8px 0;font-size:14px}.metrics{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:18px 0}.metrics strong{display:block;font-size:25px;line-height:1.3;letter-spacing:-.8px;font-variant-numeric:tabular-nums}.metrics span{font-size:12px;color:var(--muted)}.sample-note{font-size:13px;min-height:68px}.tablebox{overflow-x:auto;border:1px solid var(--rule);margin-top:18px}table{border-collapse:collapse;width:100%;min-width:860px;font-size:13px}th,td{padding:13px 15px;border-bottom:1px solid var(--rule);border-right:1px solid var(--rule);vertical-align:top;text-align:left}thead{background:var(--bg)}th:first-child{width:18%;position:sticky;left:0;background:var(--bg)}td{width:27%}tr:last-child>*{border-bottom:0}th:last-child,td:last-child{border-right:0}small{display:block;color:var(--muted);font-size:12px;margin-top:4px}.accent{color:var(--blue);font-weight:700}.note{font-size:13px;color:var(--muted)}.inputs{display:grid;grid-template-columns:135px 1fr;gap:24px;border-top:1px solid var(--rule);padding-top:20px}.inputs img{width:135px;height:210px;object-fit:contain;background:var(--bg)}audio{width:min(100%,640px)}blockquote{margin:12px 0;font-size:16px}code{font-size:12px;overflow-wrap:anywhere}.details{margin-top:22px;border-top:1px solid var(--rule);padding-top:16px}summary{cursor:pointer;font-weight:600}.frames{display:grid;grid-template-columns:1fr 1fr;gap:20px}.frames img{width:100%;height:auto;display:block}.evidence{columns:2;column-gap:40px;padding-left:18px;font-size:13px}.evidence li{break-inside:avoid;margin:9px 0}.decision{display:grid;grid-template-columns:1fr 1fr;gap:28px;padding:20px 0;border-top:1px solid var(--rule)}.decision p{font-size:14px}footer{border-top:1px solid var(--rule);margin-top:36px;padding-top:16px;font-size:12px;color:var(--muted)}@media(max-width:850px){main{padding:20px}.grid{grid-template-columns:1fr}.sample,.sample:first-child,.sample:last-child{padding:22px 0;border-right:0;border-bottom:1px solid var(--rule)}.screen{height:480px}.metrics{max-width:420px}.sample-note{min-height:0}.frames,.decision{grid-template-columns:1fr}.evidence{columns:1}nav{flex-direction:column}.inputs{grid-template-columns:90px 1fr;gap:14px}.inputs img{width:90px;height:150px}.blocked{height:280px}.tools{align-items:flex-start}h2{font-size:22px}}@media print{button,select,video,audio{display:none}main{padding:0}.grid{display:block}.sample{border:0}.screen{height:auto}.tablebox{overflow:visible}table{min-width:0}.metrics{display:block}a{color:inherit}}
+</style></head><body><main>
+<nav><span>2026.09.21 · TH-COMP-002 · 同输入对照</span><a href="../../../specs/0001-douyin-ai-studio/08-端到端技术流程与模型选型地图.html">查看端到端流程与模型清单</a></nav>
+<h1>同一人物，三方案口播对比</h1>
+<p class="lead">固定同一张人物图、同一段 9.36 秒 TTS，比较阿里万相、MuseTalk 与火山 OmniHuman。这里比较的是图片＋音频驱动的口播能力，所有主表样片均未经过增强或字幕合成。</p>
+<div class="status"><strong>2 条原片可播放，火山方案仍被权限阻塞。</strong> 本轮只补交一次火山请求，返回 HTTP 401 / 50400，未取得第三条视频。生产选型未定；完整人类视听评审尚未进行。</div>
+<div class="row tools"><div class="row"><button class="primary" id="play-all">同时静音播放画面</button><button id="stop-all">停止并恢复单片播放</button><label class="note">播放速度 <select id="speed"><option value="1">1 倍</option><option value="0.5">0.5 倍</option></select></label></div><span class="note" id="play-status" aria-live="polite">单片播放可听原音轨；并排播放从各自片头开始。</span></div>
+<div class="grid">
+<section class="sample"><div class="serial">01</div><h3>阿里万相</h3><p class="sub">wan2.2-s2v · 720P · 复用首轮真实输出</p><video class="screen" controls playsinline preload="metadata" poster="素材/阿里预览.jpg" src="素材/阿里万相原片.mp4"></video><div class="metrics"><div><strong>@@ALI_SECONDS@@ s</strong><span>服务端提交至完成</span></div><div><strong>¥@@ALI_COST@@</strong><span>视频调用估算 / 非账单</span></div></div><p class="sample-note">可见头部、表情与嘴部变化。音轨波形提示开头约 187.5 ms 未覆盖，需重点听首字。<a href="素材/阿里万相原片.mp4">打开原片</a></p></section>
+<section class="sample"><div class="serial">02</div><h3>MuseTalk 自托管</h3><p class="sub">MuseTalk 1.5 · 单图输入 · 复用 M1 原片</p><video class="screen" controls playsinline preload="metadata" poster="素材/MuseTalk预览.jpg" src="素材/MuseTalk单图原片.mp4"></video><div class="metrics"><div><strong>@@MT_SECONDS@@ s</strong><span>进程总耗时 / 含加载与编码</span></div><div><strong>¥@@MT_COST@@</strong><span>GPU 活跃时间估算 / 非总成本</span></div></div><p class="sample-note">原音频长度保持，头部和眼睛基本静止。1080×1920 是画布，模型脸区按 256×256 处理。<a href="素材/MuseTalk单图原片.mp4">打开原片</a></p></section>
+<section class="sample"><div class="serial">03</div><h3>火山 / 字节数字人</h3><p class="sub">OmniHuman1.5 · 即梦 AI 智能视觉接口</p><div class="screen blocked"><div class="code">401</div><h3>权限校验失败，未生成视频</h3><p>业务码 50400<br>Access Denied: Access Denied</p><p>本轮没有任务 ID。豆包对话、生图与该数字人服务的权限不能互相替代。</p><a href="提交响应.json">查看真实响应</a></div><div class="metrics"><div><strong>未取得</strong><span>生成耗时 / 没有生成任务</span></div><div><strong>待对账</strong><span>失败请求费用未知</span></div></div><p class="sample-note">HTTP 拒绝响应约 @@REJECTION_SECONDS@@ 秒，不是生成速度。不根据这次鉴权失败给模型画质打分。</p></section>
+</div>
+<h2>主要指标，一张表看清</h2><p class="note">相同输入用于控制人物和声音变量；输出分辨率、帧率及计时边界仍不同，不能直接把这些结果当统一性能排行榜。</p>
+<div class="tablebox" tabindex="0" aria-label="可横向滚动的三方案指标表"><table><thead><tr><th scope="col">指标 / 口径</th><th scope="col">阿里万相</th><th scope="col">MuseTalk 单图</th><th scope="col">火山 OmniHuman1.5</th></tr></thead><tbody>
+<tr><th scope="row">实际模型</th><td><code>wan2.2-s2v</code><small>千问生成了共用图片与 TTS；口播模型是万相。</small></td><td>MuseTalk 1.5<small>固定代码与权重版本，fp16 / batch 4。</small></td><td><code>jimeng_realman_avatar_picture_omni_v15</code><small>720P / pe_fast_mode=true；请求已记录。</small></td></tr>
+<tr><th scope="row">输入</th><td colspan="3">同一 Qwen 人物 PNG 1080×1920 ＋ 同一 Cherry 音色 WAV 9.36 秒。此次未生图、未重新合成 TTS；远端素材重新下载核对摘要一致。</td></tr>
+<tr><th scope="row">视频生成结果</th><td class="accent">原片已取得 / 可完整解码</td><td class="accent">原片已取得 / 可完整解码</td><td>HTTP 401 / 50400，无任务 ID</td></tr>
+<tr><th scope="row">输出规格</th><td>720×1280 · 30 fps<br>H.264 / AAC · 274 帧</td><td>1080×1920 · 25 fps<br>H.264 / AAC · 234 帧</td><td>没有输出，无法测量</td></tr>
+<tr><th scope="row">视频轨 / 音频轨时长</th><td>9.133333 s / 9.125011 s</td><td>9.36 s / 9.36 s</td><td>无法测量</td></tr>
+<tr><th scope="row">生成耗时</th><td>@@ALI_SECONDS@@ s<small>服务提交→完成，含排队 8.261 s；调度→完成 155.127 s。</small></td><td>@@MT_SECONDS@@ s<small>模型加载＋推理＋融合＋编码；不含安装和传输。</small></td><td>未知<small>仅记录 HTTP 拒绝响应 @@REJECTION_SECONDS@@ s，不算生成。</small></td></tr>
+<tr><th scope="row">视频阶段费用估算</th><td>¥@@ALI_COST@@<small>回执 9.13 s × 0.9 元/s。</small></td><td>¥@@MT_COST@@<small>99 s ÷ 3600 × 用户提供的 1.58 元/h。</small></td><td>实际费用未知<small>若按 1 元/s 成功输出 9.36 s，名义估算 ¥9.36；本次没有成功输出，不据此记账。</small></td></tr>
+<tr><th scope="row">本轮新增动作</th><td>复用原片，未重新调用</td><td>复用原片，未启动新 GPU 任务</td><td>一次生成提交，无自动重试<small>独立预留 ¥20；预留不是扣费。</small></td></tr>
+<tr><th scope="row">共享素材成本</th><td colspan="3">原图约 ¥0.20 ＋ TTS 79 个计费字符 × 0.8 元/万字符 = ¥0.00632；共享素材合计约 ¥0.20632。本轮仅复用，未重新产生这笔生成用量。</td></tr>
+<tr><th scope="row">部署 / 常驻成本</th><td>接口侧费用按用量核对，另计存储/流量等</td><td>曾观测部署区间约 1 小时，时间费约 ¥1.58。整天开机按 24×1.58=¥37.92 估算，与是否一直推理无关。</td><td>接口侧实际价格、额度与账单待核对</td></tr>
+<tr><th scope="row">实际账单</th><td>尚未对账</td><td>尚未对账；活跃时间费不等于实例账单</td><td>尚未对账，不推定失败请求为 0 元</td></tr>
+<tr><th scope="row">显存 / 人脸细节</th><td>云服务内部显存未知；关键帧脸部比输入更平滑</td><td>1 秒采样整卡峰值 7489 MiB；脸区模型 256×256，不能按画布称原生高清脸</td><td>无样片/无测量</td></tr>
+<tr><th scope="row">人物身份观察</th><td>三个关键帧发型、服装、脸部外观与输入相近；全片未验收</td><td>三个关键帧整体外观相近；局部脸部平滑；全片未验收</td><td>未生成，不评价身份质量</td></tr>
+<tr><th scope="row">动作自然度</th><td>关键帧可见头部姿态、表情变化；完整自然度待评</td><td>头部/眼睛基本静止，当前单图样片不满足完整自然主播目标</td><td>未知；不能把权限错误当质量差</td></tr>
+<tr><th scope="row">音轨保持</th><td>全波形最佳偏移 −187.5 ms，相关约 0.985；提示首段截短，需听首字</td><td>全波形最佳偏移 0 ms，相关约 0.9995；容器与输入均 9.36 s</td><td>无法测量</td></tr>
+<tr><th scope="row">精确口型 / 牙齿伪影</th><td>完整逐音素视听未评</td><td>完整逐音素视听未评</td><td>无样片，未评</td></tr>
+<tr><th scope="row">长期生产验收</th><td>未通过：缺长稿/多次/变体与完整视听</td><td>未通过：缺自然动作方案、长稿/变体与完整视听</td><td>未进入质量验收：先解决具体服务权限</td></tr>
+</tbody></table></div>
+<p class="note">波形偏移反映输入与输出音轨的关系，<strong>不是嘴型同步误差</strong>。质量项采用可追溯观察，不编造 0–100 分；完整人类视听评审人数当前为 0。单样本不计算成功率、P95 或稳定产能。</p>
+<h2>共用人物与原始旁白</h2><div class="inputs"><a href="素材/共用人物.png"><img src="素材/共用人物.png" alt="本项目共用的黑发、深蓝西装女性真人风格测试人物"></a><div><strong>同一人物身份，音频字节一致</strong><blockquote>妈妈买面包，爸爸泡白茶。检索增强生成，会先查资料，再生成回答。资料不对，答案也可能错。</blockquote><audio controls preload="metadata" src="素材/共用口播.wav"></audio><p class="note">Qwen-Image-2.0 生成人物；Qwen3-TTS-Flash / Cherry 合成声音。这是测试资产，尚未定为正式 Base Avatar / VoiceAsset。原 WAV 声明长度异常已留证，实际可解码 224640 个采样。</p><a href="同输入核验.json">查看原图与音频摘要核验</a></div></div>
+<details class="details"><summary>展开真实关键帧对照</summary><div class="frames"><figure><img src="素材/阿里关键帧对照.jpg" alt="阿里原人物图和三个原片关键帧"><figcaption class="note">阿里：输入与 0.913 / 4.567 / 8.220 秒关键帧。</figcaption></figure><figure><img src="素材/MuseTalk关键帧对照.jpg" alt="MuseTalk 单图原片的真实关键帧对照"><figcaption class="note">MuseTalk：单图输入基线关键帧；静帧不能替代完整视听。</figcaption></figure></div></details>
+<h2>这轮能得出的决定</h2><div class="decision"><div><h3>自托管值得继续验证</h3><p>MuseTalk 的活跃推理时间费用低，已经真实出片。但单图动作不足；要验证动作母版＋新音频的组合，且把母版、循环接缝与实例空闲费算进去。</p><a href="../../MuseTalk部署/MT-001/样片对比.html">查看动作母版与缓存样片（补充，不计入同图主表）</a></div><div><h3>暂不选最终生产模型</h3><p>阿里需确认首字和完整画质，MuseTalk 需补自然动作与长片，火山需恢复 OmniHuman1.5 的具体权限。三个问题不能用一张总分榜掩盖。</p><p class="note">火山本轮请求编号：<code>@@REQUEST_ID@@</code>。可据此定位账号、服务授权和 IAM 调用权限；错误本身未证明具体哪一项配置有误。</p></div></div>
+<h2>数据与原始证据</h2><ul class="evidence"><li><a href="对比数据.json">本报告机器可读数据与新媒体测量</a></li><li><a href="补测结果.json">本轮火山计时与结果</a> · <a href="提交请求.json">请求（URL 已脱敏）</a> · <a href="提交响应.json">响应</a></li><li><a href="ledger.json">本轮独立预留台账（非账单）</a></li><li><a href="../../数字人口播选型/runs/TH-AB-001/aliyun_video-query-20260921T084430324285-response.json">阿里服务时间与计费用量回执</a></li><li><a href="../../数字人口播选型/runs/TH-AB-001/B/补充测量.json">阿里音轨/帧时间戳检查</a></li><li><a href="../../MuseTalk部署/MT-001/部署记录.json">MuseTalk 计时、显存与费用来源</a></li><li><a href="../../MuseTalk部署/MT-001/单图音轨核验.json">MuseTalk 音轨保持检查</a></li><li><a href="../../../specs/selection/01-数字人口播/04-MuseTalk部署与首测结果.html">MuseTalk 完整部署报告</a></li><li><a href="../../../specs/selection/01-数字人口播/火山候选核验.html">OmniHuman1.5 接口与价格核验</a></li><li><a href="../../../specs/0001-douyin-ai-studio/08-端到端技术流程与模型选型地图.html">完整流程：输入、模型、产物、技术栈与对比顺序</a></li></ul>
+<footer>本页无需联网脚本或字体。保留本 HTML 与同级“素材”文件夹即可离线播放；“原始证据”链接需要保留工作区目录。此轮未新建人物、未重新生成语音、未向抖音发布，也未启动 GPU 推理或关闭云实例。</footer>
+</main><script>
+const videos=[...document.querySelectorAll('video')];let group=false;const status=document.getElementById('play-status');
+videos.forEach(v=>v.addEventListener('play',()=>{if(!group){videos.forEach(o=>{if(o!==v)o.pause()});document.querySelector('audio').pause()}}));
+document.querySelector('audio').addEventListener('play',()=>{group=false;videos.forEach(v=>v.pause())});
+document.getElementById('play-all').addEventListener('click',async()=>{group=true;document.querySelector('audio').pause();videos.forEach(v=>{v.pause();v.currentTime=0;v.muted=true});const results=await Promise.allSettled(videos.map(v=>v.play()));status.textContent=results.every(x=>x.status==='fulfilled')?'两条原片从片头同时静音播放；并非精确音素对齐。':'部分视频无法播放，请使用单片播放器。'});
+document.getElementById('stop-all').addEventListener('click',()=>{group=false;videos.forEach(v=>{v.pause();v.muted=false});status.textContent='已恢复单片播放，可分别听原音轨。'});
+document.getElementById('speed').addEventListener('change',event=>videos.forEach(v=>v.playbackRate=Number(event.target.value)));
+</script></body></html>'''
+
+
+if __name__ == '__main__':
+    main()

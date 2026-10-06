@@ -1,0 +1,330 @@
+{
+  "schema_version": 1,
+  "diagram_type": "architecture",
+  "meta": {
+    "title": "单用户口播工作台 · DeepAgents 架构规划",
+    "quality_profile": "showcase",
+    "animation": "none",
+    "viewBox": [
+      1640,
+      780
+    ],
+    "legend": {
+      "mode": "auto",
+      "entries": {
+        "frontend": {
+          "label": "工作台"
+        },
+        "backend": {
+          "label": "总控与专职 Agent"
+        },
+        "security": {
+          "label": "质量硬门禁"
+        },
+        "external": {
+          "label": "交付与公共规范"
+        },
+        "messagebus": {
+          "label": "工具与媒体执行"
+        },
+        "database": {
+          "label": "分层记忆"
+        }
+      }
+    }
+  },
+  "components": [
+    {
+      "id": "studio-entry",
+      "type": "frontend",
+      "label": "单用户工作台 · 七个入口",
+      "sublabel": "前四项制作，后三项展示规划",
+      "pos": [
+        80,
+        70
+      ],
+      "size": [
+        300,
+        76
+      ],
+      "tag": "用户确认人物、稿件、声音与路线"
+    },
+    {
+      "id": "deepagents-control",
+      "type": "backend",
+      "label": "DeepAgents 总控",
+      "sublabel": "DeepSeek V4.1 Flash · 工具调用待测",
+      "tag": "框架已选、服务待建 · LangGraph 状态恢复待测",
+      "pos": [
+        665,
+        70
+      ],
+      "size": [
+        310,
+        90
+      ]
+    },
+    {
+      "id": "release-package",
+      "type": "external",
+      "label": "视频与发布包",
+      "sublabel": "V1 预览、下载 · 目标产物",
+      "tag": "后续排期、发布与指标按权限接入",
+      "pos": [
+        1240,
+        70
+      ],
+      "size": [
+        310,
+        90
+      ]
+    },
+    {
+      "id": "editorial-agent",
+      "type": "backend",
+      "label": "策划文案 Agent",
+      "sublabel": "按提示直接写三稿，不联网搜索",
+      "pos": [
+        40,
+        330
+      ],
+      "size": [
+        320,
+        84
+      ],
+      "tag": "不同角度；用户选稿前交 quality"
+    },
+    {
+      "id": "quality-agent",
+      "type": "security",
+      "label": "质量审核 Agent",
+      "sublabel": "内部查重、已有材料与媒体审核",
+      "pos": [
+        1240,
+        330
+      ],
+      "size": [
+        320,
+        84
+      ],
+      "tag": "无依据转人工；后期成片终审"
+    },
+    {
+      "id": "avatar-agent",
+      "type": "backend",
+      "label": "数字人导演 Agent",
+      "sublabel": "人物库、参考图变体与表演",
+      "tag": "人物 B 为预设 · 身份锁定",
+      "pos": [
+        440,
+        330
+      ],
+      "size": [
+        320,
+        84
+      ]
+    },
+    {
+      "id": "voice-agent",
+      "type": "backend",
+      "label": "声音导演 Agent",
+      "sublabel": "MiniMax Speech 2.8 HD · 试听选声",
+      "tag": "音色 3 为预设 · 两路共用最终音频",
+      "pos": [
+        840,
+        330
+      ],
+      "size": [
+        320,
+        84
+      ]
+    },
+    {
+      "id": "shared-skills",
+      "type": "external",
+      "label": "7 个业务 Skill",
+      "sublabel": "S01–S06 / S08；无后期 Skill",
+      "pos": [
+        40,
+        620
+      ],
+      "size": [
+        280,
+        80
+      ]
+    },
+    {
+      "id": "shared-mcp",
+      "type": "messagebus",
+      "label": "MCP 工具接入",
+      "sublabel": "4 组能力；M01 历史查重仅 quality",
+      "pos": [
+        370,
+        620
+      ],
+      "size": [
+        280,
+        80
+      ]
+    },
+    {
+      "id": "shared-memory",
+      "type": "database",
+      "label": "分层记忆",
+      "sublabel": "任务 / 人设声音 / 历史 / 经验",
+      "pos": [
+        700,
+        620
+      ],
+      "size": [
+        280,
+        80
+      ]
+    },
+    {
+      "id": "video-production",
+      "type": "messagebus",
+      "label": "口播生成 · 两条路线",
+      "sublabel": "OmniHuman MVP · M2 可选",
+      "tag": "原片先交 quality 审核",
+      "pos": [
+        1030,
+        615
+      ],
+      "size": [
+        245,
+        90
+      ]
+    },
+    {
+      "id": "postprocess-worker",
+      "type": "messagebus",
+      "label": "确定性后期 Worker",
+      "sublabel": "字幕 · 合成 · 清晰度 · 封面",
+      "tag": "quality 终审通过后由内部代码打包",
+      "pos": [
+        1340,
+        615
+      ],
+      "size": [
+        260,
+        90
+      ]
+    }
+  ],
+  "boundaries": [
+    {
+      "kind": "region",
+      "label": "四类专职 Agent · 独立准备可并行；后期 Worker 不属于 Agent",
+      "wraps": [
+        "editorial-agent",
+        "avatar-agent",
+        "voice-agent",
+        "quality-agent"
+      ],
+      "pad": 24
+    },
+    {
+      "kind": "region",
+      "label": "公共基础能力 · 按角色授权 · 两个 MCP 服务",
+      "wraps": [
+        "shared-skills",
+        "shared-mcp",
+        "shared-memory"
+      ],
+      "pad": 24
+    }
+  ],
+  "connections": [
+    {
+      "id": "submit-task",
+      "from": "studio-entry",
+      "to": "deepagents-control",
+      "label": "创建与确认",
+      "variant": "emphasis"
+    },
+    {
+      "id": "deliver-approved",
+      "from": "deepagents-control",
+      "to": "release-package",
+      "label": "验收后交付",
+      "variant": "emphasis"
+    },
+    {
+      "id": "delegate-editorial",
+      "from": "deepagents-control",
+      "to": "editorial-agent",
+      "fromSide": "bottom",
+      "toSide": "top"
+    },
+    {
+      "id": "delegate-quality",
+      "from": "deepagents-control",
+      "to": "quality-agent",
+      "fromSide": "bottom",
+      "toSide": "top",
+      "variant": "security"
+    },
+    {
+      "id": "delegate-avatar",
+      "from": "deepagents-control",
+      "to": "avatar-agent",
+      "fromSide": "bottom",
+      "toSide": "top"
+    },
+    {
+      "id": "delegate-voice",
+      "from": "deepagents-control",
+      "to": "voice-agent",
+      "fromSide": "bottom",
+      "toSide": "top"
+    },
+    {
+      "id": "submit-video",
+      "from": "avatar-agent",
+      "to": "video-production",
+      "label": "人物、最终音频与表演",
+      "fromSide": "bottom",
+      "toSide": "left",
+      "variant": "dashed"
+    },
+    {
+      "id": "quality-to-postprocess",
+      "from": "quality-agent",
+      "to": "postprocess-worker",
+      "label": "原片通过＋字幕就绪",
+      "variant": "security",
+      "fromSide": "bottom",
+      "toSide": "top"
+    }
+  ],
+  "cards": [
+    {
+      "dot": "cyan",
+      "title": "协作与用户确认",
+      "items": [
+        "总控＋四类 Agent；写稿直接按提示生成，不联网搜索抓取。",
+        "quality：内部历史查重＋用户提供/既存已核材料；无依据转人工。",
+        "业务门禁控制版本、预算、恢复；确定性代码单独承担后期。"
+      ]
+    },
+    {
+      "dot": "amber",
+      "title": "两条口播路线",
+      "items": [
+        "OmniHuman：人物图＋已确认 TTS＋动作描述 → 有声原片。",
+        "不经 LivePortrait / MuseTalk；内部完成表演与口型驱动。",
+        "M2：LivePortrait 底片＋同一最终 TTS → MuseTalk。"
+      ]
+    },
+    {
+      "dot": "emerald",
+      "title": "首版范围与交付",
+      "items": [
+        "音频确认后字幕可并行；原片通过＋字幕就绪后执行代码后期。",
+        "成片返回 quality 终审，通过后由内部代码打包；失败按证据返工。",
+        "用户报价 1 元/秒尚待账单核验；当前人物 B、身体与长片待验。"
+      ]
+    }
+  ]
+}

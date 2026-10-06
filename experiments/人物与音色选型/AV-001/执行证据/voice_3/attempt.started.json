@@ -1,0 +1,26 @@
+{
+  "stage": "voice_3",
+  "started_at": "2026-09-21T23:37:00.614367+00:00",
+  "request": {
+    "model": "speech-2.8-hd",
+    "text": "你有没有发现，AI回答得很流畅，却不一定说得对。<#0.30#>RAG，也就是检索增强生成，会先找资料，再组织答案。今天用三个步骤，带你看懂它。资料是否可靠，仍然需要检查。",
+    "stream": false,
+    "output_format": "hex",
+    "language_boost": "Chinese",
+    "voice_setting": {
+      "voice_id": "Chinese (Mandarin)_Warm_Bestie",
+      "speed": 1.0,
+      "vol": 1.0,
+      "pitch": 0,
+      "emotion": "calm"
+    },
+    "audio_setting": {
+      "sample_rate": 32000,
+      "format": "wav",
+      "channel": 1
+    },
+    "subtitle_enable": false
+  },
+  "request_sha256": "db54ef67334b246f02688e535a50750bf2c47f23da4cc501de2bad747292fc7b",
+  "automatic_retry": false
+}

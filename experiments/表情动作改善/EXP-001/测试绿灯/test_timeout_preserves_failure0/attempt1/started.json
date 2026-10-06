@@ -1,0 +1,20 @@
+{
+  "started_at": "2026-09-22T00:50:07.489586+00:00",
+  "spec": {
+    "job_dir": "C:\\Users\\22346\\Desktop\\自媒体视频生成\\experiments\\表情动作改善\\EXP-001\\测试绿灯\\test_timeout_preserves_failure0\\attempt1",
+    "cwd": "C:\\Users\\22346\\Desktop\\自媒体视频生成\\experiments\\表情动作改善\\EXP-001\\测试绿灯\\test_timeout_preserves_failure0",
+    "command": [
+      "D:\\anaconda3\\python.exe",
+      "-c",
+      "import time; time.sleep(5)"
+    ],
+    "timeout_seconds": 0.1,
+    "outputs": [
+      "C:\\Users\\22346\\Desktop\\自媒体视频生成\\experiments\\表情动作改善\\EXP-001\\测试绿灯\\test_timeout_preserves_failure0\\clip.txt"
+    ],
+    "inputs": {},
+    "sample_gpu": false,
+    "hourly_cny": 1.58
+  },
+  "automatic_retry": false
+}

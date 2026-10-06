@@ -1,0 +1,11 @@
+{
+  "method": "Decode to mono24k; waveform cross correlation. Not lip sync.",
+  "reference_samples": 224640,
+  "output_samples": 225280,
+  "lag_samples": 0,
+  "lag_ms": 0.0,
+  "overlap_correlation": 0.9995075136919143,
+  "source_duration_seconds": 9.36,
+  "output_container_seconds": 9.36,
+  "subjective_audio": "NOT_REVIEWED"
+}

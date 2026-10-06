@@ -1,0 +1,35 @@
+{
+  "experiment": "TH-COMP-003",
+  "status": "succeeded",
+  "submitted_at": "2026-09-21T13:46:59.971333+00:00",
+  "observed_success_at": "2026-09-21T13:50:21.416923+00:00",
+  "task_id": "eec24b86b5c211f197771c34da482ebc",
+  "request_id": "20260921214703E552A5181B29561D4D7A",
+  "final_query_request_id": "202609212150235B37B0CEDEDBC7D69B03",
+  "observed_submit_to_success_seconds": 201.44559,
+  "poll_uncertainty_seconds": 17.052141,
+  "completion_elapsed_bracket_seconds": [
+    184.393449,
+    201.44559
+  ],
+  "timing_scope": "client submit start to first success query end; includes network, scheduling, inference and polling; excludes downloading; no server completion timestamp",
+  "poll_count": 11,
+  "submit_count": 1,
+  "automatic_resubmit": false,
+  "estimated_video_cny": 9.48,
+  "pricing_basis": "measured video track 9.48 seconds x published reference price 1 CNY/second; API returned no billing usage; actual account rounding/discount/bill unknown",
+  "actual_cost_cny": null,
+  "video_sha256": "7119a042efac8d7c73cb387ed2cb499de187745b67eac2f928a18d501b52f80b",
+  "video_path": "火山口播原片.mp4",
+  "quality": "NOT_ACCEPTED",
+  "full_audiovisual_review": "NOT_REVIEWED",
+  "previous_failures_preserved": [
+    "TH-AB-001",
+    "TH-COMP-002"
+  ],
+  "source_input_hashes_verified": true,
+  "same_request_digest_as_previous": true,
+  "user_reported_change": "OmniHuman1.5 service enabled",
+  "credentials_modified_by_agent": false,
+  "provenance": "real image+audio talking-head generation; no text-to-video"
+}

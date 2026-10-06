@@ -1,0 +1,60 @@
+[09:13:52] Load appearance_feature_extractor from    live_portrait_wrapper.py:46
+           /root/autodl-tmp/avatar-motion/EXP-001/Li                            
+           vePortrait/pretrained_weights/liveportrai                            
+           t/base_models/appearance_feature_extracto                            
+           r.pth done.                                                          
+[09:13:53] Load motion_extractor from                live_portrait_wrapper.py:49
+           /root/autodl-tmp/avatar-motion/EXP-001/Li                            
+           vePortrait/pretrained_weights/liveportrai                            
+           t/base_models/motion_extractor.pth done.                             
+           Load warping_module from                  live_portrait_wrapper.py:52
+           /root/autodl-tmp/avatar-motion/EXP-001/Li                            
+           vePortrait/pretrained_weights/liveportrai                            
+           t/base_models/warping_module.pth done.                               
+[09:13:54] Load spade_generator from                 live_portrait_wrapper.py:55
+           /root/autodl-tmp/avatar-motion/EXP-001/Li                            
+           vePortrait/pretrained_weights/liveportrai                            
+           t/base_models/spade_generator.pth done.                              
+           Load stitching_retargeting_module from    live_portrait_wrapper.py:59
+           /root/autodl-tmp/avatar-motion/EXP-001/Li                            
+           vePortrait/pretrained_weights/liveportrai                            
+           t/retargeting_models/stitching_retargetin                            
+           g_module.pth done.                                                   
+[09:13:55] FaceAnalysisDIY warmup time: 0.960s           face_analysis_diy.py:79
+[09:13:56] LandmarkRunner warmup time: 0.841s        human_landmark_runner.py:95
+           Load source image from                   live_portrait_pipeline.py:90
+           /root/autodl-tmp/avatar-motion/EXP-001/i                             
+           nputs/person_B_even.png                                              
+           Load driving video from:                live_portrait_pipeline.py:133
+           /root/autodl-tmp/avatar-motion/EXP-001/                              
+           inputs/ali_motion_loop25.mp4, FPS is 25                              
+[09:13:59] Start making driving motion template... live_portrait_pipeline.py:144
+[09:14:01] Driving video is cropped, 381 frames    live_portrait_pipeline.py:155
+           are processed.                                                       
+Making motion templates... ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:05
+[09:14:07] Dump motion template to                 live_portrait_pipeline.py:172
+           /root/autodl-tmp/avatar-motion/EXP-001/                              
+           inputs/ali_motion_loop25.pkl                                         
+           Prepared pasteback mask done.           live_portrait_pipeline.py:183
+[09:14:08] The animated video consists of 381      live_portrait_pipeline.py:270
+           frames.                                                              
+🚀Animating... ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:24
+Concatenating result... ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:01
+
+[swscaler @ 0x6d1d540] Warning: data is not aligned! This can lead to a speed loss
+
+[09:14:42] Animated template:                      live_portrait_pipeline.py:503
+           /root/autodl-tmp/avatar-motion/EXP-001/                              
+           inputs/ali_motion_loop25.pkl, you can                                
+           specify `-d` argument with this                                      
+           template path next time to avoid                                     
+           cropping video, motion making and                                    
+           protecting privacy.                                                  
+           Animated video:                         live_portrait_pipeline.py:504
+           /root/autodl-tmp/avatar-motion/EXP-001/                              
+           results/LP1/person_B_even--ali_motion_l                              
+           oop25.mp4                                                            
+           Animated video with concat:             live_portrait_pipeline.py:505
+           /root/autodl-tmp/avatar-motion/EXP-001/                              
+           results/LP1/person_B_even--ali_motion_l                              
+           oop25_concat.mp4                                                     

@@ -1,0 +1,41 @@
+<!doctype html><html lang="zh-CN"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>MuseTalk 实例使用说明</title><style>body{max-width:860px;margin:32px auto;padding:0 20px;font:16px/1.8 system-ui,"Microsoft YaHei";color:#24352c;background:#f5f4ef}pre{background:#e9ece4;padding:18px;overflow:auto}a{color:#1b6748}h1{font-size:28px}h2{font-size:21px;margin-top:30px}</style><body><h1>MuseTalk 实例使用说明</h1>
+<p>部署目录：<code>/root/autodl-tmp/avatar-musetalk/MT-001</code>。
+当前部署已经用四条短视频验证推理；完整视听、长视频和生产服务尚未验收。</p>
+<h2>进入环境</h2>
+<p>SSH 登录后执行：</p>
+<pre><code class="language-bash">source /root/miniconda3/etc/profile.d/conda.sh
+conda activate /root/autodl-tmp/avatar-musetalk/MT-001/env
+cd /root/autodl-tmp/avatar-musetalk/MT-001/source
+export OMP_NUM_THREADS=8 MKL_NUM_THREADS=8
+export HF_HUB_OFFLINE=1 TRANSFORMERS_OFFLINE=1
+export TORCH_HOME=/root/autodl-tmp/avatar-musetalk/MT-001/torch-cache
+</code></pre>
+<h2>可用入口</h2>
+<ul>
+<li>单图或普通视频推理：<code>python -m scripts.inference_mt001</code>。这是官方入口的临时目录保护版。</li>
+<li>下一次实时/缓存任务：<code>python -m scripts.realtime_inference_mt001_fixed</code>。这是计时版加末帧修复，7 项离线回归测试通过；修复后的真实出片尚待下一任务复核。</li>
+<li>所有入口显式传入 <code>--unet_model_path models/musetalkV15/unet.pth --unet_config models/musetalkV15/musetalk.json --version v15 --fps 25 --batch_size 4</code>。</li>
+<li>普通模式另加 <code>--use_float16</code>；官方实时模式内部使用半精度，不接受同名开关。</li>
+</ul>
+<p>新任务先创建独立 YAML 和输出名，再传 <code>--inference_config</code>。
+普通模式设置独立 <code>--result_dir</code>；实时模式实际在 <code>results/v15/avatars/&lt;avatar_id&gt;</code> 保存缓存及视频，不能仅依赖 <code>--result_dir</code> 隔离。
+同一母版缓存存在时使用 <code>preparation: false</code>，音频条目的键是输出文件名，必须换新名字以免覆盖已有原片。
+新母版或改变裁剪、遮罩、模型、服装/背景时使用新的 avatar_id，重新准备，不删除旧缓存来覆盖证据。</p>
+<h2>本轮材料的位置</h2>
+<ul>
+<li>原图、原 WAV、阿里原片及两个明确派生素材：<code>source/inputs/</code>。</li>
+<li>单图原片：<code>source/results/MT001-M1/v15/M1_original.mp4</code>。</li>
+<li>动作母版原片：<code>source/results/v15/avatars/mt001_motion_v1/vid_output/</code>。</li>
+<li>环境版本：<code>environment.lock.txt</code>。</li>
+<li>权重及素材摘要：<code>weights-manifest.json</code>、<code>inputs-manifest.json</code>。</li>
+<li>运行日志和显存采样：<code>logs/</code>。</li>
+</ul>
+<p>本轮 <code>run-M1.sh</code>、<code>run-M234.sh</code> 有执行标记；不要删除标记或复跑覆盖原始试验。
+已有四条原片保留官方实时路径的末帧问题，不能将其视为修复版的验证结果。
+本机可播放对比页为 <a href="%E6%A0%B7%E7%89%87%E5%AF%B9%E6%AF%94.html">样片对比.html</a>；详细记录在 <a href="../../../specs/selection/01-%E6%95%B0%E5%AD%97%E4%BA%BA%E5%8F%A3%E6%92%AD/04-MuseTalk%E9%83%A8%E7%BD%B2%E4%B8%8E%E9%A6%96%E6%B5%8B%E7%BB%93%E6%9E%9C.md">部署与首测结果</a>。</p>
+<h2>实例费用</h2>
+<p>用户提供单价 1.58 元/小时。模型进程已结束，实例仍然开机。
+不用时在算力云控制台关机；退出 SSH 或停止 Python 不会自动关闭平台计费。
+环境和权重保留在数据盘，保留期限、付费磁盘和重新开机可用性以平台规则为准。
+此部署没有开放公网 Web/API 服务，也没有自动关机或抖音发布任务。</p>
+</body></html>

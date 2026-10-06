@@ -1,0 +1,19 @@
+{
+  "source_path": "experiments/三方案口播对比/TH-COMP-003/素材/阿里万相原片.mp4",
+  "source_sha256": "29e8af401d8f4701a01cf50c35d526b7ff13a159715d4d9e6627dfc05c0c2fd0",
+  "source_identity": "本项目早期Qwen测试人物，非人物B",
+  "source_generator": "wan2.2-s2v",
+  "use": "仅LivePortrait动作驱动参考；人物B图像为source，不直接使用该画面作B成片",
+  "derivative_remote_path": "/root/autodl-tmp/avatar-motion/EXP-001/inputs/ali_motion_loop25.mp4",
+  "derivative_sha256": "9f0897bab4f99e9b9e0026e8f4b3535f76a0824810d72a7d6261993f877d9d33",
+  "derivative_fps": 25,
+  "derivative_frames": 381,
+  "derivative_seconds": 15.24,
+  "audio_removed": true,
+  "speed_changed": false,
+  "looped": true,
+  "first_loop_seam_about_seconds": 9.134,
+  "evaluation_rule": "首段与循环段分别观察；不把循环动作作为自然长片已通过",
+  "new_cloud_api_calls": 0,
+  "historical_cloud_cost_included_in_inference_cost": false
+}

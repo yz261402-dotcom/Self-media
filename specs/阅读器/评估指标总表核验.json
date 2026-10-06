@@ -1,0 +1,15 @@
+{
+  "source_sha256": "f125da755bac6e1c02054ae1899ae1e961007240762955feafe048085cd188cf",
+  "acceptance_cases": 61,
+  "metric_rows": 28,
+  "core_metric_rows": 14,
+  "standalone_table_matches_source": true,
+  "retention_policy_preserved": true,
+  "local_references_checked": 727,
+  "anchors_checked": 214,
+  "html_documents": 30,
+  "archived_originals_verified": 12,
+  "errors": [],
+  "status": "PASS",
+  "scope": "总表及文档核验，非实际评测"
+}

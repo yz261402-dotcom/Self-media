@@ -1,0 +1,115 @@
+{
+  "updated_at": "2026-09-22 09:38（北京时间）",
+  "summary": "三条真实样片均已生成并通过完整解码。采样中，M2增加了明显眼睑变化与轻微面部动作，M3增加了小幅头动，但两者肩膀与躯干仍基本固定。建议优先观看M2判断改善是否足够；本轮未通过生产质量验收，也未测试一分钟连续口播。",
+  "inputs": {
+    "avatar_path": "输入派生/人物B-偶数尺寸.png",
+    "audio_path": "输入派生/音色3原始试听.wav",
+    "identity": "固定人物B；原941×1672，只在右侧复制1列像素成为942×1672，无缩放",
+    "voice": "MiniMax speech-2.8-hd / Chinese (Mandarin)_Warm_Bestie，15.218844秒"
+  },
+  "clips": [
+    {
+      "id": "M1",
+      "label": "单图 MuseTalk",
+      "model": "MuseTalk 1.5",
+      "status": "SUCCEEDED",
+      "video_path": "样片/M1-单图MuseTalk.mp4",
+      "poster_path": "画面核验/M1-封面.jpg",
+      "width": 942,
+      "height": 1672,
+      "fps": 25,
+      "video_seconds": 15.2,
+      "audio_seconds": 15.218844,
+      "wall_seconds": 111.684,
+      "gpu_peak_mib": 7489,
+      "estimated_gpu_cny": 0.049017,
+      "observations": [
+        "嘴型变化可见；代表帧中头部和眉眼基本固定。",
+        "基准：人物B＋原始音色3，完整解码通过。"
+      ],
+      "limitations": [
+        "无法单独满足自然眨眼、表情和头动要求。",
+        "面部偏平滑，唇齿细节仍需看片确认。"
+      ],
+      "evidence_path": "执行证据/M1B/result.json",
+      "motion_summary": "嘴型变化；头部与眉眼基本固定",
+      "video_codec": "H.264",
+      "audio_format": "AAC / 32000 Hz / 1声道"
+    },
+    {
+      "id": "M2",
+      "label": "动作驱动＋嘴型同步",
+      "model": "LivePortrait → MuseTalk 1.5",
+      "status": "SUCCEEDED",
+      "video_path": "样片/M2-LivePortrait加MuseTalk.mp4",
+      "poster_path": "画面核验/M2-封面.jpg",
+      "width": 942,
+      "height": 1672,
+      "fps": 25,
+      "video_seconds": 15.2,
+      "audio_seconds": 15.218844,
+      "wall_seconds": 235.177,
+      "gpu_peak_mib": 7489,
+      "estimated_gpu_cny": 0.103217,
+      "observations": [
+        "眼部采样有明显眼睑开合变化，头部和面部有轻微变化。",
+        "两阶段已完成：动作底片53.505秒＋口播181.672秒；完整解码通过。",
+        "没有明显换人或大面积背景破坏，但这只是代表帧观察。"
+      ],
+      "limitations": [
+        "动作参考约9.13秒，之后循环；不代表15秒独立动作或一分钟自然度已通过。",
+        "MuseTalk重配后部分笑容减弱，唇齿边缘偏软；肩膀与躯干仍基本固定。",
+        "默认InsightFace预训练权重仅供非商业研究，生产接入需处理许可或替换。"
+      ],
+      "evidence_path": "执行证据/M2/result.json",
+      "motion_summary": "眼睑开合更明显，面部和头姿轻微变化",
+      "video_codec": "H.264",
+      "audio_format": "AAC / 32000 Hz / 1声道"
+    },
+    {
+      "id": "M3",
+      "label": "音频驱动全脸",
+      "model": "SadTalker 512 / full，未启用 still",
+      "status": "SUCCEEDED",
+      "video_path": "样片/M3-SadTalker-浏览器播放.mp4",
+      "poster_path": "画面核验/M3-封面.jpg",
+      "width": 942,
+      "height": 1672,
+      "fps": 25,
+      "video_seconds": 15.2,
+      "audio_seconds": 15.2,
+      "wall_seconds": 193.795,
+      "gpu_peak_mib": 9033,
+      "estimated_gpu_cny": 0.085054,
+      "motion_summary": "小幅偏转和倾斜；采样中嘴部开合较小",
+      "video_codec": "MPEG-4 Part2；播放器另用H.264兼容版",
+      "observations": [
+        "代表帧可见小幅头部偏转、倾斜，眼睑变化较轻。",
+        "512脸区渲染，保留完整画幅；未使用still或面部增强器。",
+        "原片和播放兼容版均完整解码通过；音轨与原TTS波形最佳偏移为0ms。"
+      ],
+      "limitations": [
+        "身体和肩膀仍基本固定；代表帧多为抿嘴、轻笑，明显张口样本较少。",
+        "脸部细节偏软，不能凭静帧确认身份与口型质量达标。",
+        "原输出视频和音频均15.2秒，比原TTS短约18.844毫秒；帧率取整边界保留。",
+        "播放器使用仅转码的H.264版，未补帧、未改脸，AAC音轨保持一致。",
+        "SadTalker原流程将旁白转换为16kHz；前两条为32kHz，后续生产可独立复用原TTS音轨。"
+      ],
+      "evidence_path": "执行证据/S1B/result.json",
+      "audio_format": "AAC / 16000 Hz / 1声道"
+    }
+  ],
+  "cost_note": "按用户提供的1.58元/小时，以本次作业墙钟时间估算，包含该进程加载和编码，不含模型安装、等待/空闲、传输、TTS/生图、历史动作素材成本；不是平台实际账单。M1奇数宽度的失败尝试另计103.665秒、约0.045497元。M2计入本轮两阶段首次运行，尚未测缓存复用吞吐。显存为整张GPU总占用的采样峰值。 S1首次输入预检因本地摘要多录一字符而被阻止，未启动推理，记录另计0.956秒、约0.000420元。M3浏览器兼容转码在本机约3.203秒，未计入GPU表。",
+  "notes": [
+    "三条模型输入均为相同的人物B派生图与原始音色3音频；所有成功/失败执行记录保留。",
+    "[LivePortrait动作底片（无音频）](样片/LP1-动作底片.mp4) 是中间产物，不能单独当作口播成片。",
+    "[动作参考来源](输入派生/动作参考来源.json)：旧阿里样片只作为LivePortrait driving input，source仍是人物B。",
+    "[M1代表帧](画面核验/M1-代表帧.jpg) · [M2代表帧](画面核验/M2-代表帧.jpg) · [M2眼部采样](画面核验/M2-眼部采样.jpg)。",
+    "没有给出虚构的自然度/身份相似度分数；音轨解码成功也不等于嘴型同步通过。",
+    "本轮未调用生图、TTS或云端口播收费API，也未发布视频。",
+    "[SadTalker原始MPEG-4文件](样片/M3-SadTalker.mp4) · [播放兼容处理记录](执行证据/S1B/播放兼容处理.json) · [M3代表帧](画面核验/M3-代表帧.jpg)。",
+    "[三条音轨核验](音轨一致性核验.json)：最佳音轨偏移均0ms，重叠波形相关系数约0.9986～0.9996；仅证明音轨对齐，不是唇形评分。",
+    "本轮云端观察区间为北京时间08:47:11—09:34:48，约47.63分钟，含安装/下载/等待的实例费估算约1.2543元，账单未核对。它与表中作业费用重叠，不能相加。",
+    "GPU推理与安装作业已结束，实例仍开机；关机前继续按平台规则计费。"
+  ]
+}

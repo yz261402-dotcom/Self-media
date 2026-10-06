@@ -1,0 +1,19 @@
+{
+  "state": "PROCESS_SUCCEEDED",
+  "reason": null,
+  "pid": 7103,
+  "returncode": 0,
+  "gpu_peak_total_mib_sampled": 7489,
+  "outputs": [
+    {
+      "path": "/root/autodl-tmp/avatar-motion/EXP-001/results/M2/v15/M2_original.mp4",
+      "bytes": 1529971,
+      "sha256": "3ad897bab67700583aad7c6908c61d4040bb3c58ce9cbb4d8d33caf065a668d5"
+    }
+  ],
+  "quality": "NOT_REVIEWED",
+  "finished_at": "2026-09-22T01:19:31.121792+00:00",
+  "wall_seconds": 181.672,
+  "estimated_job_gpu_cny": 0.079734,
+  "cost_scope": "job_wall_clock_only; excludes installation, idle time and all previous costs"
+}

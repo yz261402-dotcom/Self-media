@@ -1,0 +1,36 @@
+{
+  "recorded_at": "2026-09-22T00:23:25.476514+00:00",
+  "selection": {
+    "image": "B",
+    "voice": "3"
+  },
+  "selection_status": "SELECTED_BY_USER",
+  "production_acceptance": "PENDING_ACCEPTANCE",
+  "manifest_path": "assets/固定主播/主播B/版本1/角色档案.json",
+  "local_checks": {
+    "frozen_hashes": "PASS",
+    "source_copy_consistency": "PASS",
+    "manifest_config_consistency": "PASS",
+    "image_decode": "PASS",
+    "voice_ffmpeg_full_decode": "PASS",
+    "historical_files_unchanged": 35,
+    "html_pages_checked": 29,
+    "local_links_checked": 1167,
+    "broken_links": [],
+    "html_source_digests": "PASS"
+  },
+  "browser_checks": {
+    "default_B3": "PASS",
+    "stale_C2_localStorage_ignored": "PASS",
+    "temporary_comparison_keeps_official_selection": "PASS",
+    "restore_official_selection": "PASS",
+    "selected_audio_playback": "PASS",
+    "selected_audio_duration_seconds": 15.218844,
+    "export_remains_pending_user_confirmation": "PASS",
+    "desktop_1440px_overflow": false,
+    "mobile_390px_overflow": false
+  },
+  "new_provider_requests": 0,
+  "remote_gpu_tasks_started": 0,
+  "history_note": "历史候选审查及验证记录保留当时状态；当前决定见人物与音色定版.json。"
+}

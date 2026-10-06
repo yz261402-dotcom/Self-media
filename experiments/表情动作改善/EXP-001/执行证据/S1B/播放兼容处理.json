@@ -1,0 +1,10 @@
+{
+  "input": "样片/M3-SadTalker.mp4",
+  "input_sha256": "650b4c21dfcb7908d9bdf15705b2986e11e58f4acbc4181174420f0e8db51fa4",
+  "output": "样片/M3-SadTalker-浏览器播放.mp4",
+  "output_sha256": "8e09bc4a3ab72d85ffacf1e1c774e8538096f1307edd385dca15c7decbf3fe40",
+  "reason": "原始MPEG-4 Part2不适合浏览器，另存H264播放版；原片保留",
+  "operations": "libx264 crf18 yuv420p; AAC stream copy; no frame interpolation or facial enhancement",
+  "local_wall_seconds": 3.203,
+  "full_decode": "PASS"
+}

@@ -1,0 +1,14 @@
+{
+  "scope": "当前11份开发文档、同名HTML、非敏感配置和改版前原件；不声明历史调研/实验全部链接有效",
+  "main_documents": 11,
+  "html_source_hashes_checked": 30,
+  "main_html_local_references_checked": 709,
+  "anchors_checked": 198,
+  "json_examples_checked": 5,
+  "preserved_acceptance_ids": 51,
+  "current_acceptance_ids": 61,
+  "archived_originals_verified": 58,
+  "errors": [],
+  "status": "PASS",
+  "implementation_claim": "仅文档与图表核验，非应用或模型实测"
+}

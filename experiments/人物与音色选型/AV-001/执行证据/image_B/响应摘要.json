@@ -1,0 +1,15 @@
+{
+  "http_status": 200,
+  "headers": {
+    "content-type": "application/json; charset=utf-8",
+    "x-request-id": "95cf6fc0-493b-4c87-bfc2-21240b2eb292, 115e233f-e377-4b1d-86f9-73502360553e, 64192b2b-d2ff-4175-a23b-66075e657b03, 91747b66-3426-4484-9e36-8592309b21dd, 68b18dbd90f73edec7bee156a09f710c"
+  },
+  "model": null,
+  "created": 1790033833,
+  "usage": {
+    "input_tokens": 10182,
+    "output_tokens": 5184,
+    "total_tokens": 15366
+  },
+  "data_count": 1
+}

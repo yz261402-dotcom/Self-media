@@ -1,0 +1,839 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="light">
+<link rel="icon" href="data:,">
+<meta name="source-sha256" content="1724987dbf0596b299ef0ae5fd7eda51b629df7e08995c43fc34a2869f9eed53">
+<title>数字人口播选型试验：同图同音频对比 · AI 自媒体文档</title>
+<style>:root {
+  color-scheme: light;
+  --paper: #ffffff;
+  --surface: #f7f7f8;
+  --ink: #202126;
+  --muted: #666970;
+  --line: #dedfe3;
+  --blue: #002fa7;
+  --reader-font-size: 17px;
+  --header-height: 76px;
+  font-family: "Helvetica Neue", Helvetica, Arial, "PingFang SC", "Microsoft YaHei", sans-serif;
+  font-synthesis: none;
+}
+
+* { box-sizing: border-box; }
+.sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; border: 0; }
+.source-notice { margin-top: 22px; padding: 12px 14px; border-left: 3px solid var(--blue); background: var(--surface); color: var(--muted); font-size: 13px; }
+html { scroll-padding-top: 104px; }
+body { margin: 0; min-width: 320px; color: var(--ink); background: var(--surface); font-size: 14px; line-height: 1.6; }
+body.menu-open { overflow: hidden; }
+a { color: var(--blue); text-underline-offset: 3px; }
+button, input { font: inherit; }
+button { color: inherit; cursor: pointer; }
+button, input[type="search"] { border: 1px solid var(--line); border-radius: 3px; background: var(--paper); }
+button { min-height: 36px; padding: 6px 11px; line-height: 1.4; }
+button:hover { border-color: var(--blue); color: var(--blue); }
+button:disabled { opacity: .42; cursor: default; }
+button:disabled:hover { color: inherit; border-color: var(--line); }
+:focus-visible { outline: 2px solid var(--blue); outline-offset: 3px; }
+[hidden] { display: none !important; }
+::selection { background: #dbe4ff; color: #151c32; }
+
+.skip-link { position: fixed; z-index: 100; top: -70px; left: 16px; padding: 10px 18px; background: var(--blue); color: white; }
+.skip-link:focus { top: 10px; }
+.topbar { position: sticky; z-index: 30; top: 0; min-height: var(--header-height); display: flex; align-items: center; gap: 24px; padding: 15px 32px; border-bottom: 1px solid var(--line); background: var(--paper); }
+.brand { min-width: 0; color: var(--ink); font-size: 17px; font-weight: 700; line-height: 1.35; letter-spacing: -.02em; text-decoration: none; }
+.brand small, .brand span { display: block; margin-top: 4px; font-size: 11px; font-weight: 400; letter-spacing: .08em; color: var(--muted); }
+.toolbar { display: flex; align-items: center; gap: 6px; margin-left: auto; flex-shrink: 0; }
+.toolbar .font-smaller, .toolbar .font-reset, .toolbar .font-larger { min-width: 36px; padding: 5px 8px; font-variant-numeric: tabular-nums; }
+.toolbar .print-button { margin-left: 8px; }
+.mobile-menu { display: none; }
+.layout { display: grid; grid-template-columns: 244px minmax(0, 1fr) 208px; max-width: 1536px; margin: 0 auto; align-items: start; background: var(--paper); }
+.sidebar { position: sticky; top: var(--header-height); height: calc(100dvh - var(--header-height)); overflow-y: auto; overscroll-behavior: contain; padding: 32px 20px 36px 24px; border-right: 1px solid var(--line); scrollbar-width: thin; background: var(--surface); }
+.nav-group + .nav-group { margin-top: 32px; padding-top: 26px; border-top: 1px solid var(--line); }
+.group-title { margin: 0 10px 12px; color: var(--muted); font-size: 11px; font-weight: 600; letter-spacing: .11em; }
+.doc-nav { display: flex; flex-direction: column; gap: 4px; }
+.doc-nav a { display: block; padding: 9px 10px; border-left: 2px solid transparent; color: #55575d; font-size: 13px; line-height: 1.65; text-decoration: none; overflow-wrap: anywhere; }
+.doc-nav a:hover { color: var(--blue); background: #eeeeef; }
+.doc-nav a[aria-current="page"] { border-left-color: var(--blue); background: #eaf0ff; color: var(--blue); font-weight: 600; }
+.doc-nav .doc-number { display: inline-block; min-width: 25px; color: var(--muted); font-variant-numeric: tabular-nums; }
+
+#main { min-width: 0; padding: 46px clamp(28px, 3.7vw, 60px) 56px; }
+.document-header { margin-bottom: 29px; }
+.eyebrow { margin: 0 0 18px; color: var(--blue); font-size: 12px; font-weight: 600; letter-spacing: .08em; }
+.document-header h1 { margin: 0 0 21px; font-size: clamp(30px, 2.8vw, 42px); font-weight: 700; letter-spacing: -.045em; line-height: 1.3; overflow-wrap: anywhere; }
+.doc-meta { display: flex; flex-wrap: wrap; align-items: baseline; gap: 6px 18px; color: var(--muted); font-size: 12px; }
+.doc-meta a { color: var(--muted); }
+.doc-meta a:hover { color: var(--blue); }
+.reader-tools { margin: 0 0 36px; padding: 16px 0; border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); }
+#search-form { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; }
+#search-input { flex: 1 1 160px; min-width: 100px; width: 0; height: 36px; padding: 6px 10px; color: var(--ink); }
+#search-input::placeholder { color: #777a82; }
+#search-next, #search-clear { flex: 0 0 auto; font-size: 12px; }
+#search-status { flex: 1 0 100%; color: var(--muted); font-size: 11px; line-height: 1.5; }
+#search-status:empty { display: none; }
+
+#document-body { font-size: var(--reader-font-size); line-height: 1.9; overflow-wrap: anywhere; }
+#document-body > :first-child { margin-top: 0; }
+#document-body h2, #document-body h3, #document-body h4, #document-body h5, #document-body h6 { scroll-margin-top: 106px; font-weight: 650; line-height: 1.45; color: #15171c; }
+#document-body h2 { margin: 2.8em 0 1.05em; padding-top: 1.25em; border-top: 1px solid var(--line); font-size: 1.5em; letter-spacing: -.035em; }
+#document-body h3 { margin: 2em 0 .85em; font-size: 1.18em; letter-spacing: -.025em; }
+#document-body h4 { margin: 1.65em 0 .7em; font-size: 1.03em; }
+#document-body h5, #document-body h6 { margin: 1.4em 0 .6em; font-size: 1em; }
+#document-body p { margin: .9em 0; }
+#document-body ul, #document-body ol { margin: 1em 0; padding-left: 1.55em; }
+#document-body li { margin: .38em 0; padding-left: .15em; }
+#document-body li > p { margin: .4em 0; }
+#document-body li > ul, #document-body li > ol { margin: .35em 0 .6em; }
+#document-body strong { color: #14161b; font-weight: 650; }
+#document-body hr { margin: 2.1em 0; border: 0; border-top: 1px solid var(--line); }
+#document-body blockquote { margin: 1.5em 0; padding: .25em 1.15em; border-left: 3px solid var(--blue); background: var(--surface); color: #4c4f57; }
+#document-body blockquote p { margin: .55em 0; }
+#document-body a { overflow-wrap: anywhere; }
+#document-body a:hover { text-decoration-thickness: 2px; }
+#document-body img { max-width: 100%; height: auto; }
+#document-body code { padding: .12em .32em; border: 1px solid #e7e7ea; border-radius: 3px; background: var(--surface); font-family: Consolas, "SFMono-Regular", "Liberation Mono", monospace; font-size: .82em; overflow-wrap: anywhere; }
+#document-body pre { position: relative; margin: 1.5em 0; padding: 44px 0 0; max-width: 100%; overflow: hidden; border: 1px solid var(--line); border-radius: 4px; background: var(--surface); line-height: 1.7; }
+#document-body pre > code { display: block; max-width: 100%; overflow-x: auto; padding: 0 19px 18px; border: 0; border-radius: 0; font-size: .79em; line-height: 1.75; white-space: pre; overflow-wrap: normal; tab-size: 2; }
+.copy-code { position: absolute; top: 7px; right: 8px; min-height: 28px; padding: 4px 9px; color: var(--muted); font-size: 11px; background: var(--paper); }
+.table-scroll { max-width: 100%; margin: 1.5em 0; overflow-x: auto; border: 1px solid var(--line); border-radius: 3px; scrollbar-width: thin; }
+#document-body table { width: 100%; min-width: 100%; border-collapse: collapse; font-size: .82em; line-height: 1.7; }
+#document-body th, #document-body td { min-width: 105px; padding: 12px 14px; border-right: 1px solid var(--line); border-bottom: 1px solid var(--line); text-align: left; vertical-align: top; }
+#document-body th { background: var(--surface); font-weight: 600; color: #30333a; }
+#document-body tr > :last-child { border-right: 0; }
+#document-body tbody tr:last-child td { border-bottom: 0; }
+#document-body tbody tr:hover { background: #fafafb; }
+#document-body th:first-child, #document-body td:first-child { min-width: 95px; }
+#document-body input[type="checkbox"] { width: 14px; height: 14px; margin: 0 7px 0 0; vertical-align: middle; accent-color: var(--blue); }
+#document-body details { margin: 1.15em 0; padding: 12px 16px; border: 1px solid var(--line); border-radius: 3px; }
+#document-body summary { color: var(--muted); font-size: .85em; cursor: pointer; }
+#document-body details[open] summary { margin-bottom: 12px; }
+.architecture { margin: 1.8em 0; }
+.diagram-viewport { max-width: 100%; overflow-x: auto; border: 1px solid var(--line); scrollbar-width: thin; }
+.diagram-viewport > svg { display: block; min-width: 720px; width: 100%; height: auto; background: var(--paper); }
+.architecture > svg { display: block; width: 100%; height: auto; max-width: 100%; border: 1px solid var(--line); background: var(--paper); }
+.architecture figcaption { margin-top: 8px; color: var(--muted); font-size: .75em; }
+.architecture details { font-size: .85em; }
+mark.reader-match { padding: 1px 0; background: #dbe4ff; color: inherit; border-radius: 2px; scroll-margin-top: 120px; }
+mark.reader-match.is-current { background: var(--blue); color: white; box-shadow: 0 0 0 2px var(--blue); }
+.search-block-current { outline: 1px solid #b2c5f9; outline-offset: 6px; }
+
+.toc-panel { position: sticky; top: var(--header-height); max-height: calc(100dvh - var(--header-height)); overflow-y: auto; padding: 38px 20px 30px 19px; border-left: 1px solid var(--line); scrollbar-width: thin; }
+.toc-panel > h2, #toc > h2, .toc-title { margin: 0 0 15px; color: var(--muted); font-size: 11px; font-weight: 600; letter-spacing: .08em; }
+#toc ul, #toc ol { list-style: none; margin: 0; padding: 0; }
+#toc a { display: block; margin: 2px 0; padding: 5px 0 5px 12px; border-left: 2px solid transparent; color: #6c6f78; font-size: 12px; line-height: 1.65; text-decoration: none; overflow-wrap: anywhere; }
+#toc a:hover { color: var(--blue); }
+#toc a[aria-current="location"], #toc a.is-active { color: var(--blue); border-left-color: var(--blue); }
+#toc a[data-level="3"], #toc .toc-h3 a, #toc a.toc-h3, #toc li.level-3 a { padding-left: 24px; font-size: 11px; }
+.document-pager { display: flex; justify-content: space-between; gap: 20px; margin-top: 60px; padding-top: 24px; border-top: 1px solid var(--line); }
+.document-pager a { flex: 1; min-width: 0; text-decoration: none; font-size: 14px; font-weight: 600; overflow-wrap: anywhere; }
+.document-pager a:last-child { text-align: right; }
+.document-pager a:only-child { text-align: left; }
+.document-pager small, .document-pager span { display: block; margin-bottom: 4px; font-size: 11px; font-weight: 400; color: var(--muted); }
+.page-footer { max-width: 1536px; margin: auto; padding: 22px 32px; border-top: 1px solid var(--line); color: var(--muted); font-size: 11px; background: var(--surface); }
+.back-top { position: fixed; right: 24px; bottom: 24px; z-index: 20; min-height: 40px; border-color: var(--line); background: var(--paper); font-size: 12px; }
+.sidebar-scrim { display: none; }
+
+@media (min-width: 1600px) {
+  .layout { border-left: 1px solid var(--line); border-right: 1px solid var(--line); }
+  .topbar { padding-left: max(32px, calc((100vw - 1472px) / 2)); padding-right: max(32px, calc((100vw - 1472px) / 2)); }
+}
+@media (max-width: 1190px) {
+  .layout { grid-template-columns: 225px minmax(0, 1fr); }
+  .toc-panel { display: none; }
+  #main { padding-left: 42px; padding-right: 42px; }
+}
+@media (max-width: 800px) {
+  :root { --header-height: 68px; }
+  .topbar { gap: 12px; padding: 13px 18px; }
+  .brand { font-size: 15px; }
+  .brand small, .brand span { font-size: 9px; }
+  .mobile-menu { display: inline-flex; align-items: center; justify-content: center; flex-shrink: 0; min-height: 34px; padding: 6px 9px; font-size: 12px; }
+  .layout { display: block; }
+  .sidebar { position: fixed; z-index: 50; left: 0; top: var(--header-height); bottom: 0; width: min(300px, calc(100vw - 44px)); height: calc(100dvh - var(--header-height)); padding: 24px 18px; transform: translateX(-101%); visibility: hidden; transition: transform .18s ease, visibility .18s; border-right: 1px solid var(--line); }
+  .menu-open .sidebar { transform: translateX(0); visibility: visible; }
+  .sidebar-scrim:not([hidden]) { display: block; position: fixed; z-index: 40; inset: var(--header-height) 0 0; background: rgb(18 21 30 / 28%); }
+  .toolbar { gap: 3px; }
+  .toolbar .font-smaller, .toolbar .font-reset, .toolbar .font-larger { min-width: 29px; min-height: 32px; padding: 4px 5px; font-size: 12px; }
+  .toolbar .print-button { display: none; }
+  #main { padding: 33px 28px 40px; }
+  .document-header h1 { font-size: 32px; }
+  .eyebrow { margin-bottom: 13px; }
+  #document-body { line-height: 1.9; }
+  #document-body h2 { margin-top: 2.3em; font-size: 1.4em; }
+  .page-footer { padding: 18px 28px; }
+  .back-top { right: 16px; bottom: 16px; }
+}
+@media (max-width: 460px) {
+  .topbar { gap: 8px; padding-left: 12px; padding-right: 12px; }
+  .brand { font-size: 13px; letter-spacing: -.035em; }
+  .brand small, .brand span { max-width: 125px; overflow: hidden; white-space: nowrap; text-overflow: ellipsis; }
+  .mobile-menu { padding: 5px 7px; font-size: 11px; }
+  #main { padding: 29px 20px 36px; }
+  .document-header h1 { font-size: 28px; }
+  .doc-meta { gap: 4px 12px; font-size: 11px; }
+  .reader-tools { margin-bottom: 28px; }
+  #search-input { flex-basis: 110px; font-size: 12px; }
+  #search-next, #search-clear { padding-left: 8px; padding-right: 8px; }
+  #document-body { font-size: calc(var(--reader-font-size) - 1px); }
+  #document-body pre > code { padding-left: 13px; padding-right: 13px; }
+  #document-body th, #document-body td { padding: 10px 12px; }
+  .document-pager { gap: 18px; margin-top: 40px; }
+  .document-pager a { font-size: 12px; }
+  .page-footer { padding-left: 20px; padding-right: 20px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { scroll-behavior: auto !important; transition: none !important; }
+}
+@media print {
+  @page { margin: 18mm 16mm; }
+  :root { --reader-font-size: 10.5pt !important; }
+  body { min-width: 0; background: white; color: black; }
+  .topbar, .sidebar, .toc-panel, .reader-tools, .document-pager, .back-top, .sidebar-scrim, .skip-link, .copy-code { display: none !important; }
+  .layout { display: block; max-width: none; border: 0; }
+  #main { padding: 0; }
+  .document-header h1 { font-size: 24pt; }
+  .document-header { margin-bottom: 24pt; }
+  .doc-meta { font-size: 8pt; }
+  #document-body { font-size: 10.5pt; line-height: 1.65; }
+  #document-body h2, #document-body h3, #document-body h4 { break-after: avoid; }
+  #document-body h2 { margin-top: 20pt; padding-top: 12pt; font-size: 15pt; }
+  #document-body a { color: inherit; text-decoration: underline; }
+  #document-body pre { padding: 9pt; overflow: visible; background: #f7f7f8; }
+  #document-body pre > code { padding: 0; overflow: visible; white-space: pre-wrap; overflow-wrap: anywhere; font-size: 8pt; }
+  .table-scroll { overflow: visible; border-radius: 0; }
+  #document-body table { table-layout: fixed; font-size: 7.5pt; }
+  #document-body th, #document-body td, #document-body th:first-child, #document-body td:first-child { min-width: 0; padding: 5pt; overflow-wrap: anywhere; }
+  #document-body thead { display: table-header-group; }
+  #document-body tr, .architecture { break-inside: avoid; }
+  #document-body details:not([open]) { display: none; }
+  .architecture > svg { max-height: 230mm; }
+  mark.reader-match, mark.reader-match.is-current { color: inherit; background: transparent; box-shadow: none; }
+  .search-block-current { outline: none; }
+  .page-footer { margin-top: 24pt; padding: 10pt 0 0; font-size: 8pt; background: white; }
+}
+</style>
+</head>
+<body>
+<a class="skip-link" href="#main">跳到正文</a>
+<header class="topbar">
+  <button type="button" class="mobile-menu" aria-controls="doc-sidebar" aria-expanded="false">文档目录</button>
+  <a class="brand" href="../../0001-douyin-ai-studio/00-%E6%96%87%E6%A1%A3%E5%AF%BC%E8%88%AA.html">AI 自媒体<span>开发文档与调研</span></a>
+  <div class="toolbar" aria-label="阅读设置">
+    <button type="button" class="font-smaller" aria-label="缩小正文字号" title="缩小字号">A−</button>
+    <button type="button" class="font-reset" aria-label="恢复默认正文字号" title="恢复字号">默认</button>
+    <button type="button" class="font-larger" aria-label="放大正文字号" title="放大字号">A+</button>
+    <button type="button" class="print-button">打印</button>
+  </div>
+</header>
+<div class="layout">
+  <aside id="doc-sidebar" class="sidebar" aria-label="全部文档"><section class="nav-group"><h2 class="group-title">开发文档</h2><nav class="doc-nav" aria-label="开发文档"><a data-document href="../../0001-douyin-ai-studio/00-%E6%96%87%E6%A1%A3%E5%AF%BC%E8%88%AA.html">00 文档导航</a><a data-document href="../../0001-douyin-ai-studio/01-%E4%BA%A7%E5%93%81%E9%9C%80%E6%B1%82%E6%96%87%E6%A1%A3.html">01 产品需求文档</a><a data-document href="../../0001-douyin-ai-studio/02-%E6%8A%80%E6%9C%AF%E9%80%89%E5%9E%8B%E5%AF%B9%E6%AF%94.html">02 技术选型对比</a><a data-document href="../../0001-douyin-ai-studio/03-%E6%80%BB%E4%BD%93%E6%8A%80%E6%9C%AF%E6%96%B9%E6%A1%88.html">03 总体技术方案</a><a data-document href="../../0001-douyin-ai-studio/04-%E6%8E%A5%E5%8F%A3%E5%A5%91%E7%BA%A6%E4%B8%8E%E6%95%B0%E6%8D%AE%E5%AD%97%E5%85%B8.html">04 接口契约与数据字典</a><a data-document href="../../0001-douyin-ai-studio/05-%E5%BC%80%E5%8F%91%E5%AE%9E%E6%96%BD%E8%AE%A1%E5%88%92.html">05 开发实施计划</a><a data-document href="../../0001-douyin-ai-studio/06-%E9%AA%8C%E6%94%B6%E6%A0%87%E5%87%86%E4%B8%8E%E6%B5%8B%E8%AF%95%E6%96%B9%E6%A1%88.html">06 验收标准与测试方案</a><a data-document href="../../0001-douyin-ai-studio/07-%E6%8A%80%E6%9C%AF%E9%80%89%E5%9E%8B%E4%B8%8E%E5%AE%9E%E6%B5%8B%E6%B5%81%E7%A8%8B.html">07 技术选型与实测流程</a><a data-document href="../../0001-douyin-ai-studio/08-%E7%AB%AF%E5%88%B0%E7%AB%AF%E6%8A%80%E6%9C%AF%E6%B5%81%E7%A8%8B%E4%B8%8E%E6%A8%A1%E5%9E%8B%E9%80%89%E5%9E%8B%E5%9C%B0%E5%9B%BE.html">08 端到端技术流程与模型选型地图</a><a data-document href="../../0001-douyin-ai-studio/09-%E6%A8%A1%E5%9E%8B%E9%80%89%E5%9E%8B%E5%86%B3%E7%AD%96%E4%B8%8E%E6%8E%A5%E5%85%A5%E6%96%B9%E6%A1%88.html">09 模型选型决策与接入方案</a><a data-document href="../../0001-douyin-ai-studio/10-Agent%E7%BC%96%E6%8E%92%E9%80%89%E5%9E%8B%E4%B8%8E%E6%95%B4%E4%BD%93%E6%9E%B6%E6%9E%84.html">10 Agent编排选型与整体架构</a></nav></section><section class="nav-group"><h2 class="group-title">本轮选型试验</h2><nav class="doc-nav" aria-label="本轮选型试验"><a data-document href="01-%E9%80%89%E5%9E%8B%E8%AF%95%E9%AA%8C%E6%96%B9%E6%A1%88.html" aria-current="page">01 选型试验方案</a><a data-document href="02-%E9%A6%96%E8%BD%AE%E5%AE%9E%E6%B5%8B%E7%BB%93%E6%9E%9C.html">02 首轮实测结果</a><a data-document href="03-MuseTalk%E4%BA%91%E7%AB%AF%E9%83%A8%E7%BD%B2%E4%B8%8E%E8%AF%95%E9%AA%8C%E6%96%B9%E6%A1%88.html">03 MuseTalk云端部署与试验方案</a><a data-document href="04-MuseTalk%E9%83%A8%E7%BD%B2%E4%B8%8E%E9%A6%96%E6%B5%8B%E7%BB%93%E6%9E%9C.html">04 MuseTalk部署与首测结果</a><a data-document href="05-OmniHuman%E5%BC%80%E9%80%9A%E5%90%8E%E5%AE%9E%E6%B5%8B%E7%BB%93%E6%9E%9C.html">05 OmniHuman开通后实测结果</a><a data-document href="06-%E4%BA%BA%E7%89%A9B%E8%A1%A8%E6%83%85%E5%8A%A8%E4%BD%9C%E6%94%B9%E5%96%84%E5%AE%9E%E6%B5%8B.html">06 人物B表情动作改善实测</a><a data-document href="MuseTalk%E5%AE%98%E6%96%B9%E8%83%BD%E5%8A%9B%E6%A0%B8%E9%AA%8C.html">MuseTalk官方能力核验</a><a data-document href="%E6%B5%8B%E8%AF%95%E7%B4%A0%E6%9D%90%E6%8E%A5%E5%8F%A3%E6%A0%B8%E9%AA%8C.html">测试素材接口核验</a><a data-document href="%E7%81%AB%E5%B1%B1%E5%80%99%E9%80%89%E6%A0%B8%E9%AA%8C.html">火山候选核验</a><a data-document href="%E9%98%BF%E9%87%8C%E5%80%99%E9%80%89%E6%A0%B8%E9%AA%8C.html">阿里候选核验</a></nav></section><section class="nav-group"><h2 class="group-title">已选模型接入核验</h2><nav class="doc-nav" aria-label="已选模型接入核验"><a data-document href="../02-%E5%B7%B2%E9%80%89%E6%A8%A1%E5%9E%8B/%E5%AE%98%E6%96%B9%E6%96%87%E6%9C%AC%E4%B8%8E%E8%AF%AD%E9%9F%B3%E6%8E%A5%E5%8F%A3%E6%A0%B8%E9%AA%8C.html">官方文本与语音接口核验</a></nav></section><section class="nav-group"><h2 class="group-title">人物与音色候选</h2><nav class="doc-nav" aria-label="人物与音色候选"><a data-document href="../03-%E4%BA%BA%E7%89%A9%E4%B8%8E%E9%9F%B3%E8%89%B2/01-%E9%A6%96%E8%BD%AE%E5%80%99%E9%80%89%E4%B8%8E%E9%80%89%E6%8B%A9%E8%AF%B4%E6%98%8E.html">01 首轮候选与选择说明</a><a data-document href="../03-%E4%BA%BA%E7%89%A9%E4%B8%8E%E9%9F%B3%E8%89%B2/02-%E4%BA%BA%E7%89%A9B%E4%B8%8E%E9%9F%B3%E8%89%B23%E5%AE%9A%E7%89%88%E8%AE%B0%E5%BD%95.html">02 人物B与音色3定版记录</a></nav></section><section class="nav-group"><h2 class="group-title">调研资料</h2><nav class="doc-nav" aria-label="调研资料"><a data-document href="../../research/01-%E4%BA%A7%E5%93%81%E5%BD%A2%E6%80%81%E4%B8%8E%E6%8A%96%E9%9F%B3%E7%94%9F%E6%80%81.html">01 产品形态与抖音生态</a><a data-document href="../../research/02-%E4%BA%BA%E7%89%A9%E4%B8%80%E8%87%B4%E6%80%A7%E7%94%9F%E6%88%90.html">02 人物一致性生成</a><a data-document href="../../research/03-%E6%95%B0%E5%AD%97%E4%BA%BA%E5%8F%A3%E6%92%AD%E9%80%89%E5%9E%8B.html">03 数字人口播选型</a><a data-document href="../../research/04-TTS%E9%9F%B3%E8%89%B2%E4%B8%8E%E5%86%85%E5%AE%B9%E7%94%9F%E6%88%90%E8%B4%A8%E6%A3%80.html">04 TTS音色与内容生成质检</a><a data-document href="../../research/05-%E8%A7%86%E9%A2%91%E5%90%8E%E5%A4%84%E7%90%86%E5%8F%91%E5%B8%83%E4%B8%8E%E5%90%88%E8%A7%84.html">05 视频后处理发布与合规</a><a data-document href="../../research/06-%E5%86%B3%E7%AD%96%E6%B1%87%E6%80%BB.html">06 决策汇总</a></nav></section>
+    <p class="sidebar-note">11 份开发文档<br>10 份本轮选型试验<br>1 份已选模型接入核验<br>2 份人物与音色候选<br>6 份调研资料</p>
+  </aside>
+  <main id="main" tabindex="-1">
+    <header class="document-header">
+      <p class="eyebrow">本轮选型试验 / 01</p>
+      <h1>数字人口播选型试验：同图同音频对比</h1>
+      <div class="doc-meta"><span>v0.3</span><span>8 个章节</span><a href="01-%E9%80%89%E5%9E%8B%E8%AF%95%E9%AA%8C%E6%96%B9%E6%A1%88.md">Markdown 原文</a></div>
+      
+    </header>
+    <div class="reader-tools">
+      <form id="search-form" role="search">
+        <label class="sr-only" for="search-input">搜索本文</label>
+        <input id="search-input" type="search" placeholder="搜索本文，按 Enter 跳转" autocomplete="off">
+        <button id="search-next" type="submit">下一处</button>
+        <button id="search-clear" type="button">清除</button>
+        <span id="search-status" role="status" aria-live="polite"></span>
+      </form>
+    </div>
+    <article id="document-body">
+<p>版本：v0.3 Test Design · 2026-09-21（保留提交前素材偏差，补充首轮真实状态）。</p>
+<p><strong>当前决策：UNSELECTED；A 已请求但访问拒绝，B 已生成原片；主观全片视听 NOT_REVIEWED。</strong>
+2026-09-21 已各一次生成本项目新人物图与 TTS，冻结音频实际为 9.36 秒，偏差见 3.2 节。
+随后两家各提交一次同输入 720P 请求：阿里成功，火山返回访问拒绝且未重试。
+A/B 比较不完整，详见 <a href="02-%E9%A6%96%E8%BD%AE%E5%AE%9E%E6%B5%8B%E7%BB%93%E6%9E%9C.html">首轮实测结果</a>。</p>
+<h2 id="1-本轮只回答一个问题">1. 本轮只回答一个问题</h2>
+<p>在同一位真人外观虚拟人物、同一段普通话音频下，哪个图片＋音频驱动方案能产生
+身份稳定、口型同步、表情和头动自然的原始口播视频，且适合后续 60～75 秒生产？</p>
+<p>不比较图像模型、TTS 模型、内容生成质量或后端框架。准备测试素材所用工具不自动成为生产选型。
+不读、不借鉴、不使用 Demo 的代码、图片、音频、模型、配置和成片。</p>
+<h2 id="2-本轮两项平列候选">2. 本轮两项平列候选</h2>
+<div aria-label="可横向滚动的表格" class="table-scroll" tabindex="0"><table>
+<thead>
+<tr>
+<th>项目</th>
+<th>候选 A</th>
+<th>候选 B</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>服务</td>
+<td>火山即梦 OmniHuman 1.5 图片＋音频</td>
+<td>阿里百炼万相 S2V</td>
+</tr>
+<tr>
+<td>当前接口型号</td>
+<td><code>jimeng_realman_avatar_picture_omni_v15</code></td>
+<td><code>wan2.2-s2v</code></td>
+</tr>
+<tr>
+<td>首轮档位</td>
+<td>720P，按官方对应快速模式配置并记录</td>
+<td>720P</td>
+</tr>
+<tr>
+<td>首轮输入</td>
+<td>同一张 PNG/JPG、同一段 ≤15 秒 WAV</td>
+<td>完全相同字节的图像/WAV</td>
+</tr>
+<tr>
+<td>文档时长限制</td>
+<td>音频 &lt;60 秒，建议 ≤15 秒</td>
+<td>音频 &lt;20 秒</td>
+</tr>
+<tr>
+<td>前置检查</td>
+<td>本地技术检查与人物适用性评审</td>
+<td>同样检查，另按官方流程调用一次图片 detect</td>
+</tr>
+<tr>
+<td>原始视频</td>
+<td>单独保存，不先增强或烧字幕</td>
+<td>单独保存，不先增强或烧字幕</td>
+</tr>
+<tr>
+<td>实测状态</td>
+<td>HTTP 401 / code 50400 / Access Denied；无 task_id、无原片、未重试</td>
+<td>detect 的 check_pass=true；生成成功，媒体技术检查完成，主观全片视听 NOT_REVIEWED</td>
+</tr>
+</tbody>
+</table></div>
+<p>当前第一方依据见 <a href="%E7%81%AB%E5%B1%B1%E5%80%99%E9%80%89%E6%A0%B8%E9%AA%8C.html">火山候选核验</a> 和 <a href="%E9%98%BF%E9%87%8C%E5%80%99%E9%80%89%E6%A0%B8%E9%AA%8C.html">阿里候选核验</a>。
+文档中的限制、帧率、价格不是当前账号实测结果；准确的请求参数随核验报告冻结。
+先比较共同 720P 档位，避免把分辨率差异误当作模型质量差异；
+火山原生 1080P 若需测试，作为单列实验，不混入首轮胜负。</p>
+<h2 id="3-新建共同素材">3. 新建共同素材</h2>
+<h3 id="31-人物图">3.1 人物图</h3>
+<p>本轮临时人物默认成年女性、专业亲和风格；这是实验输入，不是最终人设定版。
+只生成一张、人工检查后冻结，不为不同服务分别挑选更有利的面孔或构图。</p>
+<p>图像提示词：</p>
+<pre><code class="language-text">生成一位完全虚构、真人摄影外观的成年中文知识主播。
+约 30 岁女性，清晰自然的五官和皮肤纹理，黑色齐肩直发，淡妆。
+正面面对镜头，头部完整，双肩可见，胸像至腰部构图，人体比例自然。
+穿简单深蓝色西装外套和浅色上衣，嘴唇自然闭合，表情亲和专业。
+浅灰演播室背景，均匀柔和正面灯光，人物与背景光照一致。
+竖屏构图，人物脸部足够大且清晰，嘴、下颌、头发均无遮挡。
+不要卡通、插画、3D 塑料皮肤、SVG、文字、标志、水印、额外人物或多余肢体。
+不要模仿任何具体真人或明星。
+</code></pre>
+<p>目标规范：PNG/JPG、1080×1920、&lt;5 MB；如果生成服务不能原生输出该尺寸，
+只允许记录过的等比缩放与安全裁切，不用生成式人脸修复重画身份。
+确认眼睛、鼻子、嘴、牙齿、发丝与躯干无明显结构错误，再记录 SHA-256。
+首次图片如不合格，停在素材准备阶段，不能无授权反复抽图。
+图片由用户明确授权的百炼 API 生成，本轮不用内置图像工具或另行切换其他收费服务。</p>
+<p>2026-09-21 已一次生成 1080×1920 人物图，并完成真人外观的视觉检查。
+该检查不替代后续视频中的身份保持、表情、动作与伪影评审。</p>
+<h3 id="32-测试音频">3.2 测试音频</h3>
+<p>使用同一个合法 TTS 音色生成一次干净普通话，不为不同候选分别生成语音。
+可用服务商已有合法标准音色作为临时标尺；不克隆真人声音，不把它当最终声音选型。</p>
+<p>朗读文本：</p>
+<pre><code class="language-text">妈妈买面包，爸爸泡白茶。
+检索增强生成，会先查资料，再生成回答。
+资料不对，答案也可能错。
+</code></pre>
+<p>本轮朗读采用中文“检索增强生成”，避免缩写读法成为口播模型比较的干扰；保留实际提交文本。
+自然、平稳语速，无 BGM、无混响，包含停顿、双唇闭合、张口和圆唇音。
+原计划目标时长为 10～15 秒；其中 10 秒下限是本方案自设目标，用户授权约束为 ≤15 秒。
+2026-09-21 在尚未提交任一候选视频前登记本轮偏差：一次 TTS 得到的原始音频实际为 <strong>9.36 秒</strong>，
+本轮冻结并保留该同样本，不补静音、不加速、不裁剪、不重新生成；两家仍使用完全相同的原始字节。
+本样本技术检查不再以 10 秒下限拦截，≤15 秒上限不变；结果必须披露此偏差，
+不得声称完整覆盖原计划的 10～15 秒输入范围。若后续实测因该输入失败，保留失败证据，不自动重试。</p>
+<p>保存无损 WAV 与其生成来源；若做音量或格式处理，两家必须使用同一份处理后的字节。
+采样率可先按 PCM 24 kHz/单声道准备；这只是实验输入参数，不是假定厂商强制要求。</p>
+<p>本轮原始 WAV 实测为 24,000 Hz、单声道、PCM16；服务端 RIFF/data 长度字段使用占位值，
+实际完整 PCM 为 224,640 帧，按帧数/采样率得 9.36 秒，并可完整解码。
+保留原始 WAV，不将占位长度直接当作真实时长，也不为修补头字段改变两家共同输入。
+上述是本地技术检查；完整主观听评尚未完成，发音、音色与自然度不能记为通过，
+阿里本次请求已读取该输入并生成原片；火山在访问拒绝阶段终止，不能据此判断其 WAV 输入兼容性。</p>
+<h3 id="33-冻结与传输">3.3 冻结与传输</h3>
+<p>保存图片、音频、提示词、TTS 文本、参数、费用及 SHA-256。素材均来自新项目。
+两家使用相同源文件；若对象存储签名不同，仍须验证所指文件相同。
+素材上传仅限本轮获准账户与任务，有效期覆盖排队与读取，结果下载后按保留策略清理云副本。
+不得拿截图占位或人工合成的假嘴动画补齐素材。</p>
+<p>本轮冻结 SHA-256：</p>
+<ul>
+<li>人物图：<code>6531d41f561927836d496c169e8c53751c93243aad9fb0d8e624ad4c73e4f135</code>。</li>
+<li>原始 WAV：<code>3aa5637692cfb333e0594d949bae2522cd44f698fe40c87718c96163408411ba</code>。</li>
+</ul>
+<p>本地下载 TTS 时仅将官方 OSS 地址的 HTTP 协议改为 HTTPS 读取同一对象；
+私有源 URL 保留不改。传输处理与源文件摘要分别记录，不在可分享文档中暴露私有 URL。</p>
+<h2 id="4-三层试验逐层决定是否继续">4. 三层试验，逐层决定是否继续</h2>
+<h3 id="p0-准备检查不调用生成服务">P0 准备检查（不调用生成服务）</h3>
+<p>检查新文件、文件格式/大小/时长、来源摘要、凭据是否存在、精确接口和预算。
+本地脚本：<a href="../../../experiments/%E6%95%B0%E5%AD%97%E4%BA%BA%E5%8F%A3%E6%92%AD%E9%80%89%E5%9E%8B/%E5%87%86%E5%A4%87%E6%A3%80%E6%9F%A5.py">准备检查.py</a>。
+输入技术检查、完整主观视听验收和厂商接口兼容性分别记录。
+本轮技术检查使用 3.2 节已登记的 9.36 秒冻结样本，并记录 WAV 头字段占位情况与实际解码时长。
+只报告准备状态；技术可解码不等于语音质量通过，人物图视觉检查不等于视频效果通过，
+主观评审未完成的项目保持 NOT_REVIEWED，未提交的候选保持 NOT_RUN。</p>
+<h3 id="p1-短片基础对比">P1 短片基础对比</h3>
+<ul>
+<li>A、B 各提交一次同图同音频的 720P 任务，固定同一参数记录与样本 ID。</li>
+<li>B 额外一次官方图片检测，检测失败即停止 B 的生成，不换图偷偷继续。</li>
+<li>顺序执行，记录各自提交、受理、排队、完成、下载时间。</li>
+<li>网络超时若无法确认受理，记录 UNKNOWN 并查询，不重新生成。</li>
+<li>保存原片、原音频、请求/响应摘要、远端任务 ID、计费和失败结果。</li>
+<li>输出并排原片与统一尺度人物裁剪；评审时隐藏供应商名称。</li>
+</ul>
+<p>本层最多得出“短片暂优”“两者可用”“需要更多证据”或“两者均不合格”，不能直接写 SELECTED。</p>
+<p>本轮实际状态：A/B 已各提交一次；B 图片检测 check_pass=true，已下载原片并完成媒体技术检查；
+A 返回 HTTP 401 / code 50400 / Access Denied，无 task_id、无原片，未重试。
+具体权限层原因尚不清楚，不能直接归因为 Key 错误。因缺 A 原片且 B 完整主观视听未完成，
+本轮只能记录“需要更多证据”，不具备并排质量比较或选出赢家的条件。</p>
+<h3 id="p2-目标时长与接缝对比">P2 目标时长与接缝对比</h3>
+<p>仅在 P1 至少一个候选基本合格、且另有明确额度后启动。
+固定一段 60～75 秒稿件及实际 TTS；按句切分为各不超过 15 秒的片段，
+两家使用同样的片段边界和同一人物图。记录实际片数，不预先硬填 5 段。</p>
+<p>原片逐段检查后再无缝拼接，验证身份、动作、音色、响度、语义和字幕时间线连续。
+比较“得到一条合格长片”的总费用、等待时间和接缝返工，不只对比标价/秒。
+若某候选支持更长的单次请求，可另设单段实验；与分段实验分别报告，不能混淆自变量。</p>
+<h3 id="p3-重复样本与工程确认">P3 重复样本与工程确认</h3>
+<p>在同一身份下测试至少 3 段不同语音，并以至少 2 个已审核服装/背景组合复核，
+具体样本清单先冻结并单独给出预算。
+离线注入错误响应、丢失受理回执、重复查询、下载失效；不为制造故障额外付费。
+只有这些覆盖范围通过，才能为相应生产范围给出 SELECTED。</p>
+<h2 id="5-评测表与决策规则">5. 评测表与决策规则</h2>
+<div aria-label="可横向滚动的表格" class="table-scroll" tabindex="0"><table>
+<thead>
+<tr>
+<th>维度</th>
+<th>方法</th>
+<th>决策用法</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>是否真实图像＋音频驱动</td>
+<td>输入摘要、真实 API 任务、原始输出</td>
+<td>硬门槛</td>
+</tr>
+<tr>
+<td>身份与声音是否保持</td>
+<td>基准图/音频与全片对照、关键帧、必要的对齐检查</td>
+<td>硬门槛</td>
+</tr>
+<tr>
+<td>唇形是否匹配音素</td>
+<td>双唇、张口、圆唇、停顿逐处视听；错位负对照</td>
+<td>硬门槛；不能仅看 RMS 相关</td>
+</tr>
+<tr>
+<td>面部结构与动作</td>
+<td>原片全程评审；嘴部、眼睛、头动、躯干和伪影</td>
+<td>硬门槛＋自然度评价</td>
+</tr>
+<tr>
+<td>原生画质</td>
+<td>相同显示尺度的人脸细节与原生分辨率</td>
+<td>不让放大锐化掩盖差异</td>
+</tr>
+<tr>
+<td>音画同步</td>
+<td>时长差＋人工音素抽样；记录误差和测量方法</td>
+<td>先记录实际值，再对照冻结门槛</td>
+</tr>
+<tr>
+<td>实际费用</td>
+<td>生成、检测、素材、传输和所有已计费结果</td>
+<td>失败成功件也计入</td>
+</tr>
+<tr>
+<td>时延与可恢复</td>
+<td>真实时间线、远端 ID、结果有效期、恢复验证</td>
+<td>单次样本不报告稳定 P95</td>
+</tr>
+<tr>
+<td>长片接续</td>
+<td>P2 逐接缝视听与完整语音核对</td>
+<td>未测则不声称适合 60～75 秒</td>
+</tr>
+</tbody>
+</table></div>
+<p>自然度、清晰度可用 1～5 分盲评，保存具体时间点和理由；硬门槛失败不能靠均分通过。
+首轮先以两名评审为建议，实际只有一人时如实标注样本与评审局限。
+两家都通过时才比较成本与接入复杂度；只有一家通过也仅在已测试范围暂选。</p>
+<h2 id="6-首轮预算已获授权上限-60-元">6. 首轮预算（已获授权，上限 60 元）</h2>
+<p>按本轮官方资料、恰好 15 秒且不含取整差异估算：</p>
+<ul>
+<li>A：1 元/秒 × 15 秒 = 15 元。</li>
+<li>B：720P 0.9 元/秒 × 15 秒＋一次检测 0.004 元 = 13.504 元。</li>
+<li>两条数字人原片直接标价合计：<strong>28.504 元</strong>。</li>
+<li>人物图临时采用 <code>qwen-image-2.0</code>，公开价 0.2 元/张；TTS 临时采用 <code>qwen3-tts-flash</code>/Cherry，
+公开价 0.8 元/万字符。仅作试验素材工具，不是生产选型结论，
+依据见 <a href="%E6%B5%8B%E8%AF%95%E7%B4%A0%E6%9D%90%E6%8E%A5%E5%8F%A3%E6%A0%B8%E9%AA%8C.html">测试素材接口核验</a>。对象存储/下载和账号价差按实际记录。</li>
+</ul>
+<p>已获首轮授权上限 <strong>60 元</strong>，范围仅限 1 张人物图、1 段 TTS、
+1 次阿里检测、A/B 各 1 次 ≤15 秒 720P 生成及必要传输；
+素材服务型号与分项上限在执行前记录，超出则停止。
+一次失败不自动重试，不调用备用模型，不进入 P2/P3，不做真实抖音发布。
+用户已在本任务明确回复“授权这轮，按上限执行”。授权记录见
+<a href="../../../experiments/%E6%95%B0%E5%AD%97%E4%BA%BA%E5%8F%A3%E6%92%AD%E9%80%89%E5%9E%8B/%E6%9C%AC%E8%BD%AE%E6%8E%88%E6%9D%83.json">本轮授权.json</a>，本轮不再重复申请同一预算。</p>
+<p>素材生成或视频请求返回“成功”但人像/口型不合格，仍可能计费；不能按质量差推定免单。
+本轮实际费用预留合计 47 元，实际扣款待账单对账；上述 15 秒报价仍只是预算算例。
+火山访问拒绝不能被记为已确认零费用，阿里生成成功也不等于已取得最终费用。</p>
+<h2 id="7-证据目录与当前实测状态">7. 证据目录与当前实测状态</h2>
+<pre><code class="language-text">experiments/数字人口播选型/
+  试验配置.example.json
+  凭据配置.example.env
+  准备检查.py
+  执行首轮.py                 每次只执行一个步骤，不自动生成重试
+  试验账本.py                 持久化限次、预留、未知结果
+  本轮授权.json
+  评估成片.py
+  inputs/                     素材目录示例；实际文件路径见输入清单
+  runs/TH-AB-001/
+    准备检查.json
+    输入清单.json
+    A/                        脱敏失败回执、费用待对账记录；无原片
+    B/                        脱敏回执、原片.mp4、费用待对账记录
+    评测记录.json
+    选型结论.md
+</code></pre>
+<p>当前：官网资料已核验；本项目已各一次生成新人物图与 TTS，并分别向 A/B 提交一次。
+人物图为 1080×1920，已做真人外观视觉检查；原始 WAV 为 24 kHz/单声道/PCM16，
+224,640 帧、9.36 秒且可完整解码，已在任一视频提交前登记低于原目标下限的偏差。
+阿里 detect 的 check_pass=true；<code>wan2.2-s2v</code> 720P 生成原片实测 720×1280、H.264/AAC、
+帧率字段 30 fps、274 帧、总时长 9.133333 秒，全片解码无报错。
+原片见 <a href="../../../experiments/%E6%95%B0%E5%AD%97%E4%BA%BA%E5%8F%A3%E6%92%AD%E9%80%89%E5%9E%8B/runs/TH-AB-001/B/%E5%8E%9F%E7%89%87.mp4">B/原片.mp4</a>。
+火山 OmniHuman 1.5 返回 HTTP 401 / code 50400 / Access Denied，无 task_id、无原片、未重试；
+具体权限层原因未知。原音频完整听评与成片主观全片视听均未完成，后者保持 NOT_REVIEWED。
+60 元预算已授权，累计预留 47 元，实际费用待对账；A/B 比较不完整，决策保持 UNSELECTED。
+本轮记录的 53 项离线保护测试已通过，仅支持对应本地执行逻辑，不证明视频质量或生产能力合格。
+完整证据与未测范围见 <a href="02-%E9%A6%96%E8%BD%AE%E5%AE%9E%E6%B5%8B%E7%BB%93%E6%9E%9C.html">首轮实测结果</a>。
+凭据在本地环境或试验专用文件配置，不在聊天里粘贴，不沿用 Demo 的密钥文件。</p>
+<h2 id="8-测试后如何写结论">8. 测试后如何写结论</h2>
+<p>记录候选版本、输入摘要、全部运行 ID、原片与评审、费用及未测范围。
+结论只允许：未选出、需要更多证据、限定范围暂选、满足覆盖范围后正式选定。
+选定后再更新 <a href="../../0001-douyin-ai-studio/03-%E6%80%BB%E4%BD%93%E6%8A%80%E6%9C%AF%E6%96%B9%E6%A1%88.html">总体技术方案</a> 中该模块的精确协议、
+参数、预算和恢复设计；数据库、前端、图像与 TTS 仍各自保持未选定，不能被连带决定。</p>
+</article>
+    <nav class="document-pager" aria-label="相邻文档"><a rel="prev" href="../../0001-douyin-ai-studio/10-Agent%E7%BC%96%E6%8E%92%E9%80%89%E5%9E%8B%E4%B8%8E%E6%95%B4%E4%BD%93%E6%9E%B6%E6%9E%84.html"><span>上一篇</span>10-Agent编排选型与整体架构</a><a rel="next" href="02-%E9%A6%96%E8%BD%AE%E5%AE%9E%E6%B5%8B%E7%BB%93%E6%9E%9C.html"><span>下一篇</span>02-首轮实测结果</a></nav>
+    <footer class="page-footer">与同名 Markdown 对应的阅读版 · 可离线阅读与打印</footer>
+  </main>
+  <aside class="toc-panel" aria-label="本文章节"><p class="group-title">本页目录</p><nav id="toc"><a class="toc-h2" href="#1-%E6%9C%AC%E8%BD%AE%E5%8F%AA%E5%9B%9E%E7%AD%94%E4%B8%80%E4%B8%AA%E9%97%AE%E9%A2%98">1. 本轮只回答一个问题</a><a class="toc-h2" href="#2-%E6%9C%AC%E8%BD%AE%E4%B8%A4%E9%A1%B9%E5%B9%B3%E5%88%97%E5%80%99%E9%80%89">2. 本轮两项平列候选</a><a class="toc-h2" href="#3-%E6%96%B0%E5%BB%BA%E5%85%B1%E5%90%8C%E7%B4%A0%E6%9D%90">3. 新建共同素材</a><a class="toc-h3" href="#31-%E4%BA%BA%E7%89%A9%E5%9B%BE">3.1 人物图</a><a class="toc-h3" href="#32-%E6%B5%8B%E8%AF%95%E9%9F%B3%E9%A2%91">3.2 测试音频</a><a class="toc-h3" href="#33-%E5%86%BB%E7%BB%93%E4%B8%8E%E4%BC%A0%E8%BE%93">3.3 冻结与传输</a><a class="toc-h2" href="#4-%E4%B8%89%E5%B1%82%E8%AF%95%E9%AA%8C%E9%80%90%E5%B1%82%E5%86%B3%E5%AE%9A%E6%98%AF%E5%90%A6%E7%BB%A7%E7%BB%AD">4. 三层试验，逐层决定是否继续</a><a class="toc-h3" href="#p0-%E5%87%86%E5%A4%87%E6%A3%80%E6%9F%A5%E4%B8%8D%E8%B0%83%E7%94%A8%E7%94%9F%E6%88%90%E6%9C%8D%E5%8A%A1">P0 准备检查（不调用生成服务）</a><a class="toc-h3" href="#p1-%E7%9F%AD%E7%89%87%E5%9F%BA%E7%A1%80%E5%AF%B9%E6%AF%94">P1 短片基础对比</a><a class="toc-h3" href="#p2-%E7%9B%AE%E6%A0%87%E6%97%B6%E9%95%BF%E4%B8%8E%E6%8E%A5%E7%BC%9D%E5%AF%B9%E6%AF%94">P2 目标时长与接缝对比</a><a class="toc-h3" href="#p3-%E9%87%8D%E5%A4%8D%E6%A0%B7%E6%9C%AC%E4%B8%8E%E5%B7%A5%E7%A8%8B%E7%A1%AE%E8%AE%A4">P3 重复样本与工程确认</a><a class="toc-h2" href="#5-%E8%AF%84%E6%B5%8B%E8%A1%A8%E4%B8%8E%E5%86%B3%E7%AD%96%E8%A7%84%E5%88%99">5. 评测表与决策规则</a><a class="toc-h2" href="#6-%E9%A6%96%E8%BD%AE%E9%A2%84%E7%AE%97%E5%B7%B2%E8%8E%B7%E6%8E%88%E6%9D%83%E4%B8%8A%E9%99%90-60-%E5%85%83">6. 首轮预算（已获授权，上限 60 元）</a><a class="toc-h2" href="#7-%E8%AF%81%E6%8D%AE%E7%9B%AE%E5%BD%95%E4%B8%8E%E5%BD%93%E5%89%8D%E5%AE%9E%E6%B5%8B%E7%8A%B6%E6%80%81">7. 证据目录与当前实测状态</a><a class="toc-h2" href="#8-%E6%B5%8B%E8%AF%95%E5%90%8E%E5%A6%82%E4%BD%95%E5%86%99%E7%BB%93%E8%AE%BA">8. 测试后如何写结论</a></nav></aside>
+</div>
+<button type="button" class="sidebar-scrim" aria-label="关闭文档目录" hidden></button>
+<button type="button" class="back-top" aria-label="返回顶部">顶部</button>
+<script>(() => {
+  'use strict';
+
+  function initializeReader() {
+    const article = document.getElementById('document-body');
+    if (!article) return;
+    const root = document.documentElement;
+    const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
+    const scrollBehavior = () => reducedMotion.matches ? 'instant' : 'smooth';
+
+    // Local files and privacy settings can deny storage; controls remain usable.
+    const fontKey = 'document-reader-font-size';
+    let fontSize = 17;
+    try {
+      const savedSize = Number(localStorage.getItem(fontKey));
+      if (Number.isFinite(savedSize) && savedSize >= 14 && savedSize <= 22) fontSize = savedSize;
+    } catch (_) { /* Storage is optional. */ }
+    const smaller = document.querySelector('.font-smaller');
+    const reset = document.querySelector('.font-reset');
+    const larger = document.querySelector('.font-larger');
+    function setFontSize(value) {
+      fontSize = Math.max(14, Math.min(22, value));
+      root.style.setProperty('--reader-font-size', `${fontSize}px`);
+      if (smaller) smaller.disabled = fontSize === 14;
+      if (larger) larger.disabled = fontSize === 22;
+      if (reset) reset.title = `恢复默认字号（当前 ${fontSize}px）`;
+      try { localStorage.setItem(fontKey, String(fontSize)); } catch (_) { /* Optional. */ }
+    }
+    setFontSize(fontSize);
+    smaller?.addEventListener('click', () => setFontSize(fontSize - 1));
+    reset?.addEventListener('click', () => setFontSize(17));
+    larger?.addEventListener('click', () => setFontSize(fontSize + 1));
+    document.querySelector('.print-button')?.addEventListener('click', () => window.print());
+
+    const menu = document.querySelector('.mobile-menu');
+    const sidebar = document.getElementById('doc-sidebar');
+    const scrim = document.querySelector('.sidebar-scrim');
+    const mobileWidth = window.matchMedia('(max-width: 800px)');
+    function setMenu(open, returnFocus = false) {
+      const visible = open && mobileWidth.matches;
+      document.body.classList.toggle('menu-open', visible);
+      menu?.setAttribute('aria-expanded', String(visible));
+      if (scrim) scrim.hidden = !visible;
+      if (visible) {
+        sidebar?.querySelector('[aria-current="page"], a, button')?.focus();
+      } else if (returnFocus) menu?.focus();
+    }
+    menu?.addEventListener('click', () => setMenu(!document.body.classList.contains('menu-open')));
+    scrim?.addEventListener('click', () => setMenu(false, true));
+    sidebar?.addEventListener('click', (event) => {
+      if (event.target.closest('a')) setMenu(false);
+    });
+    mobileWidth.addEventListener('change', () => setMenu(false));
+    document.addEventListener('keydown', (event) => {
+      if (!document.body.classList.contains('menu-open')) return;
+      if (event.key === 'Escape') {
+        event.preventDefault();
+        setMenu(false, true);
+      }
+      if (event.key === 'Tab') {
+        const focusable = [menu, ...sidebar.querySelectorAll('a[href], button:not([disabled]), [tabindex="0"]')].filter(Boolean);
+        const first = focusable[0];
+        const last = focusable[focusable.length - 1];
+        if (event.shiftKey && document.activeElement === first) {
+          event.preventDefault();
+          last?.focus();
+        } else if (!event.shiftKey && document.activeElement === last) {
+          event.preventDefault();
+          first?.focus();
+        }
+      }
+    });
+    setMenu(false);
+
+    const searchForm = document.getElementById('search-form');
+    const searchInput = document.getElementById('search-input');
+    const searchNext = document.getElementById('search-next');
+    const searchClear = document.getElementById('search-clear');
+    const searchStatus = document.getElementById('search-status');
+    let searchResults = [];
+    let currentResult = -1;
+    let currentQuery = '';
+    let searchTimer;
+
+    function clearHighlights() {
+      article.querySelectorAll('mark.reader-match').forEach((mark) => {
+        const parent = mark.parentNode;
+        mark.replaceWith(document.createTextNode(mark.textContent));
+        parent.normalize();
+      });
+      article.querySelectorAll('.search-block-current').forEach((block) => block.classList.remove('search-block-current'));
+      searchResults = [];
+      currentResult = -1;
+    }
+
+    function showResult(index, shouldScroll) {
+      searchResults.forEach((result) => {
+        result.block.classList.remove('search-block-current');
+        result.marks.forEach((mark) => mark.classList.remove('is-current'));
+      });
+      currentResult = (index + searchResults.length) % searchResults.length;
+      const result = searchResults[currentResult];
+      result.block.classList.add('search-block-current');
+      result.marks.forEach((mark) => mark.classList.add('is-current'));
+      if (searchStatus) searchStatus.textContent = `第 ${currentResult + 1} / ${searchResults.length} 处匹配 · Enter 下一处`;
+      if (shouldScroll) {
+        let container = result.block.parentElement;
+        while (container && container !== article) {
+          if (container.tagName === 'DETAILS') container.open = true;
+          container = container.parentElement;
+        }
+        result.marks[0].scrollIntoView({ behavior: scrollBehavior(), block: 'center', inline: 'nearest' });
+      }
+    }
+
+    function runSearch(shouldScroll = false) {
+      clearTimeout(searchTimer);
+      clearHighlights();
+      const query = searchInput?.value.trim() || '';
+      currentQuery = query;
+      if (searchClear) searchClear.disabled = !query;
+      if (!query) {
+        if (searchStatus) searchStatus.textContent = '';
+        if (searchNext) searchNext.disabled = true;
+        return;
+      }
+      const queryLower = query.toLocaleLowerCase();
+      const blockResults = new Map();
+      // Walk original text nodes, preserving links, emphasis, tables and code.
+      const walker = document.createTreeWalker(article, NodeFilter.SHOW_TEXT, {
+        acceptNode(node) {
+          if (!node.nodeValue.trim()) return NodeFilter.FILTER_REJECT;
+          if (node.parentElement.closest('script, style, button, svg, mark, [aria-hidden="true"]')) return NodeFilter.FILTER_REJECT;
+          return node.nodeValue.toLocaleLowerCase().includes(queryLower) ? NodeFilter.FILTER_ACCEPT : NodeFilter.FILTER_REJECT;
+        }
+      });
+      const nodes = [];
+      while (walker.nextNode()) nodes.push(walker.currentNode);
+      nodes.forEach((node) => {
+        const original = node.nodeValue;
+        const normalized = original.toLocaleLowerCase();
+        const block = node.parentElement.closest('p, li, td, th, h2, h3, h4, h5, h6, pre, summary, figcaption') || node.parentElement;
+        let result = blockResults.get(block);
+        if (!result) {
+          result = { block, marks: [] };
+          blockResults.set(block, result);
+        }
+        const fragment = document.createDocumentFragment();
+        let position = 0;
+        let matchPosition;
+        while ((matchPosition = normalized.indexOf(queryLower, position)) !== -1) {
+          fragment.append(document.createTextNode(original.slice(position, matchPosition)));
+          const mark = document.createElement('mark');
+          mark.className = 'reader-match';
+          mark.textContent = original.slice(matchPosition, matchPosition + query.length);
+          fragment.append(mark);
+          result.marks.push(mark);
+          position = matchPosition + query.length;
+        }
+        fragment.append(document.createTextNode(original.slice(position)));
+        node.replaceWith(fragment);
+      });
+      searchResults = [...blockResults.values()];
+      if (searchNext) searchNext.disabled = !searchResults.length;
+      if (!searchResults.length) {
+        if (searchStatus) searchStatus.textContent = '未找到匹配内容';
+      } else showResult(0, shouldScroll);
+    }
+
+    searchInput?.addEventListener('input', (event) => {
+      if (event.isComposing) return;
+      clearTimeout(searchTimer);
+      searchTimer = setTimeout(() => runSearch(false), 180);
+    });
+    searchInput?.addEventListener('compositionend', () => {
+      clearTimeout(searchTimer);
+      searchTimer = setTimeout(() => runSearch(false), 180);
+    });
+    searchForm?.addEventListener('submit', (event) => {
+      event.preventDefault();
+      const queryChanged = currentQuery !== searchInput.value.trim();
+      if (queryChanged) runSearch(true);
+      else if (searchResults.length) showResult(currentResult + 1, true);
+    });
+    if (searchNext && searchNext.type !== 'submit') {
+      searchNext.addEventListener('click', () => {
+        if (currentQuery !== searchInput.value.trim()) runSearch(true);
+        else if (searchResults.length) showResult(currentResult + 1, true);
+      });
+    }
+    function resetSearch() {
+      clearTimeout(searchTimer);
+      if (searchInput) searchInput.value = '';
+      currentQuery = '';
+      clearHighlights();
+      if (searchStatus) searchStatus.textContent = '';
+      if (searchNext) searchNext.disabled = true;
+      if (searchClear) searchClear.disabled = true;
+    }
+    searchClear?.addEventListener('click', (event) => {
+      event.preventDefault();
+      resetSearch();
+      searchInput?.focus();
+    });
+    searchInput?.addEventListener('keydown', (event) => {
+      if (event.key === 'Escape' && !event.isComposing) {
+        event.preventDefault();
+        resetSearch();
+      }
+      if (event.key === 'Enter' && event.isComposing) event.preventDefault();
+    });
+    resetSearch();
+
+    async function copyText(text) {
+      try {
+        if (navigator.clipboard?.writeText) {
+          await navigator.clipboard.writeText(text);
+          return true;
+        }
+      } catch (_) { /* File URLs may reject the modern Clipboard API. */ }
+      const previousFocus = document.activeElement;
+      const selection = window.getSelection();
+      const savedRanges = selection ? Array.from({ length: selection.rangeCount }, (_, i) => selection.getRangeAt(i).cloneRange()) : [];
+      const field = document.createElement('textarea');
+      field.value = text;
+      field.readOnly = true;
+      field.style.cssText = 'position:fixed;left:-9999px;top:0;opacity:0;font-size:16px';
+      document.body.append(field);
+      field.select();
+      let copied = false;
+      try { copied = document.execCommand('copy'); } catch (_) { /* Show the failure state. */ }
+      field.remove();
+      if (selection) {
+        selection.removeAllRanges();
+        savedRanges.forEach((range) => selection.addRange(range));
+      }
+      previousFocus?.focus({ preventScroll: true });
+      return copied;
+    }
+
+    article.querySelectorAll('pre').forEach((pre) => {
+      const code = pre.querySelector('code');
+      if (!code || pre.querySelector('.copy-code')) return;
+      const button = document.createElement('button');
+      button.type = 'button';
+      button.className = 'copy-code';
+      button.textContent = '复制代码';
+      button.setAttribute('aria-label', '复制代码');
+      button.setAttribute('aria-live', 'polite');
+      pre.append(button);
+      let labelTimer;
+      button.addEventListener('click', async () => {
+        clearTimeout(labelTimer);
+        const copied = await copyText(code.textContent);
+        button.textContent = copied ? '已复制' : '请选中后复制';
+        labelTimer = setTimeout(() => { button.textContent = '复制代码'; }, 2200);
+      });
+    });
+
+    // Scroll-spy works without observers and avoids changing browser history.
+    const tocLinks = Array.from(document.querySelectorAll('#toc a[href^="#"]'));
+    const sections = tocLinks.map((link) => {
+      let id;
+      try { id = decodeURIComponent(link.getAttribute('href').slice(1)); } catch (_) { return null; }
+      const heading = document.getElementById(id);
+      return heading ? { link, heading } : null;
+    }).filter(Boolean);
+    let activeLink = null;
+    const backTop = document.querySelector('.back-top');
+    let framePending = false;
+    function updateScrollState() {
+      framePending = false;
+      if (backTop) backTop.hidden = window.scrollY < 480;
+      let active = sections[0];
+      const header = document.querySelector('.topbar');
+      const threshold = (header?.getBoundingClientRect().height || 76) + 38;
+      for (const section of sections) {
+        if (section.heading.getBoundingClientRect().top <= threshold) active = section;
+        else break;
+      }
+      if (!active || active.link === activeLink) return;
+      activeLink?.removeAttribute('aria-current');
+      activeLink?.classList.remove('is-active');
+      activeLink = active.link;
+      activeLink.setAttribute('aria-current', 'location');
+      activeLink.classList.add('is-active');
+      const panel = document.querySelector('.toc-panel');
+      if (panel && panel.clientHeight) {
+        const linkRect = activeLink.getBoundingClientRect();
+        const panelRect = panel.getBoundingClientRect();
+        if (linkRect.top < panelRect.top + 25 || linkRect.bottom > panelRect.bottom - 25) {
+          panel.scrollTop += linkRect.top - panelRect.top - panel.clientHeight / 3;
+        }
+      }
+    }
+    function queueScrollUpdate() {
+      if (!framePending) {
+        framePending = true;
+        requestAnimationFrame(updateScrollState);
+      }
+    }
+    window.addEventListener('scroll', queueScrollUpdate, { passive: true });
+    window.addEventListener('resize', queueScrollUpdate, { passive: true });
+    backTop?.addEventListener('click', () => window.scrollTo({ top: 0, behavior: scrollBehavior() }));
+    updateScrollState();
+  }
+
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', initializeReader, { once: true });
+  else initializeReader();
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,249 @@
+{
+  "scope": "离线汇报文档、图形和交互核验，不是生产应用或模型验收",
+  "html_sha256": "020ebf8f63405af5da30c047f114dc73bff03b78b3c9e2fbcaebff18d69ba49d",
+  "checks": [
+    {
+      "test": "tab_system",
+      "passed": true
+    },
+    {
+      "test": "width_system_1440",
+      "passed": true
+    },
+    {
+      "test": "width_system_390",
+      "passed": true
+    },
+    {
+      "test": "tab_flow",
+      "passed": true
+    },
+    {
+      "test": "width_flow_1440",
+      "passed": true
+    },
+    {
+      "test": "width_flow_390",
+      "passed": true
+    },
+    {
+      "test": "tab_agents",
+      "passed": true
+    },
+    {
+      "test": "width_agents_1440",
+      "passed": true
+    },
+    {
+      "test": "width_agents_390",
+      "passed": true
+    },
+    {
+      "test": "tab_stack",
+      "passed": true
+    },
+    {
+      "test": "width_stack_1440",
+      "passed": true
+    },
+    {
+      "test": "width_stack_390",
+      "passed": true
+    },
+    {
+      "test": "tab_quality",
+      "passed": true
+    },
+    {
+      "test": "width_quality_1440",
+      "passed": true
+    },
+    {
+      "test": "width_quality_390",
+      "passed": true
+    },
+    {
+      "test": "tab_progress",
+      "passed": true
+    },
+    {
+      "test": "width_progress_1440",
+      "passed": true
+    },
+    {
+      "test": "width_progress_390",
+      "passed": true
+    },
+    {
+      "test": "svg_node_text_bounds_system",
+      "passed": true,
+      "issues": []
+    },
+    {
+      "test": "node_detail_system",
+      "passed": true
+    },
+    {
+      "test": "zoom_system",
+      "passed": true
+    },
+    {
+      "test": "svg_node_text_bounds_flow",
+      "passed": true,
+      "issues": []
+    },
+    {
+      "test": "node_detail_flow",
+      "passed": true
+    },
+    {
+      "test": "zoom_flow",
+      "passed": true
+    },
+    {
+      "test": "keyboard_tabs",
+      "passed": true
+    },
+    {
+      "test": "presentation",
+      "passed": true
+    },
+    {
+      "test": "presentation_next",
+      "passed": true
+    },
+    {
+      "test": "escape_presentation",
+      "passed": true
+    },
+    {
+      "test": "models_pending",
+      "passed": true
+    },
+    {
+      "test": "model_search",
+      "passed": true
+    },
+    {
+      "test": "model_empty",
+      "passed": true
+    },
+    {
+      "test": "metrics_default",
+      "passed": true
+    },
+    {
+      "test": "metrics_expand",
+      "passed": true
+    },
+    {
+      "test": "svg_export",
+      "passed": true,
+      "evidence": {
+        "parsed": true,
+        "style": true,
+        "width": "1120",
+        "height": "760",
+        "filename": "项目汇报架构.svg"
+      }
+    },
+    {
+      "test": "print_current",
+      "passed": true
+    },
+    {
+      "test": "print_all",
+      "passed": true
+    },
+    {
+      "test": "print_restore",
+      "passed": true
+    },
+    {
+      "test": "hash_reload",
+      "passed": true
+    },
+    {
+      "test": "javascript_errors",
+      "passed": true
+    }
+  ],
+  "failures": [],
+  "javascript_exceptions": [],
+  "visual_review": "passed",
+  "visual_note": "人工查看桌面总览/数据流/智能体/模型/评估/进度截图及手机模型页，复核两张图形文字与边界；核心11项默认展示，完整31项折叠。打印核验为按钮与打印媒体样式，未生成PDF文件。",
+  "local_document_links_verified": 12,
+  "no_external_assets": true,
+  "source_summary": {
+    "purpose": "项目方案汇报，非运行中的生产应用",
+    "style_reference": "C:\\Users\\22346\\Downloads\\project-blueprint-v2.html",
+    "style_reference_sha256": "6f1125f2a925f6650c5b4acb1adc27f15a58007e11998afc1a97d31f3eaa6b09",
+    "visual_direction": "原创白底、深色文字、蓝色强调；参考文件仅用于信息组织与交互参考",
+    "generated_at": "2026-09-22T19:33:00",
+    "sources": [
+      {
+        "path": "0001-douyin-ai-studio\\00-文档导航.md",
+        "sha256": "2773ce943eb95142ebc8b199eb1ba34df938e35fbb4a1176d3d8b1dee908f4d0"
+      },
+      {
+        "path": "0001-douyin-ai-studio\\03-总体技术方案.md",
+        "sha256": "3eb19af5300d0f02e4cf2509be6eda9cd3f08406048ec32cf7b49afed0f2284a"
+      },
+      {
+        "path": "0001-douyin-ai-studio\\04-接口契约与数据字典.md",
+        "sha256": "a91579fbdd233423444bb0a32a162189224807cbcbf8f27b9b90b14215148df1"
+      },
+      {
+        "path": "0001-douyin-ai-studio\\05-开发实施计划.md",
+        "sha256": "e2130570b7b0dd6d331dc81e61d426674cb90645d7d48e55d2cb6d6e40e720b0"
+      },
+      {
+        "path": "0001-douyin-ai-studio\\06-验收标准与测试方案.md",
+        "sha256": "c2d934cb0a54dfe77c088aa947023b8c1d44b2f9f75832db3c31d6a4ffd0b491"
+      },
+      {
+        "path": "0001-douyin-ai-studio\\08-端到端技术流程与模型选型地图.md",
+        "sha256": "cda0f46c096a8d960b8d3a512063f6d9d59661973ba8563efbfa6b7cf0300142"
+      },
+      {
+        "path": "0001-douyin-ai-studio\\09-模型选型决策与接入方案.md",
+        "sha256": "7796e7c7eb53f157eb8da9e46c51b2205a2140ce12d9f2f814912f8f5453a187"
+      },
+      {
+        "path": "0001-douyin-ai-studio\\10-Agent编排选型与整体架构.md",
+        "sha256": "7f116a0fac9d0469e75a69bcda0ec931d31f92674267766f4c9491190b274a3c"
+      },
+      {
+        "path": "汇报\\项目汇报架构.html",
+        "sha256": "eb4bbb14bff667adb7983a1a90cc38725dfd0c0965e093b4a46d000619c5d2e9"
+      },
+      {
+        "path": "架构图\\作品生产数据流.html",
+        "sha256": "639cfd588839e630cdb77d012150149150a4aed6269cedbfc93ac2918835b337"
+      }
+    ],
+    "metric_ids": [
+      "E02",
+      "E04",
+      "E06",
+      "E07",
+      "E08",
+      "E10",
+      "E14",
+      "E15",
+      "E16",
+      "E25",
+      "E27"
+    ],
+    "full_metric_count": 31,
+    "views": [
+      "system",
+      "flow",
+      "agents",
+      "stack",
+      "quality",
+      "progress"
+    ],
+    "output_sha256": "020ebf8f63405af5da30c047f114dc73bff03b78b3c9e2fbcaebff18d69ba49d"
+  }
+}

@@ -1,0 +1,15 @@
+{
+  "checked_at": "2026-09-21T14:35:40.727265+00:00",
+  "source_file": "C:\\Users\\22346\\Desktop\\密钥\\api_keys.md",
+  "source_label": "gpt-image",
+  "base_url": "https://airelay.dog.airelay.buzz",
+  "request": "GET /v1/models",
+  "billable_generation_calls": 0,
+  "endpoint_generation_verified": false,
+  "endpoint_edits_verified": false,
+  "http_status": 200,
+  "requested_model_listed": true,
+  "matching_model_ids": [
+    "gpt-image-2"
+  ]
+}

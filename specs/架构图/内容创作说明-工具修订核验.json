@@ -1,0 +1,46 @@
+{
+  "artifact": "内容创作DeepAgents说明.html",
+  "date": "2026-09-30",
+  "change": "Tool inventory revision",
+  "layouts": [
+    {
+      "width": 1440,
+      "scrollWidth": 1440,
+      "overflow": []
+    },
+    {
+      "width": 1920,
+      "scrollWidth": 1920,
+      "overflow": []
+    },
+    {
+      "width": 768,
+      "scrollWidth": 768,
+      "overflow": []
+    },
+    {
+      "width": 390,
+      "scrollWidth": 390,
+      "overflow": []
+    }
+  ],
+  "printRows": 9,
+  "errors": [],
+  "capabilityRows": 8,
+  "labels": [
+    "热点与参考获取",
+    "参考视频理解",
+    "数字人形象",
+    "音频与音色",
+    "数字人视频",
+    "Wan 短视频",
+    "写作与质量审核",
+    "查询、成片与发布"
+  ],
+  "visual_review": "passed",
+  "evidence": [
+    "内容创作说明-工具清单核验.png",
+    "内容创作说明-工具分工核验.png",
+    "内容创作说明-工具手机核验.png"
+  ]
+}

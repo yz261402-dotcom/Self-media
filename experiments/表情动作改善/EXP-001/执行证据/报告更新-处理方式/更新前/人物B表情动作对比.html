@@ -1,0 +1,83 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<link rel="icon" href="data:,">
+<title>人物 B 表情动作对比 · EXP-001</title>
+<style>
+:root { color-scheme: light; --paper: #FFFFFF; --panel: #F7F7F8; --ink: #17191e; --muted: #616771; --line: #d9dce2; --accent: #002FA7; }
+* { box-sizing: border-box; }
+body { margin: 0; color: var(--ink); background: var(--paper); font-family: "Helvetica Neue", Helvetica, "Microsoft YaHei", "PingFang SC", Arial, sans-serif; line-height: 1.7; }
+main { max-width: 1600px; margin: 0 auto; padding: 42px 36px 64px; }
+a { color: var(--accent); text-underline-offset: 4px; overflow-wrap: anywhere; }
+a:focus-visible, video:focus-visible { outline: 3px solid var(--accent); outline-offset: 4px; }
+h1, h2, h3, p { margin: 0; }
+h1 { font-size: clamp(28px, 3.1vw, 48px); line-height: 1.2; font-weight: 650; letter-spacing: -.035em; }
+.page-header { display: flex; justify-content: space-between; align-items: flex-start; gap: 24px; border-top: 5px solid var(--accent); padding: 28px 0 24px; border-bottom: 1px solid var(--line); }
+.page-header .updated { color: var(--muted); font-size: 13px; max-width: 300px; text-align: left; overflow-wrap: anywhere; }
+.inputs { margin-top: 14px; color: var(--muted); }
+.input-links { display: flex; gap: 18px; flex-wrap: wrap; margin-top: 9px; font-size: 14px; }
+.summary { padding: 20px 0; font-size: 17px; max-width: 1060px; white-space: pre-wrap; overflow-wrap: anywhere; }
+.play-hint { padding: 0 0 20px; font-size: 13px; color: var(--muted); }
+.clips { display: grid; grid-template-columns: repeat(3,minmax(0,1fr)); border-top: 1px solid var(--line); border-left: 1px solid var(--line); }
+.clip { min-width: 0; padding: 22px; border-right: 1px solid var(--line); border-bottom: 1px solid var(--line); }
+.clip-header { min-height: 136px; }
+.route-id { display: inline-block; color: var(--accent); font-size: 28px; font-weight: 700; line-height: 1; letter-spacing: -.06em; }
+.status { float: right; padding: 2px 8px; border: 1px solid var(--line); font-size: 12px; }
+.clip[data-status="SUCCEEDED"] .status { border-color: var(--accent); color: var(--accent); }
+.clip h2 { font-size: 20px; line-height: 1.4; margin-top: 17px; overflow-wrap: anywhere; }
+.clip-header p { font-size: 12px; color: var(--muted); margin-top: 5px; overflow-wrap: anywhere; }
+.video-frame { background: #000; height: clamp(290px,35vw,520px); display: flex; align-items: center; }
+video { display: block; width: 100%; height: 100%; object-fit: contain; }
+.media-link { padding: 10px 0 3px; font-size: 13px; }
+.no-video { min-height: clamp(290px,35vw,520px); display: flex; flex-direction: column; justify-content: center; align-items: flex-start; gap: 8px; padding: 25px; background: var(--panel); border: 1px solid var(--line); }
+.no-video p { font-size: 13px; color: var(--muted); }
+.clip-notes { margin-top: 22px; }
+h3 { font-size: 14px; font-weight: 650; }
+ul { padding-left: 19px; margin: 8px 0 0; }
+li { margin: 6px 0; overflow-wrap: anywhere; }
+.clip-notes li, .evidence { font-size: 13px; }
+.evidence { margin-top: 16px; }
+.section { margin-top: 36px; }
+.section > h2 { font-size: 21px; margin-bottom: 15px; }
+.table-wrap { overflow-x: auto; border: 1px solid var(--line); }
+table { width: 100%; border-collapse: collapse; min-width: 700px; font-size: 14px; font-variant-numeric: tabular-nums; }
+th, td { padding: 13px 16px; border-bottom: 1px solid var(--line); text-align: left; vertical-align: top; }
+thead th { background: var(--panel); font-weight: 600; }
+tbody th { color: var(--muted); font-weight: 400; width: 25%; }
+tbody td { width: 25%; }
+tbody tr:last-child > * { border-bottom: 0; }
+.cost-note { margin-top: 12px; color: var(--muted); font-size: 13px; }
+.cost-note p + p { margin-top: 4px; }
+.muted, footer { color: var(--muted); }
+footer { margin-top: 34px; padding-top: 16px; border-top: 1px solid var(--line); font-size: 12px; }
+@media (max-width: 850px) { main { padding: 20px 16px 40px; } .page-header { display: block; } .updated { margin-top: 14px; } .clips { grid-template-columns: 1fr; } .clip-header { min-height: auto; margin-bottom: 20px; } .video-frame, .no-video { height: 480px; min-height: 0; } }
+@media print { main { padding: 0; } .video-frame { height: 260px; } .clips { grid-template-columns: repeat(3,minmax(0,1fr)); } .clip { padding: 12px; } .clip-notes { break-inside: avoid; } }
+</style>
+</head>
+<body>
+<main>
+<header class="page-header"><div><h1>人物 B 表情动作对比</h1>
+<p class="inputs">固定人物B；原941×1672，只在右侧复制1列像素成为942×1672，无缩放 · MiniMax speech-2.8-hd / Chinese (Mandarin)_Warm_Bestie，15.218844秒</p><div class="input-links"><a href="%E8%BE%93%E5%85%A5%E6%B4%BE%E7%94%9F/%E4%BA%BA%E7%89%A9B-%E5%81%B6%E6%95%B0%E5%B0%BA%E5%AF%B8.png" target="_blank" rel="noopener">人物实验输入图</a><a href="%E8%BE%93%E5%85%A5%E6%B4%BE%E7%94%9F/%E9%9F%B3%E8%89%B23%E5%8E%9F%E5%A7%8B%E8%AF%95%E5%90%AC.wav" target="_blank" rel="noopener">原始音频</a></div></div>
+<p class="updated">EXP-001<br>数据更新：2026-09-22 09:38（北京时间）</p></header>
+<p class="summary">三条真实样片均已生成并通过完整解码。采样中，M2增加了明显眼睑变化与轻微面部动作，M3增加了小幅头动，但两者肩膀与躯干仍基本固定。建议优先观看M2判断改善是否足够；本轮未通过生产质量验收，也未测试一分钟连续口播。</p>
+<p class="play-hint">点击播放原片。播放一条视频时会自动暂停其他视频，避免声音重叠。</p>
+<section class="clips" aria-label="三条路线的原片与观察记录"><article class="clip" data-status="SUCCEEDED"><header class="clip-header"><span class="route-id">M1</span><span class="status">已生成</span><h2>单图 MuseTalk</h2><p>MuseTalk 1.5</p></header><div class="video-frame"><video controls playsinline preload="metadata" poster="%E7%94%BB%E9%9D%A2%E6%A0%B8%E9%AA%8C/M1-%E5%B0%81%E9%9D%A2.jpg" aria-label="单图 MuseTalk 原片" src="%E6%A0%B7%E7%89%87/M1-%E5%8D%95%E5%9B%BEMuseTalk.mp4">浏览器不支持视频播放，请打开原片。</video></div><div class="media-link"><a href="%E6%A0%B7%E7%89%87/M1-%E5%8D%95%E5%9B%BEMuseTalk.mp4" target="_blank" rel="noopener">打开原片</a></div><section class="clip-notes"><h3>观察记录</h3><ul><li>嘴型变化可见；代表帧中头部和眉眼基本固定。</li><li>基准：人物B＋原始音色3，完整解码通过。</li></ul></section><section class="clip-notes"><h3>限制与问题</h3><ul><li>无法单独满足自然眨眼、表情和头动要求。</li><li>面部偏平滑，唇齿细节仍需看片确认。</li></ul></section><p class="evidence"><a href="%E6%89%A7%E8%A1%8C%E8%AF%81%E6%8D%AE/M1B/result.json" target="_blank" rel="noopener">查看运行证据</a></p></article><article class="clip" data-status="SUCCEEDED"><header class="clip-header"><span class="route-id">M2</span><span class="status">已生成</span><h2>动作驱动＋嘴型同步</h2><p>LivePortrait → MuseTalk 1.5</p></header><div class="video-frame"><video controls playsinline preload="metadata" poster="%E7%94%BB%E9%9D%A2%E6%A0%B8%E9%AA%8C/M2-%E5%B0%81%E9%9D%A2.jpg" aria-label="动作驱动＋嘴型同步 原片" src="%E6%A0%B7%E7%89%87/M2-LivePortrait%E5%8A%A0MuseTalk.mp4">浏览器不支持视频播放，请打开原片。</video></div><div class="media-link"><a href="%E6%A0%B7%E7%89%87/M2-LivePortrait%E5%8A%A0MuseTalk.mp4" target="_blank" rel="noopener">打开原片</a></div><section class="clip-notes"><h3>观察记录</h3><ul><li>眼部采样有明显眼睑开合变化，头部和面部有轻微变化。</li><li>两阶段已完成：动作底片53.505秒＋口播181.672秒；完整解码通过。</li><li>没有明显换人或大面积背景破坏，但这只是代表帧观察。</li></ul></section><section class="clip-notes"><h3>限制与问题</h3><ul><li>动作参考约9.13秒，之后循环；不代表15秒独立动作或一分钟自然度已通过。</li><li>MuseTalk重配后部分笑容减弱，唇齿边缘偏软；肩膀与躯干仍基本固定。</li><li>默认InsightFace预训练权重仅供非商业研究，生产接入需处理许可或替换。</li></ul></section><p class="evidence"><a href="%E6%89%A7%E8%A1%8C%E8%AF%81%E6%8D%AE/M2/result.json" target="_blank" rel="noopener">查看运行证据</a></p></article><article class="clip" data-status="SUCCEEDED"><header class="clip-header"><span class="route-id">M3</span><span class="status">已生成</span><h2>音频驱动全脸</h2><p>SadTalker 512 / full，未启用 still</p></header><div class="video-frame"><video controls playsinline preload="metadata" poster="%E7%94%BB%E9%9D%A2%E6%A0%B8%E9%AA%8C/M3-%E5%B0%81%E9%9D%A2.jpg" aria-label="音频驱动全脸 原片" src="%E6%A0%B7%E7%89%87/M3-SadTalker-%E6%B5%8F%E8%A7%88%E5%99%A8%E6%92%AD%E6%94%BE.mp4">浏览器不支持视频播放，请打开原片。</video></div><div class="media-link"><a href="%E6%A0%B7%E7%89%87/M3-SadTalker-%E6%B5%8F%E8%A7%88%E5%99%A8%E6%92%AD%E6%94%BE.mp4" target="_blank" rel="noopener">打开原片</a></div><section class="clip-notes"><h3>观察记录</h3><ul><li>代表帧可见小幅头部偏转、倾斜，眼睑变化较轻。</li><li>512脸区渲染，保留完整画幅；未使用still或面部增强器。</li><li>原片和播放兼容版均完整解码通过；音轨与原TTS波形最佳偏移为0ms。</li></ul></section><section class="clip-notes"><h3>限制与问题</h3><ul><li>身体和肩膀仍基本固定；代表帧多为抿嘴、轻笑，明显张口样本较少。</li><li>脸部细节偏软，不能凭静帧确认身份与口型质量达标。</li><li>原输出视频和音频均15.2秒，比原TTS短约18.844毫秒；帧率取整边界保留。</li><li>播放器使用仅转码的H.264版，未补帧、未改脸，AAC音轨保持一致。</li><li>SadTalker原流程将旁白转换为16kHz；前两条为32kHz，后续生产可独立复用原TTS音轨。</li></ul></section><p class="evidence"><a href="%E6%89%A7%E8%A1%8C%E8%AF%81%E6%8D%AE/S1B/result.json" target="_blank" rel="noopener">查看运行证据</a></p></article></section>
+<section class="section" aria-labelledby="metrics-title"><h2 id="metrics-title">实测信息</h2>
+<div class="table-wrap"><table><thead><tr><th scope="col">指标</th><th scope="col">M1 · 单图 MuseTalk</th><th scope="col">M2 · 动作驱动＋嘴型同步</th><th scope="col">M3 · 音频驱动全脸</th></tr></thead><tbody><tr><th scope="row">状态</th><td>已生成</td><td>已生成</td><td>已生成</td></tr><tr><th scope="row">动作观察（采样）</th><td>嘴型变化；头部与眉眼基本固定</td><td>眼睑开合更明显，面部和头姿轻微变化</td><td>小幅偏转和倾斜；采样中嘴部开合较小</td></tr><tr><th scope="row">画面尺寸（像素）</th><td>942 × 1,672</td><td>942 × 1,672</td><td>942 × 1,672</td></tr><tr><th scope="row">原始视频编码</th><td>H.264</td><td>H.264</td><td>MPEG-4 Part2；播放器另用H.264兼容版</td></tr><tr><th scope="row">帧率</th><td>25 fps</td><td>25 fps</td><td>25 fps</td></tr><tr><th scope="row">视频时长</th><td>15.2 秒</td><td>15.2 秒</td><td>15.2 秒</td></tr><tr><th scope="row">音频时长</th><td>15.218844 秒</td><td>15.218844 秒</td><td>15.2 秒</td></tr><tr><th scope="row">原输出音频规格</th><td>AAC / 32000 Hz / 1声道</td><td>AAC / 32000 Hz / 1声道</td><td>AAC / 16000 Hz / 1声道</td></tr><tr><th scope="row">运行耗时</th><td>111.68 秒</td><td>235.18 秒</td><td>193.79 秒</td></tr><tr><th scope="row">GPU 峰值显存</th><td>7,489 MiB</td><td>7,489 MiB</td><td>9,033 MiB</td></tr><tr><th scope="row">活跃推理 GPU 估算</th><td>0.049 元</td><td>0.1032 元</td><td>0.0851 元</td></tr></tbody></table></div>
+<div class="cost-note"><p>“未测”表示没有记录该指标。GPU 费用仅为活跃推理估算，安装、下载、空闲及其他云端计费未计入，不能视为云账单总额。</p><p>按用户提供的1.58元/小时，以本次作业墙钟时间估算，包含该进程加载和编码，不含模型安装、等待/空闲、传输、TTS/生图、历史动作素材成本；不是平台实际账单。M1奇数宽度的失败尝试另计103.665秒、约0.045497元。M2计入本轮两阶段首次运行，尚未测缓存复用吞吐。显存为整张GPU总占用的采样峰值。 S1首次输入预检因本地摘要多录一字符而被阻止，未启动推理，记录另计0.956秒、约0.000420元。M3浏览器兼容转码在本机约3.203秒，未计入GPU表。</p></div></section>
+<section class="section" aria-labelledby="notes-title"><h2 id="notes-title">补充记录</h2><ul><li>三条模型输入均为相同的人物B派生图与原始音色3音频；所有成功/失败执行记录保留。</li><li><a href="%E6%A0%B7%E7%89%87/LP1-%E5%8A%A8%E4%BD%9C%E5%BA%95%E7%89%87.mp4" target="_blank" rel="noopener">LivePortrait动作底片（无音频）</a> 是中间产物，不能单独当作口播成片。</li><li><a href="%E8%BE%93%E5%85%A5%E6%B4%BE%E7%94%9F/%E5%8A%A8%E4%BD%9C%E5%8F%82%E8%80%83%E6%9D%A5%E6%BA%90.json" target="_blank" rel="noopener">动作参考来源</a>：旧阿里样片只作为LivePortrait driving input，source仍是人物B。</li><li><a href="%E7%94%BB%E9%9D%A2%E6%A0%B8%E9%AA%8C/M1-%E4%BB%A3%E8%A1%A8%E5%B8%A7.jpg" target="_blank" rel="noopener">M1代表帧</a> · <a href="%E7%94%BB%E9%9D%A2%E6%A0%B8%E9%AA%8C/M2-%E4%BB%A3%E8%A1%A8%E5%B8%A7.jpg" target="_blank" rel="noopener">M2代表帧</a> · <a href="%E7%94%BB%E9%9D%A2%E6%A0%B8%E9%AA%8C/M2-%E7%9C%BC%E9%83%A8%E9%87%87%E6%A0%B7.jpg" target="_blank" rel="noopener">M2眼部采样</a>。</li><li>没有给出虚构的自然度/身份相似度分数；音轨解码成功也不等于嘴型同步通过。</li><li>本轮未调用生图、TTS或云端口播收费API，也未发布视频。</li><li><a href="%E6%A0%B7%E7%89%87/M3-SadTalker.mp4" target="_blank" rel="noopener">SadTalker原始MPEG-4文件</a> · <a href="%E6%89%A7%E8%A1%8C%E8%AF%81%E6%8D%AE/S1B/%E6%92%AD%E6%94%BE%E5%85%BC%E5%AE%B9%E5%A4%84%E7%90%86.json" target="_blank" rel="noopener">播放兼容处理记录</a> · <a href="%E7%94%BB%E9%9D%A2%E6%A0%B8%E9%AA%8C/M3-%E4%BB%A3%E8%A1%A8%E5%B8%A7.jpg" target="_blank" rel="noopener">M3代表帧</a>。</li><li><a href="%E9%9F%B3%E8%BD%A8%E4%B8%80%E8%87%B4%E6%80%A7%E6%A0%B8%E9%AA%8C.json" target="_blank" rel="noopener">三条音轨核验</a>：最佳音轨偏移均0ms，重叠波形相关系数约0.9986～0.9996；仅证明音轨对齐，不是唇形评分。</li><li>本轮云端观察区间为北京时间08:47:11—09:34:48，约47.63分钟，含安装/下载/等待的实例费估算约1.2543元，账单未核对。它与表中作业费用重叠，不能相加。</li><li>GPU推理与安装作业已结束，实例仍开机；关机前继续按平台规则计费。</li></ul></section>
+<footer>本页按结果文件中的状态与记录展示，不提供自动排名或推测评分。</footer>
+</main>
+<script>
+(() => {
+  const videos = Array.from(document.querySelectorAll('video'));
+  videos.forEach(video => {
+    video.addEventListener('play', () => {
+      videos.forEach(other => { if (other !== video) other.pause(); });
+    });
+  });
+})();
+</script>
+</body></html>

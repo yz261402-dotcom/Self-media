@@ -1,0 +1,45 @@
+{
+  "schema_version": 1,
+  "diagram_type": "architecture",
+  "meta": {
+    "title": "内容创作 · 当前实现总览",
+    "quality_profile": "showcase",
+    "viewBox": [1400, 820],
+    "legend": {
+      "entries": {
+        "frontend": { "label": "页面入口" },
+        "backend": { "label": "应用服务" },
+        "database": { "label": "数据存储" },
+        "external": { "label": "外部能力" }
+      }
+    }
+  },
+  "components": [
+    { "id": "content-workbench", "type": "frontend", "label": "A · 内容工作台", "sublabel": "人工操作入口", "pos": [50, 70], "size": [210, 74] },
+    { "id": "content-api", "type": "backend", "label": "内容 API", "sublabel": "接收创作与审核请求", "pos": [350, 70], "size": [210, 74] },
+    { "id": "business-dag", "type": "backend", "label": "B · 业务 DAG", "sublabel": "确定性流程调度", "pos": [50, 640], "size": [210, 74] },
+    { "id": "deep-agents", "type": "backend", "label": "Deep Agents", "sublabel": "总控 / 写作 / 审核", "pos": [350, 640], "size": [210, 74] },
+    { "id": "controlled-tools", "type": "backend", "label": "受控工具", "sublabel": "边界检查与服务调用", "pos": [650, 640], "size": [210, 74] },
+    { "id": "shared-content-service", "type": "backend", "label": "共享内容服务", "sublabel": "写作、审核与参考服务", "pos": [650, 360], "size": [210, 80] },
+    { "id": "claude-writing", "type": "external", "label": "Claude", "sublabel": "写作 / 返工", "pos": [1110, 70], "size": [210, 74] },
+    { "id": "qwen-review", "type": "external", "label": "Qwen", "sublabel": "拆解 / 审核", "pos": [1110, 360], "size": [210, 80] },
+    { "id": "redfox-reference", "type": "external", "label": "RedFox", "sublabel": "搜索 / ASR 转写", "pos": [1110, 640], "size": [210, 74] },
+    { "id": "sqlite-records", "type": "database", "label": "SQLite", "sublabel": "快照 / 稿件 / 审核 / 台账", "pos": [650, 70], "size": [250, 74] }
+  ],
+  "connections": [
+    { "from": "content-workbench", "to": "content-api", "variant": "emphasis" },
+    { "from": "content-api", "to": "shared-content-service", "variant": "emphasis" },
+    { "from": "business-dag", "to": "deep-agents", "variant": "emphasis" },
+    { "from": "deep-agents", "to": "controlled-tools", "variant": "emphasis" },
+    { "from": "controlled-tools", "to": "shared-content-service", "variant": "emphasis" },
+    { "from": "shared-content-service", "to": "claude-writing", "label": "生成内容" },
+    { "from": "shared-content-service", "to": "qwen-review", "label": "分析与质检", "labelDx": 65 },
+    { "from": "shared-content-service", "to": "sqlite-records", "label": "持久化", "fromSide": "top", "toSide": "bottom" },
+    { "from": "shared-content-service", "to": "redfox-reference", "label": "references/tasks" }
+  ],
+  "cards": [
+    { "dot": "cyan", "title": "两个入口，同一套内容能力", "items": ["工作台经内容 API 调用服务；业务 DAG 经 Agent 与受控工具调用服务。"] },
+    { "dot": "emerald", "title": "外部任务统一留痕", "items": ["RedFox 搜索与 ASR 经 references/tasks 接入共用任务台账。"] },
+    { "dot": "amber", "title": "当前实现边界", "items": ["默认采用确定性调度；未宣称 LLM 自主规划。视觉能力接入中，完整链路尚未验收。"] }
+  ]
+}

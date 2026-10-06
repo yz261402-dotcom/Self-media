@@ -1,0 +1,25 @@
+[Script Info]
+; 真实口播链路验证
+ScriptType: v4.00+
+PlayResX: 1080
+PlayResY: 1920
+WrapStyle: 2
+ScaledBorderAndShadow: yes
+
+[V4+ Styles]
+Format: Name, Fontname, Fontsize, PrimaryColour, SecondaryColour, OutlineColour, BackColour, Bold, Italic, Underline, StrikeOut, ScaleX, ScaleY, Spacing, Angle, BorderStyle, Outline, Shadow, Alignment, MarginL, MarginR, MarginV, Encoding
+Style: Default,Microsoft YaHei,64,&H00FFFFFF,&H000000FF,&H00101010,&H00000000,0,0,0,0,100,100,0,0,1,3,0,2,60,60,260,1
+
+[Events]
+Format: Layer, Start, End, Style, Name, MarginL, MarginR, MarginV, Effect, Text
+Dialogue: 0,0:00:00.24,0:00:01.12,Default,,0,0,0,,你有没有发现，
+Dialogue: 0,0:00:01.44,0:00:03.76,Default,,0,0,0,,越是想写好开头，越容易卡住？
+Dialogue: 0,0:00:04.32,0:00:05.92,Default,,0,0,0,,其实开头不需要惊艳，
+Dialogue: 0,0:00:06.16,0:00:06.96,Default,,0,0,0,,只需要具体。
+Dialogue: 0,0:00:07.20,0:00:08.80,Default,,0,0,0,,给听众一个真实的场景，
+Dialogue: 0,0:00:08.96,0:00:11.04,Default,,0,0,0,,比十个华丽的形容词更有用。
+Dialogue: 0,0:00:11.44,0:00:13.92,Default,,0,0,0,,这条音频是一次真实的链路验证：
+Dialogue: 0,0:00:14.16,0:00:15.92,Default,,0,0,0,,从稿件到冻结计划，
+Dialogue: 0,0:00:16.08,0:00:17.52,Default,,0,0,0,,再到真实语音合成。
+Dialogue: 0,0:00:18.08,0:00:19.52,Default,,0,0,0,,如果你能听到这句话，
+Dialogue: 0,0:00:19.60,0:00:22.88,Default,,0,0,0,,说明从文字到声音的整条链路已经打\N通。

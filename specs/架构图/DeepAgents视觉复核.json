@@ -1,0 +1,29 @@
+{
+  "revision": "v2.4-终审后打包",
+  "visual_review": "passed",
+  "review_method": "agent-image-inspection",
+  "inspected": [
+    "DeepAgents多智能体架构.visual-check.2048x1320.light.png"
+  ],
+  "artifact": {
+    "file": "specs\\架构图\\DeepAgents多智能体架构.html",
+    "artifact_sha256": "db6f14ac0a9fbff02bd426a7c8ec8756bbedacd348b00c38a669f5ed9bc420bc",
+    "showcase": "9/9",
+    "errors": 0,
+    "warnings": 0,
+    "containment": "4/4",
+    "visual_review": "passed",
+    "inspected": [
+      "2048x1320.light"
+    ],
+    "png": {
+      "file": "specs\\架构图\\DeepAgents多智能体架构.png",
+      "size": [
+        4920,
+        2340
+      ],
+      "sha256": "0face5dc16269368e332b2c6bf18ecf140e2aee7fd547c6063d16dc49f3a7677"
+    }
+  },
+  "scope": "仅图面核验，不代表应用实现或模型验收"
+}

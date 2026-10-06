@@ -1,0 +1,8 @@
+{
+  "stage": "voice_1",
+  "state": "UNKNOWN_OR_FAILED",
+  "error_type": "ConnectionError",
+  "elapsed_seconds": 5.01600000000326,
+  "finished_at": "2026-09-21T15:33:34.585561+00:00",
+  "automatic_retry": false
+}
