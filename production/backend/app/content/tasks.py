@@ -9,6 +9,7 @@
 from __future__ import annotations
 
 import json
+import os
 import threading
 import time
 from contextlib import nullcontext
@@ -403,6 +404,79 @@ def register(kind: str, handler: Handler) -> None:
     HANDLERS[kind] = handler
 
 
+def _import_remote_call(job: dict) -> Optional[dict]:
+    if job["kind"] != "import":
+        return None
+    calls = jobs_calls(job["id"])
+    if not any(call.get("step") == "detail" and call["state"] == "succeeded" for call in calls):
+        return None
+    if any(call["state"] in ("unknown", "leased") for call in calls):
+        return None
+    return next((call for call in calls if call.get("provider") == "redfox"
+                 and call.get("step") == "transcript_submit" and call.get("remote_task_id")
+                 and call["state"] in ("waiting_external", "succeeded")), None)
+
+
+def _remote_poll_settings() -> tuple[int, int]:
+    def setting(name: str, default: int, lower: int, upper: int) -> int:
+        try:
+            return min(upper, max(lower, int(os.environ.get(name, "") or default)))
+        except ValueError:
+            return default
+    return (setting("AVATAR_STUDIO_REDFOX_AUTO_POLL_INTERVAL_SECONDS", 10, 1, 300),
+            setting("AVATAR_STUDIO_REDFOX_AUTO_POLL_TIMEOUT_SECONDS", 600, 60, 86400))
+
+
+def _remote_poll(job: dict, *, reset: bool = False) -> dict:
+    poll = {} if reset else dict(job.get("remote_poll") or {})
+    now = time.time()
+    _, timeout = _remote_poll_settings()
+    poll.setdefault("next_at", now)
+    poll.setdefault("deadline_at", now + timeout)
+    poll.setdefault("attempts", 0)
+    return poll
+
+
+def _defer_import_poll(job_id: str, exc: CallPending) -> None:
+    with st.transaction() as c:
+        job = _row(c, job_id)
+        if job is None or job["state"] in TERMINAL_STATES:
+            return
+        if job.get("cancel_requested"):
+            job.update(state="cancelled", stage="cancelled")
+        else:
+            poll = _remote_poll(job)
+            retry = exc.code == "REFERENCE_QUERY_RETRY"
+            failures = int(poll.get("failures") or 0) + 1 if retry else 0
+            interval, _ = _remote_poll_settings()
+            delay = min(60, interval * 2 ** min(max(failures - 1, 0), 3))
+            poll.update(next_at=time.time() + delay, failures=failures,
+                        last_checked_at=now_iso(), last_error=exc.to_dict() if retry else None)
+            job.update(state="waiting_external", stage="transcript", remote_poll=poll, error=None)
+        _write(c, job)
+
+
+def request_import_refresh(job_id: str) -> dict:
+    """只恢复已知转写句柄；正在执行的任务不会被另一个刷新请求重新排队。"""
+    with st.transaction() as c:
+        job = _row(c, job_id)
+        if job is None:
+            raise ContentRejected("参考导入任务不存在", "JOB_NOT_FOUND")
+        if job.get("cancel_requested") or job["state"] in ("cancelled", "superseded"):
+            return job
+        paused = job["state"] == "unknown" and (job.get("error") or {}).get("code") in (
+            "REFERENCE_POLL_TIMEOUT", "REFERENCE_QUERY_FAILED")
+        if job["state"] != "waiting_external" and not paused:
+            return job
+        if _import_remote_call(job) is None:
+            return job
+        poll = _remote_poll(job, reset=paused)
+        poll["next_at"] = time.time()
+        job.update(state="queued", stage="transcript", remote_poll=poll, error=None)
+        _write(c, job)
+        return job
+
+
 def recover_on_startup() -> Dict[str, int]:
     """启动恢复，仅扫描 content-v2：
 
@@ -421,7 +495,15 @@ def recover_on_startup() -> Dict[str, int]:
                                                     "message": "重启时存在发送后未确认的外部调用，需核对，未自动重发"})
             made_unknown += 1
         elif any(c["state"] == "waiting_external" for c in calls):
-            continue  # 保持 waiting_external，等显式 refresh 用同一 taskId 查询
+            if _import_remote_call(row) is not None:
+                with st.transaction() as c:
+                    job = _row(c, row["id"])
+                    if job["state"] in ("running", "waiting_external"):
+                        poll = _remote_poll(job)
+                        poll["next_at"] = time.time()
+                        job.update(state="waiting_external", stage="transcript", remote_poll=poll)
+                        _write(c, job)
+            continue
         else:
             with st.transaction() as c:
                 job = _row(c, row["id"])
@@ -432,18 +514,33 @@ def recover_on_startup() -> Dict[str, int]:
 
 
 def _claim(concurrency: int) -> Optional[dict]:
-    """事务内领取一个 queued 任务并置 running；运行中数量已达并发上限则不领。"""
+    """领取排队任务或到期的参考查询；等待查询间隔不占执行槽。"""
     with st.transaction() as c:
         running = c.execute("SELECT COUNT(*) AS n FROM content_jobs WHERE state='running'").fetchone()["n"]
         if running >= concurrency:
             return None
-        row = c.execute("SELECT data FROM content_jobs WHERE state='queued' ORDER BY ins_seq LIMIT 1").fetchone()
-        if row is None:
-            return None
-        job = json.loads(row["data"])
-        job.update(state="running", stage=job.get("stage") if job.get("stage") != "queued" else "starting")
-        _write(c, job)
-        return job
+        rows = c.execute("SELECT data FROM content_jobs WHERE state='queued' OR "
+                         "(state='waiting_external' AND kind='import') "
+                         "ORDER BY CASE WHEN state='queued' THEN 0 ELSE 1 END, ins_seq").fetchall()
+        for row in rows:
+            job = json.loads(row["data"])
+            if job.get("cancel_requested"):
+                job.update(state="cancelled", stage="cancelled")
+                _write(c, job)
+                continue
+            if job["state"] == "waiting_external":
+                if _import_remote_call(job) is None:
+                    continue
+                if _remote_poll(job)["next_at"] > time.time():
+                    continue
+            if job["kind"] == "import":
+                poll = _remote_poll(job)
+                poll["attempts"] += 1
+                job["remote_poll"] = poll
+            job.update(state="running", stage=job.get("stage") if job.get("stage") != "queued" else "starting")
+            _write(c, job)
+            return job
+        return None
 
 
 def run_job(job: dict) -> None:
@@ -468,7 +565,13 @@ def run_job_error(job: dict, exc: BaseException) -> None:
     except CallPending as exc:
         latest = get_job(job["id"]) or job
         calls = jobs_calls(job["id"])
-        if any(c["state"] == "waiting_external" for c in calls) and latest["state"] not in TERMINAL_STATES:
+        if latest.get("cancel_requested"):
+            finish_job(job["id"], "cancelled")
+        elif exc.code in ("REFERENCE_POLL_TIMEOUT", "REFERENCE_QUERY_FAILED"):
+            finish_job(job["id"], "unknown", error=exc.to_dict())
+        elif _import_remote_call(latest) is not None and latest["state"] not in TERMINAL_STATES:
+            _defer_import_poll(job["id"], exc)
+        elif any(c["state"] == "waiting_external" for c in calls) and latest["state"] not in TERMINAL_STATES:
             set_progress(job["id"], state="waiting_external", stage=latest.get("stage"))
         else:
             finish_job(job["id"], "unknown", error={"code": exc.code, "message": exc.message, "detail": exc.detail})

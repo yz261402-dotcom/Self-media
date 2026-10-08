@@ -63,13 +63,20 @@ const isPickable = (c: ScriptVersion) => (c.pickable ?? null) === null
 const passed = computed(() => batch.value?.passed ?? candidates.value.filter(isPickable).length)
 const produced = computed(() => batch.value?.produced ?? candidates.value.length)
 const requested = computed(() => batch.value?.requested ?? 3)
-const batchGuidance = computed(() => manualBatch.value
-  ? adoptedId.value ? '人工分镜已采用，可以进入镜头制作。' : '人工分镜已保存，请进入人工审核评分并确认采用。'
-  : batch.value?.ready_to_present
-  ? storyboardMode.value ? '智能体审核已完成，请进入人工审核后采用一篇。' : '三篇均已通过审核，请选择一篇。'
-  : candidates.value.some(isPickable)
-    ? storyboardMode.value ? '智能体审核通过的稿件可进入人工审核；其他稿件可编辑或重新审核。' : '已通过稿件可以直接采用；其他稿件可编辑或重新审核。'
-    : '初稿已展示，可查看和编辑。待审稿请重新审核，通过后才能采用。')
+const batchGuidance = computed(() => {
+  if (manualBatch.value) return adoptedId.value ? '人工分镜已采用，可以进入镜头制作。' : '人工分镜已保存，请进入人工审核评分并确认采用。'
+  if (batch.value?.ready_to_present) return storyboardMode.value ? '智能体审核已完成，请进入人工审核后采用一篇。' : '三篇均已通过审核，请选择一篇。'
+  const unpassed = candidates.value.filter(c => !isPickable(c))
+  const failedCount = unpassed.filter(c => c.review_state === 'failed').length
+  const reviewingCount = unpassed.filter(c => c.review_state === 'reviewing').length
+  const pendingCount = unpassed.length - failedCount - reviewingCount
+  const messages = []
+  if (candidates.value.some(isPickable)) messages.push(storyboardMode.value ? '已通过稿件可进入人工审核。' : '已通过稿件可以直接采用。')
+  if (failedCount) messages.push(`${failedCount} 篇审核未通过，请查看修改项。`)
+  if (pendingCount) messages.push(`${pendingCount} 篇待重新审核。`)
+  if (reviewingCount) messages.push(`${reviewingCount} 篇独立审核中。`)
+  return messages.join('') || '尚未产出稿件，请查看任务进度。'
+})
 const materialLines = computed(() => materialInput.value.split('\n').map(s => s.trim()).filter(Boolean))
 const sourceLabel = computed(() => {
   if (batch.value?.source_kind === 'llm') return '模型生成'
@@ -81,10 +88,12 @@ const working = computed(() => content.busy || store.busy === '写稿')
 const editingBusy = computed(() => content.loading || !!content.submittingKind || store.busy === '写稿'
   || !!(content.activeJob && content.activeJob.stage !== 'review'))
 const jobStageLabel = computed(() => {
-  const j = content.activeJob
+  const j = content.activeJob ?? content.waitingImportJob
   if (!j) return ''
+  if (j.kind === 'import' && j.state === 'unknown') return '参考转写 · 查询已暂停'
+  if (j.kind === 'import' && j.state === 'waiting_external') return '参考导入 · 等待转写结果'
   const kind: Record<string, string> = { search: '搜索参考', import: '导入并提取转写', reference_revision: '保存转写', prompt: '拆解参考', prompt_revision: '保存提示',
-    generation: '写稿与独立审核', repair: '按意见重写', review: '重新审核' }
+    generation: '写稿与独立审核', repair: '重写与独立审核', review: '重新审核' }
   const stage: Record<string, string> = { plan: '拆解中', write: '写稿中', review: '独立审核中', repair: '定向返工中', detail: '取详情', transcript: '提取转写', search: '搜索中' }
   return `${kind[j.kind] ?? j.kind}${j.stage && stage[j.stage] ? ' · ' + stage[j.stage] : ''}`
 })
@@ -213,6 +222,7 @@ const hero = computed(() => {
     return { status: 'block' as const, title: '先选人物', desc: '为这期作品选一位主播，再回来写稿。', ctaText: '去选择人物' }
   }
   if (working.value) {
+    if (content.waitingImportJob?.state === 'waiting_external') return { status: 'run' as const, title: '等待参考转写结果', desc: '转写请求已提交，结果将自动同步。', ctaText: undefined }
     return { status: 'run' as const, title: '正在处理', desc: jobStageLabel.value || '生成与审核中，请稍候。', ctaText: '处理中', ctaLoading: true }
   }
   if (adoptedId.value && store.selectedScript) {
@@ -289,9 +299,18 @@ function onHeroCta() {
                          :blocked-reason="!storyboardMode && !store.currentWork?.identity_id ? '请先选择主播，再生成口播稿。' : '正在处理任务，请稍候。'"
                          @generate="generateFromPrompt" />
 
-    <section v-if="content.activeJob" class="section" aria-label="写稿进度" aria-live="polite">
+    <section v-if="content.activeJob || content.waitingImportJob" class="section" aria-label="写稿进度" aria-live="polite">
       <div class="section-head"><span class="section-title">{{ jobStageLabel || '处理中' }}</span></div>
-      <div class="panel panel-pad faint">刷新页面不会丢失进度，也不会重复发起请求。</div>
+      <div v-if="content.waitingImportJob" class="panel panel-pad">
+        <p v-if="content.waitingImportJob.state === 'unknown'" class="warning" role="alert">{{ content.waitingImportJob.error?.message || '转写结果查询已暂停，原任务仍保留。' }}</p>
+        <p v-else class="faint">转写已提交，结果将自动同步。</p>
+        <button type="button" class="primary sm"
+          :disabled="content.refreshingImportJobId === content.waitingImportJob.job_id"
+          @click="content.refreshImportResult(content.waitingImportJob.job_id)">
+          {{ content.refreshingImportJobId === content.waitingImportJob.job_id ? '查询中…' : content.waitingImportJob.state === 'unknown' ? '继续查询转写' : '查询转写进度' }}
+        </button>
+      </div>
+      <div v-else class="panel panel-pad faint">刷新页面不会丢失进度，也不会重复发起请求。</div>
     </section>
     <section v-else-if="store.task && store.busy === '写稿'" class="section" aria-label="写稿进度" aria-live="polite">
       <div class="section-head"><span class="section-title">正在写稿与检查</span></div>
@@ -344,7 +363,7 @@ function onHeroCta() {
         <p v-for="target in batch.retry_targets ?? []" :key="target.candidate_id" class="warning">候选 {{ target.slot ?? '' }}：{{ target.reason }}</p>
         <div class="btn-row">
           <button :disabled="working || !candidates.length" @click="content.rereview()">重新审核</button>
-          <button v-if="batch.retry_targets?.length" :disabled="working" @click="content.repairPending()">继续返工</button>
+          <button v-if="batch.retry_targets?.length" :disabled="working" @click="content.repairPending()">重写未通过稿件</button>
         </div>
       </div>
     </section>

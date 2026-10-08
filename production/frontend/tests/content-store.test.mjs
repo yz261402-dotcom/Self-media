@@ -345,6 +345,46 @@ const writerActions = {
   repair_pending: (store) => store.repairPending(),
 }
 
+for (const passed of [0, 1, 3]) test(`重写完成后展示新版本与当前批次 ${passed}/3 的真实审核结果`, async () => {
+  const job = { ...doneJob(), kind: 'repair', state: passed === 3 ? 'succeeded' : 'partial',
+    result_refs: { batch_id: 'b1', produced: 3, passed } }
+  globalThis.contentApi = {
+    getContentState: async id => writerState(id, { batch: { id: 'b1', produced: 3, passed: 3, candidates: [] } }),
+    startRepair: async () => job,
+    getContentJob: async () => job,
+  }
+  const store = useContentStore()
+  try {
+    await store.enter('W')
+    await writerActions.repair(store)
+    assert.equal(store.error, '')
+    assert.match(store.notice, /重写新版本已生成/)
+    assert.match(store.notice, new RegExp(`当前批次 ${passed}/3 篇通过独立审核`))
+    if (passed < 3) {
+      assert.match(store.notice, new RegExp(`${3 - passed} 篇尚未通过`))
+      assert.doesNotMatch(store.notice, /全部通过/)
+    } else assert.doesNotMatch(store.notice, /尚未通过/)
+  } finally { store.leave() }
+})
+
+test('重写请求失败时展示原错误，不能误报新版本生成成功', async () => {
+  const message = '审核服务拒绝了本次请求。'
+  const job = { ...doneJob(), kind: 'repair', state: 'failed', error: { code: 'PROVIDER_REJECTED', message },
+    result_refs: { produced: 3, passed: 1 } }
+  globalThis.contentApi = {
+    getContentState: async id => writerState(id),
+    startRepair: async () => job,
+    getContentJob: async () => job,
+  }
+  const store = useContentStore()
+  try {
+    await store.enter('W')
+    await writerActions.repair(store)
+    assert.equal(store.error, message)
+    assert.equal(store.notice, '')
+  } finally { store.leave() }
+})
+
 test('确定性硬门禁需复核的稿可定向返工，单纯未审稿不会混入', async () => {
   const sent = []
   const gated = { id: 'gated', review_state: 'needs_review', quality_report: {

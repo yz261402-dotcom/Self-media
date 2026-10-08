@@ -61,7 +61,7 @@ const qualityLabel = computed(() => manualReview.value
     </div>
     <div class="option-actions">
       <button class="primary sm" type="button" :disabled="(!canHumanReview && !humanApproved) || busy" @click="emit('adopt', c)">{{ manualReview ? '人工审核' : adopted ? '重新采用' : '采用这篇' }}</button>
-      <button v-if="canRepair" class="sm" type="button" :disabled="busy" @click="emit('repair', c)">按意见重写</button>
+      <button v-if="canRepair" class="sm" type="button" :disabled="busy" @click="emit('repair', c)">重写这一篇</button>
       <button v-if="canReview" class="sm" type="button" :disabled="busy" @click="emit('review')">重新审核</button>
       <button v-if="!manualSource" class="ghost sm" type="button" :disabled="editDisabled" @click="emit('edit', c)">编辑</button>
       <button class="ghost sm detail-toggle" type="button" :aria-expanded="open" @click="open = !open">{{ open ? '收起检查' : '检查详情' }}</button>

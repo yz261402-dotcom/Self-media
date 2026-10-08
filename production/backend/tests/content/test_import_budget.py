@@ -99,7 +99,7 @@ def test_search_then_import_finishes_past_daily_amount_limits_and_keeps_ledger(m
     assert len(ledger) == 2
     assert sum(call["reserved_fen"] for call in ledger) == 150
     transcript_call = next(call for call in ledger if call["step"] == "transcript_submit")
-    assert transcript_call["settlement_state"] == "settled" and transcript_call["actual_cost_fen"] == 0
+    assert transcript_call["settlement_state"] == "held" and transcript_call["actual_cost_fen"] is None
     again = tasks.submit_job("work", "import", "another-request", {"platform_work_id": "77"})
     references.handle_import(again, transport=transport)
     assert tasks.get_job(again["id"])["result_refs"]["reused"] is True

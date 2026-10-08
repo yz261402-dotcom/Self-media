@@ -7,10 +7,18 @@ import type {
 const TERMINAL = ['succeeded', 'partial', 'blocked', 'failed', 'unknown', 'cancelled', 'superseded']
 const wait = (ms: number) => new Promise((r) => setTimeout(r, ms))
 
+function importAwaitingResult(job: ContentJobReceipt): boolean {
+  const paused = job.state === 'unknown' && ['REFERENCE_POLL_TIMEOUT', 'REFERENCE_QUERY_FAILED'].includes(job.error?.code ?? '')
+  return job.kind === 'import' && (job.state === 'waiting_external' || paused)
+    && !!job.calls?.some(call => call.provider === 'redfox' && call.step === 'transcript_submit'
+      && call.state === 'waiting_external' && call.has_remote_handle)
+}
+
 function jobErrorMessage(job: ContentJobReceipt): string {
   if (job.state === 'failed' || job.state === 'blocked') return job.error?.message ?? '任务未成功'
   if (job.state === 'unknown') {
-    if (['PROVIDER_RESPONSE_TIMEOUT', 'PROVIDER_CONNECTION_CLOSED', 'VISUAL_PREVIOUS_CALL_UNKNOWN'].includes(job.error?.code ?? '') && job.error?.message) return job.error.message
+    if (['PROVIDER_RESPONSE_TIMEOUT', 'PROVIDER_CONNECTION_CLOSED', 'VISUAL_PREVIOUS_CALL_UNKNOWN',
+      'REFERENCE_POLL_TIMEOUT', 'REFERENCE_QUERY_FAILED'].includes(job.error?.code ?? '') && job.error?.message) return job.error.message
     return '这一步的结果未确认（可能已发出请求），系统不会自动重发，请先核对。'
   }
   return ''
@@ -74,6 +82,7 @@ export const useContentStore = defineStore('content', {
     // 写稿等待超出页面同步期限后，仍只追踪本次回执，避免历史错误混入当前请求。
     writerJobs: {} as Record<string, WriterJobTracking>,
     reviewJob: null as ReviewJobTracking | null,
+    refreshingImportJobId: '',
     polling: false,
     pollTimer: null as ReturnType<typeof setTimeout> | null,
     // 画面分析：上传的原视频（按参考快照索引）与最近一次报价
@@ -88,6 +97,9 @@ export const useContentStore = defineStore('content', {
     revision: (s) => s.state?.content_revision ?? 0,
     activeJob: (s): ContentJobReceipt | null =>
       s.state?.active_jobs?.[0] ?? (Object.values(s.jobs) as ContentJobReceipt[]).find((j) => !TERMINAL.includes(j.state)) ?? null,
+    waitingImportJob: (s): ContentJobReceipt | null =>
+      [...(s.state?.active_jobs ?? []), ...Object.values(s.jobs), ...(s.state?.recent_jobs ?? []).slice().reverse()]
+        .find(importAwaitingResult) ?? null,
     busy(): boolean { return this.loading || !!this.submittingKind || !!this.activeJob },
     selectedReference: (s) => s.state?.reference ?? null,
     /** 每条参考的反馈也绑定媒体，避免显示其他步骤或换视频之前的失败。 */
@@ -175,6 +187,7 @@ export const useContentStore = defineStore('content', {
       this.jobs = {}
       this.writerJobs = {}
       this.reviewJob = null
+      this.refreshingImportJobId = ''
       this.mediaByRef = {}
       this.visualQuote = null
       this.visualQuoteBinding = null
@@ -288,6 +301,14 @@ export const useContentStore = defineStore('content', {
       this.forgetWriterJob(kind)
       this.error = jobErrorMessage(job)
       this.notice = job.state === 'superseded' ? '创作内容在生成期间被修改，这次结果已归档，没有覆盖当前内容。' : ''
+      if (['succeeded', 'partial'].includes(job.state)) {
+        const produced = job.result_refs?.produced, passed = job.result_refs?.passed
+        if (Number.isInteger(produced) && Number.isInteger(passed) && produced >= 0 && passed >= 0 && passed <= produced) {
+          this.notice = produced ? `${kind === 'repair' ? '重写新版本' : '新稿'}已生成，当前批次 ${passed}/${produced} 篇通过独立审核`
+            + (passed < produced ? `，${produced - passed} 篇尚未通过。` : '。')
+            : '本次未产出新稿，请查看任务详情。'
+        }
+      }
       if (job.state !== 'unknown') this.releaseRid(kind, tracked.fingerprint)
     },
 
@@ -406,6 +427,33 @@ export const useContentStore = defineStore('content', {
       if (gen !== this.generation || id !== this.workId) return
       const running = this.state?.active_jobs?.find((job) => job.job_id === jobId)
       if (running) this.startPolling()
+    },
+
+    async refreshImportResult(jobId: string) {
+      const id = this.workId
+      const gen = this.generation
+      if (!id || !jobId || this.refreshingImportJobId) return
+      this.refreshingImportJobId = jobId
+      this.error = ''
+      try {
+        const job = await api.getContentJob(id, jobId)
+        if (gen !== this.generation || id !== this.workId) return
+        if (job.job_id !== jobId || !importAwaitingResult(job) || !job.actions?.includes('refresh')) {
+          await this.refresh(gen)
+          return
+        }
+        const receipt = await api.refreshContentJob(id, jobId)
+        if (gen !== this.generation || id !== this.workId) return
+        this.notice = receipt.status === 'needs_verification'
+          ? receipt.message ?? '转写结果需要核对，未重新提交请求。'
+          : '已查询原转写任务。'
+        await this.refresh(gen)
+        if (gen === this.generation && id === this.workId && this.state?.active_jobs?.length) this.startPolling()
+      } catch (e: any) {
+        if (gen === this.generation && id === this.workId) this.error = e?.message ?? String(e)
+      } finally {
+        if (gen === this.generation && id === this.workId) this.refreshingImportJobId = ''
+      }
     },
 
     async importReference(item: { platform_work_id: string }) {

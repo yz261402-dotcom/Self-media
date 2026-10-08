@@ -22,7 +22,7 @@ from . import repository as repo
 from .dedup import dedup_report, text_similarity
 from .errors import ContentBlocked, ContentError, ContentRejected
 from .providers import text as tp
-from .review import review_candidate, storyboard_review_texts
+from .review import current_storyboard_quality_report, review_candidate, storyboard_review_texts
 
 EST_CHARS_PER_SEC = 4.0
 TARGET_COUNT = 3
@@ -375,7 +375,8 @@ def _problem_map(versions: Sequence[Dict[str, Any]], parsed: Dict[str, Any]) -> 
             probs += [f"[审稿] {f['issue']}" + (f"（建议：{f['suggestion']}）" if f["suggestion"] else "")
                       + (f" 引文：「{f['quote']}」" if f["quote"] else "") for f in single["findings"]]
         if v["slot"] in rewrite:
-            probs += [f"[批次差异] {f['issue']}" for f in parsed["set"]["findings"] if f["issue"]] \
+            probs += [f"[批次差异] {f['issue']}" + (f"（建议：{f['suggestion']}）" if f.get("suggestion") else "")
+                      for f in parsed["set"]["findings"] if f["issue"]] \
                 or ["[批次差异] 与其他稿角度或观点过于接近，需要拉开差异"]
         if probs:
             out[v["slot"]] = probs
@@ -461,7 +462,9 @@ def _run_rounds(job: dict, ctx: Dict[str, Any], versions: List[Dict[str, Any]], 
                         "problems": problems[v["slot"]]} for v in versions if v["slot"] in problems]
             system, user = prompts.repair_messages(brief=ctx["brief_core"], prompt=ctx["prompt"], reference=ctx["reference"],
                                                    style=ctx["style"], materials=ctx["materials"], targets=targets,
-                                                   instruction=instruction, identity=ctx.get("identity"))
+                                                   instruction=instruction, identity=ctx.get("identity"),
+                                                   other_candidates=[v for v in versions if v["slot"] not in problems]
+                                                   if not parsed["set"]["passed"] else [])
             round_no = first_round + attempt
             res, writer = _writer_call(job, ctx, system, user, round_no, "repair", transport)
             raw_list = res["json"].get("candidates")
@@ -580,17 +583,28 @@ def handle_repair(job: dict, *, transport=None) -> None:
     current = st.get("script_batches", job["work_id"]) or {}
     if batch is None or batch["work_id"] != job["work_id"] or current.get("id") != batch["id"]:
         raise ContentRejected("该批次不是当前批次，不能返工", "STALE_SELECTION")
-    versions = repo.batch_candidates(batch)
+    versions = [dict(v, quality_report=current_storyboard_quality_report(v, ctx["materials"]))
+                for v in repo.batch_candidates(batch)]
     ids = list(p.get("candidate_ids") or [])
     targets = [v for v in versions if v["id"] in ids]
     if not ids or len(targets) != len(ids):
         raise ContentRejected("返工目标不在当前批次里", "STALE_SELECTION")
+    singles = {}
+    for version in versions:
+        current_review = sr.current_single(job["work_id"], version, ctx)
+        if current_review is not None:
+            singles[version["id"]] = {"passed": current_review["recommendation"] == "pass",
+                                       "findings": current_review["findings"]}
+    members = [{"slot": v["slot"], "candidate_id": v["id"], "text_digest": cc.candidate_digest(v)} for v in versions]
+    set_review = sr.current_set(job["work_id"], members, ctx)
+    parsed = {"singles": singles, "set": {
+        "passed": set_review is None or set_review["recommendation"] == "pass",
+        "rewrite_slots": ((set_review or {}).get("reviewer") or {}).get("rewrite_slots") or [],
+        "findings": (set_review or {}).get("findings") or []}}
+    current_problems = _problem_map(versions, parsed)
     problems: Dict[int, List[str]] = {}
     for v in targets:
-        cur = sr.current_single(job["work_id"], v, ctx)
-        probs = _rule_problems(v)
-        if cur and cur["recommendation"] != "pass":
-            probs += [f"[审稿] {f['issue']}" for f in cur["findings"]]
+        probs = current_problems.get(v["slot"], [])
         if p.get("instruction"):
             probs.append(f"[用户要求] {p['instruction']}")
         problems[v["slot"]] = probs or ["用户要求改写这一稿"]
@@ -604,7 +618,9 @@ def handle_repair(job: dict, *, transport=None) -> None:
            for v in versions if v["slot"] in problems]
     system, user = prompts.repair_messages(brief=ctx["brief_core"], prompt=ctx["prompt"], reference=ctx["reference"],
                                            style=ctx["style"], materials=ctx["materials"], targets=tgt,
-                                           instruction=str(p.get("instruction") or ""), identity=ctx.get("identity"))
+                                           instruction=str(p.get("instruction") or ""), identity=ctx.get("identity"),
+                                           other_candidates=[v for v in versions if v["slot"] not in problems]
+                                           if any(p.startswith("[批次差异]") for ps in problems.values() for p in ps) else [])
     res, writer = _writer_call(job, ctx, system, user, 1, "repair", transport)
     changed = []
     by_slot = {v["slot"]: v for v in versions}

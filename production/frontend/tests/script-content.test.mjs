@@ -61,7 +61,7 @@ test('审核未完成时展示初稿和编辑入口，未审稿不能采用或�
   assert.doesNotMatch(button(html, '编辑'), /disabled/)
   assert.match(button(html, '采用这篇'), /disabled/)
   assert.match(html, /重新审核/)
-  assert.doesNotMatch(html, /继续返工|按意见重写|三篇全部通过审核后展示/)
+  assert.doesNotMatch(html, /重写未通过稿件|重写这一篇|三篇全部通过审核后展示/)
   assert.match(html, /已通过 2 \/ 已产出 3/)
 })
 
@@ -87,8 +87,8 @@ test('部分通过批次可直接采用已通过稿件，其余候选保留编�
     assert.ok(button(html, '重新审核'))
     assert.match(html, /已通过 1 \/ 已产出 3/)
     const guidance = route === 'short_video_storyboard'
-      ? /智能体审核通过的稿件可进入人工审核；其他稿件可编辑或重新审核。/g
-      : /已通过稿件可以直接采用；其他稿件可编辑或重新审核。/g
+      ? /已通过稿件可进入人工审核。2 篇审核未通过，请查看修改项。/g
+      : /已通过稿件可以直接采用。2 篇审核未通过，请查看修改项。/g
     assert.equal((html.match(guidance) ?? []).length, 2,
       '顶部说明和审核提示都应明确部分通过可采用')
     assert.doesNotMatch(html, /三篇均已通过|三篇全部通过审核后/)
@@ -103,7 +103,7 @@ test('重新审核入口在已有候选时仍可达，活动审核时禁用但�
   assert.match(html, /正文draft/)
   assert.ok(button(html, '重新审核'))
   assert.match(button(html, '重新审核'), /disabled/)
-  assert.doesNotMatch(html, /按意见重写|继续返工/)
+  assert.doesNotMatch(html, /重写这一篇|重写未通过稿件/)
 })
 
 test('活动审核允许编辑和保存初稿，写稿或返工期间仍禁用编辑', async () => {
@@ -132,21 +132,41 @@ test('确实缺少事实依据的硬门禁复核项可以定向修改', async ()
     quality_report: { checks: [{ code: 'FACT_EVIDENCE', hard_gate: true, outcome: 'review', message: '缺少依据' }] } }
   const html = await render({ id: 'b', ready_to_present: false, candidates: [draft],
     retry_targets: [{ candidate_id: 'fact', review_state: 'needs_review', reason: '缺少依据' }] })
-  assert.ok(button(html, '按意见重写'))
+  assert.ok(button(html, '重写这一篇'))
 })
 
 test('明确审核失败稿显示返工入口，审核失效稿仅提供编辑和重审', async () => {
   const failed = await render({ id: 'b', ready_to_present: false, candidates: [
     { ...candidate('failed'), review_state: 'failed', pickable: false }],
     retry_targets: [{ candidate_id: 'failed', review_state: 'failed', reason: '需要修正事实' }] })
-  assert.ok(button(failed, '按意见重写'))
-  assert.ok(button(failed, '继续返工'))
+  assert.ok(button(failed, '重写这一篇'))
+  assert.ok(button(failed, '重写未通过稿件'))
+  assert.match(failed, /1 篇审核未通过，请查看修改项。/)
+  assert.doesNotMatch(failed, /待审稿请重新审核|待重新审核/)
   const stale = await render({ id: 'b', ready_to_present: false, candidates: [
     { ...candidate('stale'), review_state: 'stale', pickable: false }], retry_targets: [] })
   assert.match(stale, /正文stale/)
   assert.match(stale, /审核已失效/)
   assert.ok(button(stale, '重新审核'))
-  assert.doesNotMatch(stale, /按意见重写|继续返工/)
+  assert.doesNotMatch(stale, /重写这一篇|重写未通过稿件/)
+})
+
+test('批次说明区分审核失败、待审核和正在审核，失败稿不冒充待审稿', async () => {
+  const html = await render({ id: 'mixed', requested: 3, produced: 3, passed: 0, ready_to_present: false,
+    candidates: [
+      { ...candidate('failed'), review_state: 'failed', pickable: false },
+      { ...candidate('pending'), review_state: 'needs_review', pickable: false },
+      { ...candidate('reviewing'), review_state: 'reviewing', pickable: false },
+    ], retry_targets: [{ candidate_id: 'failed', review_state: 'failed', reason: '需要修改' }] }, 'short_video_storyboard')
+  assert.match(html, /1 篇审核未通过，请查看修改项。1 篇待重新审核。1 篇独立审核中。/)
+  const cards = [...html.matchAll(/<article\b[^>]*class="script-option[^"]*"[^>]*>[\s\S]*?<\/article>/g)].map(match => match[0])
+  assert.match(cards[0], /审核未通过/)
+  assert.ok(button(cards[0], '重写这一篇'))
+  assert.match(cards[1], /尚未审核/)
+  assert.ok(button(cards[1], '重新审核'))
+  assert.equal(button(cards[1], '重写这一篇'), '')
+  assert.match(cards[2], /审核中/)
+  assert.equal(button(cards[2], '重写这一篇'), '')
 })
 
 test('整批已通过后仍保留明确的重新审核入口', async () => {
@@ -345,7 +365,7 @@ test('审核未通过批次不提供绕过未保存提示的重复生成入口',
     assert.match(button(html, '生成三篇分镜剧本'), /disabled/)
     assert.match(button(html, '重新生成三篇'), /disabled/)
     assert.equal((html.match(/>重新生成三篇<\/button>/g) ?? []).length, 1)
-    assert.match(html, /继续返工|重新审核/)
+    assert.match(html, /重写未通过稿件|重新审核/)
   } finally { delete globalThis.promptDraftSeed }
 })
 

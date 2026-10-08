@@ -7,6 +7,7 @@ from __future__ import annotations
 
 import os
 import time
+from urllib.error import URLError
 from datetime import datetime, timedelta, timezone
 from typing import Any, Callable, Dict, List, Optional
 
@@ -135,14 +136,29 @@ def build_reference(*, ref_id: str, work_id: str, item: Dict[str, Any], transcri
     }
 
 
-def _poll_transcript(call: dict, transport) -> dict:
-    """已有远端句柄：只用同一个 taskId 查询，有限轮询。"""
+def _poll_transcript(call: dict, transport, *, job: Optional[dict] = None) -> dict:
+    """后台每次只查原句柄一次，未完成交回持久调度；不重新提交。"""
     interval = float(os.environ.get("AVATAR_STUDIO_REDFOX_POLL_INTERVAL", "2"))
     attempts = max(1, _env_int("AVATAR_STUDIO_REDFOX_POLL_MAX", 5))
+    if job and job.get("remote_poll"):
+        attempts = 1
+        if call["state"] != "succeeded" and time.time() >= job["remote_poll"]["deadline_at"]:
+            raise tasks.CallPending("自动查询已超时，转写结果暂未确认。可继续查询原任务，原提交和费用记录保留。",
+                                    code="REFERENCE_POLL_TIMEOUT", detail=call["id"])
     for i in range(attempts):
+        if job:
+            tasks.checkpoint(job)
         def query(tid):
-            r = redfox.query_transcript(tid, transport=transport)
-            return tasks.CallOutcome(response=r, pending=r["state"] == "processing", cost_fen=0)
+            try:
+                r = redfox.query_transcript(tid, transport=transport)
+            except (tasks.ProviderRefused, tasks.NotSent) as exc:
+                code = "REFERENCE_QUERY_FAILED" if exc.code in ("AUTH_FAILED", "BAD_REQUEST", "PROVIDER_NOT_CONFIGURED") else "REFERENCE_QUERY_RETRY"
+                raise tasks.CallPending("红狐转写结果查询未成功，原任务和费用记录保留：" + exc.message,
+                                        code=code, detail=call["id"]) from exc
+            except (URLError, OSError, ValueError) as exc:
+                raise tasks.CallPending("转写结果查询暂时中断，将继续查询原任务。",
+                                        code="REFERENCE_QUERY_RETRY", detail=call["id"]) from exc
+            return tasks.CallOutcome(response=r, pending=r["state"] == "processing", cost_fen=_cost_fen("transcript"))
         out = tasks.resume_remote(call["id"], query)
         if out["state"] == "succeeded":
             return out
@@ -152,6 +168,7 @@ def _poll_transcript(call: dict, transport) -> dict:
 
 
 def handle_import(job: dict, *, transport=None) -> None:
+    tasks.checkpoint(job)
     payload = job["payload"]
     vid = str(payload.get("platform_work_id") or "").strip() or redfox.video_id_from_url(payload.get("source_url") or "")
     if not vid:
@@ -176,7 +193,7 @@ def handle_import(job: dict, *, transport=None) -> None:
         if existing is not None and existing.get("remote_task_id") and existing["state"] == "succeeded":
             done = existing  # 显式刷新已经用同一 taskId 取回结果：直接采用，不重提交
         elif existing is not None and existing["state"] in ("waiting_external", "unknown") and existing.get("remote_task_id"):
-            done = _poll_transcript(existing, transport)
+            done = _poll_transcript(existing, transport, job=job)
         else:
             def send_submit():
                 task_id = redfox.submit_transcript(item["source_url"], transport=transport)
@@ -188,7 +205,7 @@ def handle_import(job: dict, *, transport=None) -> None:
                 pending = _find_call(job["id"], "transcript_submit")
                 if pending is None or pending["state"] != "waiting_external":
                     raise
-                done = _poll_transcript(pending, transport)
+                done = _poll_transcript(pending, transport, job=job)
             else:  # 同步返回（不应发生）：没有句柄就没有转写结果
                 raise ContentRejected("转写提交未返回远端任务句柄", "TRANSCRIPT_NO_HANDLE")
         res = done["result"]

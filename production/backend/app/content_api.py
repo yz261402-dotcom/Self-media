@@ -611,6 +611,12 @@ def refresh_job(work_id: str, job_id: str):
     if not handles:
         return {"job_id": job_id, "state": job["state"], "status": "needs_verification" if calls or job["state"] == "unknown" else "nothing_to_refresh",
                 "message": "没有可查询的远端句柄：结果需要人工核对，系统不会重新提交请求"}
+    if job["kind"] == "import":
+        current = tasks.request_import_refresh(job_id)
+        if current["state"] in tasks.ACTIVE_STATES:
+            tasks.get_scheduler().start()
+        return {"job_id": job_id, "state": current["state"],
+                "status": "needs_verification" if current["state"] == "unknown" else "refreshed"}
     for call in handles:
         try:
             tasks.resume_remote(call["id"], lambda tid: _query_transcript(tid))
@@ -625,7 +631,7 @@ def refresh_job(work_id: str, job_id: str):
 
 def _query_transcript(task_id: str) -> tasks.CallOutcome:
     r = redfox.query_transcript(task_id)
-    return tasks.CallOutcome(response=r, pending=r["state"] == "processing", cost_fen=0)
+    return tasks.CallOutcome(response=r, pending=r["state"] == "processing", cost_fen=references._cost_fen("transcript"))
 
 
 @router.post(P + "/jobs/{job_id}/cancel")

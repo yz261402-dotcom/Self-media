@@ -293,6 +293,36 @@ def test_refresh_without_handle_reports_needs_verification_and_never_resends(cli
     assert jobs.get_job(call["id"])["attempts"] == 1
 
 
+@pytest.mark.parametrize("state", ["waiting_external", "running", "unknown"])
+def test_import_refresh_only_schedules_original_query_and_does_not_race_worker(client, monkeypatch, state):
+    from app.content import references
+    from tests.content.test_references import routes, redfox_path
+    from app.content.providers import redfox
+
+    monkeypatch.setenv("AVATAR_STUDIO_REDFOX_API_KEY", "rf-test-key")
+    monkeypatch.setenv("AVATAR_STUDIO_REDFOX_POLL_MAX", "1")
+    wid = make_work(with_reference=False)
+    job = tasks.submit_job(wid, "import", "original-import", {"platform_work_id": "77"})
+    transport = routes([{"status": "processing"}])
+    tasks.set_progress(job["id"], state="running")
+    with pytest.raises(tasks.CallPending) as pending:
+        references.handle_import(job, transport=transport)
+    tasks.run_job_error(job, pending.value)
+    if state == "running":
+        tasks.set_progress(job["id"], state="running")
+    elif state == "unknown":
+        tasks.finish_job(job["id"], "unknown", error={"code": "REFERENCE_POLL_TIMEOUT", "message": "paused"})
+    monkeypatch.setattr(redfox, "query_transcript", lambda *a, **k: pytest.fail("HTTP refresh must not query alongside a worker"))
+    response = client.post(base(wid) + f"/jobs/{job['id']}/refresh")
+    assert response.status_code == 200
+    assert response.json()["state"] == ("running" if state == "running" else "queued")
+    calls = tasks.jobs_calls(job["id"])
+    transcript = next(call for call in calls if call["step"] == "transcript_submit")
+    assert len(calls) == 2 and transcript["remote_task_id"] == "T-77" and transcript["attempts"] == 1
+    assert transport.count(redfox_path("SUBMIT")) == 1
+    tasks.finish_job(job["id"], "cancelled")
+
+
 def test_reference_binding_and_settings(client):
     wid = make_work()
     ref = st.get("works", wid)["reference_snapshot_id"]

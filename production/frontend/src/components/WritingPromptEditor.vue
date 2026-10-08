@@ -26,6 +26,7 @@ const progressText = computed(() => {
   if (content.submittingKind) return `正在提交${names[content.submittingKind] ?? '任务'}请求，请稍候。`
   const job = content.activeJob
   if (job) {
+    if (job.kind === 'import' && job.state === 'waiting_external') return '参考转写已提交，结果将自动同步。'
     const stages: Record<string, string> = { plan: '拆解参考', write: '写稿', review: '独立审核', repair: '定向返工',
       queued: '等待处理', search: '搜索', detail: '取参考详情', transcript: '提取转写' }
     const stage = job.stage ? stages[job.stage] : ''

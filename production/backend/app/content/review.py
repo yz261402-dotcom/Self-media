@@ -99,27 +99,55 @@ _PRODUCTION_CUE = re.compile(
 _PRODUCTION_CLOCK = re.compile(
     r"^((?:低音量|背景|低频|轻微|轻柔)?(?:音乐|配乐|音效|字幕))"
     r"(?:在)?第?\d+(?:\.\d+)?秒(?:前|后)?(?=结束|开始|停止|渐入|渐出|消失|出现)")
+_PRODUCTION_EVENT_OFFSET = re.compile(
+    r"^(?:第|前|后|最后)?" + _SECOND_NUMBER + r"秒(?:处|时|后|前)?"
+    r"(?=(?:(?:一次|一声)?(?:自然|轻微|轻柔|轻轻|短促)?"
+    r"(?:鼠标(?:单击|点击|滑动|移动)|键盘声|按键声|脚步声|布料声|布料摩擦声|"
+    r"呼气|吸气|叹气|轻叹气|待批准提示音|提示音)|"
+    r"(?:她|他|人物|主角)?保持(?:一次|有意识的)?(?:安静)?(?:停顿|静止)|转头|点头|微笑|眨眼))")
+_PRODUCTION_ACTION_WINDOW = re.compile(
+    r"^((?:主要|人物)?动作)(?:在)?(?:前|后)?\d+(?:\.\d+)?秒(?:内)?(?=完成|开始|结束)")
+_PRODUCTION_SOUND_OFFSET = re.compile(
+    r"^(?:第|前|后|最后)?\d+(?:\.\d+)?(?:、\d+(?:\.\d+)?)*秒(?:处|时|后|前)?"
+    r"(?=(?:各)?(?:一次|一声)?(?:画外)?(?:自然|细微|轻微|轻柔|低调)?"
+    r"(?:鼠标(?:单击|点击|滑动|移动)|单击|点击|(?:手指)?触杯声|杯底离桌(?:声|轻响)|"
+    r"手掌落桌轻响|饮用声|布料(?:声|轻响|摩擦声)|袖口与桌面轻微摩擦|"
+    r"(?:状态|结束|确认|待批准)?提示音|确认音|状态音|(?:预览)?室内底声))")
+_LOCAL_OUTPUT_VERSION = re.compile(
+    r"新版本(?=(?:结果|画面|预览|视频|镜头|文件|草稿)(?:里|中|内|$))")
+_LOCAL_EDIT_CONTEXT = re.compile(r"镜头间|镜头内|编辑器|草稿|剪辑|重新生成|预览全镜|预览片段")
+_REAL_PRODUCT_CONTEXT = re.compile(r"产品|软件|手机|设备|模型|发布|上线|首发|官方|性能|功能")
+_MEASUREMENT_CONTEXT = re.compile(r"延迟|响应|识别|推理|检测|耗时|用时|性能|测试|测评|速度|效率|充电")
 # 引号中的内容，以及屏幕文字 / 新闻播报后的句段，属于作品传达的内容，不能按制作 cue 豁免。
 _REPORTED_CONTENT = re.compile(
     r'“[^”]*”|「[^」]*」|『[^』]*』|"[^"\n]*"'
-    r"|(?:屏幕(?:上)?(?:字幕|文字|显示|写着)|字幕(?:写着|显示|文字|内容)?|"
+    r"|(?:屏幕(?:上)?(?:字幕|文字|显示|写着|展示(?:文字|字幕|内容)?)|字幕(?:写着|显示|文字|内容)?|"
     r"显示屏(?:显示|写着)|手机界面(?:显示|写着)|新闻播报|新闻播音|广播(?:播报)?|"
     r"播报|旁白|画外音)[:：][^。！？；\n]*"
-    r"|(?:屏幕(?:上)?|显示屏|手机界面|字幕)(?:写着|显示)[^。！？；\n]*")
+    r"|(?:屏幕(?:上)?|显示屏|手机界面|字幕)(?:写着|显示|展示)[^。！？；\n]*")
 _DIALOGUE_CLOSING_DAY = re.compile(
     r"今天(?=(?:的(?:生活化|聊天|讨论|分享))?(?:就)?(?:先)?(?:到这里|这样)(?:吧|了)?(?:[。！？!?；;，,]|$))")
 
 
-def _production_rule_text(content: str) -> str:
+def _production_rule_text(content: str, *, sound: bool = False) -> str:
     def strip_cues(part: str) -> str:
         # 只删句段起始的调度指令；句中设备、系统等现实事实的秒数保持原样。
         # 冒号通常引入屏幕文字/播报/检测结果，不把其后内容重新当制作指令起始。
         segments = re.split(r"([，。；！？,;!?\n])", part)
         for index, segment in enumerate(segments):
+            if _MEASUREMENT_CONTEXT.search(segment):
+                continue
             segment = _PRODUCTION_RANGE.sub("", segment)
             segment = _PRODUCTION_DURATION.sub(r"\1", segment)
             segment = _PRODUCTION_CUE.sub("", segment)
-            segments[index] = _PRODUCTION_CLOCK.sub(r"\1", segment)
+            segment = _PRODUCTION_CLOCK.sub(r"\1", segment)
+            segment = _PRODUCTION_EVENT_OFFSET.sub("", segment)
+            segment = _PRODUCTION_ACTION_WINDOW.sub(r"\1", segment)
+            if sound:
+                segment = _PRODUCTION_SOUND_OFFSET.sub("", segment)
+            if _LOCAL_EDIT_CONTEXT.search(segment) and not _REAL_PRODUCT_CONTEXT.search(segment):
+                segment = _LOCAL_OUTPUT_VERSION.sub("版本", segment)
+            segments[index] = segment
         return "".join(segments)
 
     parts, cursor = [], 0
@@ -137,7 +165,7 @@ def storyboard_review_texts(shots: Sequence[Dict[str, Any]]) -> Dict[str, str]:
         for field in ("visual", "dialogue", "sound_effects"):
             content = _norm(str(shot.get(field) or ""))
             if field != "dialogue":
-                content = _production_rule_text(content)
+                content = _production_rule_text(content, sound=field == "sound_effects")
             facts.append(content)
             # 日常结束语只移除其中的“今天”；同一句里的价格/最新/发布等其他信号仍保留。
             timely.append(_DIALOGUE_CLOSING_DAY.sub("", content) if field == "dialogue" else content)

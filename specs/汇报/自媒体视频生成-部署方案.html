@@ -1,0 +1,358 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="light">
+  <link rel="icon" href="data:,">
+  <title>自媒体视频生成系统部署方案</title>
+  <style>
+    :root { color-scheme:light; --page:#fff; --panel:#f7f7f8; --text:#151923; --muted:#646c7d; --border:#d9dde6; --accent:#002fa7; --accent-soft:#eef2fc; --side:236px; }
+    * { box-sizing:border-box; }
+    html { scroll-behavior:smooth; scroll-padding-top:96px; }
+    body { margin:0; background:var(--page); color:var(--text); font:15px/1.8 "Segoe UI",Arial,"Microsoft YaHei","PingFang SC",sans-serif; letter-spacing:0; }
+    main { margin-left:var(--side); padding:0 44px 56px; min-width:0; }
+    article,footer { max-width:1200px; margin-left:auto; margin-right:auto; }
+    .sidebar { position:fixed; inset:0 auto 0 0; width:var(--side); background:var(--panel); border-right:1px solid var(--border); display:flex; flex-direction:column; z-index:20; }
+    .brand { margin:30px 22px 22px; padding-top:16px; border-top:4px solid var(--accent); }
+    .brand strong { display:block; font-size:20px; line-height:1.45; }
+    .brand span { display:block; margin-top:7px; color:var(--muted); font-size:12px; }
+    .nav-caption { margin:0 22px 12px; color:var(--muted); font-size:11px; }
+    .sidebar nav { display:grid; gap:4px; padding:0 10px; overflow:auto; }
+    .sidebar nav a { display:flex; align-items:center; gap:12px; padding:11px 12px; border-left:2px solid transparent; color:var(--muted); text-decoration:none; font-size:13px; }
+    .sidebar nav a span { font-size:11px; min-width:20px; font-variant-numeric:tabular-nums; }
+    .sidebar nav a:hover,.sidebar nav a.active { color:var(--accent); background:var(--page); border-left-color:var(--accent); }
+    .sidebar nav a.active { font-weight:600; }
+    .side-footer { margin-top:auto; padding:18px 22px; border-top:1px solid var(--border); color:var(--muted); font-size:11px; }
+    .toolbar { position:sticky; top:0; z-index:10; display:flex; gap:16px; align-items:center; justify-content:space-between; min-height:74px; border-bottom:1px solid var(--border); margin-bottom:42px; background:var(--page); }
+    .breadcrumb { display:flex; flex-wrap:wrap; gap:8px; font-size:12px; color:var(--muted); }
+    .breadcrumb strong { color:var(--text); font-weight:600; }
+    a { color:var(--accent); text-underline-offset:4px; }
+    button { min-height:36px; border:1px solid var(--border); border-radius:3px; background:var(--page); color:var(--text); padding:6px 13px; font:13px/1.6 "Segoe UI",Arial,"Microsoft YaHei",sans-serif; cursor:pointer; white-space:nowrap; }
+    button:hover { border-color:var(--accent); color:var(--accent); }
+    a:focus-visible,button:focus-visible { outline:3px solid #a0b8ff; outline-offset:3px; }
+    h1 { font-size:36px; line-height:1.35; margin:0 0 18px; font-weight:700; }
+    h2 { display:flex; align-items:center; gap:15px; font-size:24px; line-height:1.5; margin:48px 0 20px; padding-top:32px; border-top:1px solid var(--border); scroll-margin-top:0; }
+    h2::before { content:counter(section,decimal-leading-zero); counter-increment:section; color:var(--accent); font-size:18px; font-weight:500; padding-right:15px; border-right:1px solid var(--border); flex-shrink:0; }
+    article { counter-reset:section; }
+    h1 + p { color:var(--muted); font-size:13px; max-width:900px; }
+    p { margin:14px 0 18px; overflow-wrap:anywhere; }
+    pre { margin:24px 0 26px; padding:24px 28px; border:1px solid var(--border); border-left:3px solid var(--accent); background:#fafbfe; overflow-wrap:anywhere; white-space:pre-wrap; tab-size:2; }
+    pre code { display:block; padding:0; font:14px/2.1 Consolas,"Microsoft YaHei",monospace; color:#33425b; background:none; }
+    code { padding:2px 5px; background:var(--panel); font:13px/1.7 Consolas,"Microsoft YaHei",monospace; color:#33425b; overflow-wrap:anywhere; }
+    table { display:block; width:100%; overflow-x:auto; border-collapse:collapse; margin:24px 0; border:1px solid var(--border); font-size:13px; font-variant-numeric:tabular-nums; }
+    th,td { border-bottom:1px solid var(--border); padding:13px 16px; text-align:left; vertical-align:top; min-width:135px; }
+    th { background:var(--panel); font-weight:600; color:var(--muted); white-space:nowrap; }
+    td { color:#526176; }
+    td:first-child { color:var(--text); font-weight:600; }
+    tbody tr:hover { background:#fafbfe; }
+    th:nth-child(2),td:nth-child(2) { min-width:225px; }
+    th:nth-child(3),td:nth-child(3) { white-space:nowrap; text-align:right; min-width:165px; }
+    th:nth-child(4),td:nth-child(4) { width:100%; min-width:235px; }
+    tbody tr:last-child { background:var(--accent-soft); }
+    tbody tr:last-child td { color:var(--accent); border-bottom:0; }
+    ul,ol { padding-left:25px; margin:16px 0 24px; }
+    li { margin:10px 0; overflow-wrap:anywhere; }
+    li::marker { color:var(--accent); font-weight:600; }
+    footer { margin-top:44px; padding-top:18px; border-top:1px solid var(--border); color:var(--muted); font-size:11px; }
+    @media (max-width:1000px) {
+      :root { --side:196px; }
+      main { padding:0 28px 48px; }
+      .brand { margin-left:18px; margin-right:18px; }
+      .brand strong { font-size:18px; }
+      h1 { font-size:32px; }
+    }
+    @media (max-width:760px) {
+      html { scroll-padding-top:124px; }
+      main { margin-left:0; padding:0 18px 40px; }
+      .sidebar { position:sticky; top:0; width:auto; height:49px; border-right:0; border-bottom:1px solid var(--border); }
+      .brand,.nav-caption,.side-footer { display:none; }
+      .sidebar nav { display:flex; gap:0; padding:0 8px; height:49px; overflow-x:auto; }
+      .sidebar nav a { flex-shrink:0; gap:6px; padding:11px 10px; border-left:0; border-bottom:2px solid transparent; font-size:12px; }
+      .sidebar nav a:hover,.sidebar nav a.active { border-left:0; border-bottom-color:var(--accent); }
+      .sidebar nav a span { min-width:auto; font-size:10px; }
+      .toolbar { top:49px; min-height:60px; gap:12px; margin-bottom:30px; }
+      .breadcrumb { font-size:11px; }
+      button { font-size:13px; padding:6px 10px; }
+      h1 { font-size:28px; }
+      h2 { font-size:21px; gap:10px; margin-top:36px; padding-top:26px; }
+      h2::before { font-size:16px; padding-right:10px; }
+      pre { padding:18px 16px; }
+      pre code { font-size:13px; line-height:2; }
+      th,td { padding:10px 12px; }
+    }
+    @media print {
+      body { font-size:10pt; line-height:1.7; }
+      main { margin-left:0; max-width:none; padding:0; }
+      .sidebar,.toolbar { display:none; }
+      h1 { font-size:20pt; }
+      h2 { font-size:14pt; break-after:avoid; }
+      pre { padding:12px 16px; }
+      pre code { font-size:9pt; line-height:1.8; }
+      table { display:table; table-layout:fixed; font-size:9pt; }
+      th,td,th:nth-child(n),td:nth-child(n) { min-width:0; width:auto; white-space:normal; padding:6px; font-size:9pt; }
+      tr { break-inside:avoid; }
+      a { color:inherit; text-decoration:none; }
+      @page { size:A4; margin:16mm; }
+    }
+  </style>
+</head>
+<body>
+  <aside class="sidebar" aria-label="文档导航">
+    <div class="brand"><strong>自媒体视频生成</strong><span>部署方案</span></div>
+    <p class="nav-caption">内容目录</p>
+    <nav aria-label="文档目录">
+      <a href="#_2" class="active" aria-current="location"><span>01</span>生产环境</a>
+      <a href="#_3"><span>02</span>成本估算</a>
+      <a href="#_4"><span>03</span>当前部署</a>
+      <a href="#_5"><span>04</span>实施顺序</a>
+      <a href="#_6"><span>05</span>答辩表述</a>
+      <a href="#_7"><span>06</span>代码依据</a>
+    </nav>
+    <div class="side-footer">2026-10-08<br>配置建议与预算规划</div>
+  </aside>
+  <main>
+    <div class="toolbar">
+      <div class="breadcrumb"><span>项目答辩 /</span><strong>部署方案</strong></div>
+      <button type="button" onclick="window.print()">打印</button>
+    </div>
+    <article>
+<h1 id="_1">自媒体视频生成系统部署方案</h1>
+<p>版本：2026-10-08。用于答辩与部署规划；建议配置和成本均为规划值，未代表已完成生产部署或容量验收。</p>
+<h2 id="_2">一、生产环境（答辩重点）</h2>
+<p>架构：应用控制面、媒体后期、GPU 推理与浏览器发布分离。当前先沿用 Windows 单实例工作台 + Linux GPU 节点；下列多节点布局属于完成改造后的生产目标。</p>
+<pre><code class="language-text">【服务器1：Web 入口 + API + 内容创作】
+  - 建议配置：8 核 CPU + 16 GB 内存 + 200 GB SSD，Linux
+  - Nginx：托管 Vue 3 / TypeScript / Pinia / Vite 构建后的 dist
+  - HTTPS 443；反向代理 FastAPI / Uvicorn，API 仅私网可达
+  - FastAPI 初期 1 个 worker，不直接启动 4 个 worker
+  - DeepAgents：进程内策划、写稿、审核与工具编排
+  - 业务 Skill：按阶段加载规则；人工审核通过或手工修改确认后采用
+  - 降级：DeepAgents 异常时独立内容流程；模型不可用时人工编辑 / 导入
+  - 扩容前：拆唯一内容调度器，补任务 owner、租约和心跳恢复
+
+【服务器2：视频拼接 + 字幕烧录】
+  - 建议配置：16 核 CPU + 32 GB 内存 + 500 GB SSD，Linux
+  - 分镜拼接 Worker：python -m app.short_video.worker --loop
+  - 字幕 Worker：python -m app.short_video.subtitle_jobs --loop
+  - FFmpeg / ffprobe / libass：拼接、音轨提取、ASS 烧录、SRT 导出
+  - 当前编码为 libx264，主要消耗 CPU，不假定已经使用 GPU 编码
+  - 字幕时间轴来自成功的 ASR / 强制对齐，不用估算时间轴兜底
+  - 初期每类 Worker 1 个；按实测编码时间、队列长度再扩容
+  - 拆机前：统一媒体路径和共享挂载，适配路径与授权中文字体
+
+【服务器3：GPU 模型推理】
+  - 建议配置：8–16 核 CPU + 32–64 GB 内存 + 500 GB SSD
+  - 1 张支持 BF16 的 NVIDIA GPU，建议显存 24–32 GB
+  - LivePortrait：动作迁移；MuseTalk：人物口型生成
+  - Qwen3-ASR-1.7B：语音识别；Qwen3-ForcedAligner-0.6B：字幕对齐
+  - 三套独立 Python 推理环境，共用单 GPU 串行队列
+  - HTTP Worker 通过私网或 SSH 隧道访问，携带鉴权令牌
+  - 按需开机；模型 API 写稿、图片、Wan 视频无需占用本节点
+  - 生产必补：GPU 作业索引持久化、恢复与幂等结果核对
+  - 显存为选型建议，最长视频和真实模型验收后再确定采购规格
+
+【服务器4：抖音浏览器发布】
+  - 建议配置：4 核 CPU + 8 GB 内存 + 100 GB SSD，Windows 交互桌面
+  - Playwright + 可见 Chrome；专用登录 profile 持久化
+  - 同一账号同一时刻只运行一个发布会话
+  - 用户完成扫码 / 验证、投稿内容核对与最终发布确认
+  - 初期可复用现有电脑；服务器报价需另核 Windows 授权
+  - 当前发布线程在 API 进程内；独立部署需新增远程发布 Agent
+  - 上传准备成功、提交回执与平台审核通过是不同状态
+
+【数据库：PostgreSQL】
+  - 建议配置：4 核 CPU + 8 GB 内存 + 100 GB SSD，托管数据库优先
+  - 保存作品、分镜、人工审核、任务、版本、预算和外部调用账本
+  - 已接入 psycopg 3；当前写事务使用 PostgreSQL advisory lock
+  - 仅私网访问；每日备份，按业务要求开启 WAL 归档与恢复演练
+  - 当前无需 Milvus / Elasticsearch；Redis 也不是现有必需依赖
+  - 后续按需增加 Redis 队列 / 缓存，须同时实现租约与任务恢复
+
+【存储 + 监控】
+  - 媒体：当前 runtime 本地文件 + 火山 TOS 供应商素材传递
+  - 初期跨节点使用相同路径的共享挂载；归档目标为 TOS 对象存储
+  - 当前 TOS 素材传递不等于所有成片已迁到对象存储
+  - 私有桶 / 有效期 URL / 生命周期需做供应商兼容与代码改造
+  - 建议增加 Prometheus + Grafana + Loki，初期与应用节点合部署
+  - 监测队列等待、unknown 任务、GPU 显存、磁盘、供应商余额和失败率
+
+【外部模型与数据 API：无需自建 GPT 推理服务器】
+  - 写稿 / 定向返工：gpt-6.1-sol
+  - 策划 / 独立审核：gpt-6-astra
+  - 人物 / 分镜图片：GPT Image 2.5
+  - TTS：MiniMax speech-2.8-hd
+  - 分镜视频：百炼 wan3.0-video；云端口播：OmniHuman 1.5
+  - 参考检索 / 转写：红狐 API；参考画面分析：Qwen3-VL
+  - 密钥只放后端秘密配置；预算、限流与未知结果核对统一记账
+</code></pre>
+<p>推荐数据流：浏览器 → Web/API → 内容生成与模型检查 → 人工审核 / 修改采用 → 图片与视频 API / GPU 口播 → CPU 拼接 → GPU ASR 与对齐 → CPU 烧录字幕 → 交付包 → 浏览器发布确认。PostgreSQL 记录各阶段状态，媒体存储保存原件和成片。</p>
+<h2 id="_3">二、成本估算</h2>
+<p>按小团队试运行规划：每月约 30 条成片，每条 30–60 秒，平均 6 个镜头；GPU 开机 120 小时 / 月，估算单价 3 元 / 小时。此负载仅用于预算，不构成产能保证。所有金额为预算示例，未查询实时云报价；外部 API 项是月度预留额度，不是已核实的模型单价，含返工余量。税费、Windows 授权和首次开发改造另计。</p>
+<table>
+<thead>
+<tr>
+<th>资源</th>
+<th>配置 / 计费假设</th>
+<th style="text-align: right;">月成本示例</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>应用服务器</td>
+<td>8 核 / 16 GB</td>
+<td style="text-align: right;">¥450</td>
+<td>Web、API、内容调度</td>
+</tr>
+<tr>
+<td>媒体服务器</td>
+<td>16 核 / 32 GB</td>
+<td style="text-align: right;">¥750</td>
+<td>FFmpeg 拼接与字幕烧录</td>
+</tr>
+<tr>
+<td>PostgreSQL</td>
+<td>4 核 / 8 GB / 100 GB</td>
+<td style="text-align: right;">¥400</td>
+<td>业务数据与任务账本</td>
+</tr>
+<tr>
+<td>发布节点</td>
+<td>4 核 / 8 GB</td>
+<td style="text-align: right;">¥300</td>
+<td>可复用已有电脑，授权另核</td>
+</tr>
+<tr>
+<td>GPU</td>
+<td>1 张，120 小时 × ¥3</td>
+<td style="text-align: right;">¥360</td>
+<td>24–32 GB 档预算占位，采购需报价与压测</td>
+</tr>
+<tr>
+<td>对象存储 / 备份</td>
+<td>约 500 GB</td>
+<td style="text-align: right;">¥100</td>
+<td>原件、成片、备份；不含服务器 SSD</td>
+</tr>
+<tr>
+<td>公网流量</td>
+<td>约 300 GB / 月</td>
+<td style="text-align: right;">¥100</td>
+<td>含供应商素材下载，按计费口径复核</td>
+</tr>
+<tr>
+<td>日志 / 监控留存</td>
+<td>30 天</td>
+<td style="text-align: right;">¥60</td>
+<td>软件可开源，费用预留给留存资源</td>
+</tr>
+<tr>
+<td>写稿 / 策划 / 审核 API</td>
+<td>月预算</td>
+<td style="text-align: right;">¥800</td>
+<td>按 token；三稿及返工均计入</td>
+</tr>
+<tr>
+<td>图片 API</td>
+<td>月预算</td>
+<td style="text-align: right;">¥400</td>
+<td>人物、分镜、重生成</td>
+</tr>
+<tr>
+<td>TTS API</td>
+<td>月预算</td>
+<td style="text-align: right;">¥200</td>
+<td>按字符或供应商账单</td>
+</tr>
+<tr>
+<td>视频 API</td>
+<td>月预算</td>
+<td style="text-align: right;">¥1,400</td>
+<td>Wan / OmniHuman；M2 替代部分口播可再估</td>
+</tr>
+<tr>
+<td>红狐 / 参考视觉 API</td>
+<td>月预算</td>
+<td style="text-align: right;">¥200</td>
+<td>检索、转写、画面分析</td>
+</tr>
+<tr>
+<td><strong>总计</strong></td>
+<td><strong>示例预算</strong></td>
+<td style="text-align: right;"><strong>¥5,520 / 月</strong></td>
+<td><strong>基础资源 ¥2,520 + 外部 API ¥3,000</strong></td>
+</tr>
+</tbody>
+</table>
+<p>若 GPU 按同一假设整月开机 720 小时：GPU 成本为 ¥2,160，总预算为 ¥7,320 / 月。已有电脑承载本机工作台与发布、PostgreSQL 同机时，可省四项服务器预算 ¥1,900 和监控留存预算 ¥60，示例预算约 ¥3,560 / 月；不含已有硬件购置、电费和维护成本。</p>
+<p>成本公式：月成本 = CPU / 数据库资源 + GPU 小时 × 小时单价 + 存储 + 流量 + 监控留存 + 文本 / 图片 / 语音 / 视频 / 数据 API 实际调用费用。</p>
+<h2 id="_4">三、当前可落地部署</h2>
+<pre><code class="language-text">【主机A：现有 Windows 工作台】
+  - 建议 8 核 CPU + 32 GB 内存 + 1 TB SSD
+  - Vue 构建产物、FastAPI 1 worker、进程内 DeepAgents
+  - PostgreSQL、分镜拼接 Worker、字幕 Worker、FFmpeg / libass
+  - 可交互 Chrome 与发布适配器放在同一主机
+  - 默认仅本机访问；团队内网访问前增加认证与访问控制
+
+【主机B：Linux 算力云】
+  - 四阶段 GPU Worker，单 GPU 串行
+  - 私网 / SSH 隧道访问，按需开机
+
+【云服务】
+  - 外部模型 API + 火山 TOS
+  - 数据库、媒体、浏览器 profile 与密钥分别备份
+</code></pre>
+<p>这条路线符合当前程序边界。现有 <code>production/start.ps1</code> 启动的是 Vite 开发服务；正式部署应构建 <code>dist</code> 并配置静态服务器，而不是把 5173 作为生产入口。当前 GPU 连接保持关闭，本方案不执行开机、连接或部署。</p>
+<h2 id="_5">四、生产化实施顺序</h2>
+<ol>
+<li>固定依赖与发布版本，备份 PostgreSQL、媒体、角色配置和浏览器 profile；在独立目录恢复验证。</li>
+<li>构建前端 <code>dist</code>，配置 HTTPS 反向代理、认证、权限、上传限额与 CORS；先以 1 个 API worker 上线内网。</li>
+<li>拆内容调度器，完善 owner / 租约 / 心跳恢复；保持未知付费请求先核对再决定是否重生成。</li>
+<li>统一媒体 URI 与共享路径，独立部署 CPU 后期节点；Linux 验证中文字体、libass、字幕时间轴与成片音轨。</li>
+<li>持久化 GPU 作业与幂等索引，验证断线、进程重启和中途失败不会重复提交。</li>
+<li>新增远程发布 Agent，隔离账号 profile、转移媒体并保留人工确认；完成真实发布授权验收。</li>
+<li>增加监控、磁盘与余额告警；完成端到端、并发和恢复验收后再扩 API 与 Worker 副本。</li>
+</ol>
+<p>验收至少覆盖：修改剧本与人工采用、生成任务幂等、未知请求核对、合成视频音画检查、字幕烧录与 SRT 导出、数据库与媒体恢复、浏览器上传准备。最终发布需要另行明确授权；健康检查不替代真实制作和发布验收。</p>
+<h2 id="_6">五、答辩表述</h2>
+<p>“系统采用混合部署：应用层承担内容编排和人工审核，CPU 节点负责视频拼接与字幕烧录，独立 GPU 节点完成数字人口型和语音对齐，浏览器节点处理抖音投稿。业务状态已存入 PostgreSQL，GPT、图片、TTS 和分镜视频通过外部 API 调用。当前可落地的是单实例工作台加云端 GPU；多节点方案需要补齐调度恢复、共享媒体和远程发布，成本按按需 GPU 与模型调用预算分别计算。”</p>
+<h2 id="_7">六、代码依据</h2>
+<ul>
+<li><code>production/backend/app/storage.py:1</code>：PostgreSQL 仓储；<code>:326</code>：事务与 advisory lock。</li>
+<li><code>production/backend/app/main.py:115</code>：启动恢复与内容调度；<code>app/content/tasks.py:406</code>、<code>:521</code>：恢复规则、单进程调度器。</li>
+<li><code>production/backend/app/content/providers/text.py:27</code>：GPT 角色配置；<code>app/agents/framework.py</code>：DeepAgents 进程内框架。</li>
+<li><code>production/backend/app/short_video/worker.py:87</code>：CPU 拼接 Worker；<code>subtitle_jobs.py:214</code>：字幕 Worker。</li>
+<li><code>production/backend/app/short_video/subtitle_media.py:181</code>：ASS / SRT 与字幕烧录；<code>app/video/subtitles.py:20</code>：字体配置。</li>
+<li><code>production/workers/m2_gpu/worker_server.py:71</code>：内存作业索引；<code>:278</code>：单 GPU 串行执行。</li>
+<li><code>production/workers/m2_gpu/启动完整服务.sh:5</code>：四阶段与独立环境。</li>
+<li><code>production/backend/app/publishing/service.py:114</code>、<code>adapters.py:655</code>：API 内发布线程与可见 Chrome。</li>
+<li><code>production/backend/app/digital_human/publish.py:1</code>：火山 TOS 素材传递。</li>
+</ul>
+<p>仓库早期 <code>production/部署方案.md</code> 和部分旧汇报中的 SQLite、旧模型、二期 PostgreSQL 描述已落后于当前实现，本方案按 2026-10-08 代码核对。</p>
+
+    </article>
+    <footer>自媒体视频生成系统 · 2026-10-08 代码核对 · 配置为容量建议，金额为预算示例 · 本文不执行部署或模型调用</footer>
+  </main>
+  <script>
+    const headings = [...document.querySelectorAll('article h2')];
+    const links = [...document.querySelectorAll('.sidebar nav a')];
+    function updateNavigation() {
+      const threshold = document.querySelector('.toolbar').getBoundingClientRect().bottom + 96;
+      let current = headings[0];
+      for (const heading of headings) {
+        if (heading.getBoundingClientRect().top <= threshold) current = heading;
+      }
+      for (const link of links) {
+        const active = link.hash === '#' + current.id;
+        link.classList.toggle('active', active);
+        if (active) link.setAttribute('aria-current', 'location');
+        else link.removeAttribute('aria-current');
+      }
+    }
+    addEventListener('scroll', updateNavigation, {passive:true});
+    addEventListener('resize', updateNavigation);
+    updateNavigation();
+  </script>
+</body>
+</html>
