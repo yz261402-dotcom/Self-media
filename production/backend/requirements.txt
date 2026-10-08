@@ -6,6 +6,7 @@ python-multipart>=0.0.20
 
 # 智能体执行框架（生产默认；依赖缺失显式失败，不回退到其他执行器）
 deepagents==0.7.17
+PyYAML==6.0.3  # 业务 Skill 元数据；独立内容工作流也直接使用
 
 # DeepSeek 真实接入路径（仅 MODEL_BACKEND=deepseek 时使用）
 # 未安装时该路径显式报 CapabilityNotConfigured，不静默降级到离线替身。

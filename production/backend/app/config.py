@@ -133,6 +133,8 @@ PROVIDERS: Dict[str, ProviderSpec] = {
     "gpt-image-2": ProviderSpec("gpt-image-2", "人像生成与编辑", "GPTIMAGE", "gpt-image-2.5-sunburst",
                                 ["text_to_image", "image_edit"]),
     "anthropic": ProviderSpec("anthropic", "内容写作", "ANTHROPIC", "claude-sonnet-5-5", ["chat"]),
+    "claude_compat": ProviderSpec("claude_compat", "Claude OpenAI兼容写作", "CLAUDE_COMPAT",
+                                   "claude-sonnet-5-5", ["chat"]),
     "openai": ProviderSpec("openai", "GPT 内容写作", "OPENAI", "gpt-6.1-sol", ["chat"]),
     "qwen": ProviderSpec("qwen", "参考拆解与独立审稿", "QWEN", "qwen-plus", ["chat"]),
     "redfox": ProviderSpec("redfox", "抖音参考检索与转写", "REDFOX", "redfox-api", ["search", "transcript"]),

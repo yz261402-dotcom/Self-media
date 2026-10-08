@@ -234,8 +234,11 @@ def test_hard_gate_cannot_be_offset_by_score():
 # --------------------------- Skill 绑定与角色 ---------------------------
 
 def test_skill_refs_are_bound_to_real_files():
+    from app.skill_library import load_skill, skill_digest
+
     ref = load_skill_ref("S02")
-    assert ref is not None and ref.version == "0.2.0" and ref.digest.startswith("sha256:")
+    assert ref is not None and ref.version == load_skill("S02").version
+    assert ref.digest == skill_digest("S02")
 
 
 def test_each_role_has_own_tool_scope():

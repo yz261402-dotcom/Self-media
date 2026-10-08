@@ -9,10 +9,11 @@ __pycache__/
 *.pyc
 
 # 临时测试库与探测脚本
-tests/tmp_test.db
-tests/.tmp_compose/
-tests/probe_*.db
-tests/dbg_*.db
+backend/tests/*.db
+backend/tests/*.db-wal
+backend/tests/*.db-shm
+backend/tests/.tmp_compose/
+backend/v/
 backend/server.log
 backend/server.err
 backend/pytest_run.log

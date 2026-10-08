@@ -87,7 +87,8 @@ def regenerate(graph_id: str, shot_index: int, *, actor_id: str, plan_digest: st
             raise service.StoryboardError("STORYBOARD_IMAGE_RETRY_NOT_READY", "镜头尚未生成或原请求仍在执行，请等待原请求返回")
         original = jobs.get_job(expected_image_job_id) or {}
         if (original.get("work_id") != graph["work_id"] or original.get("capability") != "storyboard_image"
-                or original.get("args_digest") != jobs.args_digest(service._image_args(graph, shot))):
+                or (original.get("args_digest") != jobs.args_digest(service._image_args(graph, shot))
+                    and not (shot.get("image_reuse") and service._verified_reusable_image(graph, shot)))):
             raise service.StoryboardError("STORYBOARD_IMAGE_ATTEMPT_CHANGED", "原图片作业与当前镜头不一致，请刷新")
         service._assert_no_other_unresolved_graphs(graph)
         _, reference_bytes = service._identity_reference(st.get("works", graph["work_id"]) or {})
@@ -110,6 +111,9 @@ def regenerate(graph_id: str, shot_index: int, *, actor_id: str, plan_digest: st
                 raise service.StoryboardError("STORYBOARD_IMAGE_ATTEMPT_CHANGED", "镜头图片请求已变化，请刷新")
             history = {k: copy.deepcopy(current_shot.get(k)) for k in
                        ("image_job_id", "image_state", "image", "error")}
+            for key in ("image_reuse", "image_reuse_history"):
+                if key in current_shot:
+                    history[key] = current_shot.pop(key)
             history.update(image_attempt=int(current_shot.get("image_attempt") or 0), superseded_at=now_iso())
             current_shot.setdefault("image_history", []).append(history)
             current_shot.update(image_attempt=next_shot["image_attempt"], image_job_id=job["id"], image=None,

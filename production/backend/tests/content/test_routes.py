@@ -1,4 +1,4 @@
-"""Content routes and the all-three review gate."""
+"""Content routes, current review bindings, and per-candidate adoption gates."""
 import pytest
 from fastapi.testclient import TestClient
 
@@ -6,7 +6,7 @@ from app import storage as st
 from app.content import selection, service
 from app.content.errors import ContentRejected
 from app.main import app
-from tests.content._helpers import Script, cand, make_work, plan_json, review_reply, run_job, set_env
+from tests.content._helpers import Script, cand, human_approve, make_work, plan_json, review_reply, run_job, set_env
 
 
 @pytest.fixture(autouse=True)
@@ -63,8 +63,9 @@ def test_storyboard_visual_change_invalidates_single_and_set_review():
     changed["storyboard"][0]["visual"] = "一处尚未审核的新画面"
     st.put("script_batches", wid, batch)
     projected = selection.project_batch(wid)
-    assert projected["candidates"] == [] and projected["ready_to_present"] is False
-    assert projected["retry_targets"][0]["candidate_id"] == changed["id"]
+    assert len(projected["candidates"]) == 3 and projected["ready_to_present"] is False
+    assert projected["retry_targets"] == []
+    assert any(t["candidate_id"] == changed["id"] for t in projected["review_targets"])
 
 
 def test_storyboard_adoption_pauses_before_media_confirmation():
@@ -79,13 +80,14 @@ def test_storyboard_adoption_pauses_before_media_confirmation():
                                            "state": "waiting_selection", "pending_selection_ids": ["sel_script"]},
            {"work_id": wid})
     candidate_id = selection.project_batch(wid)["candidates"][0]["id"]
+    human_approve(wid, candidate_id)
     result = selection.adopt(wid, candidate_id)
     assert result["advance"] is False
     task = st.get("tasks", "task_storyboard")
     assert task["stage"] == "content_review" and task["state"] == "waiting_review"
 
 
-def test_partial_batch_redacts_all_candidate_bodies_and_blocks_adoption(monkeypatch):
+def test_partial_batch_exposes_candidate_bodies_and_allows_passed_adoption(monkeypatch):
     monkeypatch.setenv("AVATAR_STUDIO_CONTENT_MAX_REPAIR_ROUNDS", "0")
     wid, script = _ready()
     script.q["writer"].append({"candidates": [cand(1), cand(2), cand(3)]})
@@ -96,14 +98,16 @@ def test_partial_batch_redacts_all_candidate_bodies_and_blocks_adoption(monkeypa
     target_id = raw["candidates"][2]["id"]
     projected = selection.project_batch(wid)
     assert projected["passed"] == 2
-    assert projected["candidates"] == []
+    assert len(projected["candidates"]) == 3
     assert target_id in [row["candidate_id"] for row in projected["retry_targets"]]
     assert all("text" not in row and "storyboard" not in row for row in projected["retry_targets"])
     response = TestClient(app).get(f"/api/v1/works/{wid}/scripts")
     assert response.status_code == 200
-    assert all(raw["text"] not in response.text for raw in raw["candidates"])
+    assert [row["text"] for row in response.json()["candidates"]] == [row["text"] for row in raw["candidates"]]
+    selection.adopt(wid, raw["candidates"][0]["id"])
+    assert selection.current_selection_valid(wid)
     with pytest.raises(selection.SelectionRejected):
-        selection.adopt(wid, raw["candidates"][0]["id"])
+        selection.adopt(wid, target_id)
 
 
 def test_set_rejection_without_rewrite_slots_never_reports_success(monkeypatch):
@@ -135,3 +139,47 @@ def test_storyboard_duration_must_be_whole_seconds():
     with pytest.raises(ContentRejected, match="整数"):
         service._build_version(raw, ctx=cx.load_context(wid), job={"id": "g", "work_id": wid},
                                slot=1, parent_id=None, round_no=0, writer={})
+
+
+def test_storyboard_revision_creates_new_version_and_requires_new_review():
+    wid, script = _ready("short_video_storyboard")
+    script.q["writer"].append({"candidates": [dict(cand(i), storyboard=[_shot(1, cand(i)["text"])]) for i in (1, 2, 3)]})
+    script.q["reviewer"].append(review_reply())
+    assert run_job("generation", wid, {}, service.handle_generation, script)["state"] == "succeeded"
+    original = st.get("script_batches", wid)["candidates"][0]
+    human_approve(wid, original["id"])
+    selection.adopt(wid, original["id"])
+    assert st.get("works", wid)["script_version_id"] == original["id"]
+    edited_shot = {**original["storyboard"][0], "visual": "用户修改后的画面", "duration_seconds": 9}
+
+    response = TestClient(app).post(f"/api/v1/works/{wid}/script-revisions", json={
+        "script_id": original["id"], "title": "用户修改后的分镜", "description": "用户补充说明",
+        "storyboard": [edited_shot],
+    })
+    assert response.status_code == 200, response.text
+    revised = response.json()
+    assert revised["id"] != original["id"] and revised["parent_id"] == original["id"]
+    assert revised["title"] == "用户修改后的分镜"
+    assert revised["storyboard"][0]["visual"] == "用户修改后的画面"
+    assert revised["storyboard"][0]["duration_seconds"] == 9
+    assert st.get("script_versions", original["id"])["storyboard"][0]["visual"] != "用户修改后的画面"
+    assert st.get("works", wid)["script_version_id"] is None
+    projected = selection.project_batch(wid)
+    assert len(projected["candidates"]) == 3 and projected["ready_to_present"] is False
+    assert projected["retry_targets"] == []
+    assert any(row["candidate_id"] == revised["id"] and row["review_state"] == "needs_review"
+               for row in projected["review_targets"])
+
+
+def test_storyboard_revision_rejects_invalid_structured_shot():
+    wid, script = _ready("short_video_storyboard")
+    script.q["writer"].append({"candidates": [dict(cand(i), storyboard=[_shot(1, cand(i)["text"])]) for i in (1, 2, 3)]})
+    script.q["reviewer"].append(review_reply())
+    assert run_job("generation", wid, {}, service.handle_generation, script)["state"] == "succeeded"
+    original = st.get("script_batches", wid)["candidates"][0]
+    invalid = {**original["storyboard"][0], "duration_seconds": 31}
+    response = TestClient(app).post(f"/api/v1/works/{wid}/script-revisions", json={
+        "script_id": original["id"], "storyboard": [invalid],
+    })
+    assert response.status_code == 422, response.text
+    assert (response.json().get("error") or response.json()["detail"]["error"])["code"] == "STORYBOARD_INVALID"

@@ -138,9 +138,9 @@ def test_reviewer_outage_binds_unreviewed_candidates_that_cannot_be_picked():
     job = generate(wid, s)
     assert job["state"] == "unknown"
     batch = selection.project_batch(wid)
-    assert batch["produced"] == 3 and batch["candidates"] == [] and not batch["ready_to_present"]
-    assert len(batch["retry_targets"]) == 3
-    assert all(c["review_state"] == "needs_review" for c in batch["retry_targets"])
+    assert batch["produced"] == 3 and len(batch["candidates"]) == 3 and not batch["ready_to_present"]
+    assert batch["retry_targets"] == [] and len(batch["review_targets"]) == 3
+    assert all(c["review_state"] == "needs_review" for c in batch["review_targets"])
     assert s.calls["reviewer"] == 1
 
 
@@ -174,7 +174,10 @@ def test_late_result_for_old_revision_is_archived_not_bound():
     s.q["reviewer"].append(bump_then_review)
     job = generate(wid, s)
     assert job["state"] == "superseded" and job["archived_result"]["batch_id"]
-    assert st.get("script_batches", wid) is None
+    # 审核开始前已展示初稿；输入变更后它成为失效稿，晚到审核不能重新绑定最终批次。
+    view = selection.project_batch(wid)
+    assert view["id"] != job["archived_result"]["batch_id"]
+    assert all(c["review_state"] == "stale" and not c["pickable"] for c in view["candidates"])
 
 
 def test_repair_job_targets_only_named_candidate_and_needs_current_batch():

@@ -63,6 +63,16 @@ test('Wan 任务图展示镜头图和总费用，未勾选时不能批准视频�
   assert.match(html, /<img[^>]+src="\/image.png"/)
   assert.match(html, /<button[^>]+disabled[^>]*>确认任务图与视频费用/)
 })
+test('重新准备后的任务图展示已复用图片和待生成镜头数', async () => {
+  const html = await render({ ...base, state: 'waiting_image_approval', image_approval: null,
+    image_reuse: { source_graph_id: 'old-graph', shot_indexes: [1] },
+    shots: [base.shots[0], { ...base.shots[0], shot_index: 2, image_state: 'pending', image: null }] })
+  assert.match(html, /已复用 1 张图片/)
+  assert.match(html, /1 张待生成/)
+  assert.match(html, /确认剩余 1 次生图/)
+  assert.match(button(html, '确认图片生成'), /disabled/)
+})
+
 test('Wan 未知镜头有查询原作业入口，禁止再次提交', async () => {
   const html = await render({ ...base, state: 'unknown', video_approval: { task_graph_digest: 't' },
     shots: [{ ...base.shots[0], video_state: 'unknown', remote_task_id: 'original-task' }] })
@@ -147,6 +157,25 @@ test('失效选稿的拼接任务显示原因并隐藏无效重试', async () =>
   assert.doesNotMatch(html, /重试本地拼接/)
 })
 
+test('创作版本变化和重新采用其他分镜时显示分镜重准备入口并禁用生图', async () => {
+  for (const work of [{ content_revision: 9 }, { content_revision: 3, script_version_id: 'new-script' }]) {
+    const graph = { ...base, content_revision: 3, state: 'waiting_image_approval',
+      shots: [{ ...base.shots[0], image_state: 'pending', image: null }] }
+    const html = await render(graph, work)
+    assert.match(html, /创作输入或采用的分镜已变化/)
+    assert.ok(button(html, '按当前分镜重新准备任务图'))
+    assert.match(button(html, '生成镜头图片'), /disabled/)
+    assert.doesNotMatch(html, /按当前人物重新准备任务图/)
+  }
+})
+
+test('未知修订号保持历史兼容，同修订号任务不被错误拦截', async () => {
+  for (const [graph, work] of [[base, {}], [{ ...base, content_revision: 3 }, { content_revision: 3 }]]) {
+    const html = await render(graph, work)
+    assert.doesNotMatch(html, /按当前分镜重新准备任务图|创作输入或采用的分镜已变化/)
+  }
+})
+
 test('分镜制作显示任务实际绑定的人物图和标签', async () => {
   const html = await render({ ...base, identity_reference: identityReference }, { identity_id: 'person' })
   assert.match(html, /人物参考图/)
@@ -159,6 +188,49 @@ test('未绑定人物的分镜说明按画面描述生成', async () => {
   const html = await render(base)
   assert.match(html, /未选择人物.*按画面描述生成/)
   assert.doesNotMatch(html, /重新准备任务图|未使用人物图/)
+})
+
+test('统一服装的新任务显示服装基准，旧任务提供重准备入口且保留旧图片', async () => {
+  const current = await render({ ...base, outfit_policy: 'reference_image', identity_reference: identityReference }, { identity_id: 'person' })
+  assert.match(current, /所有镜头沿用参考图中的服装/)
+  assert.doesNotMatch(current, /旧任务未锁定服装/)
+  const legacy = await render({ ...base, identity_reference: identityReference }, { identity_id: 'person' })
+  assert.match(legacy, /旧任务未锁定服装/)
+  assert.match(legacy, /重新确认图片费用/)
+  assert.ok(button(legacy, '按参考图统一服装'))
+  assert.doesNotMatch(button(legacy, '按参考图统一服装'), /disabled/)
+  assert.match(legacy, /<img[^>]+src="\/image.png"/)
+})
+
+test('已开始视频或未绑定人物时不提供服装重准备入口', async () => {
+  const g = { ...base, identity_reference: identityReference }
+  for (const extra of [{ video_job_id: 'job' }, { video_state: 'waiting_provider' }, { clip: { preview_url: '/clip.mp4' } }]) {
+    const html = await render({ ...g, shots: [{ ...base.shots[0], ...extra }] }, { identity_id: 'person' })
+    assert.equal(button(html, '按参考图统一服装'), '')
+  }
+  assert.equal(button(await render(base), '按参考图统一服装'), '')
+})
+
+test('统一服装只创建新任务图，沿用原清晰度和预算，不提交模型调用', async () => {
+  const calls = []
+  const legacy = { ...base, resolution: '1080p', identity_reference: identityReference,
+    estimate: { ...base.estimate, budget_unlimited: false } }
+  const context = await mount(legacy, {}, {
+    createWanStoryboard: async (...args) => {
+      calls.push(args)
+      return { ...legacy, id: 'new-outfit-graph', outfit_policy: 'reference_image', image_approval: null,
+        shots: [{ ...base.shots[0], image: null, image_state: 'pending' }] }
+    },
+    generateWanStoryboardImages: async () => assert.fail('重准备不应提交图片模型'),
+    submitWanStoryboardVideos: async () => assert.fail('重准备不应提交视频模型'),
+  }, true)
+  try {
+    await click(context, '按参考图统一服装')
+    assert.deepEqual(calls, [['W', { resolution: '1080p', image_ceiling_fen_per_shot: 200 }]])
+    assert.equal(context.actions.graph.value.id, 'new-outfit-graph')
+    assert.equal(context.actions.graph.value.image_approval, null)
+    assert.match(content(context.root), /所有镜头沿用参考图中的服装/)
+  } finally { context.cleanup() }
 })
 
 test('旧分镜已有图片授权时仍提供人物重准备入口并保留结果', async () => {
@@ -269,6 +341,54 @@ const subtitleAck = context => descendants(context.root).find(target => target.t
   && target.props.type === 'checkbox' && /确认使用云端 GPU/.test(content(target.parent)))
 const finalAck = context => descendants(context.root).find(target => target.type === 'input'
   && target.props.type === 'checkbox' && /已观看成片/.test(content(target.parent)))
+
+test('创作变更后的重准备保留旧图清晰度和图片预算，旧收费操作不提交', async () => {
+  const calls = []
+  const graph = { ...base, content_revision: 3, resolution: '1080p', image_ceiling_fen_per_shot: 375,
+    identity_reference: identityReference,
+    shots: [{ ...base.shots[0], image_state: 'pending', image: null }] }
+  const context = await mount(graph, { content_revision: 9 }, {
+    createWanStoryboard: async (...args) => { calls.push(['create', ...args]); return { ...graph, id: 'new-graph', content_revision: 9 } },
+    generateWanStoryboardImages: async (...args) => { calls.push(['images', ...args]); return graph },
+    approveWanStoryboardImages: async (...args) => { calls.push(['approve-images', ...args]); return graph },
+    approveWanStoryboardVideos: async (...args) => { calls.push(['approve-videos', ...args]); return graph },
+    submitWanStoryboardVideos: async (...args) => { calls.push(['videos', ...args]); return graph },
+  }, true)
+  try {
+    // A valid current adoption can use the old images only through a new graph.
+    context.studio.scriptBatch = { candidates: [{ id: 's', pickable: true, content_route: 'short_video_storyboard',
+      quality_report: { checks: [], overall: 'pass' } }] }
+    await nextTick()
+    await context.actions.generateImages()
+    await context.actions.approveImages()
+    await context.actions.approveVideos()
+    await context.actions.submitVideos()
+    assert.deepEqual(calls, [])
+    await click(context, '按当前分镜重新准备任务图')
+    assert.deepEqual(calls, [['create', 'W', { resolution: '1080p', image_ceiling_fen_per_shot: 375 }]])
+  } finally { context.cleanup() }
+})
+
+test('当前创作版本变化后新图不能沿用之前勾选的图片费用确认', async () => {
+  const graph = { ...base, content_revision: 3, identity_reference: identityReference, image_approval: null }
+  const context = await mount(graph, { content_revision: 3 }, {
+    createWanStoryboard: async () => ({ ...graph, id: 'new-graph', content_revision: 9 }),
+  }, true)
+  try {
+    context.studio.scriptBatch = { candidates: [{ id: 's', pickable: true, content_route: 'short_video_storyboard',
+      quality_report: { checks: [], overall: 'pass' } }] }
+    const checkbox = descendants(context.root).find(target => target.type === 'input'
+      && target.props.type === 'checkbox' && /确认.*次生图/.test(content(target.parent)))
+    checkbox.props['onUpdate:modelValue'](true)
+    await nextTick()
+    assert.equal(liveButton(context, '确认图片生成').props.disabled, false)
+    context.studio.works[0].content_revision = 9
+    await nextTick()
+    assert.equal(liveButton(context, '确认图片生成').props.disabled, true)
+    await click(context, '按当前分镜重新准备任务图')
+    assert.equal(liveButton(context, '确认图片生成').props.disabled, true, '新任务图需要重新勾选费用确认')
+  } finally { context.cleanup() }
+})
 
 test('已生成发布包的无字幕成片仍提供 GPU 字幕入口，必须显式确认', async () => {
   const html = await render(subtitleGraph({ identity_reference: null, package_id: 'existing-package' }))

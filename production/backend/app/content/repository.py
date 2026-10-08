@@ -18,7 +18,8 @@ from . import contracts as cc
 SHARED_INPUT_FIELDS = ("brief", "reference_snapshot_id", "writing_prompt_id",
                        "writer_profile_id", "style_snapshot")
 
-_PROJECTION_ONLY = {"review_state", "pickable", "unpickable_reasons"}
+_PROJECTION_ONLY = {"review_state", "pickable", "unpickable_reasons", "human_review_state", "human_review",
+                    "creation_source", "ai_review_status", "takeover_reason"}
 
 
 class RepositoryError(Exception):

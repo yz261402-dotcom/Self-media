@@ -37,6 +37,12 @@ import type {
   RoutePriceView,
   ContentJobReceipt,
   ContentState,
+  HumanReviewContext,
+  HumanReviewSubmission,
+  HumanReviewReceipt,
+  ManualStoryboardInput,
+  ManualStoryboardReceipt,
+  DirectGenerationInput,
   MediaAssetView,
   VisualQuote,
   MediaFetchQuote,
@@ -44,6 +50,7 @@ import type {
   WanStoryboardGraph,
   ScriptBatch,
   ScriptVersion,
+  StoryboardShot,
   ScriptRepairReceipt,
   SegmentPlanRecord,
   SegmentPlanView,
@@ -347,6 +354,14 @@ export const httpApi = {
 
   // ---- 口播稿升级（content-v2）：写操作 202 + 回执，读操作不触发外部请求 ----
   getContentState: (workId: string) => req<ContentState>(`/works/${encodeURIComponent(workId)}/content/state`),
+  getHumanReview: (workId: string, scriptId: string) =>
+    req<HumanReviewContext>(`/works/${encodeURIComponent(workId)}/content/human-review/${encodeURIComponent(scriptId)}`),
+  submitHumanReview: (workId: string, input: HumanReviewSubmission) =>
+    post<HumanReviewReceipt>(`/works/${encodeURIComponent(workId)}/content/human-review`, input),
+  createManualStoryboard: (workId: string, input: ManualStoryboardInput) =>
+    post<ManualStoryboardReceipt>(`/works/${encodeURIComponent(workId)}/content/manual-storyboards`, input),
+  startDirectGeneration: (workId: string, input: DirectGenerationInput) =>
+    post<ContentJobReceipt>(`/works/${encodeURIComponent(workId)}/content/direct-generations`, input),
   getReferenceSnapshot: (workId: string, referenceId: string) =>
     req<ReferenceSnapshot>(`/works/${encodeURIComponent(workId)}/content/references/${encodeURIComponent(referenceId)}`),
   getContentJob: (workId: string, jobId: string) =>
@@ -386,14 +401,18 @@ export const httpApi = {
     post<ContentJobReceipt>(`/works/${encodeURIComponent(workId)}/content/prompts`, input),
   revisePrompt: (workId: string, input: { request_id: string; prompt_id: string; prompt_text: string; expected_content_revision: number }) =>
     post<ContentJobReceipt>(`/works/${encodeURIComponent(workId)}/content/prompt-revisions`, input),
-  startGeneration: (workId: string, input: { request_id: string; prompt_id: string; content_route: 'talking_script' | 'short_video_storyboard'; expected_content_revision: number }) =>
+  startGeneration: (workId: string, input: { request_id: string; prompt_id: string; content_route: 'talking_script' | 'short_video_storyboard'; expected_content_revision: number; retry_unknown_call_id?: string; retry_paid_ack?: boolean }) =>
     post<ContentJobReceipt>(`/works/${encodeURIComponent(workId)}/content/generations`, input),
   startRepair: (workId: string, input: { request_id: string; batch_id: string; candidate_ids: string[]; expected_content_revision: number; instruction?: string }) =>
     post<ContentJobReceipt>(`/works/${encodeURIComponent(workId)}/content/repairs`, input),
-  startReview: (workId: string, input: { request_id: string; batch_id: string; expected_content_revision: number }) =>
+  startReview: (workId: string, input: { request_id: string; batch_id: string; expected_content_revision: number; retry_unknown_call_id?: string; retry_paid_ack?: boolean }) =>
     post<ContentJobReceipt>(`/works/${encodeURIComponent(workId)}/content/reviews`, input),
-  reviseScript: (workId: string, scriptId: string, text: string) =>
-    post<ScriptVersion>(`/works/${workId}/script-revisions`, { script_id: scriptId, text }),
+  reviseScript: (workId: string, scriptId: string, input: string | {
+    text?: string; title?: string; description?: string; storyboard?: StoryboardShot[]
+  }) => post<ScriptVersion>(`/works/${workId}/script-revisions`, {
+    script_id: scriptId,
+    ...(typeof input === 'string' ? { text: input } : input),
+  }),
   /** 让模型把这一稿重写到过硬门禁——用户不必自己改字。 */
   repairScript: (workId: string, scriptId: string) =>
     post<ScriptVersion | ScriptRepairReceipt>(`/works/${workId}/script-repairs`, { script_id: scriptId }),

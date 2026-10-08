@@ -185,7 +185,7 @@ export const useStudioStore = defineStore('studio', {
       if (w.brief.content_route === 'short_video_storyboard') {
         if (!this.scriptReady) {
           return { key: 'script', title: '写分镜剧本并选稿',
-                   detail: '三篇分镜均通过审核后，选择一篇进入镜头制作。', to: '/script', label: '去写分镜剧本' }
+                   detail: '分镜剧本通过智能体审核后，完成人工审核并确认采用，再进入镜头制作。', to: '/script', label: '去写分镜剧本' }
         }
         return this.deliveryReady
           ? { key: 'download', title: '短片已确认：预览并下载', detail: '查看已审核的 Wan 原生声画成片。', to: '/video', label: '查看与下载短片' }
@@ -235,9 +235,10 @@ export const useStudioStore = defineStore('studio', {
     scriptReady(): boolean {
       const batch = this.scriptBatch
       const selected = this.selectedScript
-      // Older cached projections omit ready_to_present; only an explicit
-      // server-side false may block an otherwise selected historical script.
-      return !!selected && batch?.ready_to_present !== false && selected.pickable !== false
+      // 当前投影按已采用稿件判断，部分通过批次也可继续制作；
+      // 历史投影省略 pickable 时，仍保留批次明确未就绪的拦截。
+      return !!selected && (['human_edit', 'manual_takeover'].includes(selected.human_review_state ?? '') || selected.pickable === true
+        || (selected.pickable !== false && batch?.ready_to_present !== false))
     },
     confirmedAudio(state): AudioAssetInfo | null {
       const w = this.currentWork
@@ -909,9 +910,11 @@ export const useStudioStore = defineStore('studio', {
       const batch = await this.guard('读取审核结果', () => api.getScriptBatch(id))
       if (!this.workContextMatches(id, version)) return null
       this.scriptBatch = batch
-      this.setNotice(batch?.ready_to_present ? 'ok' : 'warn', batch?.ready_to_present
-        ? '三篇稿件均已通过审核，可以选择采用'
-        : '返工完成；三篇全部通过审核后才展示候选稿')
+      const repaired = batch?.candidates.find((c) => c.id === fixed.id)
+      const pickable = repaired?.pickable === true
+      this.setNotice(pickable ? 'ok' : 'warn', pickable
+        ? '返工稿已通过审核，可以采用'
+        : '返工完成；可查看和编辑返工稿，请重新审核后采用')
       return fixed
     },
 
@@ -931,14 +934,15 @@ export const useStudioStore = defineStore('studio', {
       await this.syncWork(id)
     },
 
-    async reviseScript(scriptId: string, text: string) {
+    async reviseScript(scriptId: string, input: string | { text?: string; title?: string; description?: string; storyboard?: import('@/api/types').StoryboardShot[] }) {
       const id = this.currentWorkId
-      if (!id) return
-      const v = await this.guard('重审', () => api.reviseScript(id, scriptId, text))
+      if (!id) return null
+      const v = await this.guard('重审', () => api.reviseScript(id, scriptId, input))
       if (v) {
-        this.setNotice('ok', '已保存修订稿并重新审核；下游音频与口型依赖已失效')
+        this.setNotice('ok', '已保存修订稿；需要重新审核后才能采用，下游音频与口型依赖已失效')
         await this.syncWork(id)
       }
+      return v ?? null
     },
 
     /** 重新拉人物列表与就绪度：丢弃 / 恢复之后必须重取，否则分组与"还缺什么"会不同步。 */

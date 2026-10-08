@@ -595,6 +595,72 @@ def test_unknown_graph_cannot_be_bypassed_by_changing_image_budget(prepared):
     assert calls == []
 
 
+def _zombie_shot(service, graph, shot_index, monkeypatch):
+    """留下一个"发送方已死且无回执"的僵尸镜头：作业仍 leased，但租约已过期。
+
+    复刻进程在 acquire_lease 之后、回写之前崩溃的场景：镜头持久化为 sending，
+    作业停在 leased 且没有 image_receipt，因此 recover() 永远取不回、也永远清不掉。
+    """
+    clock = [1000.0]
+    monkeypatch.setattr(jobs, "_now", lambda: clock[0])
+    monkeypatch.setattr(service.time, "time", lambda: clock[0])
+    from app.avatar import person_image
+
+    def crash_before_response(request, **kwargs):
+        raise KeyboardInterrupt
+
+    monkeypatch.setattr(person_image, "generate", crash_before_response)
+    with pytest.raises(KeyboardInterrupt):
+        service.generate_images(graph["id"], transport=lambda *a, **kw: {})
+    monkeypatch.undo()
+    shot = next(s for s in st.get("media_jobs", graph["id"])["shots"] if s["shot_index"] == shot_index)
+    job = jobs.get_job(shot["image_job_id"])
+    assert shot["image_state"] == "sending" and job["state"] == "leased" and not job.get("image_receipt")
+    clock[0] += service.IMAGE_LEASE_SECONDS + 1
+    monkeypatch.setattr(jobs, "_now", lambda: clock[0])
+    monkeypatch.setattr(service.time, "time", lambda: clock[0])
+    return job
+
+
+def test_dead_lease_zombie_does_not_wedge_the_work(prepared, monkeypatch):
+    """租约已过期且无回执的僵尸镜头不可回收、也不可重新生成，不能永久堵死该作品。"""
+    service, graph, _ = prepared
+    approve_images(service, graph)
+    _zombie_shot(service, graph, 1, monkeypatch)
+
+    replacement = service.create_graph(graph["work_id"], image_ceiling_fen_per_shot=200)
+    service.approve_images(replacement["id"], actor_id="user", plan_digest=replacement["plan_digest"],
+                           paid_ack=True, total_ceiling_fen=400)
+    calls = []
+    result = service.generate_images(replacement["id"], transport=image_transport(calls))
+    assert len(calls) == len(replacement["shots"])
+    assert all(s["image_state"] == "succeeded" for s in result["shots"])
+
+
+def test_dead_lease_zombie_still_blocks_while_sender_is_alive(prepared, monkeypatch):
+    """发送方仍在飞（租约未过期）时必须继续拦，避免同一批镜头重复计费。"""
+    service, graph, _ = prepared
+    approve_images(service, graph)
+    clock = [1000.0]
+    monkeypatch.setattr(jobs, "_now", lambda: clock[0])
+    monkeypatch.setattr(service.time, "time", lambda: clock[0])
+    from app.avatar import person_image
+
+    monkeypatch.setattr(person_image, "generate", lambda *a, **kw: (_ for _ in ()).throw(KeyboardInterrupt))
+    with pytest.raises(KeyboardInterrupt):
+        service.generate_images(graph["id"], transport=lambda *a, **kw: {})
+    monkeypatch.undo()
+
+    replacement = service.create_graph(graph["work_id"], image_ceiling_fen_per_shot=200)
+    service.approve_images(replacement["id"], actor_id="user", plan_digest=replacement["plan_digest"],
+                           paid_ack=True, total_ceiling_fen=400)
+    calls = []
+    with pytest.raises(service.StoryboardError) as exc:
+        service.generate_images(replacement["id"], transport=image_transport(calls))
+    assert exc.value.code == "STORYBOARD_RECONCILIATION_REQUIRED"
+    assert calls == []
+
+
 @pytest.mark.parametrize("field,value", [("wan_prompt", "Unapproved prompt"), ("duration_seconds", 30)])
 def test_graph_shot_tampering_cannot_inherit_approval(prepared, field, value):
     service, graph, _ = prepared
@@ -697,6 +763,72 @@ def test_selected_identity_is_sent_as_reference_bytes_to_every_shot(prepared):
         assert shot["image"]["identity_reference"]["asset_hash"] == hero["file_hash"]
     service.generate_images(graph["id"], transport=image_transport(calls))
     assert len(calls) == 2
+
+
+def test_every_image_and_video_prompt_locks_reference_outfit_despite_scene_conflicts(prepared):
+    service, original, root = prepared
+    _, hero, data, _ = attach_storyboard_identity(original, root)
+    version = st.get("script_versions", original["script_version_id"])
+    for shot, clothes in zip(version["storyboard"], ("主角穿深蓝夹克", "主角换成白色T恤")):
+        shot["visual"] = clothes + "，她拿起手机。"
+        shot["prompt"] = shot["visual"]
+    st.put("script_versions", version["id"], version, {"work_id": version["work_id"]})
+    batch = st.get("script_batches", original["work_id"])
+    batch["candidates"][0] = version
+    st.put("script_batches", original["work_id"], batch)
+    graph = service.create_graph(original["work_id"], image_ceiling_fen_per_shot=100)
+    assert graph.get("outfit_policy") == "reference_image"
+    approve_images(service, graph)
+    calls = []
+    result = service.generate_images(graph["id"], transport=image_transport(calls))
+    assert len(calls) == 2
+    for request, shot in zip(calls, result["shots"]):
+        assert request["image_bytes"] == data and request["reference_sha256"] == hero["file_hash"]
+        for prompt in (request["prompt"], shot["wan_prompt"]):
+            assert "服装约束" in prompt
+            assert "颜色" in prompt and "款式" in prompt and "配饰" in prompt
+            assert "优先于" in prompt and "不换装" in prompt
+        # Raw approved scenes remain available for review, without rewriting the script.
+        assert shot["visual"] in request["prompt"]
+
+
+def test_reference_outfit_policy_is_bound_to_approval_digest(prepared):
+    service, original, root = prepared
+    attach_storyboard_identity(original, root)
+    graph = service.create_graph(original["work_id"], image_ceiling_fen_per_shot=100)
+    approve_images(service, graph)
+    service._mutate(graph["id"], lambda g: g.update(outfit_policy=None))
+    calls = []
+    with pytest.raises(service.StoryboardError) as exc:
+        service.generate_images(graph["id"], transport=image_transport(calls))
+    assert exc.value.code == "STORYBOARD_GRAPH_CHANGED"
+    assert calls == []
+
+
+def test_reprepare_outfit_preserves_historical_graph_and_requires_new_fee_confirmation(prepared):
+    service, original, root = prepared
+    attach_storyboard_identity(original, root)
+    graph = service.create_graph(original["work_id"], image_ceiling_fen_per_shot=100)
+    legacy = service.get_graph(graph["id"])
+    legacy.pop("outfit_policy", None)
+    for shot in legacy["shots"]:
+        shot["image_prompt"] = "历史人物图片提示"
+        shot["wan_prompt"] = "历史视频提示"
+    legacy["plan_digest"] = service._plan_digest(legacy)
+    legacy["image_approval"] = {"plan_digest": legacy["plan_digest"]}
+    st.put("media_jobs", legacy["id"], legacy, {"work_id": legacy["work_id"]})
+    snapshot = service.get_graph(legacy["id"])
+    replacement = service.create_graph(original["work_id"], image_ceiling_fen_per_shot=100)
+    assert replacement["id"] != legacy["id"]
+    assert replacement.get("outfit_policy") == "reference_image"
+    assert replacement["image_approval"] is None
+    assert service.get_graph(legacy["id"]) == snapshot
+    service.assert_current(snapshot)
+    calls = []
+    with pytest.raises(service.StoryboardError) as exc:
+        service.generate_images(replacement["id"], transport=image_transport(calls))
+    assert exc.value.code == "STORYBOARD_IMAGE_APPROVAL_REQUIRED"
+    assert calls == []
 
 
 @pytest.mark.parametrize("change", ["identity", "version", "file", "missing_file"])

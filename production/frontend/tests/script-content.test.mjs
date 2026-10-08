@@ -14,15 +14,19 @@ const output = await mkdtemp(resolve('node_modules/.script-content-tests-'))
 after(() => rm(output, { recursive: true, force: true }))
 const outfile = join(output, 'view.mjs')
 await build({
-  stdin: { contents: `export { default } from './src/views/ScriptView.vue'; export { useStudioStore } from './src/stores/studio.ts'; export { useContentStore } from './src/stores/content.ts'`, resolveDir: resolve('.') },
+  stdin: { contents: `export { default } from './src/views/ScriptView.vue'; export { default as WritingPromptEditor } from './src/components/WritingPromptEditor.vue'; export { useStudioStore } from './src/stores/studio.ts'; export { useContentStore } from './src/stores/content.ts'`, resolveDir: resolve('.') },
   outfile, bundle: true, format: 'esm', platform: 'node', external: ['vue', 'vue/server-renderer', 'pinia', 'vue-router'],
   plugins: [{ name: 'vue', setup(builder) {
     builder.onResolve({ filter: /^@\/api$/ }, () => ({ path: 'api', namespace: 'stub' }))
     builder.onLoad({ filter: /.*/, namespace: 'stub' }, () => ({ contents: 'export const api = { quoteMediaFetch: async () => ({ reserve_fen: 50 }), quoteVisualAnalysis: async () => ({ reserve_fen: 80 }) }; export const apiMode = "http";' }))
     builder.onLoad({ filter: /\.vue$/ }, async ({ path }) => {
       let source = await readFile(path, 'utf8')
+      if (path.replaceAll('\\', '/').endsWith('/views/ScriptView.vue')) {
+        source = source.replace('</script>', "if (globalThis.storyboardEditSeed) editing.value = globalThis.storyboardEditSeed\n</script>")
+        source = source.replace('</script>', 'if (globalThis.routeChoiceCapture) globalThis.routeChoiceCapture({ chooseRoute, content, store })\n</script>')
+      }
       if (path.replaceAll('\\', '/').endsWith('/components/WritingPromptEditor.vue')) {
-        source = source.replace('</script>', 'if (globalThis.promptDraftSeed !== undefined) draft.value = globalThis.promptDraftSeed\n</script>')
+        source = source.replace('</script>', 'if (globalThis.promptDraftSeed !== undefined) draft.value = globalThis.promptDraftSeed\nif (globalThis.promptGenerateCapture) globalThis.promptGenerateCapture(generate)\n</script>')
       }
       const { descriptor } = parse(source, { filename: path })
       return { contents: compileScript(descriptor, { id: 'test', inlineTemplate: true, templateOptions: { ssr: true } }).content, loader: 'ts', resolveDir: dirname(path) }
@@ -48,16 +52,182 @@ async function render(batch, route = 'talking_script', contentExtra = {}) {
   await router.push('/script')
   return renderToString(createSSRApp(view.default).use(pinia).use(router))
 }
-test('2/3 时隐藏所有候选正文并显示安全返工入口', async () => {
+test('审核未完成时展示初稿和编辑入口，未审稿不能采用或按意见返工', async () => {
   const html = await render({ id: 'b', requested: 3, produced: 3, passed: 2, ready_to_present: false,
-    candidates: [candidate('hidden')], retry_targets: [{ candidate_id: 'hidden', slot: 3, reason: '审核尚未通过' }] })
-  assert.doesNotMatch(html, /正文hidden|标题hidden/)
-  assert.match(html, /继续返工/); assert.match(html, /已通过 2 \/ 已产出 3/)
+    candidates: [{ ...candidate('draft'), review_state: 'needs_review', pickable: false }], retry_targets: [],
+    review_targets: [{ candidate_id: 'draft', slot: 3, review_state: 'needs_review', reason: '等待独立审核' }] })
+  assert.match(html, /正文draft|标题draft/)
+  assert.match(html, /尚未审核/)
+  assert.doesNotMatch(button(html, '编辑'), /disabled/)
+  assert.match(button(html, '采用这篇'), /disabled/)
+  assert.match(html, /重新审核/)
+  assert.doesNotMatch(html, /继续返工|按意见重写|三篇全部通过审核后展示/)
+  assert.match(html, /已通过 2 \/ 已产出 3/)
+})
+
+test('部分通过批次可直接采用已通过稿件，其余候选保留编辑和重审入口', async () => {
+  const batch = { id: 'partial', status: 'partial', requested: 3, produced: 3, passed: 1, ready_to_present: false,
+    candidates: [
+      { ...candidate('1'), slot: 1, review_state: 'passed' },
+      { ...candidate('2'), slot: 2, review_state: 'failed', pickable: false },
+      { ...candidate('3'), slot: 3, review_state: 'failed', pickable: false },
+    ], retry_targets: [{ candidate_id: '2', slot: 2, reason: '审核未通过' }, { candidate_id: '3', slot: 3, reason: '审核未通过' }] }
+  for (const route of ['talking_script', 'short_video_storyboard']) {
+    const html = await render(batch, route)
+    const adoptionLabel = route === 'short_video_storyboard' ? '人工审核' : '采用这篇'
+    const cards = [...html.matchAll(/<article\b[^>]*class="script-option[^"]*"[^>]*>[\s\S]*?<\/article>/g)].map(match => match[0])
+    assert.equal(cards.length, 3)
+    assert.ok(button(cards[0], adoptionLabel))
+    assert.doesNotMatch(button(cards[0], adoptionLabel), /disabled/)
+    for (const card of cards.slice(1)) {
+      assert.match(button(card, adoptionLabel), /disabled/)
+      assert.ok(button(card, '编辑'))
+      assert.doesNotMatch(button(card, '编辑'), /disabled/)
+    }
+    assert.ok(button(html, '重新审核'))
+    assert.match(html, /已通过 1 \/ 已产出 3/)
+    const guidance = route === 'short_video_storyboard'
+      ? /智能体审核通过的稿件可进入人工审核；其他稿件可编辑或重新审核。/g
+      : /已通过稿件可以直接采用；其他稿件可编辑或重新审核。/g
+    assert.equal((html.match(guidance) ?? []).length, 2,
+      '顶部说明和审核提示都应明确部分通过可采用')
+    assert.doesNotMatch(html, /三篇均已通过|三篇全部通过审核后/)
+  }
+})
+
+test('重新审核入口在已有候选时仍可达，活动审核时禁用但保留正文', async () => {
+  const batch = { id: 'b', requested: 3, produced: 1, passed: 0, ready_to_present: false,
+    candidates: [{ ...candidate('draft'), review_state: 'reviewing', pickable: false }], retry_targets: [] }
+  const html = await render(batch, 'short_video_storyboard', {
+    active_jobs: [{ job_id: 'review', kind: 'review', state: 'running', stage: 'review' }] })
+  assert.match(html, /正文draft/)
+  assert.ok(button(html, '重新审核'))
+  assert.match(button(html, '重新审核'), /disabled/)
+  assert.doesNotMatch(html, /按意见重写|继续返工/)
+})
+
+test('活动审核允许编辑和保存初稿，写稿或返工期间仍禁用编辑', async () => {
+  const batch = { id: 'b', ready_to_present: false, candidates: [
+    { ...candidate('draft'), review_state: 'needs_review', pickable: false }] }
+  for (const kind of ['review', 'generation']) {
+    const extra = { active_jobs: [{ job_id: 'j', kind, state: 'running', stage: 'review' }] }
+    const html = await render(batch, 'talking_script', extra)
+    assert.doesNotMatch(button(html, '编辑'), /disabled/)
+    assert.match(button(html, '采用这篇'), /disabled/)
+    globalThis.storyboardEditSeed = { id: 'draft', text: '改后的初稿' }
+    try {
+      const editing = await render(batch, 'talking_script', extra)
+      assert.doesNotMatch(button(editing, '保存为新版本'), /disabled/)
+    } finally { delete globalThis.storyboardEditSeed }
+  }
+  for (const stage of ['write', 'repair']) {
+    const html = await render(batch, 'talking_script', {
+      active_jobs: [{ job_id: 'j', kind: 'generation', state: 'running', stage }] })
+    assert.match(button(html, '编辑'), /disabled/)
+  }
+})
+
+test('确实缺少事实依据的硬门禁复核项可以定向修改', async () => {
+  const draft = { ...candidate('fact'), review_state: 'needs_review', pickable: false,
+    quality_report: { checks: [{ code: 'FACT_EVIDENCE', hard_gate: true, outcome: 'review', message: '缺少依据' }] } }
+  const html = await render({ id: 'b', ready_to_present: false, candidates: [draft],
+    retry_targets: [{ candidate_id: 'fact', review_state: 'needs_review', reason: '缺少依据' }] })
+  assert.ok(button(html, '按意见重写'))
+})
+
+test('明确审核失败稿显示返工入口，审核失效稿仅提供编辑和重审', async () => {
+  const failed = await render({ id: 'b', ready_to_present: false, candidates: [
+    { ...candidate('failed'), review_state: 'failed', pickable: false }],
+    retry_targets: [{ candidate_id: 'failed', review_state: 'failed', reason: '需要修正事实' }] })
+  assert.ok(button(failed, '按意见重写'))
+  assert.ok(button(failed, '继续返工'))
+  const stale = await render({ id: 'b', ready_to_present: false, candidates: [
+    { ...candidate('stale'), review_state: 'stale', pickable: false }], retry_targets: [] })
+  assert.match(stale, /正文stale/)
+  assert.match(stale, /审核已失效/)
+  assert.ok(button(stale, '重新审核'))
+  assert.doesNotMatch(stale, /按意见重写|继续返工/)
+})
+
+test('整批已通过后仍保留明确的重新审核入口', async () => {
+  const html = await render({ id: 'b', ready_to_present: true, candidates: [candidate('passed')] })
+  assert.ok(button(html, '重新审核'))
+  assert.doesNotMatch(button(html, '重新审核'), /disabled/)
 })
 test('3/3 时显示三个候选并提供路线选择', async () => {
   const html = await render({ id: 'b', requested: 3, produced: 3, passed: 3, ready_to_present: true, candidates: [1, 2, 3].map(candidate) })
   assert.match(html, /正文1/); assert.match(html, /正文2/); assert.match(html, /正文3/)
   assert.match(html, /aria-label="内容路线"/); assert.match(html, /短视频分镜/)
+  assert.match(html, /三篇均已通过审核，请选择一篇。/)
+})
+
+async function routeChoice(batch = null, contentExtra = {}) {
+  let context
+  globalThis.routeChoiceCapture = value => { context = value }
+  try { await render(batch, 'short_video_storyboard', contentExtra) }
+  finally { delete globalThis.routeChoiceCapture }
+  return context
+}
+
+test('已有候选切换路线取消时不保存、不刷新，当前路线不弹确认', async () => {
+  const batch = { id: 'b', ready_to_present: true, candidates: [candidate('selected')] }
+  const context = await routeChoice(batch, { selected_script_id: 'selected' })
+  const calls = []; const confirmations = []
+  context.content.setRoute = async route => { calls.push(['save', route]); return true }
+  context.store.syncWork = async id => { calls.push(['sync', id]) }
+  const original = globalThis.window
+  globalThis.window = { confirm: message => { confirmations.push(message); return false } }
+  try {
+    await context.chooseRoute('short_video_storyboard')
+    assert.deepEqual(confirmations, [])
+    await context.chooseRoute('talking_script')
+    assert.equal(confirmations.length, 1)
+    assert.match(confirmations[0], /撤销.*采用|采用.*失效/)
+    assert.match(confirmations[0], /重新.*审核|审核.*失效/)
+    assert.match(confirmations[0], /制作|任务图/)
+    assert.deepEqual(calls, [])
+    assert.equal(context.content.revision, 1)
+    assert.equal(context.content.state.selected_script_id, 'selected')
+  } finally { globalThis.window = original; context.content.leave() }
+})
+
+test('确认路线变更成功才同步原作品，失败与切作品不误刷新', async () => {
+  const original = globalThis.window
+  globalThis.window = { confirm: () => true }
+  try {
+    for (const outcome of ['success', 'failed', 'switched']) {
+      const context = await routeChoice({ id: 'b', candidates: [candidate('s')] })
+      const calls = []
+      context.content.setRoute = async route => {
+        calls.push(['save', route])
+        if (outcome === 'switched') { context.content.generation++; context.store.currentWorkId = 'other' }
+        return outcome !== 'failed'
+      }
+      context.store.syncWork = async id => { calls.push(['sync', id]) }
+      await context.chooseRoute('talking_script')
+      assert.deepEqual(calls, outcome === 'success' ? [['save', 'talking_script'], ['sync', 'W']] : [['save', 'talking_script']])
+      context.content.leave()
+    }
+  } finally { globalThis.window = original }
+})
+
+test('空作品切换路线直接保存，内容正忙时不会弹确认或保存', async () => {
+  const original = globalThis.window
+  const confirmations = []
+  globalThis.window = { confirm: message => { confirmations.push(message); return true } }
+  try {
+    const context = await routeChoice()
+    const calls = []
+    context.content.setRoute = async route => { calls.push(['save', route]); return true }
+    context.store.syncWork = async id => { calls.push(['sync', id]) }
+    await context.chooseRoute('talking_script')
+    assert.deepEqual(calls, [['save', 'talking_script'], ['sync', 'W']])
+    assert.deepEqual(confirmations, [])
+    context.content.loading = true
+    await context.chooseRoute('talking_script')
+    assert.equal(calls.length, 2)
+    context.content.leave()
+  } finally { globalThis.window = original }
 })
 test('分镜候选展示画面、台词、声音和镜头时长', async () => {
   const c = { ...candidate('s'), content_route: 'short_video_storyboard', storyboard: [
@@ -65,6 +235,35 @@ test('分镜候选展示画面、台词、声音和镜头时长', async () => {
   const html = await render({ id: 'b', ready_to_present: true, requested: 3, produced: 3, passed: 3, candidates: [c] }, 'short_video_storyboard')
   assert.match(html, /清晰场景/); assert.match(html, /镜头对白/); assert.match(html, /环境声音/); assert.match(html, /6 秒/)
   assert.doesNotMatch(html, /正文s/)
+  assert.ok(button(html, '人工审核'))
+  assert.match(html, /待人工审核/)
+})
+
+test('人工修订采用保持独立状态，不要求智能体再次审核', async () => {
+  const c = { ...candidate('human'), content_route: 'short_video_storyboard', review_state: 'needs_review',
+    pickable: false, human_review_state: 'human_edit', unpickable_reasons: ['需要独立审核'] }
+  const html = await render({ id: 'human-batch', ready_to_present: false, candidates: [c] }, 'short_video_storyboard')
+  assert.match(html, /人工修订确认采用/)
+  assert.doesNotMatch(button(html, '人工审核'), /disabled/)
+  assert.doesNotMatch(html, /暂不可人工审核|需要独立审核/)
+})
+
+test('分镜候选提供编辑入口，编辑状态展示结构化镜头字段', async () => {
+  const c = { ...candidate('edit'), content_route: 'short_video_storyboard', storyboard: [
+    { shot_index: 1, visual: '原画面', dialogue: '原台词', sound_effects: '原声音', duration_seconds: 6, prompt: '原提示' }] }
+  const idle = await render({ id: 'b', ready_to_present: true, requested: 3, produced: 3, passed: 3, candidates: [c] }, 'short_video_storyboard')
+  assert.match(idle, />编辑<\/button>/)
+  globalThis.storyboardEditSeed = { id: c.id, title: c.title, description: c.description, text: c.text,
+    storyboard: c.storyboard.map((shot) => ({ ...shot })) }
+  try {
+    const editing = await render({ id: 'b', ready_to_present: true, requested: 3, produced: 3, passed: 3, candidates: [c] }, 'short_video_storyboard')
+    assert.match(editing, /修改分镜剧本/)
+    assert.match(editing, /画面描述/)
+    assert.match(editing, /台词 \/ 旁白/)
+    assert.match(editing, /声音 \/ 音效/)
+    assert.match(editing, /时长（秒）/)
+    assert.match(editing, /图片生成提示词/)
+  } finally { delete globalThis.storyboardEditSeed }
 })
 
 const reference = (id, transcriptState = 'failed', visualState = 'none') => ({
@@ -161,6 +360,57 @@ test('0/3 批次仍能在提示旁显式重新生成，参考待解析时两个�
   const blocked = await render(batch, 'short_video_storyboard', { reference: silent, prompt: promptFor(silent.id) })
   assert.match(button(blocked, '生成三篇分镜剧本'), /disabled/)
   assert.match(button(blocked, '重新生成三篇'), /disabled/)
+})
+
+const unknownWriteJob = (extra = {}) => ({ job_id: 'unknown-write', kind: 'generation', state: 'unknown',
+  prompt_id: 'p', content_revision: 1,
+  calls: [{ id: 'write-call', step: 'write', state: 'unknown', has_remote_handle: false, reserved_fen: 127 }],
+  ...extra })
+
+test('首次写稿结果未知且无批次时也提供显式重新生成入口', async () => {
+  const ref = reference('ready', 'ready')
+  const html = await render(null, 'short_video_storyboard', { reference: ref, prompt: promptFor(ref.id),
+    recent_jobs: [unknownWriteJob()] })
+  assert.ok(button(html, '重新生成三篇'), '没有批次的未知写稿也需要费用确认重试入口')
+  assert.doesNotMatch(button(html, '重新生成三篇'), /disabled/)
+})
+
+test('审核、返工、可查询远端和过期写稿不能提供无批次写稿重试入口', async () => {
+  const ref = reference('ready', 'ready')
+  for (const job of [
+    unknownWriteJob({ calls: [{ id: 'review-call', step: 'review', state: 'unknown', has_remote_handle: false }] }),
+    unknownWriteJob({ kind: 'repair' }),
+    unknownWriteJob({ calls: [{ id: 'remote-write', step: 'write', state: 'unknown', has_remote_handle: true }] }),
+    unknownWriteJob({ prompt_id: 'old-prompt' }),
+    unknownWriteJob({ content_revision: 0 }),
+  ]) {
+    const html = await render(null, 'short_video_storyboard', { reference: ref, prompt: promptFor(ref.id), recent_jobs: [job] })
+    assert.equal(button(html, '重新生成三篇'), '', JSON.stringify(job))
+  }
+})
+
+test('首次未知写稿重新生成必须先确认上次费用，拒绝时不提交', async () => {
+  const pinia = createPinia(); setActivePinia(pinia)
+  const content = view.useContentStore(), ref = reference('ready', 'ready')
+  content.state = { work_id: 'W', content_revision: 1, brief: { content_route: 'short_video_storyboard' },
+    reference: ref, prompt: promptFor(ref.id), batch: null, active_jobs: [], recent_jobs: [unknownWriteJob()], references: [] }
+  const emitted = [], confirmations = [], previousWindow = globalThis.window
+  let generate, accepted = false
+  globalThis.promptGenerateCapture = (handler) => { generate = handler }
+  globalThis.window = { confirm(message) { confirmations.push(message); return accepted } }
+  try {
+    await renderToString(createSSRApp(view.WritingPromptEditor, { onGenerate: (force) => emitted.push(force) }).use(pinia))
+    generate(true)
+    assert.deepEqual(emitted, [])
+    assert.match(confirmations[0], /可能已经产生费用.*上次预留 ¥1\.27.*可能重复收费/)
+    accepted = true
+    generate(true)
+    assert.deepEqual(emitted, [true])
+  } finally {
+    delete globalThis.promptGenerateCapture
+    if (previousWindow === undefined) delete globalThis.window
+    else globalThis.window = previousWindow
+  }
 })
 
 const promptSection = (html) => html.match(/<section[^>]*aria-label="写作提示"[^>]*>[\s\S]*?<\/section>/)?.[0] ?? ''

@@ -98,8 +98,9 @@ def test_text_edit_new_version_invalidates_that_single_and_the_set_but_not_other
     batch["candidates"] = [c if c["slot"] != 3 else replacement for c in batch["candidates"]]
     st.put("script_batches", wid, batch)
     projection = selection.project_batch(wid)
-    assert projection["candidates"] == [] and projection["ready_to_present"] is False
-    assert any(t["slot"] == 3 and t["review_state"] == "needs_review" for t in projection["retry_targets"])
+    assert len(projection["candidates"]) == 3 and projection["ready_to_present"] is False
+    assert projection["retry_targets"] == []
+    assert any(t["slot"] == 3 and t["review_state"] == "needs_review" for t in projection["review_targets"])
     ctx = cx.load_context(wid)
     assert sr.current_single(wid, v[1], ctx) is not None
     assert sr.current_single(wid, v[2], ctx) is not None

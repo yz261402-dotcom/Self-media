@@ -39,9 +39,9 @@ def cached_source():
     source = tasks.submit_job(wid, "generation", uuid4().hex, {"prompt_id": "p"})
     drafts = {"candidates": [{"slot": i, "storyboard": [shot(3.0)]} for i in (1, 2, 3)]}
     def transport(*_args):
-        return 200, json.dumps({"id": "source-request", "model": "claude-sonnet-5-5", "content": [
-            {"type": "text", "text": json.dumps(drafts)}], "stop_reason": "end_turn",
-            "usage": {"input_tokens": 20, "output_tokens": 50}}).encode()
+        return 200, json.dumps({"id": "source-request", "model": "gpt-6.1-sol",
+            "choices": [{"message": {"content": json.dumps(drafts)}, "finish_reason": "stop"}],
+            "usage": {"prompt_tokens": 20, "completion_tokens": 50}}).encode()
     result, _ = service._writer_call(source, {"prompt": {"id": "p"}}, "system", "user", 0, "writer", transport)
     tasks.run_job_error(source, ContentRejected("local candidate validation failed", "NO_VALID_CANDIDATES"))
     new = tasks.submit_job(wid, "generation", uuid4().hex, {"prompt_id": "p", "reuse_writer_call_id": result["job_id"]})
@@ -126,9 +126,9 @@ def test_quality_repair_uses_normal_new_call_not_initial_cache():
     calls = []
     def fake_repair(*args):
         calls.append(args)
-        return 200, json.dumps({"id": "repair-request", "model": "claude-sonnet-5-5", "content": [
-            {"type": "text", "text": '{"candidates": []}'}], "stop_reason": "end_turn",
-            "usage": {"input_tokens": 20, "output_tokens": 50}}).encode()
+        return 200, json.dumps({"id": "repair-request", "model": "gpt-6.1-sol",
+            "choices": [{"message": {"content": '{"candidates": []}'}, "finish_reason": "stop"}],
+            "usage": {"prompt_tokens": 20, "completion_tokens": 50}}).encode()
     result, _ = service._writer_call(new, {"prompt": {"id": "p"}}, "repair system", "feedback", 1, "repair", fake_repair)
     assert len(calls) == 1 and result["job_id"] != original["job_id"]
     assert tasks.jobs_calls(new["id"])[0]["step"] == "repair"

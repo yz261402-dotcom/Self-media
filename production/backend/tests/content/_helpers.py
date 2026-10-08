@@ -12,7 +12,9 @@ def set_env(monkeypatch, per_flow="100000", daily="100000000"):
         "AVATAR_STUDIO_CONTENT_BUDGET_PER_FLOW_FEN": per_flow, "AVATAR_STUDIO_CONTENT_BUDGET_DAILY_FEN": daily,
         "AVATAR_STUDIO_BUDGET_PER_TASK_FEN": "100000", "AVATAR_STUDIO_BUDGET_DAILY_FEN": "100000000",
         "AVATAR_STUDIO_BUDGET_MAX_SUBMISSIONS": "1000000", "AVATAR_STUDIO_ANTHROPIC_API_KEY": "sk-test-a",
-        "AVATAR_STUDIO_QWEN_API_KEY": "sk-test-q", "AVATAR_STUDIO_FX_USD_CNY": "7.2",
+        "AVATAR_STUDIO_QWEN_API_KEY": "sk-test-q", "AVATAR_STUDIO_OPENAI_API_KEY": "sk-test-openai",
+        "AVATAR_STUDIO_CLAUDE_COMPAT_API_KEY": "sk-test-claude-compat",
+        "AVATAR_STUDIO_FX_USD_CNY": "7.2",
     }.items():
         monkeypatch.setenv(k, v)
     # 会话内共用一个库：不同用例复用相同示例稿，跨作品查重会把它们互相判成重复
@@ -91,9 +93,9 @@ class Script:
 
     def __call__(self, url, headers, body, timeout):
         b = json.loads(body)
-        if "anthropic" in url:
+        if "anthropic" in url or b.get("model") in ("claude-sonnet-5-5", "gpt-6.1-sol"):
             role = "writer"
-            user = b["messages"][0]["content"]
+            user = b["messages"][-1]["content"]
         else:
             user = b["messages"][1]["content"]
             role = "reviewer" if "独立的口播稿审稿人" in b["messages"][0]["content"] else "planner"
@@ -106,9 +108,10 @@ class Script:
             raise item
         text = json.dumps(item, ensure_ascii=False)
         if role == "writer":
-            return 200, json.dumps({"id": "m", "model": "claude-sonnet-5-5", "content": [{"type": "text", "text": text}],
-                                    "stop_reason": "end_turn", "usage": {"input_tokens": 3000, "output_tokens": 1500}}).encode()
-        return 200, json.dumps({"id": "c", "model": "qwen-plus", "choices": [{"message": {"content": text}, "finish_reason": "stop"}],
+            return 200, json.dumps({"id": "m", "model": b["model"],
+                                    "choices": [{"message": {"content": text}, "finish_reason": "stop"}],
+                                    "usage": {"prompt_tokens": 3000, "completion_tokens": 1500}}).encode()
+        return 200, json.dumps({"id": "c", "model": b["model"], "choices": [{"message": {"content": text}, "finish_reason": "stop"}],
                                 "usage": {"prompt_tokens": 4000, "completion_tokens": 800}}).encode()
 
 
@@ -155,3 +158,14 @@ def run_job(kind, work_id, payload, handler, transport, request_id=None):
     except Exception as exc:  # 走与调度器相同的终态映射
         tasks.run_job_error(job, exc)
     return tasks.get_job(job["id"])
+
+
+def human_approve(work_id, script_id):
+    from app.content import human_review
+
+    batch = st.get("script_batches", work_id)
+    return human_review.submit(work_id, {
+        "request_id": uuid4().hex, "script_id": script_id, "action": "adopt", "rubric": "core5",
+        "scores": dict.fromkeys(human_review.CORE, 5), "expected_batch_id": batch["id"],
+        "expected_content_revision": int(st.get("works", work_id).get("content_revision") or 0),
+    })

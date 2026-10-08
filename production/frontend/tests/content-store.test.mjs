@@ -191,14 +191,64 @@ test('切换内容路线保存到作品并刷新，旧提示不被继续使用',
   store.leave()
 })
 
-test('仅服务端确认整批已通过时向页面提供候选正文', async () => {
+test('路线设置返回成功状态，同路线和忙碌状态不提交', async () => {
+  const saves = []
+  let route = 'talking_script'
+  globalThis.contentApi = {
+    getContentState: async id => emptyState(id, { brief: { content_route: route } }),
+    saveContentSettings: async (_id, input) => { saves.push(input); route = input.brief.content_route; return { ok: true, content_revision: 2 } },
+  }
+  const store = useContentStore()
+  await store.enter('W')
+  assert.equal(await store.setRoute(route), false)
+  for (const busy of ['loading', 'submitting', 'active']) {
+    store.loading = busy === 'loading'
+    store.submittingKind = busy === 'submitting' ? 'review' : null
+    store.state.active_jobs = busy === 'active' ? [{ job_id: 'job', kind: 'review', state: 'running' }] : []
+    assert.equal(await store.setRoute('short_video_storyboard'), false)
+  }
+  assert.equal(saves.length, 0)
+  store.loading = false; store.submittingKind = null; store.state.active_jobs = []
+  assert.equal(await store.setRoute('short_video_storyboard'), true)
+  assert.equal(saves.length, 1)
+  assert.equal(store.submittingKind, null)
+  store.leave()
+})
+
+test('路线设置锁定在途提交，保存失败或旧作品响应不能报告成功', async () => {
+  const pending = deferred(); const calls = []
+  let route = 'talking_script'
+  globalThis.contentApi = {
+    getContentState: async id => emptyState(id, { brief: { content_route: id === 'B' ? 'talking_script' : route } }),
+    saveContentSettings: async (_id, input) => { calls.push(input); await pending.promise; route = input.brief.content_route; return { ok: true } },
+  }
+  const store = useContentStore()
+  await store.enter('A')
+  const first = store.setRoute('short_video_storyboard')
+  assert.equal(store.submittingKind, 'settings')
+  assert.equal(await store.setRoute('short_video_storyboard'), false)
+  assert.equal(calls.length, 1)
+  await store.enter('B')
+  pending.resolve()
+  assert.equal(await first, false)
+  assert.equal(store.state.work_id, 'B')
+  assert.equal(store.submittingKind, null)
+  globalThis.contentApi.saveContentSettings = async () => { throw new Error('保存失败') }
+  assert.equal(await store.setRoute('short_video_storyboard'), false)
+  assert.equal(store.error, '保存失败')
+  assert.equal(store.submittingKind, null)
+  store.leave()
+})
+
+test('写稿落库后立即向页面提供初稿，采用资格仍保留后端投影', async () => {
   globalThis.contentApi = { getContentState: async (id) => emptyState(id, {
     batch: { id: 'b', requested: 3, produced: 3, passed: 2, ready_to_present: false,
-      candidates: [{ id: 'hidden', text: '不可见', pickable: true }] },
+      candidates: [{ id: 'draft', text: '初稿正文', pickable: false, review_state: 'needs_review' }] },
   }) }
   const store = useContentStore()
   await store.enter('W')
-  assert.deepEqual(store.visibleCandidates, [])
+  assert.equal(store.visibleCandidates[0].text, '初稿正文')
+  assert.equal(store.visibleCandidates[0].pickable, false)
   store.state.batch = { id: 'b2', requested: 3, produced: 3, passed: 3, ready_to_present: true,
     candidates: [1, 2, 3].map(id => ({ id: `c${id}`, text: `稿${id}`, pickable: true })) }
   assert.equal(store.visibleCandidates.length, 3)
@@ -285,15 +335,146 @@ const doneJob = (id = 'j') => ({ job_id: id, kind: 'generation', state: 'succeed
 
 const writerState = (id, extra = {}) => emptyState(id, {
   prompt: { id: 'p1', version: 1, prompt_text: 't', angle_plan: [] },
-  batch: { id: 'b1', retry_targets: [{ candidate_id: 'c1' }], candidates: [] },
+  batch: { id: 'b1', retry_targets: [{ candidate_id: 'c1', review_state: 'failed' }], candidates: [] },
   writer_runtime: { execution_mode: 'claude_code', timeout_seconds: 600, profile_id: 'airelay-claude-code' },
   ...extra,
 })
 const writerActions = {
   generation: (store, force = false) => store.generate(force),
-  repair: (store) => store.repair({ id: 'c1' }, '增强场景细节'),
+  repair: (store) => store.repair({ id: 'c1', review_state: 'failed' }, '增强场景细节'),
   repair_pending: (store) => store.repairPending(),
 }
+
+test('确定性硬门禁需复核的稿可定向返工，单纯未审稿不会混入', async () => {
+  const sent = []
+  const gated = { id: 'gated', review_state: 'needs_review', quality_report: {
+    checks: [{ code: 'FACT_EVIDENCE', hard_gate: true, outcome: 'review' }] } }
+  globalThis.contentApi = {
+    getContentState: async id => writerState(id, { batch: { id: 'b', candidates: [gated],
+      retry_targets: [{ candidate_id: 'gated', review_state: 'needs_review' },
+        { candidate_id: 'unreviewed', review_state: 'needs_review' }] } }),
+    startRepair: async (_id, input) => { sent.push(input); return { ...doneJob(), kind: 'repair' } },
+  }
+  const store = useContentStore()
+  try {
+    await store.enter('W'); store.waitForJob = async () => {}
+    await store.repairPending()
+    assert.equal(sent.length, 1)
+    assert.deepEqual(sent[0].candidate_ids, ['gated'])
+  } finally { store.leave() }
+})
+
+test('没有明确返工目标时不会自动补写，未审目标也不能发送返工', async () => {
+  const sent = []
+  globalThis.contentApi = {
+    getContentState: async (id) => writerState(id, { batch: { id: 'b', candidates: [
+      { id: 'draft', review_state: 'needs_review', quality_report: { checks: [] } }], retry_targets: [] } }),
+    startGeneration: async () => { sent.push('generation'); return doneJob() },
+    startRepair: async () => { sent.push('repair'); return doneJob() },
+    getContentJob: async () => doneJob(),
+  }
+  const store = useContentStore()
+  try {
+    await store.enter('W')
+    await store.repairPending()
+    store.state.batch.retry_targets = [{ candidate_id: 'draft', review_state: 'needs_review' }]
+    await store.repairPending()
+    await store.repair(store.state.batch.candidates[0])
+    assert.deepEqual(sent, [])
+    assert.match(store.notice, /重新审核/)
+  } finally { store.leave() }
+})
+
+const reviewJob = (state = 'unknown', id = 'review-job') => ({ job_id: id, kind: 'review', batch_id: 'b1',
+  state, content_revision: 1, result_refs: {}, error: state === 'unknown'
+    ? { code: 'PROVIDER_RESPONSE_TIMEOUT', message: '审核响应超时，结果与费用未确认。' } : null })
+const retryReview = { call_id: 'review-call', job_id: 'review-job', batch_id: 'b1', reserved_fen: 127, has_remote_handle: false }
+
+test('审核未知结果刷新后沿用同一 RID，不默认释放后再新开付费任务', async () => {
+  const sent = [], job = reviewJob()
+  globalThis.contentApi = {
+    getContentState: async (id) => writerState(id, { recent_jobs: [job], review_retry: null }),
+    startReview: async (_id, input) => { sent.push(input); return job },
+    getContentJob: async () => job,
+  }
+  let store = useContentStore()
+  try {
+    await store.enter('W'); await store.rereview()
+    store.leave(); setActivePinia(createPinia()); store = useContentStore()
+    await store.enter('W'); await store.rereview()
+    assert.equal(sent[0].request_id, sent[1].request_id)
+    assert.equal(sent[1].retry_unknown_call_id, undefined)
+    assert.match(store.error, /审核响应超时/)
+  } finally { store.leave() }
+})
+
+test('审核未知恢复必须明确确认可能重复计费，拒绝不提交且接受后绑定原调用', async () => {
+  const sent = [], confirmations = [], oldWindow = globalThis.window
+  let accept = false
+  globalThis.window = { confirm(message) { confirmations.push(message); return accept } }
+  globalThis.contentApi = {
+    getContentState: async (id) => writerState(id, { review_retry: retryReview }),
+    startReview: async (_id, input) => { sent.push(input); return reviewJob() },
+    getContentJob: async () => reviewJob(),
+  }
+  const store = useContentStore()
+  try {
+    await store.enter('W')
+    const original = store.rid('review', 'b1@1')
+    await store.rereview()
+    assert.deepEqual(sent, [])
+    assert.match(confirmations[0], /可能.*费用.*预留.*1\.27.*重复/)
+    accept = true
+    await store.rereview()
+    assert.notEqual(sent[0].request_id, original)
+    assert.equal(sent[0].retry_unknown_call_id, 'review-call')
+    assert.equal(sent[0].retry_paid_ack, true)
+    assert.equal(store.rid('review', 'b1@1'), original, '旧的未知请求不能被新意图释放')
+    await store.rereview()
+    assert.equal(sent[0].request_id, sent[1].request_id, '相同恢复意图必须重放原任务')
+  } finally {
+    store.leave()
+    if (oldWindow === undefined) delete globalThis.window
+    else globalThis.window = oldWindow
+  }
+})
+
+for (const state of ['succeeded', 'failed', 'unknown']) test(`页面重新进入时审核${state}回执结算并按终态保留或释放 RID`, async () => {
+  const sent = []
+  let active = [], recent = [], job = reviewJob('running')
+  globalThis.contentApi = {
+    getContentState: async (id) => writerState(id, { active_jobs: active, recent_jobs: recent }),
+    startReview: async (_id, input) => { sent.push(input); active = [job]; return job },
+  }
+  let store = useContentStore()
+  try {
+    await store.enter('W'); store.waitForJob = async () => {}; await store.rereview()
+    store.leave(); setActivePinia(createPinia()); store = useContentStore()
+    job = reviewJob(state); active = []; recent = [job]
+    await store.enter('W')
+    assert.equal(store.busy, false)
+    if (state === 'unknown') assert.match(store.error, /审核响应超时/)
+    store.waitForJob = async () => {}; await store.rereview()
+    assert.equal(sent[0].request_id === sent[1].request_id, state === 'unknown')
+  } finally { store.leave() }
+})
+
+test('审核仍在运行时重复点击不会开单或弹出费用确认', async () => {
+  const oldWindow = globalThis.window, sent = [], confirmations = []
+  globalThis.window = { confirm(message) { confirmations.push(message); return true } }
+  globalThis.contentApi = { getContentState: async (id) => writerState(id, {
+    active_jobs: [reviewJob('running')], review_retry: retryReview }),
+    startReview: async () => { sent.push('review'); return reviewJob() } }
+  const store = useContentStore()
+  try {
+    await store.enter('W'); await store.rereview()
+    assert.deepEqual(sent, []); assert.deepEqual(confirmations, [])
+  } finally {
+    store.leave()
+    if (oldWindow === undefined) delete globalThis.window
+    else globalThis.window = oldWindow
+  }
+})
 
 test('写稿与返工依据运行配置等待，并按实际线路说明写稿方式', async () => {
   let runtime = { execution_mode: 'claude_code', timeout_seconds: 900 }
@@ -320,7 +501,7 @@ test('写稿与返工依据运行配置等待，并按实际线路说明写稿�
   } finally { store.leave() }
 })
 
-for (const [kind, action] of Object.entries(writerActions)) test(`${kind}未知结果刷新后沿用原请求，重新生成也不绕过未确认费用`, async () => {
+for (const [kind, action] of Object.entries(writerActions)) test(`${kind}未知结果刷新后沿用原请求，不会隐式创建新付费请求`, async () => {
   const sent = []
   const job = { ...doneJob(), state: 'unknown', error: { code: 'CONTENT_CALL_PENDING', message: '原请求费用未确认' } }
   globalThis.contentApi = {
@@ -333,7 +514,7 @@ for (const [kind, action] of Object.entries(writerActions)) test(`${kind}未知�
   try {
     await store.enter('W'); await action(store)
     store.leave(); setActivePinia(createPinia()); store = useContentStore()
-    await store.enter('W'); await action(store, true)
+    await store.enter('W'); await action(store)
     assert.equal(sent.length, 2)
     assert.equal(sent[0], sent[1], '未知调用必须重放同 request_id，不创建另一份付费意图')
     assert.match(store.error, /结果未确认.*不会自动重发/)
@@ -355,6 +536,49 @@ test('写稿明确失败保留客户端限制说明，人工再次提交可以�
     assert.equal(store.notice, '')
     await store.generate(true)
     assert.notEqual(sent[0], sent[1])
+  } finally { store.leave() }
+})
+
+test('写稿断连展示安全原因，未知费用仍保留原请求', async () => {
+  const sent = [], message = '外部服务连接提前断开，原请求的结果和费用尚未确认。系统不会自动重发。'
+  const job = { ...doneJob(), state: 'unknown',
+    error: { code: 'PROVIDER_CONNECTION_CLOSED', message } }
+  globalThis.contentApi = {
+    getContentState: async (id) => writerState(id, { batch: null, recent_jobs: [job] }),
+    startGeneration: async (_id, input) => { sent.push(input.request_id); return job },
+    getContentJob: async () => job,
+  }
+  const store = useContentStore()
+  try {
+    await store.enter('W'); await store.generate()
+    assert.equal(store.error, message)
+    assert.equal(store.notice, '')
+    await store.generate()
+    assert.equal(sent[0], sent[1], '断连不能被当成已确认失败而释放原请求')
+  } finally { store.leave() }
+})
+
+test('写稿未知结果先沿用原请求；明确确认重试才创建新request_id', async () => {
+  const sent = [], inputs = []
+  const job = { ...doneJob(), state: 'unknown', prompt_id: 'p1', content_revision: 1,
+    calls: [{ id: 'write-call-1', step: 'write', state: 'unknown', has_remote_handle: false, reserved_fen: 127 }],
+    error: { code: 'CONTENT_CALL_PENDING', message: '原请求费用未确认' } }
+  globalThis.contentApi = {
+    getContentState: async (id) => writerState(id, { recent_jobs: [job] }),
+    startGeneration: async (_id, input) => { sent.push(input.request_id); inputs.push(input); return job },
+    getContentJob: async () => job,
+  }
+  const store = useContentStore()
+  try {
+    await store.enter('W')
+    await store.generate(false)
+    const original = sent[0]
+    await store.generate(true)
+    assert.equal(sent.length, 2)
+    assert.notEqual(sent[1], original)
+    assert.equal('retry_unknown_call_id' in inputs[0], false)
+    assert.equal(inputs[1].retry_unknown_call_id, 'write-call-1')
+    assert.equal(inputs[1].retry_paid_ack, true)
   } finally { store.leave() }
 })
 
@@ -382,6 +606,8 @@ for (const terminal of ['unknown', 'failed', 'succeeded']) test(`同步等待结
   let active = [], recent = [], job
   const sent = [], message = terminal === 'unknown' ? '写稿响应超时，费用与结果未确认。' : terminal === 'failed' ? 'Claude Code 写稿进程失败。' : ''
   const ended = { ...doneJob('writer'), state: terminal,
+    ...(terminal === 'unknown' ? { prompt_id: 'p1', content_revision: 1,
+      calls: [{ id: 'write-call-1', step: 'write', state: 'unknown', has_remote_handle: false, reserved_fen: 127 }] } : {}),
     error: message ? { code: terminal === 'unknown' ? 'PROVIDER_RESPONSE_TIMEOUT' : 'CLAUDE_CODE_FAILED', message } : null }
   globalThis.contentApi = {
     getContentState: async (id) => writerState(id, { active_jobs: active, recent_jobs: recent }),
@@ -412,7 +638,7 @@ for (const terminal of ['unknown', 'failed', 'succeeded']) test(`同步等待结
     assert.equal(store.polling, false)
     store.waitForJob = async () => {}
     await store.generate(true)
-    if (terminal === 'unknown') assert.equal(sent[0], sent[1], '未知结果仍只能重放')
+    if (terminal === 'unknown') assert.notEqual(sent[0], sent[1], '显式重新生成已确认重复计费风险后创建新请求')
     else assert.notEqual(sent[0], sent[1], '已确认终态后人工再点可以成为新请求')
   } finally { store.leave(); t.mock.timers.reset() }
 })
@@ -478,14 +704,17 @@ for (const terminal of ['succeeded', 'failed', 'unknown']) test(`写稿在刷新
   try {
     await store.enter('W'); generating = store.generate()
     await new Promise(resolve => setImmediate(resolve))
-    const ended = { ...job, state: terminal, error: terminal === 'succeeded' ? null : { code: 'PROVIDER_RESPONSE_TIMEOUT', message: '写稿结果未确认。' } }
+    const ended = { ...job, state: terminal,
+      ...(terminal === 'unknown' ? { prompt_id: 'p1', content_revision: 1,
+        calls: [{ id: 'write-call-1', step: 'write', state: 'unknown', has_remote_handle: false, reserved_fen: 127 }] } : {}),
+      error: terminal === 'succeeded' ? null : { code: 'PROVIDER_RESPONSE_TIMEOUT', message: '写稿结果未确认。' } }
     store.leave(); setActivePinia(createPinia()); store = useContentStore()
     active = []; recent = [ended]
     await store.enter('W')
     store.waitForJob = async () => {}
     await store.generate(true)
     assert.equal(sent.length, 2)
-    if (terminal === 'unknown') assert.equal(sent[0], sent[1], '刷新后未知结果仍须重放原RID')
+    if (terminal === 'unknown') assert.notEqual(sent[0], sent[1], '显式重新生成创建新RID')
     else assert.notEqual(sent[0], sent[1], '刷新后原任务已确认结束，首点击就应产生新RID')
   } finally { pending.resolve(doneJob()); if (generating) await generating; store.leave() }
 })
@@ -812,6 +1041,39 @@ for (const operation of ['upload', 'fetch']) test(`${operation}换媒体触发�
     assert.deepEqual(store.visualQuoteBinding, { referenceId: 'ref', mediaId: 'new-media' })
     assert.equal(store.visualQuote?.retry_unknown_call.call_id, 'old-call')
   } finally { stop?.(); store.leave() }
+})
+
+test('直接生成响应丢失后修订号变化，刷新仍重放原完整请求', async () => {
+  let revision = 4
+  let first = true
+  const sent = []
+  const job = { job_id: 'direct-job', kind: 'generation', state: 'succeeded', replayed: true, error: null, result_refs: {} }
+  globalThis.contentApi = {
+    getContentState: async id => emptyState(id, { content_revision: revision,
+      brief: { content_route: 'short_video_storyboard', topic: '主题' }, recent_jobs: first ? [] : [job] }),
+    startDirectGeneration: async (_id, input) => {
+      sent.push(structuredClone(input))
+      if (first) { first = false; revision++; throw new Error('响应丢失') }
+      return job
+    },
+    getContentJob: async () => job,
+  }
+  const store = useContentStore()
+  try {
+    await store.enter('direct-work')
+    await store.generateDirect('主题', ['依据'])
+    assert.equal(store.directRequestPending, true)
+    store.leave()
+    await store.enter('direct-work')
+    assert.equal(store.revision, 5)
+    assert.equal(store.directRequestPending, true)
+    await store.generateDirect('另一个主题', ['依据'])
+    assert.equal(sent.length, 1, '未核对旧提交时不能悄悄换输入')
+    await store.generateDirect('主题', ['依据'])
+    assert.deepEqual(sent[1], sent[0])
+    assert.equal(sent[1].expected_content_revision, 4)
+    assert.equal(store.directRequestPending, false)
+  } finally { store.leave() }
 })
 
 test('未知视觉请求同报价摘要刷新沿用RID，视觉profile改变后新摘要使用新RID', async () => {

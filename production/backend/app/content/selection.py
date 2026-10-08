@@ -7,6 +7,7 @@ adopt 在一个事务里完成：复验 → 撤旧选用与下游 → 写新选�
 from __future__ import annotations
 
 import json
+from contextlib import nullcontext
 from typing import Any, Dict, List, Optional, Tuple
 
 from .. import storage as st
@@ -15,7 +16,9 @@ from . import context as cx
 from . import contracts as cc
 from . import repository as repo
 from . import semantic_review as sr
+from . import manual_creation as manual
 from .errors import ContentError
+from .review import current_storyboard_quality_report
 
 
 class SelectionRejected(ContentError):
@@ -36,8 +39,20 @@ def _hard_fail(cand: dict) -> List[str]:
             if c["hard_gate"] and c["outcome"] != "pass"]
 
 
+def _quality_report(work_id: str, cand: dict, batch: dict, ctx: dict) -> dict:
+    if manual.is_manual_batch(batch):
+        return manual.structural_report(cand, ctx) if manual.current_import(work_id, cand, batch, ctx) else cand["quality_report"]
+    return current_storyboard_quality_report(cand, ctx["materials"])
+
+
 def evaluate(work_id: str, cand: dict, batch: dict, ctx: Dict[str, Any]) -> Dict[str, Any]:
     """返回 {review_state, pickable, reasons, review_id, set_review_id, code}。"""
+    if manual.is_manual_batch(batch):
+        valid = manual.current_import(work_id, cand, batch, ctx) is not None
+        return {"review_state": "needs_review" if valid else "stale", "pickable": valid,
+                "reasons": [] if valid else ["人工接管记录与当前稿件或创作输入不一致，请重新导入并确认事实"],
+                "review_id": None, "set_review_id": None, "code": None if valid else "MANUAL_IMPORT_STALE"}
+    cand = dict(cand, quality_report=_quality_report(work_id, cand, batch, ctx))
     reasons: List[str] = []
     hard = _hard_fail(cand)
     if hard:
@@ -78,10 +93,6 @@ def evaluate(work_id: str, cand: dict, batch: dict, ctx: Dict[str, Any]) -> Dict
     if len(batch["candidates"]) != 3 or {c.get("slot") for c in batch["candidates"]} != {1, 2, 3}:
         reasons.append("必须凑齐三篇不同候选并完成审核")
         code = code or "SCRIPT_REVIEW_REQUIRED"
-    elif not all(_candidate_review_passes(work_id, c, ctx) for c in batch["candidates"]) or \
-            set_dec is None or set_dec["recommendation"] != "pass":
-        reasons.append("三篇候选必须全部通过单稿审核和集合审核")
-        code = code or "SCRIPT_REVIEW_REQUIRED"
     pickable = not reasons and state == "passed"
     return {"review_state": state, "pickable": pickable, "reasons": reasons,
             "review_id": single["id"] if single else None, "set_review_id": set_dec["id"] if set_dec else None,
@@ -89,11 +100,29 @@ def evaluate(work_id: str, cand: dict, batch: dict, ctx: Dict[str, Any]) -> Dict
 
 
 def _candidate_review_passes(work_id: str, cand: dict, ctx: Dict[str, Any]) -> bool:
+    cand = dict(cand, quality_report=current_storyboard_quality_report(cand, ctx["materials"]))
     dec = sr.current_single(work_id, cand, ctx)
     return not _hard_fail(cand) and dec is not None and dec["recommendation"] == "pass"
 
 
 def project_batch(work_id: str) -> Optional[dict]:
+    try:
+        return _project_batch(work_id)
+    except ContentError as exc:
+        batch = st.get("script_batches", work_id)
+        if not batch:
+            return None
+        reason = f"审核配置暂不可用：{exc.message}。可以使用人工创作入口，原稿与任务记录保留。"
+        candidates = [dict(candidate, pickable=False, review_state="needs_review",
+                           human_review_state="pending", human_review=None,
+                           unpickable_reasons=[reason]) for candidate in batch.get("candidates", [])]
+        return dict(batch, candidates=candidates, ready_to_present=False, passed=0,
+                    retry_targets=[], review_targets=[{"candidate_id": candidate["id"],
+                    "slot": candidate.get("slot"), "review_state": "needs_review", "reason": reason}
+                    for candidate in candidates])
+
+
+def _project_batch(work_id: str) -> Optional[dict]:
     """GET scripts 的投影：在落库批次上叠加 review_state/pickable/unpickable_reasons/passed。"""
     batch = st.get("script_batches", work_id)
     if not batch:
@@ -102,21 +131,46 @@ def project_batch(work_id: str) -> Optional[dict]:
     passed = 0
     cands = []
     for cand in batch["candidates"]:
+        cand = dict(cand, quality_report=_quality_report(work_id, cand, batch, ctx))
         ev = evaluate(work_id, cand, batch, ctx)
         cand = dict(cand, review_state=ev["review_state"], pickable=ev["pickable"], unpickable_reasons=ev["reasons"])
-        passed += 1 if _candidate_review_passes(work_id, cand, ctx) else 0
+        if cand.get("content_route") == "short_video_storyboard":
+            from . import human_review
+            human = human_review.current_review(work_id, cand, batch, ctx)
+            cand.update(human_review_state=human["mode"] if human else "pending", human_review=human)
+            imported = manual.current_import(work_id, cand, batch, ctx)
+            cand.update(creation_source="manual" if manual.is_manual_batch(batch) else "llm",
+                        ai_review_status="not_performed" if manual.is_manual_batch(batch)
+                        else "passed" if ev["review_state"] == "passed" else "required",
+                        takeover_reason=(imported or {}).get("takeover_reason"))
+        passed += 1 if not manual.is_manual_batch(batch) and _candidate_review_passes(work_id, cand, ctx) else 0
         cands.append(cand)
-    ready = (len(cands) == 3 and {c.get("slot") for c in cands} == {1, 2, 3}
+    ready = ((len(cands) == 1 and manual.is_manual_batch(batch)
+              or len(cands) == 3 and {c.get("slot") for c in cands} == {1, 2, 3})
              and all(c["pickable"] for c in cands))
-    targets = [{"candidate_id": c["id"], "slot": c.get("slot"), "review_state": c["review_state"],
-                "reason": ("单稿审核未通过，请定向返工" if c["review_state"] == "failed"
-                           else "单稿尚未完成有效审核")}
-               for c in cands if not _candidate_review_passes(work_id, c, ctx)]
-    if not ready and not targets:
-        targets = [{"candidate_id": c["id"], "slot": c.get("slot"), "review_state": c["review_state"],
-                    "reason": "请补齐三篇候选并完成集合审核"} for c in cands]
-    out = dict(batch, candidates=cands if ready or is_mock_batch(batch) else [],
-               ready_to_present=ready, retry_targets=targets)
+    members = [{"slot": c["slot"], "candidate_id": c["id"], "text_digest": cc.candidate_digest(c)}
+               for c in cands if c.get("slot") is not None]
+    set_dec = (sr.current_set(work_id, members, ctx)
+               if not manual.is_manual_batch(batch) and len(members) == len(cands) else None)
+    rewrite_slots = ((set_dec.get("reviewer") or {}).get("rewrite_slots") or []) if set_dec else []
+    retry_targets, review_targets = [], []
+    for cand in cands:
+        if manual.is_manual_batch(batch):
+            continue
+        target = {"candidate_id": cand["id"], "slot": cand.get("slot"), "review_state": cand["review_state"]}
+        single = sr.current_single(work_id, cand, ctx)
+        if _hard_fail(cand):
+            retry_targets.append(dict(target, reason="硬门禁未通过，请修改剧本或定向返工"))
+        elif single is not None and single["recommendation"] != "pass":
+            retry_targets.append(dict(target, reason="单稿审核未通过，请按审核意见定向返工"))
+        elif set_dec is not None and set_dec["recommendation"] != "pass" and \
+                (not rewrite_slots or cand.get("slot") in rewrite_slots):
+            retry_targets.append(dict(target, reason="批次差异审核未通过，请拉开候选差异后重新审核"))
+        elif not is_mock_batch(batch) and (single is None or set_dec is None):
+            reason = "单稿尚未完成有效审核" if single is None else "候选集合尚未完成有效差异审核"
+            review_targets.append(dict(target, reason=reason))
+    out = dict(batch, candidates=cands, ready_to_present=ready,
+               retry_targets=retry_targets, review_targets=review_targets)
     if batch.get("requested") is not None:
         out["passed"] = passed
         out["produced"] = len(cands)
@@ -143,9 +197,25 @@ def current_selection_valid(work_id: str) -> bool:
     cand = _find_candidate(batch, sid)
     if cand is None:
         return False
+    ctx = cx.load_context(work_id)
+    if manual.is_manual_batch(batch) and manual.current_import(work_id, cand, batch, ctx) is None:
+        return False
+    if cand.get("content_route") == "short_video_storyboard":
+        from . import human_review
+        human = human_review.current_review(work_id, cand, batch, ctx)
+        selected = next((s for s in sels if s.get("selected_ref") == sid), {})
+        if human:
+            hard = _hard_fail(dict(cand, quality_report=_quality_report(work_id, cand, batch, ctx)))
+            return not hard and (human["mode"] in ("human_edit", "manual_takeover")
+                                 or evaluate(work_id, cand, batch, ctx)["pickable"])
+        if selected.get("human_review_id"):
+            return False
+        if manual.is_manual_batch(batch):
+            return False
+        # Existing selections retain their original approval contract after the feature is deployed.
     if is_mock_batch(batch):
         return not _hard_fail(cand)
-    return evaluate(work_id, cand, batch, cx.load_context(work_id))["pickable"]
+    return evaluate(work_id, cand, batch, ctx)["pickable"]
 
 
 def _selection_rows(c, work_id: str) -> List[dict]:
@@ -194,8 +264,9 @@ def on_batch_replaced(c, work_id: str) -> None:
 
 
 def adopt(work_id: str, script_id: str, *, expected_revision: Optional[int] = None,
-          review_id: Optional[str] = None, set_review_id: Optional[str] = None) -> Dict[str, Any]:
-    with st.transaction() as c:
+          review_id: Optional[str] = None, set_review_id: Optional[str] = None,
+          _connection=None) -> Dict[str, Any]:
+    with nullcontext(_connection) if _connection is not None else st.transaction() as c:
         wrow = c.execute("SELECT data FROM works WHERE id=?", [work_id]).fetchone()
         if not wrow:
             raise SelectionRejected("作品不存在", "WORK_NOT_FOUND", 404)
@@ -208,8 +279,20 @@ def adopt(work_id: str, script_id: str, *, expected_revision: Optional[int] = No
         cand = _find_candidate(batch, script_id)
         if cand is None:
             raise SelectionRejected("稿件不存在或已被新版本取代", "STALE_SELECTION")
-        ev = evaluate(work_id, cand, batch, cx.load_context(work_id))
-        if not ev["pickable"]:
+        ctx = cx.load_context(work_id)
+        ev = evaluate(work_id, cand, batch, ctx)
+        human = None
+        if cand.get("content_route") == "short_video_storyboard":
+            from . import human_review
+            human = human_review.current_review(work_id, cand, batch, ctx)
+            if not human:
+                raise SelectionRejected("请先完成人工审核并确认采用", "HUMAN_REVIEW_REQUIRED")
+            if manual.is_manual_batch(batch) and manual.current_import(work_id, cand, batch, ctx) is None:
+                raise SelectionRejected("人工接管依据已过期，请重新导入并确认事实", "MANUAL_IMPORT_STALE")
+            hard = _hard_fail(dict(cand, quality_report=_quality_report(work_id, cand, batch, ctx)))
+            if hard:
+                raise SelectionRejected("硬门禁未过：" + "；".join(hard), "SCRIPT_QUALITY_FAILED")
+        if not ev["pickable"] and not (human and human["mode"] == "human_edit"):
             raise SelectionRejected("；".join(ev["reasons"]) or "该稿当前不可采用", ev["code"] or "SCRIPT_REVIEW_REQUIRED")
         if review_id and review_id != ev["review_id"]:
             raise SelectionRejected("提交的单稿审核已被新的审核或改稿取代", "STALE_SELECTION")
@@ -236,6 +319,7 @@ def adopt(work_id: str, script_id: str, *, expected_revision: Optional[int] = No
                                 selected_digest=digest, reason="")
         st.insert_row(c, "selections", dec.id, dict(dec.model_dump(), state="selected",
                                                     review_id=ev["review_id"], set_review_id=ev["set_review_id"],
+                                                    human_review_id=human["id"] if human else None,
                                                     content_revision=int(work.get("content_revision") or 0)),
                       {"work_id": work_id})
         work["script_version_id"] = script_id

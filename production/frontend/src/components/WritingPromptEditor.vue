@@ -45,11 +45,25 @@ const generationBlockedReason = computed(() => {
   return ''
 })
 const canGenerate = computed(() => !generationBlockedReason.value)
+const unknownGeneration = computed(() => [...(content.state?.recent_jobs ?? [])].reverse().find((job) =>
+  job.kind === 'generation' && job.state === 'unknown' && job.prompt_id === prompt.value?.id
+  && job.content_revision === content.revision))
+const unknownWriteCall = computed(() => unknownGeneration.value?.calls?.find((call) =>
+  call.step === 'write' && call.state === 'unknown' && !call.has_remote_handle))
 const techniques = computed<string[]>(() => (prompt.value?.reference_analysis?.reusable_techniques as string[]) ?? [])
 const hook = computed<string>(() => (prompt.value?.reference_analysis?.hook_function as string) ?? '')
 
 async function saveDraft() { if (canSave.value) await content.savePrompt(draft.value) }
-function generate(force: boolean) { if (canGenerate.value) emit('generate', force) }
+function generate(force: boolean) {
+  if (!canGenerate.value) return
+  if (force && unknownWriteCall.value) {
+    const reserve = unknownWriteCall.value.reserved_fen
+    const amount = typeof reserve === 'number' ? `上次预留 ¥${(reserve / 100).toFixed(2)} 仍待核对。` : '上次费用仍待核对。'
+    const accepted = window.confirm(`上次写稿请求结果未确认，可能已经产生费用。${amount}重新生成会创建新请求，并按当前费用另行预留，可能重复收费；原任务和费用记录会保留。仍要继续吗？`)
+    if (!accepted) return
+  }
+  emit('generate', force)
+}
 </script>
 
 <template>
@@ -86,7 +100,7 @@ function generate(force: boolean) { if (canGenerate.value) emit('generate', forc
         <p v-if="!dirty" class="faint">当前提示已自动保存。修改后可保存为新版本。</p>
         <div class="btn-row generation">
           <button class="primary" type="button" :disabled="!canGenerate" @click="generate(false)">{{ storyboardMode ? '生成三篇分镜剧本' : '生成三篇口播稿' }}</button>
-          <button v-if="content.batch" class="ghost" type="button" :disabled="!canGenerate" @click="generate(true)">重新生成三篇</button>
+          <button v-if="content.batch || unknownWriteCall" class="ghost" type="button" :disabled="!canGenerate" @click="generate(true)">重新生成三篇</button>
         </div>
         <p v-if="generationBlockedReason && !progressText" class="faint" role="status">{{ generationBlockedReason }}</p>
       </template>

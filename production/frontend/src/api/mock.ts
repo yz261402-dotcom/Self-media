@@ -1542,14 +1542,19 @@ export const mockApi = {
     return mockJob(workId, 'review', input.request_id, {})
   },
 
-  async reviseScript(workId: string, scriptId: string, text: string): Promise<ScriptVersion> {
+  async reviseScript(workId: string, scriptId: string, input: string | { text?: string; title?: string; description?: string; storyboard?: ScriptVersion['storyboard'] }): Promise<ScriptVersion> {
     await wait(900)
     const batch = db.scriptBatches[workId]!
     const src = batch.candidates.find((x) => x.id === scriptId)!
     const revised: ScriptVersion = {
       ...src,
       id: nextId('script'),
-      text,
+      ...(typeof input === 'string' ? { text: input } : {
+        text: input.text ?? src.text,
+        title: input.title ?? src.title,
+        description: input.description ?? src.description,
+        storyboard: input.storyboard ?? src.storyboard,
+      }),
       quality_report: {
         checks: src.quality_report.checks.map((c) =>
           c.code === 'HOOK_STRENGTH' && c.outcome === 'fail'

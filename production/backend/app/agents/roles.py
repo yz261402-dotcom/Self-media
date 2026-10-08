@@ -6,38 +6,25 @@ Skill 版本与摘要从 production/skills 下真实文件计算，文件缺失�
 """
 from __future__ import annotations
 
-import hashlib
 import os
 from typing import Dict, List, Optional
 
+from ..skill_library import SKILL_DIRS, get_skills_dir, load_skill, skill_digest
 from .contracts import RoleId, SkillRef
 
-SKILLS_DIR = os.environ.get(
-    "AVATAR_STUDIO_SKILLS_DIR",
-    os.path.abspath(os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "..", "..", "skills")),
-)
-
-# Skill ID → 目录名
-SKILL_DIRS = {
-    "S01": "选题与新意",
-    "S02": "口播写作",
-    "S03": "事实与重复审核",
-}
-
-SKILL_VERSION = "0.2.0"
+SKILLS_DIR = str(get_skills_dir())
 
 
 def load_skill_ref(skill_id: str) -> Optional[SkillRef]:
-    """从真实 SKILL.md 计算摘要；文件不存在返回 None（调用方必须阻断）。"""
+    """读取真实版本与包含路由参考的摘要；缺失返回 None，无效配置显式阻断。"""
     d = SKILL_DIRS.get(skill_id)
     if not d:
         return None
     path = os.path.join(SKILLS_DIR, d, "SKILL.md")
     if not os.path.exists(path):
         return None
-    with open(path, "rb") as f:
-        body = f.read()
-    return SkillRef(skill_id=skill_id, version=SKILL_VERSION, digest="sha256:" + hashlib.sha256(body).hexdigest()[:32])
+    skill = load_skill(skill_id, root=SKILLS_DIR)
+    return SkillRef(skill_id=skill_id, version=skill.version, digest=skill_digest(skill_id, root=SKILLS_DIR))
 
 
 def require_skill_refs(ids: List[str]) -> List[SkillRef]:

@@ -22,7 +22,8 @@ class Gate:
         self.script, self.release, self.entered = script, threading.Event(), threading.Event()
 
     def __call__(self, url, headers, body, timeout):
-        if "anthropic" in url and not self.release.is_set():
+        request = json.loads(body)
+        if ("anthropic" in url or request.get("model") in ("claude-sonnet-5-5", "gpt-6.1-sol")) and not self.release.is_set():
             self.entered.set()
             self.release.wait(10)
         return self.script(url, headers, body, timeout)
@@ -135,9 +136,10 @@ def test_legacy_revision_creates_new_version_and_revokes_selection(monkeypatch):
         assert repo.get_script_version(first["id"])["text"] == first["text"]  # 旧版本不可变
         assert st.get("works", wid)["script_version_id"] is None  # 旧选用撤销
         after = client.get(f"/api/v1/works/{wid}/scripts").json()
-        assert after["candidates"] == [] and after["ready_to_present"] is False
+        assert len(after["candidates"]) == 3 and after["ready_to_present"] is False
+        assert after["retry_targets"] == []
         assert any(t["slot"] == first["slot"] and t["review_state"] == "needs_review"
-                   for t in after["retry_targets"])
+                   for t in after["review_targets"])
         blocked = client.post(f"/api/v1/works/{wid}/script-selection", json={"script_id": new["id"]})
         assert blocked.status_code == 409 and err(blocked)["code"] == "SCRIPT_REVIEW_REQUIRED"
 
@@ -212,7 +214,8 @@ def test_legacy_repair_on_pre_upgrade_batch_is_explicitly_refused():
 
 
 def test_missing_credentials_in_non_mock_mode_blocks_without_fake_scripts(monkeypatch):
-    monkeypatch.delenv("AVATAR_STUDIO_ANTHROPIC_API_KEY")
+    monkeypatch.delenv("AVATAR_STUDIO_CLAUDE_COMPAT_API_KEY")
+    monkeypatch.delenv("AVATAR_STUDIO_OPENAI_API_KEY")
     wid = make_work(with_reference=False)
     ctx = {"work_item_id": "wi_x"}
     monkeypatch.setattr(tools, "MODE", "production")

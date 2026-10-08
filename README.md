@@ -2,7 +2,7 @@
 
 数字人口播工作台：从主题到成片再到抖音投稿的完整链路。
 
-输入主题、选定固定主播、生成并采用口播稿、合成与确认语音、制作口播视频，最后生成字幕成片与下载包。人物形象在整个链路中保持一致，不使用独立文生视频替代口播。
+支持固定人物口播和短视频分镜两条制作路线。口播路线采用稿件后合成语音与数字人口播；分镜路线经模型检查和人工审核采用剧本，逐镜头生成图片及 Wan 原声视频，再拼接、补字幕和生成发布包。已选人物及服装基准贯穿分镜制作。
 
 ## 能力现状
 
@@ -11,9 +11,9 @@
 | 入口 | 状态 |
 |---|---|
 | 人物形象 | 可用，含人物 / 变体两级管理与权属审核 |
-| 口播稿生成 | 可用，三选一稿件 + 质量审核 |
+| 内容创作 | 口播 / 分镜候选、独立审核、编辑与定向重写；分镜另有人工评分 |
 | TTS 语音 | 可用，MiniMax 试听与全文确认 |
-| 视频合成 | 可用，M2 与 OmniHuman 两条路线 |
+| 视频合成 | M2 / OmniHuman 口播，以及 Wan 分镜生成、本地拼接与字幕 |
 | 发布 | 首版抖音浏览器 Adapter，单账号单条即时投稿 |
 | 指标监控 | 未实现 |
 | 领域模型选择 | 未实现 |
@@ -29,6 +29,12 @@
 - **数字人**：M2（LivePortrait + MuseTalk 1.5，需云端 GPU Worker）/ OmniHuman 1.5（供应商接口）
 - **后期**：FFmpeg 裁切、规格统一、降噪锐化、响度处理、字幕与封面输出
 - **发布**：Playwright Adapter 操作抖音创作者中心（非官方 OpenAPI）
+
+写稿及返工默认使用 `gpt-6.1-sol`，策划和独立审核默认使用 `gpt-6-astra`，供应商、地址和模型均从配置读取。DeepAgents 不可用时可走独立直接生成流程；模型不可用时，分镜支持人工导入或手写，并如实记录未进行模型审核。
+
+分镜人工审核支持五项或八项 1-5 分评分，全部启用项平均分严格大于 4 才通过。未通过可在审核页人工修改后确认采用，或提交意见定向重写并重新经过模型、人工审核。生成及审核异常时仍保留草稿展示和恢复入口，不自动重发结果未知的收费请求。
+
+业务 Skill 入口： [选题策划](production/skills/topic-planning/SKILL.md)、[内容写作](production/skills/content-writing/SKILL.md)、[内容审核](production/skills/content-review/SKILL.md)。框架先显示元数据，再按需读取正文；实际模型调用按阶段、口播或分镜路线加载同一套规则。详见 [Skill 改造记录](specs/业务Skill渐进加载改造-20261008.md)。
 
 成片规格：竖屏 1080 × 1920、30 fps、MP4 / H.264 / AAC。
 
@@ -56,6 +62,7 @@ powershell -ExecutionPolicy Bypass -File ".\production\start.ps1"
 - `AVATAR_STUDIO_M2_WORKER_URL` / `AVATAR_STUDIO_M2_WORKER_TOKEN`：云端口播 Worker
 - `AVATAR_STUDIO_ASR_WORKER_URL` / `AVATAR_STUDIO_ASR_WORKER_TOKEN`：字幕识别与对齐
 - `AVATAR_STUDIO_DEEPSEEK_*`、`AVATAR_STUDIO_GPTIMAGE_*`、`AVATAR_STUDIO_MINIMAX_*`：供应商凭据
+- `AVATAR_STUDIO_OPENAI_API_KEY` / `AVATAR_STUDIO_OPENAI_BASE_URL`：默认策划、写稿和审核共用的兼容接口配置
 - `AVATAR_STUDIO_PUBLISH_ADAPTER`：`playwright`（真实发布）/ `mock`（隔离测试）
 
 未配置预算时默认不允许可计费提交。
@@ -74,7 +81,7 @@ powershell -ExecutionPolicy Bypass -File ".\production\start.ps1"
 │   ├── backend/                FastAPI 后端与回归测试
 │   ├── frontend/               Vue 3 前端与状态回归测试
 │   ├── workers/m2_gpu/         云端 GPU Worker
-│   ├── skills/                 业务 Skill（口播写作、质量审核、动作表情等）
+│   ├── skills/                 选题、写作、独立审核 Skill 与路线参考
 │   └── scripts/               隧道、诊断、预览构建等工具脚本
 ├── specs/                      产品规格与技术方案
 │   └── 0001-douyin-ai-studio/  PRD、技术选型、接口契约、实施计划、验收标准
@@ -93,7 +100,9 @@ powershell -ExecutionPolicy Bypass -File ".\production\start.ps1"
 ```text
 production/backend/app/
   agents/             总控、角色、DeepAgents、受控工具
-  content/            口播稿生成与质量评估
+  content/            双路线创作、独立审核、人工评分、直接生成与人工导入
+  short_video/        分镜图片 / Wan 视频作业、本地拼接与字幕
+  skill_library.py    Skill 元数据、路线规则、摘要与受控文件快照
   avatar/             人物、变体、权属、身份准入
   tts/                MiniMax 音轨、试听与确认
   digital_human/      M2 / OmniHuman、底片与原片审核

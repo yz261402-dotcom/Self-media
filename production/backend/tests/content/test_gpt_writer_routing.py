@@ -10,7 +10,7 @@ from tests.content.test_text_providers import env, parent, Stub  # noqa: F401
 
 
 @pytest.fixture(autouse=True)
-def gpt_settings(monkeypatch):
+def gpt_settings(monkeypatch, env):
     monkeypatch.setenv("AVATAR_STUDIO_CONTENT_WRITER_PROVIDER", "openai")
     monkeypatch.setenv("AVATAR_STUDIO_CONTENT_WRITER_MODEL", "gpt-6.1-sol")
     monkeypatch.setenv("AVATAR_STUDIO_CONTENT_WRITER_EXECUTION_MODE", "http_api")
@@ -48,7 +48,33 @@ def test_gpt_writer_uses_exact_model_and_http_budget_lease_once():
     text.call_text("writer",parent=job,step="write",system="s",user="u",transport=transport)
     assert len(requests)==1
     assert text.profile("repair")["provider"]=="openai"
-    assert text.profile("reviewer")["provider"]=="qwen" and text.profile("reviewer")["model"]=="qwen-plus"
+    assert text.profile("planner")["provider"]=="openai" and text.profile("planner")["model"]=="gpt-6-astra"
+    assert text.profile("reviewer")["provider"]=="openai" and text.profile("reviewer")["model"]=="gpt-6-astra"
+
+
+@pytest.mark.parametrize("role,model", [
+    ("writer", "gpt-6.1-sol"), ("repair", "gpt-6.1-sol"),
+    ("planner", "gpt-6-astra"), ("reviewer", "gpt-6-astra"),
+])
+def test_gpt_roles_send_exact_model_with_shared_url_and_key(role, model):
+    job = parent()
+    requests = []
+
+    def transport(url, headers, raw, timeout):
+        requests.append((url, headers, json.loads(raw)))
+        return 200, json.dumps(dict(reply(), model=model)).encode()
+
+    result = text.call_text(role, parent=job, step=role, system="JSON", user="test", transport=transport)
+    assert len(requests) == 1
+    url, headers, body = requests[0]
+    assert url == "https://relay.example/v1/chat/completions"
+    assert headers["authorization"] == "Bearer fake-gpt-key"
+    assert body["model"] == model and result["model"] == model
+    call = tasks.jobs_calls(job["id"])[0]
+    assert call["provider"] == "openai" and call["model"] == model
+    assert call["price_snapshot"]["model"] == model
+    assert call["price_snapshot"]["price_verified"] is False
+    assert call["actual_cost_fen"] is None
 
 
 def test_gpt_refusal_keeps_known_response_and_usage():

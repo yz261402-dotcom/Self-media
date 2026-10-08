@@ -18,17 +18,17 @@ from .. import costs, tasks
 from ..errors import ContentBlocked, ContentRejected
 from ...config import PROVIDERS
 from ...jobs import args_digest
-from . import anthropic, qwen, openai
+from . import anthropic, qwen, openai, claude_compat
 
 Transport = Callable[[str, Dict[str, str], bytes, int], Tuple[int, bytes]]
 
 ROLES = ("planner", "writer", "repair", "reviewer")
 _DEFAULTS = {
-    "planner": ("qwen", "qwen-plus"), "reviewer": ("qwen", "qwen-plus"),
-    "writer": ("anthropic", "claude-sonnet-5-5"), "repair": (None, None),  # repair 缺省跟随 writer
+    "planner": ("openai", "gpt-6-astra"), "reviewer": ("openai", "gpt-6-astra"),
+    "writer": ("openai", "gpt-6.1-sol"), "repair": (None, None),  # repair 缺省跟随 writer
 }
 _MAX_OUTPUT = {"planner": 2048, "reviewer": 4096, "writer": 6144, "repair": 6144}
-_ADAPTERS = {"anthropic": anthropic, "qwen": qwen, "openai": openai}
+_ADAPTERS = {"anthropic": anthropic, "claude_compat": claude_compat, "qwen": qwen, "openai": openai}
 # 官方标准价（2026-09-29，非代理渠道报价）；渠道价不同时用环境变量覆盖。
 _PRICES = {
     "anthropic": {"currency": "USD", "input_per_million": "2", "output_per_million": "10",
@@ -37,16 +37,25 @@ _PRICES = {
              "price_date": "2026-09-29", "source": "官方标准价（北京地域，单请求输入≤256k）"},
     "openai": {"currency": "USD", "input_per_million": "2", "output_per_million": "10",
                "cached_input_per_million": "0.1", "cache_write_per_million": "2.5",
-               "price_date": "2026-10-01", "source": "GPT-6.1 Sol 官方参考价；渠道实际费用待核对",
+               "price_date": "2026-10-01", "source": "GPT-6.1 Sol 参考价；GPT-6 Astra 与中转渠道实际费用待核对",
                "price_verified": False, "model": "gpt-6.1-sol"},
+    "claude_compat": {"currency": "USD", "input_per_million": "2", "output_per_million": "10",
+                       "price_date": "2026-09-29", "source": "Claude 官方标准价；兼容中转渠道实际费用待核对"},
 }
-MAX_INPUT_TOKENS = 24_000
 DEFAULT_USER_AGENT = "AvatarStudio/0.1"
 CLAUDE_CODE_INPUT_OVERHEAD = 4096
 
 
 def _env(name: str, default: str = "") -> str:
     return os.environ.get(name, default).strip()
+
+
+def _http_proxy_mode() -> str:
+    mode = _env("AVATAR_STUDIO_CONTENT_HTTP_PROXY_MODE", "system")
+    if mode not in ("system", "direct"):
+        raise ContentBlocked("文本 HTTP 代理方式只支持 system（系统代理）或 direct（直连）",
+                             "TEXT_PROXY_MODE_INVALID", retryable=False)
+    return mode
 
 
 def profile(role: str) -> Dict[str, Any]:
@@ -74,6 +83,8 @@ def profile(role: str) -> Dict[str, Any]:
         raise ContentBlocked("文本调用等待时间须为 30–1800 秒的整数", "TEXT_TIMEOUT_INVALID", retryable=False)
     spec = PROVIDERS[provider]
     price = dict(_PRICES[provider])
+    if provider == "openai":
+        price["model"] = model
     pe = provider.upper()
     for key, env in (("input_per_million", f"AVATAR_STUDIO_{pe}_PRICE_INPUT"),
                      ("output_per_million", f"AVATAR_STUDIO_{pe}_PRICE_OUTPUT")):
@@ -88,6 +99,7 @@ def profile(role: str) -> Dict[str, Any]:
             "protocol": "claude-code-cli" if execution_mode == "claude_code" else _ADAPTERS[provider].PROTOCOL,
             "base_url": _env(spec.base_env), "key_env": spec.key_env,
             "execution_mode": execution_mode, "timeout_seconds": int(wait),
+            "http_proxy_mode": _http_proxy_mode() if execution_mode == "http_api" else None,
             "max_output": int(_env(f"AVATAR_STUDIO_CONTENT_{up}_MAX_OUTPUT", str(_MAX_OUTPUT[role]))),
             "price": price}
 
@@ -101,6 +113,8 @@ def _runtime_profile(profile_: Dict[str, Any], api_key: str, executable: str = "
     p = profile_
     identity = {k: p[k] for k in ("provider", "model", "base_url", "execution_mode", "max_output")}
     identity["credential_digest"] = hashlib.sha256(api_key.encode()).hexdigest()
+    if p["execution_mode"] == "http_api":
+        identity["http_proxy_mode"] = p["http_proxy_mode"]
     if p["execution_mode"] == "claude_code":
         identity["transport_profile"] = "native-cli-append-system-v1"
         identity["context_1m"] = _env("AVATAR_STUDIO_CLAUDE_CODE_CONTEXT_1M", "false").casefold() in ("true", "1", "yes")
@@ -108,6 +122,7 @@ def _runtime_profile(profile_: Dict[str, Any], api_key: str, executable: str = "
         identity["reasoning_effort"] = _env("AVATAR_STUDIO_CONTENT_GPT_REASONING_EFFORT", "medium")
     identity["cli_executable"] = executable or _env("AVATAR_STUDIO_CLAUDE_CODE_EXECUTABLE") if p["execution_mode"] == "claude_code" else ""
     return {"execution_mode": p["execution_mode"], "timeout_seconds": p["timeout_seconds"],
+            "http_proxy_mode": p["http_proxy_mode"],
             "profile_id": args_digest(identity)}
 
 
@@ -125,6 +140,7 @@ def capabilities() -> Dict[str, Any]:
             p = profile(role)
             out[role] = {"provider": p["provider"], "model": p["model"], "protocol": p["protocol"],
                          "execution_mode": p["execution_mode"], "timeout_seconds": p["timeout_seconds"],
+                         "http_proxy_mode": p["http_proxy_mode"],
                          "configured": bool(os.environ.get(p["key_env"])),
                          "price": {k: v for k, v in p["price"].items()}}
         except ContentBlocked as exc:
@@ -144,10 +160,29 @@ def _estimate_input_tokens(system: str, user: str) -> int:
     return len(system) + len(user) + 64
 
 
+def _configured_input_limit() -> Optional[int]:
+    """Return an optional local input budget; an empty value or 0 disables it.
+
+    Context windows belong to the configured provider/model, so a universal
+    24k gate rejects valid requests before they reach models with larger
+    contexts. Deployments can still opt into a local budget when they need one.
+    """
+    raw = _env("AVATAR_STUDIO_CONTENT_MAX_INPUT_TOKENS")
+    if not raw or raw == "0":
+        return None
+    if not raw.isdigit() or int(raw) < 1:
+        raise ContentBlocked("AVATAR_STUDIO_CONTENT_MAX_INPUT_TOKENS 须为正整数或 0（表示不限制）",
+                             "TEXT_INPUT_LIMIT_INVALID", retryable=False)
+    return int(raw)
+
+
 def _default_transport(url: str, headers: Dict[str, str], body: bytes, timeout: int) -> Tuple[int, bytes]:
     req = urllib.request.Request(url, data=body, headers={"User-Agent": DEFAULT_USER_AGENT, **headers}, method="POST")
+    # urllib 在 Windows 会自动读取注册表代理；直连策略必须显式禁用它，且不能失败后换路径重发。
+    open_request = (urllib.request.build_opener(urllib.request.ProxyHandler({})).open
+                    if _http_proxy_mode() == "direct" else urllib.request.urlopen)
     try:
-        with urllib.request.urlopen(req, timeout=timeout) as resp:
+        with open_request(req, timeout=timeout) as resp:
             return resp.status, resp.read()
     except urllib.error.HTTPError as exc:
         return exc.code, exc.read()
@@ -207,8 +242,9 @@ def call_text(role: str, *, parent: dict, step: str, round_no: int = 0, system: 
         raise ContentRejected("文本等待时间不合法", "TEXT_TIMEOUT_INVALID")
     overhead = CLAUDE_CODE_INPUT_OVERHEAD if is_cli else 0
     input_estimate = _estimate_input_tokens(system, user) + overhead
-    if input_estimate > MAX_INPUT_TOKENS:
-        raise ContentRejected("输入超过 24k tokens 上限：请缩小参考范围或分段总结，系统不会静默截断审核依据",
+    input_limit = _configured_input_limit()
+    if input_limit is not None and input_estimate > input_limit:
+        raise ContentRejected(f"输入超过已配置的 {input_limit:,} tokens 上限；系统不会静默截断审核依据",
                               "INPUT_TOO_LARGE")
     adapter = _ADAPTERS[prof["provider"]]
     max_tokens = max_output or prof["max_output"]
@@ -222,8 +258,9 @@ def call_text(role: str, *, parent: dict, step: str, round_no: int = 0, system: 
             raise ContentRejected("Claude Code 路线不支持 stop_sequences 参数", "PARAM_UNSUPPORTED")
         max_tokens = int(cli_payload["max_tokens"])
         input_estimate = _estimate_input_tokens(cli_payload["system"], cli_payload["messages"][0]["content"]) + overhead
-        if input_estimate > MAX_INPUT_TOKENS:
-            raise ContentRejected("输入超过 24k tokens 上限，未提交 Claude Code 写稿", "INPUT_TOO_LARGE")
+        if input_limit is not None and input_estimate > input_limit:
+            raise ContentRejected(f"输入超过已配置的 {input_limit:,} tokens 上限，未提交 Claude Code 写稿",
+                                  "INPUT_TOO_LARGE")
         try:
             cli_config = claude_code.preflight(base_url=prof["base_url"], api_key=api_key, model=prof["model"],
                                                max_tokens=max_tokens, timeout=response_wait)

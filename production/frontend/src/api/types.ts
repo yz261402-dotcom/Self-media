@@ -69,6 +69,7 @@ export interface WorkMotionIntent {
 
 export interface Work {
   id: string
+  content_revision?: number
   name: string
   brief: {
     topic: string
@@ -458,6 +459,15 @@ export interface ScriptQualityCheck {
   message: string
 }
 
+export interface StoryboardShot {
+  shot_index: number
+  visual: string
+  dialogue: string
+  sound_effects: string
+  duration_seconds: number
+  prompt: string
+}
+
 export interface ScriptVersion {
   id: string
   angle: string
@@ -466,7 +476,7 @@ export interface ScriptVersion {
   tags: string[]
   text: string
   content_route?: 'talking_script' | 'short_video_storyboard'
-  storyboard?: { shot_index: number; visual: string; dialogue: string; sound_effects: string; duration_seconds: number; prompt: string }[]
+  storyboard?: StoryboardShot[]
   duration_estimate_ms: number
   quality_report: {
     checks: ScriptQualityCheck[]
@@ -483,6 +493,90 @@ export interface ScriptVersion {
   review_state?: 'needs_review' | 'reviewing' | 'passed' | 'failed' | 'stale' | null
   pickable?: boolean | null
   unpickable_reasons?: string[]
+  creation_source?: 'manual' | 'llm'
+  ai_review_status?: 'not_performed' | 'passed' | 'required'
+  takeover_reason?: string
+  human_review_state?: 'pending' | 'scored_pass' | 'human_edit' | 'manual_takeover'
+  human_review?: HumanReviewRecord | null
+}
+
+export type HumanReviewAction = 'adopt' | 'edit_adopt' | 'rewrite'
+export type HumanReviewRubric = 'core5' | 'extended8'
+
+export interface HumanReviewRecord {
+  id?: string
+  mode?: 'scored_pass' | 'human_edit' | 'manual_takeover'
+  action?: HumanReviewAction
+  rubric?: HumanReviewRubric
+  scores?: Record<string, number>
+  average?: number | null
+  notes?: string
+  feedback?: string
+  created_at?: string
+  [key: string]: unknown
+}
+
+export interface HumanReviewContext {
+  candidate: ScriptVersion
+  content_revision: number
+  batch_id: string
+  eligible: boolean
+  reasons: string[]
+  review?: HumanReviewRecord | null
+  creation_source?: 'manual' | 'llm'
+  ai_review_status?: 'not_performed' | 'passed' | 'required'
+  takeover_reason?: string
+}
+
+export interface HumanReviewSubmission {
+  request_id: string
+  script_id: string
+  expected_content_revision: number
+  expected_batch_id: string
+  action: HumanReviewAction
+  rubric: HumanReviewRubric
+  scores: Record<string, number>
+  notes?: string
+  feedback?: string
+  title?: string
+  description?: string
+  storyboard?: StoryboardShot[]
+  facts_ack?: boolean
+}
+
+export interface ManualStoryboardInput {
+  request_id: string
+  expected_content_revision: number
+  title: string
+  description?: string
+  storyboard: StoryboardShot[]
+  takeover_reason: string
+  manual_ack: boolean
+  facts_ack: boolean
+}
+
+export interface ManualStoryboardReceipt {
+  ok: boolean
+  script_id: string
+  batch_id: string
+  content_revision: number
+  candidate: ScriptVersion
+}
+
+export interface DirectGenerationInput {
+  request_id: string
+  expected_content_revision: number
+  topic: string
+  materials?: Array<string | MaterialEntry>
+  content_route?: 'talking_script' | 'short_video_storyboard'
+}
+
+export interface HumanReviewReceipt {
+  ok: boolean
+  action: HumanReviewAction
+  script_id: string
+  review?: HumanReviewRecord | null
+  job?: ContentJobReceipt | null
 }
 
 export interface MaterialEntry {
@@ -500,6 +594,7 @@ export interface ScriptBatch {
   content_route?: 'talking_script' | 'short_video_storyboard'
   ready_to_present?: boolean
   retry_targets?: { candidate_id: string; slot?: number; review_state: string; reason: string }[]
+  review_targets?: { candidate_id: string; slot?: number; review_state: string; reason: string }[]
   shortfall_note: string | null
   /** 候选稿来源：llm＝真实模型产出，mock＝模拟三稿，null/undefined＝改动前写入的历史批次（未标注，不追认）。 */
   source_kind?: 'llm' | 'mock' | string | null
@@ -545,6 +640,8 @@ export interface ContentJobReceipt {
   reference_snapshot_id?: string | null
   media_asset_id?: string | null
   content_revision?: number
+  prompt_id?: string | null
+  batch_id?: string | null
   cancel_requested?: boolean
   actions?: string[]
   calls?: {
@@ -677,12 +774,16 @@ export interface WritingPrompt {
 export interface ContentState {
   work_id: string
   content_revision: number
-  writer_runtime?: { execution_mode: 'http_api' | 'claude_code'; timeout_seconds?: number; profile_id?: string }
+  writer_runtime?: { execution_mode: 'http_api' | 'claude_code'; timeout_seconds?: number; profile_id?: string } | null
+  writer_error?: { code: string; message: string } | null
   brief: Work['brief']
   reference: ReferenceSnapshot | null
   style: Record<string, any> | null
   prompt: WritingPrompt | null
   batch: ScriptBatch | null
+  review_retry?: {
+    call_id: string; job_id: string; batch_id: string; reserved_fen: number | null; has_remote_handle: false
+  } | null
   selected_script_id: string | null
   active_jobs: ContentJobReceipt[]
   recent_jobs: ContentJobReceipt[]
@@ -738,8 +839,11 @@ export interface WanStoryboardIdentityReference {
 
 export interface WanStoryboardGraph {
   id: string
+  content_revision?: number
+  image_reuse?: { source_graph_id: string; shot_indexes: number[] }
   schema_version?: number
   identity_reference?: WanStoryboardIdentityReference | null
+  outfit_policy?: 'reference_image' | null
   updated_at?: string
   work_id: string
   script_version_id: string

@@ -70,7 +70,8 @@ def test_failed_review_cannot_adopt(client):
     r = client.post(f"/api/v1/works/{wid}/script-selection", json={"script_id": i[3]})
     assert r.status_code == 409 and err(r)["code"] in ("SCRIPT_QUALITY_FAILED", "SCRIPT_REVIEW_REQUIRED")
     proj = client.get(f"/api/v1/works/{wid}/scripts").json()
-    assert proj["candidates"] == [] and not proj["ready_to_present"]
+    assert len(proj["candidates"]) == 3 and not proj["ready_to_present"]
+    assert [c["pickable"] for c in proj["candidates"]] == [True, True, False]
     assert any(c["slot"] == 3 for c in proj["retry_targets"])
 
 
@@ -99,7 +100,8 @@ def test_forged_decision_without_binding_does_not_count(client):
 def test_set_review_failure_blocks_flagged_slot():
     wid, _, _ = generated(set_distinct=False, rewrite=(2,))
     proj = selection.project_batch(wid)
-    assert proj["candidates"] == [] and not proj["ready_to_present"]
+    assert len(proj["candidates"]) == 3 and not proj["ready_to_present"]
+    assert [t["slot"] for t in proj["retry_targets"]] == [2]
 
 
 def test_historical_selected_record_no_longer_satisfies_downstream_gates(client):

@@ -2,6 +2,7 @@
 from __future__ import annotations
 
 import hashlib
+import copy
 import json
 import os
 import time
@@ -27,6 +28,12 @@ _NO_IMAGE_JOB_CHECK = object()
 SHOT_FIELDS = ("shot_index", "visual", "dialogue", "sound_effects", "duration_seconds", "image_prompt", "wan_prompt")
 PLAN_FIELDS = ("work_id", "script_version_id", "script_digest", "task_id", "content_revision", "resolution",
                "image_model", "image_size", "image_ceiling_fen_per_shot", "estimate")
+REFERENCE_OUTFIT_RULE = (
+    "服装约束（优先于镜头文字中的穿着描述）：所有镜头以人物参考图中的服装为统一基准，"
+    "保持衣服颜色、款式、层次、材质、图案、领口、袖型和配饰一致；不换装、不变色、不增减外套或配饰。"
+    "镜头文字与参考服装冲突时以参考图为准，未描述服装也必须沿用参考图；视频全程保持起始图服装。"
+    "仅调整动作、表情、场景和构图。空镜、道具和手部特写只约束实际可见的服装，不额外加入人物。"
+)
 
 
 class StoryboardError(Exception):
@@ -114,10 +121,13 @@ def _selected(work_id: str) -> tuple[dict, dict]:
         raise StoryboardError("STORYBOARD_SELECTION_REQUIRED", "请先采用当前审核通过的分镜剧本")
     batch = selection.project_batch(work_id) or {}
     current = next((c for c in batch.get("candidates", []) if c.get("id") == version["id"]), None)
-    if (not batch.get("ready_to_present") or len(batch.get("candidates", [])) != 3
-            or {c.get("slot") for c in batch["candidates"]} != {1, 2, 3}
+    from ..content import manual_creation
+    complete = ((len(batch.get("candidates", [])) == 1 and manual_creation.is_manual_batch(batch))
+                or (len(batch.get("candidates", [])) == 3
+                    and {c.get("slot") for c in batch["candidates"]} == {1, 2, 3}))
+    if (not complete
             or current is None or cc.candidate_digest(current) != cc.candidate_digest(version)):
-        raise StoryboardError("STORYBOARD_SELECTION_REQUIRED", "当前三篇候选必须全部通过审核，且选稿与已审核分镜完全一致")
+        raise StoryboardError("STORYBOARD_SELECTION_REQUIRED", "当前候选须完整，且选稿与已审核分镜完全一致")
     return work, version
 
 
@@ -184,7 +194,7 @@ def _shots(version: dict, resolution: str, image_size: str, image_model: str,
             prompt = (str(shot.get("prompt") or visual).strip() + "\n画面：" + visual.strip()
                       + "\n台词/旁白：" + dialogue + "\n声音/音效：" + sounds)
             if identity_reference:
-                prompt = "保持起始图中的人物身份与外貌，不换脸、不换人。\n" + prompt
+                prompt = "保持起始图中的人物身份与外貌，不换脸、不换人。\n" + prompt + "\n" + REFERENCE_OUTFIT_RULE
             params = wan_provider.assert_native_input(duration_seconds=shot["duration_seconds"],
                                                       prompt=prompt, resolution=resolution)
             image_prompt = "短片首帧，竖构图，无文字水印。\n" + visual.strip()
@@ -192,7 +202,7 @@ def _shots(version: dict, resolution: str, image_size: str, image_model: str,
                 image_prompt = ("画面中出现主角时，使用参考图中的同一人物，优先保持面部特征、发型、年龄感、"
                                 "身材比例与整体形象一致；画面描述中的泛称或外貌冲突不应改变参考人物身份。"
                                 "只按镜头调整动作、表情、场景和构图。空镜、道具和手部特写不额外加入人脸。\n"
-                                + image_prompt)
+                                + image_prompt + "\n" + REFERENCE_OUTFIT_RULE)
             person_image.build_request(prompt=image_prompt, size=image_size, model=image_model)
         except (KeyError, TypeError, ValueError, TalkingHeadRejected, person_image.PersonImageRejected) as error:
             raise StoryboardError("STORYBOARD_SHOT_INVALID", "每镜头需连续编号、有效画面提示及 2–30 秒整数时长", 422) from error
@@ -220,7 +230,120 @@ def _plan_digest(graph: dict) -> str:
     # Historical schema 2 hashes must keep their original meaning.
     if "identity_reference" in graph:
         plan["identity_reference"] = graph["identity_reference"]
+    # Additive policy snapshots must not change hashes of historical plans.
+    if "outfit_policy" in graph:
+        plan["outfit_policy"] = graph["outfit_policy"]
     return jobs.args_digest(plan)
+
+
+def _image_plan_valid(graph: dict) -> bool:
+    try:
+        return (graph.get("schema_version") == 3 and graph.get("is_mock") is False
+                and all(k in graph for k in (*PLAN_FIELDS, "identity_reference", "outfit_policy"))
+                and bool(graph["shots"]) and all(all(k in s for k in SHOT_FIELDS) for s in graph["shots"])
+                and _plan_digest(graph) == graph.get("plan_digest"))
+    except (KeyError, TypeError, ValueError, AttributeError):
+        return False
+
+
+def _same_image_plan(source: dict, target: dict) -> bool:
+    fields = ("work_id", "script_version_id", "script_digest", "identity_reference", "outfit_policy",
+              "image_model", "image_size", "resolution")
+    return (all(source.get(k) == target.get(k) for k in fields)
+            and [{k: s.get(k) for k in SHOT_FIELDS} for s in source["shots"]]
+            == [{k: s.get(k) for k in SHOT_FIELDS} for s in target["shots"]])
+
+
+def _verified_reusable_image(graph: dict, shot: dict) -> dict | None:
+    """Check original job bindings and bytes, including an earlier reuse's origin."""
+    try:
+        if not _image_plan_valid(graph) or shot.get("image_state") != "succeeded":
+            return None
+        origin, original = graph, shot
+        provenance = shot.get("image_reuse")
+        if provenance:
+            origin = get_graph(provenance["job_graph_id"], graph["work_id"])
+            original = next(s for s in origin["shots"] if s["shot_index"] == shot["shot_index"])
+            if (not _image_plan_valid(origin) or provenance["job_plan_digest"] != origin["plan_digest"]
+                    or not _same_image_plan(origin, graph) or original.get("image_state") != "succeeded"
+                    or any(original.get(k) != shot.get(k) for k in ("image_job_id", "image", "image_attempt"))):
+                return None
+        job = jobs.get_job(shot.get("image_job_id") or "") or {}
+        image = shot.get("image")
+        if (not isinstance(image, dict) or job.get("state") != "succeeded"
+                or job.get("work_id") != graph["work_id"] or job.get("capability") != "storyboard_image"
+                or job.get("provider") != person_image.PROVIDER or job.get("model") != graph["image_model"]
+                or job.get("args_digest") != jobs.args_digest(_image_args(origin, original))
+                or (job.get("result") or {}).get("image") != image
+                or job.get("result_digest") != jobs.args_digest(job.get("result"))
+                or image.get("work_id") != graph["work_id"] or image.get("kind") != "wan_image"
+                or image.get("provider") != person_image.PROVIDER or image.get("model") != graph["image_model"]
+                or image.get("identity_reference") != graph.get("identity_reference")):
+            return None
+        reference = graph.get("identity_reference") or {}
+        request = person_image.build_request(prompt=shot["image_prompt"], size=graph["image_size"],
+            model=graph["image_model"], reference_sha256=reference.get("asset_hash", ""),
+            reference_uri=reference.get("storage_uri", ""))
+        if image.get("request_digest") != person_image.request_digest(request):
+            return None
+        path = local_image_path(image)
+        info = validate_image(path)
+        if any(info[k] != image.get(k) for k in ("width", "height")):
+            return None
+        return {"job_graph_id": origin["id"], "job_plan_digest": origin["plan_digest"]}
+    except (StoryboardError, TalkingHeadBlocked, TalkingHeadRejected, person_image.PersonImageRejected,
+            OSError, KeyError, TypeError, ValueError, AttributeError, StopIteration):
+        return None
+
+
+def _has_unbound_image_intents(graph: dict) -> bool:
+    known = {s.get("image_job_id") for s in graph.get("shots", [])}
+    known.update(h.get("image_job_id") for s in graph.get("shots", [])
+                 for h in (s.get("image_history") or []) if isinstance(h, dict))
+    prefix = graph["id"] + ":image:"
+    for job in st.all_rows("provider_jobs", "work_id=?", [graph["work_id"]]):
+        if (job.get("work_id") != graph["work_id"] or job.get("capability") != "storyboard_image"
+                or not str(job.get("idempotency_key") or "").startswith(prefix) or job.get("id") in known):
+            continue
+        if job.get("state") == "blocked":
+            continue
+        if (job.get("state") == "cancelled" and job.get("attempts") == 0
+                and not any(job.get(k) for k in ("settlement_required", "result", "lease", "sent_at", "sending", "unknown_at"))):
+            continue
+        return True
+    return False
+
+
+def _reuse_images(plan: dict, shots: list[dict], priors: list[dict]) -> dict | None:
+    from .image_regeneration import video_started
+
+    best = None
+    for source in reversed(priors):
+        if (not _image_plan_valid(source) or source.get("content_revision") == plan["content_revision"]
+                or not _same_image_plan(source, plan) or video_started(source) or _has_unbound_image_intents(source)
+                or any(s.get("image_state") not in ("pending", "succeeded")
+                       or (s.get("image_state") == "pending" and (s.get("image_job_id") or s.get("image")))
+                       for s in source["shots"])):
+            continue
+        verified = [(s, origin) for s in source["shots"]
+                    if (origin := _verified_reusable_image(source, s)) is not None]
+        if verified and (best is None or len(verified) > len(best[1])):
+            best = source, verified
+    if best is None:
+        return None
+    source, verified = best
+    for previous, origin in verified:
+        shot = next(s for s in shots if s["shot_index"] == previous["shot_index"])
+        for key in ("image", "image_job_id", "image_attempt", "image_history", "image_reuse_history"):
+            if key in previous:
+                shot[key] = copy.deepcopy(previous[key])
+        if previous.get("image_reuse"):
+            shot.setdefault("image_reuse_history", []).append(copy.deepcopy(previous["image_reuse"]))
+        shot.update(image_state="succeeded", error=None, image_reuse={**origin,
+            "source_graph_id": source["id"], "source_plan_digest": source["plan_digest"]})
+    return {"source_graph_id": source["id"], "source_plan_digest": source["plan_digest"],
+            "source_content_revision": source["content_revision"],
+            "shot_indexes": [s["shot_index"] for s, _ in verified], "reused_at": now_iso()}
 
 
 def create_graph(work_id: str, *, resolution: str = "720p", image_size: str = person_image.DEFAULT_SIZE,
@@ -246,16 +369,18 @@ def create_graph(work_id: str, *, resolution: str = "720p", image_size: str = pe
     plan = {"work_id": work_id, "script_version_id": version["id"], "script_digest": cc.candidate_digest(version),
             "task_id": task["id"],
             "content_revision": int(work.get("content_revision") or 0), "resolution": resolution,
-            "identity_reference": reference,
+            "identity_reference": reference, "outfit_policy": "reference_image" if reference else None,
             "image_model": model, "image_size": image_size, "image_ceiling_fen_per_shot": image_ceiling_fen_per_shot,
             "estimate": quote,
             "shots": [{k: s[k] for k in ("shot_index", "visual", "dialogue", "sound_effects", "duration_seconds",
                                           "image_prompt", "wan_prompt")} for s in shots]}
     digest = _plan_digest(plan)
     with st.transaction() as conn:
-        for prior in list_graphs(work_id):
-            if prior["plan_digest"] == digest:
-                return prior
+        priors = [get_graph(g["id"], work_id) for g in st.all_rows("media_jobs", "work_id=?", [work_id])
+                  if g.get("kind") == KIND]
+        for prior in priors:
+            if prior.get("plan_digest") == digest and _plan_digest(prior) == digest:
+                return project(prior)
         current, selected = _selected(work_id)
         if (current.get("script_version_id") != version["id"] or cc.candidate_digest(selected) != plan["script_digest"]
                 or current.get("content_revision", 0) != plan["content_revision"]
@@ -268,6 +393,8 @@ def create_graph(work_id: str, *, resolution: str = "720p", image_size: str = pe
         graph = dict(plan, id=st.new_id("storyboard"), kind=KIND, schema_version=3, plan_digest=digest,
                      state="waiting_image_approval", shots=shots, is_mock=selection.is_mock_batch(st.get("script_batches", work_id)),
                      image_approval=None, video_approval=None, clip_approval=None, created_at=now_iso(), updated_at=now_iso())
+        if not graph["is_mock"] and (reuse := _reuse_images(plan, shots, priors)):
+            graph["image_reuse"] = reuse
         st.insert_row(conn, "media_jobs", graph["id"], graph, {"work_id": work_id})
     return project(graph)
 
@@ -296,7 +423,9 @@ def project(graph: dict) -> dict:
         project_video(shot)
     states = [s["image_state"] for s in result["shots"]] + [s["video_state"] for s in result["shots"]]
     if result.get("state") not in ("stitch_queued", "stitching", "succeeded", "stitch_failed"):
-        if "unknown" in states:
+        if result.get("image_reuse") and not result.get("image_approval"):
+            result["state"] = "waiting_image_approval"
+        elif "unknown" in states:
             result["state"] = "unknown"
         elif "failed" in states or "blocked" in states:
             result["state"] = "blocked"
@@ -721,7 +850,7 @@ def _assert_no_other_unresolved_graphs(graph: dict) -> None:
         if prior.get("kind") != KIND or prior["id"] == graph["id"]:
             continue
         if any(s.get("image_state") in ("sending", "unknown") or s.get("video_state") in ("sending", "unknown", "waiting_provider")
-               for s in prior.get("shots", [])):
+               for s in prior.get("shots", [])) or _has_unbound_image_intents(prior):
             raise StoryboardError("STORYBOARD_RECONCILIATION_REQUIRED", "该作品还有未核对的制作作业，请先处理原任务图")
 
 

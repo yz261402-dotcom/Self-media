@@ -157,7 +157,7 @@ def review_batch(*, parent: Dict[str, Any], ctx: Dict[str, Any], versions: Seque
                     for v in sorted(versions, key=lambda x: x["slot"])]
     system, user = prompts.reviewer_messages(
         brief=ctx["brief_core"], reference=ctx["reference"], style=ctx["style"], materials=ctx["materials"],
-        candidates=cand_payload, review_ids=list(review_ids), identity=ctx.get("identity"))
+        candidates=cand_payload, review_ids=list(review_ids), identity=ctx.get("identity"), prompt=ctx.get("prompt"))
     res = text_provider.call_text("reviewer", parent=parent, step="review", round_no=round_no,
                                   system=system, user=user, transport=transport)
     parsed = parse_review(res["json"], review_ids=list(review_ids), versions=versions)

@@ -31,6 +31,7 @@ let timer: ReturnType<typeof setTimeout> | undefined
 const money = (fen: number) => `¥${(fen / 100).toFixed(2)}`
 const budgetUnlimited = computed(() => graph.value?.estimate.budget_unlimited ?? true)
 const allImages = computed(() => !!graph.value && graph.value.shots.every(s => s.image_state === 'succeeded'))
+const pendingImages = computed(() => graph.value?.shots.filter(s => s.image_state === 'pending').length ?? 0)
 const allClips = computed(() => !!graph.value && graph.value.shots.every(s => s.video_state === 'succeeded'))
 const legacyWithoutReference = computed(() => !!graph.value && (graph.value.schema_version ?? 2) < 3 && !!studio.currentWork?.identity_id)
 const referenceChanged = computed(() => {
@@ -40,9 +41,17 @@ const referenceChanged = computed(() => {
   return identityId !== (reference?.identity_id ?? null)
     || (!!identityId && (studio.currentWork?.variant_id ?? null) !== (reference?.variant_id ?? null))
 })
-const needsReprepare = computed(() => legacyWithoutReference.value || referenceChanged.value)
+const contentChanged = computed(() => {
+  const g = graph.value; const work = studio.currentWork
+  return !!g && !!work && (g.script_version_id !== work.script_version_id
+    || (typeof work.content_revision === 'number' && typeof g.content_revision === 'number'
+      && work.content_revision !== g.content_revision)
+    || g.error?.code === 'STORYBOARD_INPUT_CHANGED')
+})
+const needsReprepare = computed(() => legacyWithoutReference.value || referenceChanged.value || contentChanged.value)
 const unresolved = computed(() => graph.value?.shots.some(s => ['unknown', 'failed', 'blocked', 'sending'].includes(s.video_state)) ?? false)
-const invalidSelection = computed(() => ['STORYBOARD_INPUT_CHANGED', 'STORYBOARD_SELECTION_REQUIRED'].includes(graph.value?.error?.code ?? ''))
+const invalidSelection = computed(() => graph.value?.error?.code === 'STORYBOARD_SELECTION_REQUIRED'
+  || (graph.value?.error?.code === 'STORYBOARD_INPUT_CHANGED' && !studio.scriptReady))
 const subtitlesProcessing = computed(() => ['queued', 'running'].includes(graph.value?.subtitles?.state ?? ''))
 const subtitlesUnresolved = computed(() => subtitlesProcessing.value || graph.value?.subtitles?.state === 'unknown')
 const subtitleGenerationBlocked = computed(() => busy.value || confirming.value || needsReprepare.value || invalidSelection.value
@@ -53,6 +62,7 @@ const videoStarted = computed(() => !!graph.value && (
   || !!graph.value.video_id || !!graph.value.output
   || ['stitch_queued', 'stitching', 'stitch_failed', 'succeeded'].includes(graph.value.state)
 ))
+const legacyOutfit = computed(() => !!graph.value?.identity_reference && graph.value.outfit_policy !== 'reference_image')
 const imageRegenerationBlocked = computed(() => busy.value || needsReprepare.value || videoStarted.value || invalidSelection.value || apiMode !== 'http')
 const imageRegenerationCurrent = computed(() => {
   const selection = imageRegeneration.value; const g = graph.value
@@ -94,7 +104,8 @@ async function load() {
   try {
     const result = await api.listWanStoryboards(workId)
     if (current !== generation) return
-    graph.value = [...result.graphs].reverse().find(g => g.script_version_id === studio.currentWork?.script_version_id) ?? null
+    const graphs = [...result.graphs].reverse()
+    graph.value = graphs.find(g => g.script_version_id === studio.currentWork?.script_version_id) ?? graphs[0] ?? null
     pollLater()
   } catch (e: any) { if (current === generation) error.value = e?.message ?? String(e) }
 }
@@ -121,6 +132,15 @@ watch(() => [studio.currentWorkId, studio.currentWork?.script_version_id, studio
   imagePaidAck.value = videoPaidAck.value = imageReviewAck.value = clipReviewAck.value = finalReviewAck.value = false
   void load()
 }, { immediate: true })
+watch(() => graph.value?.id, () => {
+  if (!graph.value) return
+  resolution.value = graph.value.resolution
+  imageBudget.value = graph.value.image_ceiling_fen_per_shot / 100
+  imagePaidAck.value = videoPaidAck.value = imageReviewAck.value = clipReviewAck.value = finalReviewAck.value = false
+  resetImageRegeneration()
+  resetVideoRegeneration()
+  resetSubtitleRequest()
+}, { flush: 'sync' })
 watch(() => [graph.value?.id, graph.value?.video_id, graph.value?.output?.file_hash, graph.value?.output?.preview_url], (next, previous) => {
   if (next.some((value, index) => value !== previous[index])) {
     finalReviewAck.value = false
@@ -135,17 +155,35 @@ watch(() => [graph.value?.subtitles?.job_id, graph.value?.subtitles?.state], (ne
 }, { flush: 'sync' })
 onBeforeUnmount(() => { generation++; clearTimeout(timer) })
 const workId = () => studio.currentWorkId
-function create() { void action(() => api.createWanStoryboard(workId(), { resolution: resolution.value, image_ceiling_fen_per_shot: budgetUnlimited.value ? 0 : Math.round(imageBudget.value * 100) })) }
+function create() {
+  if (busy.value || apiMode !== 'http' || (!studio.scriptReady && (!needsReprepare.value || contentChanged.value))
+    || !Number.isFinite(imageBudget.value) || imageBudget.value < 0) return
+  const ceiling = budgetUnlimited.value
+    ? needsReprepare.value && graph.value ? graph.value.image_ceiling_fen_per_shot : 0
+    : Math.round(imageBudget.value * 100)
+  void action(() => api.createWanStoryboard(workId(), { resolution: resolution.value, image_ceiling_fen_per_shot: ceiling }))
+}
+function reprepareOutfit() {
+  const g = graph.value
+  if (!g || !legacyOutfit.value || videoStarted.value || needsReprepare.value || invalidSelection.value || busy.value || apiMode !== 'http') return
+  resolution.value = g.resolution
+  imageBudget.value = g.image_ceiling_fen_per_shot / 100
+  imagePaidAck.value = videoPaidAck.value = imageReviewAck.value = clipReviewAck.value = finalReviewAck.value = false
+  resetImageRegeneration()
+  resetVideoRegeneration()
+  resetSubtitleRequest()
+  void action(() => api.createWanStoryboard(workId(), { resolution: g.resolution, image_ceiling_fen_per_shot: g.image_ceiling_fen_per_shot }))
+}
 function approveImages() {
-  if (needsReprepare.value) return
+  if (needsReprepare.value || invalidSelection.value || !graph.value) return
   const g = graph.value!; void action(() => api.approveWanStoryboardImages(workId(), g.id, { actor_id: 'user_local', paid_ack: imagePaidAck.value, plan_digest: g.plan_digest, total_ceiling_fen: g.estimate.image_ceiling_total_fen }))
 }
 function approveVideos() {
-  if (needsReprepare.value) return
+  if (needsReprepare.value || invalidSelection.value || !graph.value) return
   const g = graph.value!; void action(() => api.approveWanStoryboardVideos(workId(), g.id, { actor_id: 'user_local', paid_ack: videoPaidAck.value, image_review_ack: imageReviewAck.value, task_graph_digest: g.task_graph_digest, total_ceiling_fen: g.estimate.video_total_fen }))
 }
 function generateImages() {
-  if (needsReprepare.value || !graph.value) return
+  if (needsReprepare.value || invalidSelection.value || !graph.value) return
   const id = graph.value.id; void action(() => api.generateWanStoryboardImages(workId(), id))
 }
 function resetImageRegeneration() {
@@ -181,7 +219,7 @@ async function confirmImageRegeneration() {
   })
 }
 function submitVideos() {
-  if (needsReprepare.value || !graph.value) return
+  if (needsReprepare.value || invalidSelection.value || !graph.value) return
   const id = graph.value.id; void action(() => api.submitWanStoryboardVideos(workId(), id))
 }
 function videoRegenerationPrice(shotIndex: number) {
@@ -276,20 +314,27 @@ async function confirmFinal() {
     <p v-if="error" class="warning" role="alert">{{ error }}</p>
     <p v-if="graph?.error" class="warning" role="alert">{{ graph.error.message }}</p>
     <p v-if="invalidSelection" class="warning" role="alert">当前任务图已失效，请返回脚本页重新采用审核通过的分镜，再重新准备任务图。</p>
+    <p v-if="contentChanged" class="warning" role="alert">创作输入或采用的分镜已变化，请按当前分镜重新准备任务图，再确认费用；原有结果仍可查看。</p>
     <p v-if="legacyWithoutReference" class="warning" role="alert">旧任务未使用人物图。请按当前人物重新准备任务图，再确认图片预算；原有结果仍可查看。</p>
     <p v-else-if="referenceChanged" class="warning" role="alert">人物参考已变化，请重新准备任务图，再确认图片预算；原有结果仍可查看。</p>
     <section v-if="!graph || !graph.image_approval || needsReprepare" class="section graph-setup">
       <label class="field"><span>清晰度</span><select v-model="resolution"><option>480p</option><option>720p</option><option>1080p</option></select></label>
       <label v-if="!budgetUnlimited" class="field"><span>每张图片预算预留（元）</span><input v-model.number="imageBudget" type="number" min="0" step="0.01" /></label>
-      <button class="primary" :disabled="busy || apiMode !== 'http' || (!studio.scriptReady && !needsReprepare) || !Number.isFinite(imageBudget) || imageBudget < 0" @click="create">{{ needsReprepare ? '按当前人物重新准备任务图' : graph ? '更新预算与任务图' : '准备任务图' }}</button>
+      <button class="primary" :disabled="busy || apiMode !== 'http' || (!studio.scriptReady && (!needsReprepare || contentChanged)) || !Number.isFinite(imageBudget) || imageBudget < 0" @click="create">{{ contentChanged ? '按当前分镜重新准备任务图' : needsReprepare ? '按当前人物重新准备任务图' : graph ? '更新预算与任务图' : '准备任务图' }}</button>
     </section>
     <template v-if="graph">
       <figure v-if="graph.identity_reference" class="identity-reference">
         <img v-if="graph.identity_reference.preview_url" :src="graph.identity_reference.preview_url" alt="人物参考图" />
         <figcaption><strong>人物参考图</strong><span>{{ graph.identity_reference.label }}</span></figcaption>
       </figure>
+      <p v-if="graph.outfit_policy === 'reference_image'" class="faint">所有镜头沿用参考图中的服装，保持颜色、款式与配饰一致；生成后请检查人物和服装。</p>
+      <section v-else-if="legacyOutfit && !needsReprepare" class="section">
+        <p class="warning">旧任务未锁定服装。若要统一服装，请在生成视频前按参考图重新准备，并重新确认图片费用；旧图片保留，新图片需要重新生成。</p>
+        <button v-if="!videoStarted" :disabled="busy || invalidSelection || apiMode !== 'http'" @click="reprepareOutfit">按参考图统一服装</button>
+      </section>
       <p v-else-if="!needsReprepare" class="faint">未选择人物，镜头图片将按画面描述生成。</p>
       <section class="section graph-summary">
+        <p v-if="graph.image_reuse" class="faint">已复用 {{ graph.image_reuse.shot_indexes.length }} 张图片 · {{ pendingImages }} 张待生成</p>
         <strong>{{ labels[graph.state] ?? graph.state }}</strong><span>{{ graph.shots.length }} 镜头 · {{ graph.shots.reduce((n, s) => n + s.duration_seconds, 0) }} 秒 · {{ graph.resolution }}</span>
         <span>{{ budgetUnlimited ? '图片按实际账单' : `图片预算 ${money(graph.estimate.image_ceiling_total_fen)}` }} · Wan 估算 {{ money(graph.estimate.video_total_fen) }}</span>
         <p class="faint">图片金额是预算预留，当前没有已核验的供应商单价。已受理作业可能计费。</p>
@@ -335,16 +380,16 @@ async function confirmFinal() {
       </ol>
       <section class="section graph-actions">
         <template v-if="!graph.image_approval">
-          <label><input v-model="imagePaidAck" type="checkbox" /> 确认 {{ graph.estimate.image_calls }} 次生图{{ budgetUnlimited ? '（费用按实际账单）' : `及 ${money(graph.estimate.image_ceiling_total_fen)} 预算预留` }}</label>
-          <button :disabled="busy || needsReprepare || !imagePaidAck || (!budgetUnlimited && graph.estimate.image_ceiling_total_fen <= 0)" @click="approveImages">{{ budgetUnlimited ? '确认图片生成' : '确认图片预算' }}</button>
+          <label><input v-model="imagePaidAck" type="checkbox" :disabled="busy || needsReprepare || invalidSelection" /> 确认{{ graph.image_reuse ? '剩余' : '' }} {{ graph.image_reuse ? pendingImages : graph.estimate.image_calls }} 次生图{{ budgetUnlimited ? '（费用按实际账单）' : `及 ${money(graph.estimate.image_ceiling_total_fen)} 预算预留` }}</label>
+          <button :disabled="busy || needsReprepare || invalidSelection || !imagePaidAck || (!budgetUnlimited && graph.estimate.image_ceiling_total_fen <= 0)" @click="approveImages">{{ budgetUnlimited ? '确认图片生成' : '确认图片预算' }}</button>
         </template>
-        <button v-else-if="!allImages" class="primary" :disabled="busy || needsReprepare || graph.state === 'unknown' || graph.state === 'blocked'" @click="generateImages">生成镜头图片</button>
+        <button v-else-if="!allImages" class="primary" :disabled="busy || needsReprepare || invalidSelection || graph.state === 'unknown' || graph.state === 'blocked'" @click="generateImages">生成镜头图片</button>
         <template v-else-if="!graph.video_approval">
-          <label><input v-model="imageReviewAck" type="checkbox" /> 已查看所有镜头图片</label>
-          <label><input v-model="videoPaidAck" type="checkbox" /> 确认 {{ graph.estimate.video_calls }} 次 Wan 调用，预计 {{ money(graph.estimate.video_total_fen) }}</label>
-          <button :disabled="busy || needsReprepare || !imageReviewAck || !videoPaidAck" @click="approveVideos">确认任务图与视频费用</button>
+          <label><input v-model="imageReviewAck" type="checkbox" :disabled="busy || needsReprepare || invalidSelection" /> 已查看所有镜头图片</label>
+          <label><input v-model="videoPaidAck" type="checkbox" :disabled="busy || needsReprepare || invalidSelection" /> 确认 {{ graph.estimate.video_calls }} 次 Wan 调用，预计 {{ money(graph.estimate.video_total_fen) }}</label>
+          <button :disabled="busy || needsReprepare || invalidSelection || !imageReviewAck || !videoPaidAck" @click="approveVideos">确认任务图与视频费用</button>
         </template>
-        <button v-else-if="!allClips" class="primary" :disabled="busy || needsReprepare || unresolved || graph.shots.some(s => s.video_state === 'waiting_provider')" @click="submitVideos">开始逐镜头生成</button>
+        <button v-else-if="!allClips" class="primary" :disabled="busy || needsReprepare || invalidSelection || unresolved || graph.shots.some(s => s.video_state === 'waiting_provider')" @click="submitVideos">开始逐镜头生成</button>
         <template v-else-if="!graph.clip_approval">
           <label><input v-model="clipReviewAck" type="checkbox" /> 已观看全部镜头，确认画面、声音和衔接</label>
           <button :disabled="busy || !clipReviewAck" @click="approveClips">确认原片</button>

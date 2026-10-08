@@ -57,7 +57,7 @@ beforeEach(() => {
   globalThis.studioTestApi.resumeTalkingHeadDriver = async () => ({ state: 'IDLE', resumable: false, started: false })
 })
 
-test('返工未凑齐三篇过审时只接收回执并刷新隐藏候选', async () => {
+test('返工后仍不可采用时接收回执并提示待重新审核', async () => {
   store.currentWorkId = 'one'
   store.scriptBatch = { id: 'old', candidates: [{ id: 'old-script', text: '旧稿' }], ready_to_present: true }
   globalThis.studioTestApi.repairScript = async () => ({ id: 'new-script', parent_id: 'old-script', ready_to_present: false })
@@ -66,6 +66,69 @@ test('返工未凑齐三篇过审时只接收回执并刷新隐藏候选', async
   assert.equal(result.id, 'new-script')
   assert.deepEqual(store.scriptBatch.candidates, [])
   assert.equal(store.notice.kind, 'warn')
+  assert.match(store.notice.text, /重新审核/)
+  assert.doesNotMatch(store.notice.text, /三篇全部通过/)
+})
+
+test('返工目标稿可采用时即使整批部分通过也给出选稿提示', async () => {
+  store.currentWorkId = 'one'
+  const fixed = { id: 'new-script', parent_id: 'old-script', pickable: true }
+  globalThis.studioTestApi.repairScript = async () => fixed
+  globalThis.studioTestApi.getScriptBatch = async () => ({ id: 'new', ready_to_present: false,
+    candidates: [fixed, { id: 'failed-2', pickable: false }, { id: 'failed-3', pickable: false }] })
+  const result = await store.repairScript('old-script')
+  assert.equal(result.id, fixed.id)
+  assert.equal(store.notice.kind, 'ok')
+  assert.match(store.notice.text, /返工稿已通过审核，可以采用/)
+  assert.doesNotMatch(store.notice.text, /三篇均已通过|三篇全部通过/)
+})
+
+test('其他候选可采用也不会把未通过返工目标标为已通过', async () => {
+  store.currentWorkId = 'one'
+  const fixed = { id: 'new-script', parent_id: 'old-script', pickable: false }
+  globalThis.studioTestApi.repairScript = async () => fixed
+  globalThis.studioTestApi.getScriptBatch = async () => ({ id: 'new', ready_to_present: false,
+    candidates: [fixed, { id: 'passed', pickable: true }] })
+  await store.repairScript('old-script')
+  assert.equal(store.notice.kind, 'warn')
+  assert.match(store.notice.text, /重新审核/)
+})
+
+test('部分通过批次已采用稿件可进入配音或分镜制作下一步', () => {
+  store.currentWorkId = 'one'
+  Object.assign(store.works[0], { identity_id: 'person', script_version_id: 'passed' })
+  store.readinessMap = { person: { ready: true, reasons: [] } }
+  store.scriptBatch = { id: 'partial', ready_to_present: false, passed: 1,
+    candidates: [{ id: 'passed', pickable: true }, { id: 'failed-2', pickable: false }, { id: 'failed-3', pickable: false }] }
+  assert.equal(store.scriptReady, true)
+  assert.equal(store.nextStep.key, 'tts')
+  assert.equal(store.nextStep.to, '/tts')
+  store.works[0].brief.content_route = 'short_video_storyboard'
+  assert.equal(store.nextStep.key, 'video')
+  assert.equal(store.nextStep.to, '/video')
+})
+
+test('稿件明确不可采用和历史批次明确未就绪时仍挡制作下一步', () => {
+  store.currentWorkId = 'one'
+  Object.assign(store.works[0], { script_version_id: 'selected', brief: { content_route: 'short_video_storyboard' } })
+  for (const [candidate, ready] of [[{ id: 'selected', pickable: false }, true], [{ id: 'selected', pickable: false }, false], [{ id: 'selected' }, false]]) {
+    store.scriptBatch = { candidates: [candidate], ready_to_present: ready }
+    assert.equal(store.scriptReady, false)
+    assert.equal(store.nextStep.key, 'script')
+    assert.equal(store.nextStep.to, '/script')
+    assert.doesNotMatch(store.nextStep.detail, /三篇.*均通过审核后/)
+  }
+})
+
+test('历史已采用稿件省略新审核字段时保持原有兼容', () => {
+  store.currentWorkId = 'one'
+  store.works[0].script_version_id = 'historical'
+  store.scriptBatch = { candidates: [{ id: 'historical' }] }
+  assert.equal(store.scriptReady, true)
+  store.scriptBatch.ready_to_present = true
+  assert.equal(store.scriptReady, true)
+  store.works[0].script_version_id = null
+  assert.equal(store.scriptReady, false)
 })
 
 test('opening a work restores its persisted final audio and current bindings', async () => {

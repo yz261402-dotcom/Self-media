@@ -50,6 +50,51 @@ def test_generation_rejects_route_mismatch_before_submitting_job(client):
     assert not tasks.list_jobs(wid)
 
 
+def _unknown_write_call(wid, prompt_id="prompt-retry", *, step="write"):
+    from app import jobs
+
+    parent = tasks.submit_job(wid, "generation", "old-generation", {"prompt_id": prompt_id},
+                              expected_revision=rev(wid))
+    tasks.set_progress(parent["id"], state="running")
+    call = jobs.submit_content_call(parent_id=parent["id"], parent_kind="generation", work_id=wid,
+                                    provider="claude_compat", model="claude-sonnet-5-5", capability="chat",
+                                    idempotency_key="old-write-" + uuid4().hex, request_digest="digest",
+                                    reserve_fen=127, step=step, round_no=0)
+    jobs.mark_sending(call["id"], "test-worker")
+    jobs.mark_content_unknown(call["id"], "RemoteDisconnected")
+    tasks.finish_job(parent["id"], "unknown", error={"code": "CONTENT_RESULT_UNKNOWN", "message": "unknown"})
+    return parent, call
+
+
+def test_generation_unknown_write_retry_requires_ack_and_binds_new_intent(client):
+    wid = make_work()
+    old, call = _unknown_write_call(wid)
+    body = {"request_id": "new-generation", "prompt_id": "prompt-retry",
+            "expected_content_revision": rev(wid), "retry_unknown_call_id": call["id"], "retry_paid_ack": True}
+    response = client.post(base(wid) + "/generations", json=body)
+    assert response.status_code == 202
+    retry = tasks.get_job(response.json()["job_id"])
+    assert retry["id"] != old["id"]
+    assert retry["payload"]["retry_unknown_call_id"] == call["id"]
+    assert retry["payload"]["retry_paid_ack"] is True
+    from app import jobs
+    jobs_state = jobs.get_job(call["id"])
+    assert jobs_state
+    assert jobs_state["state"] == "unknown" and jobs_state["attempts"] == 1
+
+
+def test_generation_unknown_retry_rejects_wrong_stage_and_missing_ack(client):
+    wid = make_work()
+    _, call = _unknown_write_call(wid, step="review")
+    base_body = {"prompt_id": "prompt-retry", "expected_content_revision": rev(wid),
+                 "retry_unknown_call_id": call["id"]}
+    no_ack = client.post(base(wid) + "/generations", json={**base_body, "request_id": "no-ack"})
+    assert no_ack.status_code == 422 and err(no_ack)["code"] == "GENERATION_RETRY_CONFIRMATION_REQUIRED"
+    wrong_stage = client.post(base(wid) + "/generations", json={**base_body, "request_id": "wrong-stage",
+                                                                       "retry_paid_ack": True})
+    assert wrong_stage.status_code == 409 and err(wrong_stage)["code"] == "GENERATION_RETRY_TARGET_INVALID"
+
+
 def test_writes_return_202_receipt_and_replay_same_job(client):
     wid = make_work()
     body = {"request_id": "r1", "expected_content_revision": rev(wid)}
@@ -287,7 +332,7 @@ def test_capabilities_page_has_no_secret(client):
     r = client.get("/api/v1/content/capabilities")
     assert r.status_code == 200
     dump = json.dumps(r.json(), ensure_ascii=False)
-    assert "sk-test" not in dump and "claude-sonnet-5-5" in dump and "qwen-plus" in dump
+    assert "sk-test" not in dump and "gpt-6.1-sol" in dump and "gpt-6-astra" in dump
     assert r.json()["redfox"]["contract"] == "unverified"
 
 

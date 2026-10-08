@@ -8,7 +8,7 @@ from typing import Any, Dict, List, Literal, Optional
 
 from fastapi import APIRouter, File, Form, HTTPException, UploadFile
 from fastapi.responses import JSONResponse
-from pydantic import BaseModel, ConfigDict, Field
+from pydantic import BaseModel, ConfigDict, Field, StrictInt
 
 from . import storage as st
 from .contracts import ApiError
@@ -87,6 +87,22 @@ class SettingsReq(Req):
     writer_profile_id: Optional[str] = None
 
 
+class HumanReviewReq(Req):
+    request_id: str = Field(min_length=1, max_length=200)
+    script_id: str
+    expected_content_revision: int
+    expected_batch_id: str
+    action: Literal["adopt", "edit_adopt", "rewrite"]
+    rubric: Literal["core5", "extended8"]
+    scores: Dict[str, StrictInt]
+    notes: Optional[str] = None
+    facts_ack: bool = False
+    feedback: Optional[str] = None
+    title: Optional[str] = None
+    description: Optional[str] = None
+    storyboard: Optional[List[Dict[str, Any]]] = None
+
+
 class PromptReq(Req):
     request_id: str
     expected_content_revision: int
@@ -104,6 +120,8 @@ class GenerationReq(Req):
     prompt_id: str
     expected_content_revision: int
     content_route: Optional[Literal["talking_script", "short_video_storyboard"]] = None
+    retry_unknown_call_id: str = ""
+    retry_paid_ack: bool = False
 
 
 class RepairReq(Req):
@@ -118,6 +136,8 @@ class ReviewReq(Req):
     request_id: str
     batch_id: str
     expected_content_revision: int
+    retry_unknown_call_id: str = ""
+    retry_paid_ack: bool = False
 
 
 class StyleReq(Req):
@@ -146,6 +166,8 @@ def _err(status: int, code: str, message: str, **extra) -> HTTPException:
 def _map(exc: Exception) -> HTTPException:
     code = getattr(exc, "code", "CONTENT_ERROR")
     message = getattr(exc, "message", str(exc))
+    if isinstance(exc, selection.SelectionRejected):
+        return _err(exc.http_status, code, message)
     if isinstance(exc, (tasks.IdempotencyConflict, repo.StaleContentWrite, tasks.FlowActive, repo.ImmutableRecordConflict)):
         return _err(409, code, message)
     if isinstance(exc, ContentBlocked):
@@ -172,7 +194,16 @@ def _work(work_id: str) -> dict:
 
 
 def receipt(job: dict, work_id: str) -> Dict[str, Any]:
+    from .content.review_recovery import batch_id_for_job
     error = job.get("error")
+    # 历史文本断连仅投影为安全诊断，不回显异常原文、不更改作业或费用台账。
+    if job["state"] == "unknown" and error and error.get("code") == "CONTENT_CALL_PENDING":
+        call = st.get("provider_jobs", error.get("detail") or "")
+        if (call and call.get("work_id") == work_id and call.get("parent_content_job_id") == job["id"]
+                and call.get("capability") == "chat" and call.get("state") == "unknown"):
+            reason = str(call.get("unknown_reason") or "").partition(":")[0]
+            if reason in ("RemoteDisconnected", "ConnectionResetError", "BrokenPipeError"):
+                error = tasks.connection_closed_error(call["id"]).to_dict()
     # 旧任务仅记录了通用未确认错误；投影已知超时原因，不改台账或再次查询供应商。
     if job["state"] == "unknown" and job["kind"] == "visual_analysis" and error and error.get("code") == "CONTENT_CALL_PENDING":
         call = st.get("provider_jobs", error.get("detail") or "")
@@ -184,11 +215,18 @@ def receipt(job: dict, work_id: str) -> Dict[str, Any]:
                 from .content.visual import previous_unknown_error
                 error = previous_unknown_error(call["id"]).to_dict()
     payload = job.get("payload") or {}
+    from . import jobs as provider_jobs
+    calls = provider_jobs.content_calls(job["id"])
     return {"job_id": job["id"], "kind": job["kind"], "state": job["state"], "stage": job.get("stage"),
             "replayed": bool(job.get("replayed")), "poll_url": f"/api/v1/works/{work_id}/content/jobs/{job['id']}",
             "result_refs": job.get("result_refs") or {}, "error": error,
             "reference_snapshot_id": payload.get("reference_snapshot_id"), "media_asset_id": payload.get("media_asset_id"),
-            "content_revision": job.get("content_revision")}
+            "content_revision": job.get("content_revision"), "prompt_id": payload.get("prompt_id"),
+            "batch_id": batch_id_for_job(job),
+            "calls": [{"id": c["id"], "step": c.get("step"), "provider": c["provider"], "model": c["model"],
+                       "state": c["state"], "settlement_state": c.get("settlement_state"),
+                       "reserved_fen": c.get("reserved_fen"), "actual_cost_fen": c.get("actual_cost_fen"),
+                       "has_remote_handle": bool(c.get("remote_task_id"))} for c in calls]}
 
 
 def _submit(work_id: str, kind: str, request_id: str, payload: Dict[str, Any], expected: Optional[int]):
@@ -202,6 +240,32 @@ def _submit(work_id: str, kind: str, request_id: str, payload: Dict[str, Any], e
 
 
 P = "/api/v1/works/{work_id}/content"
+
+
+@router.get(P + "/human-review/{script_id}")
+def get_human_review(work_id: str, script_id: str):
+    from .content import human_review
+
+    _work(work_id)
+    try:
+        return human_review.get_review(work_id, script_id)
+    except Exception as exc:  # noqa: BLE001
+        raise _map(exc)
+
+
+@router.post(P + "/human-review")
+def post_human_review(work_id: str, req: HumanReviewReq):
+    from .content import human_review
+
+    _work(work_id)
+    try:
+        result = human_review.submit(work_id, req.model_dump())
+    except Exception as exc:  # noqa: BLE001
+        raise _map(exc)
+    if result.get("job") is not None:
+        result["job"] = receipt(result["job"], work_id)
+        tasks.get_scheduler().start()
+    return result
 
 
 @router.post(P + "/searches", status_code=202)
@@ -409,13 +473,25 @@ def put_settings(work_id: str, req: SettingsReq):
         fields["writer_profile_id"] = req.writer_profile_id
     if not fields:
         raise _err(422, "VALIDATION_FAILED", "没有可更新的字段")
-    fields["writing_prompt_id"] = None  # 要求/风格变化后旧提示不再绑定；审核随修订号自动失效
     try:
         with st.transaction() as c:
-            out = repo.bump_content_revision(c, work_id, expected_revision=req.expected_content_revision, **fields)
+            current = _work(work_id)
+            revision = int(current.get("content_revision") or 0)
+            if req.expected_content_revision != revision:
+                raise repo.StaleContentWrite(f"创作输入已变化（当前 {revision}，请求基于 {req.expected_content_revision}）")
+            # Compare normalized briefs without rewriting legacy defaults on a no-op.
+            existing = {key: WorkBrief(**(current.get("brief") or {})).model_dump()
+                        if key == "brief" else current.get(key) for key in fields}
+            if all(existing[key] == value for key, value in fields.items()):
+                out = current
+            else:
+                fields["writing_prompt_id"] = None
+                out = repo.bump_content_revision(c, work_id, expected_revision=req.expected_content_revision, **fields)
+    except HTTPException:
+        raise
     except Exception as exc:  # noqa: BLE001
         raise _map(exc)
-    return {"ok": True, "content_revision": out["content_revision"]}
+    return {"ok": True, "content_revision": int(out.get("content_revision") or 0)}
 
 
 @router.post(P + "/prompts", status_code=202)
@@ -431,10 +507,28 @@ def post_prompt_revision(work_id: str, req: PromptRevisionReq):
 
 @router.post(P + "/generations", status_code=202)
 def post_generation(work_id: str, req: GenerationReq):
-    route = (_work(work_id).get("brief") or {}).get("content_route", "talking_script")
+    work = _work(work_id)
+    route = (work.get("brief") or {}).get("content_route", "talking_script")
     if req.content_route is not None and req.content_route != route:
         raise _err(409, "CONTENT_ROUTE_STALE", "内容路线已变化，请刷新后重新生成")
-    return _submit(work_id, "generation", req.request_id, {"prompt_id": req.prompt_id}, req.expected_content_revision)
+    if bool(req.retry_unknown_call_id) != (req.retry_paid_ack is True):
+        raise _err(422, "GENERATION_RETRY_CONFIRMATION_REQUIRED", "请单独确认原写稿请求可能已收费，并同意重新提交产生新的费用")
+    payload = {"prompt_id": req.prompt_id}
+    if req.retry_unknown_call_id:
+        call = st.get("provider_jobs", req.retry_unknown_call_id)
+        parent = tasks.get_job((call or {}).get("parent_content_job_id", ""))
+        valid = bool(call and parent and call.get("work_id") == work_id
+                     and call.get("state") == "unknown" and not call.get("remote_task_id")
+                     and call.get("step") == "write" and int(call.get("round_no") or 0) == 0
+                     and parent.get("work_id") == work_id and parent.get("kind") == "generation"
+                     and parent.get("state") == "unknown"
+                     and parent.get("content_revision") == req.expected_content_revision
+                     and (parent.get("payload") or {}).get("prompt_id") == req.prompt_id)
+        if not valid:
+            raise _err(409, "GENERATION_RETRY_TARGET_INVALID", "原调用不属于当前写稿任务，或其状态不允许重新提交")
+        payload["retry_unknown_call_id"] = req.retry_unknown_call_id
+        payload["retry_paid_ack"] = True
+    return _submit(work_id, "generation", req.request_id, payload, req.expected_content_revision)
 
 
 @router.post(P + "/repairs", status_code=202)
@@ -447,7 +541,29 @@ def post_repair(work_id: str, req: RepairReq):
 
 @router.post(P + "/reviews", status_code=202)
 def post_review(work_id: str, req: ReviewReq):
-    return _submit(work_id, "review", req.request_id, {"batch_id": req.batch_id}, req.expected_content_revision)
+    from .content.review_recovery import pending_review_call
+
+    work = _work(work_id)
+    if bool(req.retry_unknown_call_id) != (req.retry_paid_ack is True):
+        raise _err(422, "REVIEW_RETRY_CONFIRMATION_REQUIRED", "原审核请求可能已收费，请单独确认重新审核可能产生新的费用")
+    payload = {"batch_id": req.batch_id}
+    if req.retry_unknown_call_id:
+        payload.update(retry_unknown_call_id=req.retry_unknown_call_id, retry_paid_ack=True)
+    # 精确同 RID 先走已有幂等契约；旧请求状态、审核结论变化不应使回放变成新调用。
+    if tasks.find_job(work_id, "review", req.request_id):
+        return _submit(work_id, "review", req.request_id, payload, req.expected_content_revision)
+    batch = st.get("script_batches", work_id)
+    pending = pending_review_call(work_id, batch, int(work.get("content_revision") or 0))
+    if req.retry_unknown_call_id:
+        if (not pending or pending["state"] != "unknown" or pending.get("remote_task_id")
+                or pending["id"] != req.retry_unknown_call_id or not batch or batch["id"] != req.batch_id
+                or work.get("content_revision") != req.expected_content_revision):
+            raise _err(409, "REVIEW_RETRY_TARGET_INVALID", "原调用不属于当前批次的未确认审核，或其状态不允许重新提交")
+    elif pending and batch["id"] == req.batch_id:
+        if pending.get("remote_task_id") or pending["state"] == "waiting_external":
+            raise _err(409, "REVIEW_RESULT_PENDING", "原审核有可查询的远端任务，请先核对结果，不能重新提交")
+        raise _err(422, "REVIEW_RETRY_CONFIRMATION_REQUIRED", "原审核结果和费用未确认，请确认可能重复计费后重新审核")
+    return _submit(work_id, "review", req.request_id, payload, req.expected_content_revision)
 
 
 def _job_of(work_id: str, job_id: str) -> dict:
@@ -521,6 +637,7 @@ def cancel_job(work_id: str, job_id: str):
 
 @router.get(P + "/state")
 def get_state(work_id: str):
+    from .content.review_recovery import public_review_retry
     work = _work(work_id)
     ctx = cx.load_context(work_id)
     batch = selection.project_batch(work_id)
@@ -535,11 +652,22 @@ def get_state(work_id: str):
         limits = costs.content_limits().to_dict()
     except Exception:  # noqa: BLE001
         pass
+    writer_runtime = None
+    writer_error = None
+    if not batch or batch.get("source_kind") != "manual":
+        try:
+            writer_runtime = text_providers.runtime_profile("writer")
+        except ContentError as exc:
+            writer_error = {"code": exc.code, "message": exc.message}
+        except Exception:
+            writer_error = {"code": "WRITER_CONFIGURATION_INVALID", "message": "写稿模型配置不可用，可以使用人工创作入口"}
     return {
         "work_id": work_id, "content_revision": ctx["content_revision"], "brief": ctx["brief"],
         "reference": ref, "style": ctx["style"], "prompt": ctx["prompt"], "batch": batch,
         "selected_script_id": work.get("script_version_id"),
-        "writer_runtime": text_providers.runtime_profile("writer"),
+        "writer_runtime": writer_runtime,
+        "writer_error": writer_error,
+        "review_retry": public_review_retry(work_id, st.get("script_batches", work_id), ctx["content_revision"]),
         "active_jobs": [receipt(j, work_id) for j in jobs_now if j["state"] in tasks.ACTIVE_STATES],
         "recent_jobs": [receipt(j, work_id) for j in jobs_now[-10:]],
         "references": [{"id": r["id"], "platform_work_id": r["platform_work_id"], "caption": r["caption"],

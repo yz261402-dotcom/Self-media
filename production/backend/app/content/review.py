@@ -85,6 +85,65 @@ def _norm(s: str) -> str:
     return re.sub(r"\s+", "", s or "")
 
 
+# 仅识别画面 / 音效字段里的制作计时，不清空字段：画面字幕和新闻播报仍可能含真实事实。
+_SECOND_NUMBER = r"(?<![\d.])\d+(?:\.\d+)?"
+_PRODUCTION_RANGE = re.compile(
+    r"^[\[【]?" + _SECOND_NUMBER + r"(?:至|到|[-–—~～])\d+(?:\.\d+)?秒"
+    r"(?=[:：\]】]|回到|切|转场|特写|镜头|黑屏)")
+_PRODUCTION_DURATION = re.compile(
+    r"^((?:(?:镜头|画面|字幕|音乐|配乐|音效)(?:需要|先|再|应)?)?(?:停顿|停留|暂停|静音)"
+    r"|音效持续|音乐持续|配乐持续|镜头持续|字幕持续)"
+    r"(?:约)?\d+(?:\.\d+)?秒(?=(?:后)?(?:消失|出现|硬切|切|转场|渐入|渐出)|$)")
+_PRODUCTION_CUE = re.compile(
+    r"^" + _SECOND_NUMBER + r"秒(?=(?:后|处)(?:一次)?(?:硬切|切|转场|黑屏|轻呼气|轻叹气|呼气|叹气|提示音))")
+_PRODUCTION_CLOCK = re.compile(
+    r"^((?:低音量|背景|低频|轻微|轻柔)?(?:音乐|配乐|音效|字幕))"
+    r"(?:在)?第?\d+(?:\.\d+)?秒(?:前|后)?(?=结束|开始|停止|渐入|渐出|消失|出现)")
+# 引号中的内容，以及屏幕文字 / 新闻播报后的句段，属于作品传达的内容，不能按制作 cue 豁免。
+_REPORTED_CONTENT = re.compile(
+    r'“[^”]*”|「[^」]*」|『[^』]*』|"[^"\n]*"'
+    r"|(?:屏幕(?:上)?(?:字幕|文字|显示|写着)|字幕(?:写着|显示|文字|内容)?|"
+    r"显示屏(?:显示|写着)|手机界面(?:显示|写着)|新闻播报|新闻播音|广播(?:播报)?|"
+    r"播报|旁白|画外音)[:：][^。！？；\n]*"
+    r"|(?:屏幕(?:上)?|显示屏|手机界面|字幕)(?:写着|显示)[^。！？；\n]*")
+_DIALOGUE_CLOSING_DAY = re.compile(
+    r"今天(?=(?:的(?:生活化|聊天|讨论|分享))?(?:就)?(?:先)?(?:到这里|这样)(?:吧|了)?(?:[。！？!?；;，,]|$))")
+
+
+def _production_rule_text(content: str) -> str:
+    def strip_cues(part: str) -> str:
+        # 只删句段起始的调度指令；句中设备、系统等现实事实的秒数保持原样。
+        # 冒号通常引入屏幕文字/播报/检测结果，不把其后内容重新当制作指令起始。
+        segments = re.split(r"([，。；！？,;!?\n])", part)
+        for index, segment in enumerate(segments):
+            segment = _PRODUCTION_RANGE.sub("", segment)
+            segment = _PRODUCTION_DURATION.sub(r"\1", segment)
+            segment = _PRODUCTION_CUE.sub("", segment)
+            segments[index] = _PRODUCTION_CLOCK.sub(r"\1", segment)
+        return "".join(segments)
+
+    parts, cursor = [], 0
+    for match in _REPORTED_CONTENT.finditer(content):
+        parts.extend((strip_cues(content[cursor:match.start()]), match.group(0)))
+        cursor = match.end()
+    parts.append(strip_cues(content[cursor:]))
+    return "".join(parts)
+
+
+def storyboard_review_texts(shots: Sequence[Dict[str, Any]]) -> Dict[str, str]:
+    """为硬门禁派生分镜输入；完整正文与镜头内容保持原样，对白数字全部保留。"""
+    facts, timely = [], []
+    for shot in shots:
+        for field in ("visual", "dialogue", "sound_effects"):
+            content = _norm(str(shot.get(field) or ""))
+            if field != "dialogue":
+                content = _production_rule_text(content)
+            facts.append(content)
+            # 日常结束语只移除其中的“今天”；同一句里的价格/最新/发布等其他信号仍保留。
+            timely.append(_DIALOGUE_CLOSING_DAY.sub("", content) if field == "dialogue" else content)
+    return {"fact_text": "\n".join(facts), "timeliness_text": "\n".join(timely)}
+
+
 # 模型会在断言正文上自带结论标记，位置不固定：前缀 `[unverified]`、后缀 `（unverified）`
 # 都出现过。verdict 的唯一来源是本模块按资料复算的结果，标记一律剥掉——留着不仅让
 # 读者把模型自评当成判定，还会污染"改稿后这条断言是否还在正文里"的比对：
@@ -180,7 +239,9 @@ def review_candidate(*, text: str, title: str = "", claims: Optional[List[Claim]
                      materials: Optional[Sequence[Any]] = None,
                      target_duration_ms: int = 0,
                      duration_estimate_ms: int = 0,
-                     require_hook: bool = True) -> QualityReport:
+                     require_hook: bool = True,
+                     fact_text: Optional[str] = None,
+                     timeliness_text: Optional[str] = None) -> QualityReport:
     """逐项检查并给出 QualityReport。硬门禁失败不能被评分抵消。"""
     checks: List[QualityCheck] = []
     claims = claims or []
@@ -206,7 +267,8 @@ def review_candidate(*, text: str, title: str = "", claims: Optional[List[Claim]
     #     这一项是**确定性**的、不看模型怎么说：清单是模型自报的，若它交回空清单，
     #     上一项就会判"无关键断言"而放行——那是拿模型自审换核验。有了本项，
     #     正文里带着数字/归因/年份的稿子无论清单怎么写都过不去，只能真去删改或补资料。
-    signals = detect_fact_signals(text) if text else []
+    fact_body = text if fact_text is None else fact_text
+    signals = detect_fact_signals(fact_body) if fact_body else []
     uncovered = [s for s in signals if not _covered_by_claims(s, claims)]
     if uncovered:
         sample = "、".join(f"{s['kind']}「{s['snippet']}」" for s in uncovered[:3])
@@ -223,7 +285,8 @@ def review_candidate(*, text: str, title: str = "", claims: Optional[List[Claim]
                      else f"正文 {len(signals)} 处事实性表述均已被断言清单覆盖")))
 
     # 2) 时效性（硬）：带**强时效**表述且无资料 → review
-    timey = [m for m in STRONG_TIMELINESS_MARKERS if m in _norm(text)] if text else []
+    timely_body = text if timeliness_text is None else timeliness_text
+    timey = [m for m in STRONG_TIMELINESS_MARKERS if m in _norm(timely_body)] if timely_body else []
     if timey:
         supported_timey = any(
             _supported(f"{m}{'' }", _materials_text(materials)) for m in timey)
@@ -300,3 +363,23 @@ def review_candidate(*, text: str, title: str = "", claims: Optional[List[Claim]
     hard_fail = any(c.hard_gate and c.outcome == "fail" for c in checks)
     overall = "fail" if hard_fail else ("review" if review_required else "pass")
     return QualityReport(checks=checks, overall=overall, review_required=review_required)
+
+
+def current_storyboard_quality_report(candidate: Dict[str, Any], materials: Sequence[Any]) -> Dict[str, Any]:
+    """只读重算分镜的两个字段上下文规则；保留原始质量记录及其余事实门禁。"""
+    original = candidate["quality_report"]
+    if candidate.get("content_route") != "short_video_storyboard" or not candidate.get("storyboard"):
+        return original
+    revised = review_candidate(
+        text=candidate.get("text", ""), title=candidate.get("title", ""),
+        claims=[Claim(**c) for c in candidate.get("claims") or []], materials=materials,
+        require_hook=False, **storyboard_review_texts(candidate["storyboard"]))
+    replace_codes = {"CLAIM_COVERAGE", "TIMELINESS"}
+    replacements = {c.code: c.model_dump() for c in revised.checks if c.code in replace_codes}
+    checks = [replacements.get(c["code"], dict(c)) for c in original["checks"]]
+    present = {c["code"] for c in checks}
+    checks.extend(check for code, check in replacements.items() if code not in present)
+    failed = any(c["hard_gate"] and c["outcome"] == "fail" for c in checks)
+    requires_review = any(c["outcome"] in ("review", "fail") for c in checks)
+    return dict(original, checks=checks, overall="fail" if failed else "review" if requires_review else "pass",
+                review_required=requires_review)

@@ -11,9 +11,11 @@
 from __future__ import annotations
 
 import os
+from copy import deepcopy
 from typing import Any, Dict, List, Optional
 
 from .. import storage as st
+from ..skill_library import skill_files
 from . import tools as tl
 from .models import OfflineModel, build_model
 from .roles import ROLES, SKILL_DIRS, SKILLS_DIR, role_system_prompt, role_tools, require_skill_refs
@@ -21,7 +23,7 @@ from .roles import ROLES, SKILL_DIRS, SKILLS_DIR, role_system_prompt, role_tools
 # 框架默认提供的通用文件/shell 能力：本项目不允许暴露给 Agent
 FORBIDDEN_DEFAULT_TOOLS = ("read_file", "write_file", "edit_file", "execute", "glob", "grep", "ls", "delete")
 
-# 框架强制保留：read_file 无法从白名单中移除，只能接受并通过空后端约束其作用域
+# 框架强制保留 read_file；仅允许读取当前角色的 Skill 快照。
 MANDATORY_READ_TOOL = "read_file"
 
 # 会造成真实副作用的工具：这些必须被摘除，残留即为红线破坏
@@ -41,7 +43,28 @@ def build_backend(kind: str = DEFAULT_BACKEND_KIND):
     return StateBackend()
 
 
-def build_filesystem_middleware():
+def build_skill_backend(role: str):
+    """固定只读的角色 Skill 快照，不接受调用者注入的 files 状态。"""
+    from deepagents.backends import StateBackend
+    from deepagents.backends.utils import create_file_data
+
+    spec = ROLES.get(role)
+    ids = spec.skill_ids if spec else []
+    require_skill_refs(ids)
+    snapshot = {path: create_file_data(text) for path, text in skill_files(ids, root=SKILLS_DIR).items()}
+
+    class _ReadOnlySkillBackend(StateBackend):
+        # deepagents 0.7.17 的读入口统一走 _read_files；行为测试锁定此隔离边界。
+        def _read_files(self):
+            return deepcopy(snapshot)
+
+        def _send_files_update(self, update):
+            raise PermissionError("Skill 文件快照只允许读取")
+
+    return _ReadOnlySkillBackend()
+
+
+def build_filesystem_middleware(backend: Any = None):
     """替换框架默认的文件系统中间件：只保留框架强制的 read_file。
 
     deepagents 0.7.17 默认把 ls/read_file/write_file/edit_file/glob/grep/
@@ -53,20 +76,39 @@ def build_filesystem_middleware():
     - 白名单必须包含 read_file，否则构造直接抛 ValueError；
     - execute / delete 需要沙箱后端，内存后端下列入无效（no-op）。
 
-    因此可达到的最小暴露面是 read_file 一个，且它只能读内存后端里的虚拟
-    文件——本项目从不注入 files，该命名空间恒为空，读任何路径只会失败。
+    最小暴露面为 read_file；角色运行时只读取已登记的 Skill 与路由参考快照。
+    未绑定 Skill 的总控使用空快照，不接受调用者 files 状态扩展可见范围。
 
     中间件按 name 原地替换（见 deepagents.graph._apply_custom_middleware）。
     """
     from deepagents.middleware.filesystem import FilesystemMiddleware
 
-    return FilesystemMiddleware(backend=build_backend(), tools=[MANDATORY_READ_TOOL])
+    return FilesystemMiddleware(backend=backend if backend is not None else build_backend(),
+                                tools=[MANDATORY_READ_TOOL])
+
+
+def build_skills_middleware(backend: Any):
+    """沿用官方发现与渲染，但不信任调用者注入的元数据缓存。"""
+    from deepagents.middleware.skills import SkillsMiddleware
+
+    class _TrustedSkillsMiddleware(SkillsMiddleware):
+        @property
+        def name(self):
+            return "SkillsMiddleware"
+
+        def before_agent(self, state, runtime, config):
+            return super().before_agent(dict(state, skills_metadata=None), runtime, config)
+
+        async def abefore_agent(self, state, runtime, config):
+            return await super().abefore_agent(dict(state, skills_metadata=None), runtime, config)
+
+    return _TrustedSkillsMiddleware(backend=backend, sources=["/skills/"])
 
 
 def residual_forbidden_tools(agent: Any) -> Dict[str, List[str]]:
     """返回仍然可见的默认文件/shell 工具，区分「已摘除」与「框架强制残留」。
 
-    残留项不等于放行：read_file 受空内存后端约束，execute/delete 受非沙箱
+    残留项不等于放行：read_file 受角色 Skill 快照约束，execute/delete 受非沙箱
     后端约束（no-op）。测试持续跟踪这一分类，框架升级若放宽即为回归信号。
     """
     seen = set(available_tool_names(agent))
@@ -196,7 +238,7 @@ def execute_work_item(role: str, context: Dict[str, Any],
 
     allowed = role_tools(role)
     for step in script or []:
-        if step.get("tool") not in allowed:
+        if step.get("tool") not in [*allowed, MANDATORY_READ_TOOL]:
             controlled_call(step.get("tool", ""), dict(step.get("args") or {}))
             return result
 
@@ -206,11 +248,7 @@ def execute_work_item(role: str, context: Dict[str, Any],
         return StructuredTool(name=name, func=run, args_schema=None, infer_schema=False,
                               description=f"[{role}] {name}：仅允许经业务权限与版本门禁调用")
 
-    prompt = role_system_prompt(role)
-    for path in skill_paths_for(role):
-        # Skill 来自已登记的可信目录，作为指令注入；内存后端不开放真实文件系统。
-        with open(os.path.join(path, "SKILL.md"), encoding="utf-8") as source:
-            prompt += "\n\n" + source.read()
+    backend = build_skill_backend(role)
     class _BusinessDagDelegation(AgentMiddleware):
         # 按框架公开的 middleware.name 覆盖规则移除当前工作项的 task 工具；
         # 角色委派已由外层业务 DAG 完成，不能在这里绕过依赖关系递归委派。
@@ -219,10 +257,15 @@ def execute_work_item(role: str, context: Dict[str, Any],
             return "SubAgentMiddleware"
 
     no_delegation = _BusinessDagDelegation()
+    role_has_skills = bool(ROLES.get(role) and ROLES[role].skill_ids)
+    middleware = [build_filesystem_middleware(backend), no_delegation]
+    if role_has_skills:
+        middleware.append(build_skills_middleware(backend))
     specialist = create_deep_agent(
         model=adapter.as_chat_model(), tools=[wrap(name) for name in allowed],
-        system_prompt=prompt, name=f"avatar_studio_{role}", backend=build_backend(),
-        middleware=[build_filesystem_middleware(), no_delegation],
+        system_prompt=role_system_prompt(role), name=f"avatar_studio_{role}", backend=backend,
+        skills=["/skills/"] if role_has_skills else None,
+        middleware=middleware,
     )
     if role == "supervisor":
         specialist.invoke({"messages": [{"role": "user", "content": "执行当前已批准工作项。"}]},
@@ -266,10 +309,11 @@ def execute_work_item(role: str, context: Dict[str, Any],
             audit["created_at"] = now_iso()
             st.put("agent_tool_audit", audit["id"], audit, {"work_item_id": audit["work_item_id"]})
 
+    supervisor_backend = build_skill_backend("supervisor")
     graph = create_deep_agent(
         model=delegation.as_chat_model(), tools=[],
-        system_prompt=role_system_prompt("supervisor"), name="avatar_studio_supervisor", backend=build_backend(),
-        middleware=[build_filesystem_middleware()],
+        system_prompt=role_system_prompt("supervisor"), name="avatar_studio_supervisor", backend=supervisor_backend,
+        middleware=[build_filesystem_middleware(supervisor_backend)],
         subagents=[{"name": role, "description": ROLES[role].duties,
                     "runnable": RunnableLambda(run_specialist), "mode": "isolated"}],
     )
@@ -298,6 +342,7 @@ def build_agent(work_id: str = "w_dev", task_id: str = "t_dev", work_item_id: st
     subagents = []
     for rid in ("content", "quality"):
         spec = ROLES[rid]
+        backend = build_skill_backend(rid)
         subagents.append({
             "name": rid,
             "description": spec.duties,
@@ -305,19 +350,22 @@ def build_agent(work_id: str = "w_dev", task_id: str = "t_dev", work_item_id: st
             "tools": lc_tools_for_role(rid, work_id, task_id, f"{work_item_id}_{rid}"),
             "model": OfflineModel(rid, _ctx(work_id, task_id, f"{work_item_id}_{rid}", rid),
                                   script=role_scripts.get(rid)).as_chat_model(),
-            "skills": skill_paths_for(rid),
+            "skills": ["/skills/"],
+            "middleware": [build_filesystem_middleware(backend),
+                           build_skills_middleware(backend)],
             "mode": "isolated",
         })
 
+    supervisor_backend = build_skill_backend("supervisor")
     return create_deep_agent(
         model=model,
         tools=lc_tools_for_role("supervisor", work_id, task_id, work_item_id),
         subagents=subagents,
         system_prompt=sup.system_prompt(),
         name="avatar_studio_supervisor",
-        backend=build_backend(),
-        # 关键：摘掉框架默认的文件/shell 工具，Agent 只剩受控业务工具与 task 委派
-        middleware=[build_filesystem_middleware()],
+        backend=supervisor_backend,
+        # 总控 read_file 为空；子角色仅保留受控业务工具与 Skill 读取。
+        middleware=[build_filesystem_middleware(supervisor_backend)],
         # 人工中断：任何工具调用前暂停，用于验证选择门的人工恢复路径
         interrupt_on=None,
     )

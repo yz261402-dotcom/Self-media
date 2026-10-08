@@ -10,7 +10,7 @@ const wait = (ms: number) => new Promise((r) => setTimeout(r, ms))
 function jobErrorMessage(job: ContentJobReceipt): string {
   if (job.state === 'failed' || job.state === 'blocked') return job.error?.message ?? '任务未成功'
   if (job.state === 'unknown') {
-    if (['PROVIDER_RESPONSE_TIMEOUT', 'VISUAL_PREVIOUS_CALL_UNKNOWN'].includes(job.error?.code ?? '') && job.error?.message) return job.error.message
+    if (['PROVIDER_RESPONSE_TIMEOUT', 'PROVIDER_CONNECTION_CLOSED', 'VISUAL_PREVIOUS_CALL_UNKNOWN'].includes(job.error?.code ?? '') && job.error?.message) return job.error.message
     return '这一步的结果未确认（可能已发出请求），系统不会自动重发，请先核对。'
   }
   return ''
@@ -19,6 +19,12 @@ function jobErrorMessage(job: ContentJobReceipt): string {
 export type SearchSort = 'likes' | 'recent' | 'recommended'
 export type ContentRoute = 'talking_script' | 'short_video_storyboard'
 type WriterJobTracking = { jobId: string; fingerprint: string; runtimeKey: string }
+type ReviewJobTracking = { jobId: string; fingerprint: string; batchKey: string }
+
+function needsRepair(candidate: ScriptVersion): boolean {
+  return candidate.review_state === 'failed'
+    || !!candidate.quality_report?.checks?.some(check => check.hard_gate && check.outcome !== 'pass')
+}
 
 /** 每类操作的 request_id 只在“同一份意图”里稳定：刷新后还能取回原任务，不会因重复点击多收一次费。 */
 const RID_PREFIX = 'avatar-studio:content-rid:'
@@ -46,6 +52,7 @@ export const useContentStore = defineStore('content', {
     loading: false,
     refreshRequest: 0,
     submittingKind: null as string | null,
+    directRequestPending: false,
     error: '' as string,
     notice: '' as string,
     inspectedReference: null as ReferenceSnapshot | null,
@@ -66,6 +73,7 @@ export const useContentStore = defineStore('content', {
     jobs: {} as Record<string, ContentJobReceipt>,
     // 写稿等待超出页面同步期限后，仍只追踪本次回执，避免历史错误混入当前请求。
     writerJobs: {} as Record<string, WriterJobTracking>,
+    reviewJob: null as ReviewJobTracking | null,
     polling: false,
     pollTimer: null as ReturnType<typeof setTimeout> | null,
     // 画面分析：上传的原视频（按参考快照索引）与最近一次报价
@@ -99,8 +107,7 @@ export const useContentStore = defineStore('content', {
     prompt: (s) => s.state?.prompt ?? null,
     batch: (s) => s.state?.batch ?? null,
     passedCount: (s): number => s.state?.batch?.passed ?? (s.state?.batch?.candidates ?? []).filter((c) => c.pickable).length,
-    visibleCandidates: (s): ScriptVersion[] => s.state?.batch?.ready_to_present === true
-      ? (s.state.batch.candidates ?? []) : [],
+    visibleCandidates: (s): ScriptVersion[] => s.state?.batch?.candidates ?? [],
     writerWaitMs: (s): number => {
       const runtime = s.state?.writer_runtime
       const configured = runtime?.timeout_seconds
@@ -116,28 +123,36 @@ export const useContentStore = defineStore('content', {
   },
 
   actions: {
-    async setRoute(route: ContentRoute) {
-      if (!this.state || this.state.brief?.content_route === route) return
+    async setRoute(route: ContentRoute): Promise<boolean> {
+      if (!this.state || this.state.brief?.content_route === route || this.busy) return false
       const id = this.workId
       const gen = this.generation
+      this.submittingKind = 'settings'
+      this.error = ''; this.notice = ''
       try {
         await api.saveContentSettings(id, {
           expected_content_revision: this.revision, brief: { content_route: route },
         })
-        if (gen === this.generation) {
+        if (gen === this.generation && id === this.workId) {
           this.notice = '内容路线已更新，请重新准备写作提示。'
           await this.refresh(gen)
+          return gen === this.generation && id === this.workId && this.state?.brief.content_route === route
         }
       } catch (e: any) {
-        if (gen === this.generation) this.error = e?.message ?? String(e)
+        if (gen === this.generation && id === this.workId) this.error = e?.message ?? String(e)
+      } finally {
+        if (gen === this.generation && id === this.workId && this.submittingKind === 'settings') this.submittingKind = null
       }
+      return false
     },
     /** 进入某作品：清空旧作品的一切本地状态并恢复（含刷新后的任务）。 */
     async enter(workId: string) {
       if (this.workId === workId && this.state) return
       this.leave()
       this.workId = workId
+      this.directRequestPending = !!stored(`${workId}:direct-pending`)
       this.restoreWriterJobs()
+      this.restoreReviewJob()
       const gen = this.generation
       await this.refresh(gen)
       if (gen === this.generation && this.state?.active_jobs?.length) this.startPolling()
@@ -148,6 +163,7 @@ export const useContentStore = defineStore('content', {
       this.generation++
       this.stopPolling()
       this.workId = ''
+      this.directRequestPending = false
       this.state = null
       this.error = ''
       this.notice = ''
@@ -158,6 +174,7 @@ export const useContentStore = defineStore('content', {
       this.fetchQuoteRequest++
       this.jobs = {}
       this.writerJobs = {}
+      this.reviewJob = null
       this.mediaByRef = {}
       this.visualQuote = null
       this.visualQuoteBinding = null
@@ -192,6 +209,12 @@ export const useContentStore = defineStore('content', {
           if (active.has(tracked.jobId)) continue
           const terminal = (s.recent_jobs ?? []).find((j) => j.job_id === tracked.jobId) ?? this.jobs[kind]
           if (terminal?.job_id === tracked.jobId && TERMINAL.includes(terminal.state)) this.settleWriterJob(terminal)
+        }
+        const trackedReview = this.reviewJob
+        if (trackedReview && trackedReview.batchKey !== this.reviewBatchKey()) this.forgetReviewJob()
+        else if (trackedReview && !active.has(trackedReview.jobId)) {
+          const terminal = (s.recent_jobs ?? []).find(job => job.job_id === trackedReview.jobId) ?? this.jobs.review
+          if (terminal?.job_id === trackedReview.jobId && TERMINAL.includes(terminal.state)) this.settleReviewJob(terminal)
         }
         for (const [k, j] of Object.entries(this.jobs) as [string, ContentJobReceipt][]) if (TERMINAL.includes(j.state) || !active.has(j.job_id)) delete this.jobs[k]
       } catch (e: any) {
@@ -268,10 +291,40 @@ export const useContentStore = defineStore('content', {
       if (job.state !== 'unknown') this.releaseRid(kind, tracked.fingerprint)
     },
 
+    reviewBatchKey(): string {
+      return `${this.state?.batch?.id ?? ''}@${this.revision}`
+    },
+
+    reviewJobCurrent(jobId: string): boolean {
+      return this.reviewJob?.jobId === jobId && this.reviewJob.batchKey === this.reviewBatchKey()
+    },
+
+    restoreReviewJob() {
+      try {
+        const parsed = JSON.parse(stored(`${this.workId}:review-job`) ?? 'null')
+        if (parsed && typeof parsed.jobId === 'string' && typeof parsed.fingerprint === 'string' && typeof parsed.batchKey === 'string') this.reviewJob = parsed
+      } catch { /* 缓存只恢复任务追踪，不决定是否重新收费。 */ }
+    },
+
+    forgetReviewJob() {
+      this.reviewJob = null
+      remember(`${this.workId}:review-job`, null)
+    },
+
+    settleReviewJob(job: ContentJobReceipt) {
+      const tracked = this.reviewJob
+      if (!tracked || !this.reviewJobCurrent(job.job_id) || !TERMINAL.includes(job.state)) return
+      this.forgetReviewJob()
+      this.error = jobErrorMessage(job)
+      this.notice = job.state === 'superseded' ? '稿件在审核期间已修改，这次审核结果已归档，请审核当前版本。' : ''
+      if (job.state !== 'unknown') this.releaseRid('review', tracked.fingerprint)
+    },
+
     async submit(kind: string, fingerprint: string, call: (rid: string) => Promise<ContentJobReceipt>, okNote = '') {
       const id = this.workId
       const gen = this.generation
       const writerRuntimeKey = this.writerFingerprint('')
+      const reviewBatchKey = this.reviewBatchKey()
       if (!id || this.submittingKind || this.loading) return null
       this.submittingKind = kind
       this.error = ''
@@ -284,6 +337,10 @@ export const useContentStore = defineStore('content', {
           jobId: receipt.job_id, fingerprint, runtimeKey: writerRuntimeKey,
         }
         if (kind === 'generation' || kind === 'repair') remember(`${id}:writer-job:${kind}`, JSON.stringify(this.writerJobs[kind]))
+        if (kind === 'review') {
+          this.reviewJob = { jobId: receipt.job_id, fingerprint, batchKey: reviewBatchKey }
+          remember(`${id}:review-job`, JSON.stringify(this.reviewJob))
+        }
         if (okNote && !receipt.replayed) this.notice = okNote
         if (receipt.replayed) this.notice = '这项操作已经提交过，正在沿用原任务，不会重复发起或重复计费。'
         await this.refresh(gen)
@@ -544,15 +601,68 @@ export const useContentStore = defineStore('content', {
     },
 
     /** 已确认的终态会释放 request_id；“重新生成”不能绕过在途或未知调用。 */
-    async generate(_force = false) {
+    async generateDirect(topic: string, materials: string[] = []) {
+      if (this.busy || !this.state) return
+      if (typeof api.startDirectGeneration !== 'function') { this.error = '当前模式不支持直接生成，请连接生产后端。'; return }
+      const id = this.workId
+      const gen = this.generation
+      const desired = { topic: topic.trim(), materials, content_route: this.state.brief.content_route ?? 'talking_script' as ContentRoute }
+      if (!desired.topic) { this.error = '请先填写这期主题。'; return }
+      const fp = this.writerFingerprint(`direct:${JSON.stringify(desired)}`)
+      const intentKey = `${id}:direct-pending`
+      type DirectInput = typeof desired & { request_id: string; expected_content_revision: number }
+      let input: DirectInput | null = null
+      try {
+        const prior = JSON.parse(stored(intentKey) ?? 'null') as DirectInput | null
+        if (prior && typeof prior.request_id === 'string' && Number.isInteger(prior.expected_content_revision)) {
+          if (JSON.stringify({ topic: prior.topic, materials: prior.materials, content_route: prior.content_route }) !== JSON.stringify(desired)) {
+            this.error = '上次直接生成的提交结果尚未确认，请先按原主题和资料核对原任务，再修改输入。'
+            return
+          }
+          input = prior
+          remember(`${id}:generation:${fp}`, input.request_id)
+        }
+      } catch { /* Malformed local state cannot authorize a model call. */ }
+      const maxMs = this.writerWaitMs
+      const receipt = await this.submit('generation', fp, async (request_id) => {
+        input ??= { ...desired, request_id, expected_content_revision: this.revision }
+        remember(intentKey, JSON.stringify(input))
+        this.directRequestPending = true
+        try {
+          return await api.startDirectGeneration(id, input)
+        } catch (cause: any) {
+          if (cause?.status != null && cause.status < 500) {
+            remember(intentKey, null)
+            remember(`${id}:generation:${fp}`, null)
+            if (gen === this.generation && id === this.workId) this.directRequestPending = false
+          }
+          throw cause
+        }
+      }, '正在按主题写稿并执行模型审核。')
+      if (receipt && gen === this.generation && id === this.workId) {
+        remember(intentKey, null)
+        this.directRequestPending = false
+        await this.waitForJob(receipt.job_id, job => this.settleWriterJob(job), maxMs,
+          () => this.writerJobCurrent(receipt.job_id))
+      }
+    },
+
+    async generate(force = false) {
       if (this.submittingKind || this.loading) return
       const p = this.state?.prompt
       if (!p) { this.error = '请先准备并确认写作提示。'; return }
       const content_route = this.state?.brief?.content_route ?? 'talking_script'
+      const unknown = [...(this.state?.recent_jobs ?? [])].reverse().find((job) =>
+        job.kind === 'generation' && job.state === 'unknown' && job.prompt_id === p.id
+        && job.content_revision === this.revision)
+      const retryCall = force ? unknown?.calls?.find((call) =>
+        call.step === 'write' && call.state === 'unknown' && !call.has_remote_handle) : undefined
       const fp = this.writerFingerprint(`${p.id}@${this.revision}:${content_route}`)
+        + (retryCall ? `|retry:${retryCall.id}` : '')
       const maxMs = this.writerWaitMs
       const receipt = await this.submit('generation', fp, (request_id) => api.startGeneration(this.workId, {
         request_id, prompt_id: p.id, content_route, expected_content_revision: this.revision,
+        ...(retryCall ? { retry_unknown_call_id: retryCall.id, retry_paid_ack: true } : {}),
       }), this.state?.writer_runtime?.execution_mode === 'claude_code'
         ? '已开始通过 Claude Code 写三个不同角度的稿，完成后逐稿独立审核。' : '已开始写三个不同角度的稿并逐稿独立审核。')
       if (receipt) await this.waitForJob(receipt.job_id, (job) => this.settleWriterJob(job), maxMs,
@@ -562,6 +672,7 @@ export const useContentStore = defineStore('content', {
     async repair(candidate: ScriptVersion, instruction = '') {
       const b = this.state?.batch
       if (!b) return
+      if (!needsRepair(candidate)) { this.notice = '这篇稿件尚无明确返工意见，请先重新审核。'; return }
       const fp = this.writerFingerprint(`${b.id}|${candidate.id}|${instruction}`)
       const maxMs = this.writerWaitMs
       const receipt = await this.submit('repair', fp, (request_id) => api.startRepair(this.workId, {
@@ -576,26 +687,37 @@ export const useContentStore = defineStore('content', {
     async repairPending() {
       const b = this.state?.batch
       if (!b) return
-      const ids = (b.retry_targets ?? []).map(t => t.candidate_id)
-      if (!ids.length) { await this.generate(true); return }
+      const ids = (b.retry_targets ?? []).filter(target => target.review_state === 'failed'
+        || b.candidates.some(candidate => candidate.id === target.candidate_id && needsRepair(candidate)))
+        .map(target => target.candidate_id)
+      if (!ids.length) { this.notice = '没有需要按意见重写的稿件，请重新审核待审稿件。'; return }
       const fp = this.writerFingerprint(`${b.id}|${ids.join(',')}`)
       const maxMs = this.writerWaitMs
       const receipt = await this.submit('repair', fp, (request_id) => api.startRepair(this.workId, {
         request_id, batch_id: b.id, candidate_ids: ids, expected_content_revision: this.revision,
       }), this.state?.writer_runtime?.execution_mode === 'claude_code'
-        ? '已开始通过 Claude Code 补齐三篇候选，完成后独立审核。' : '正在补齐并审核三篇候选。')
+        ? '已开始通过 Claude Code 按审核意见返工未通过的稿件。' : '正在按审核意见返工未通过的稿件。')
       if (receipt) await this.waitForJob(receipt.job_id, (job) => this.settleWriterJob(job), maxMs,
         () => this.writerJobCurrent(receipt.job_id))
     },
 
     async rereview() {
+      if (this.busy) return
       const b = this.state?.batch
       if (!b) return
-      const fp = `${b.id}@${this.revision}`
+      const retry = this.state?.review_retry
+      if (retry && retry.batch_id !== b.id) { this.error = '审核恢复信息已失效，请刷新后重试。'; return }
+      if (retry) {
+        const reserve = retry.reserved_fen == null ? '未确认' : `¥${(retry.reserved_fen / 100).toFixed(2)}`
+        if (!window.confirm(`上次审核可能已经产生费用，结果尚未确认（上次预留 ${reserve}）。重新审核会发起新的付费请求，可能重复收费。是否继续？`)) return
+      }
+      const fp = `${b.id}@${this.revision}` + (retry ? `|retry:${retry.call_id}` : '')
       const receipt = await this.submit('review', fp, (request_id) => api.startReview(this.workId, {
         request_id, batch_id: b.id, expected_content_revision: this.revision,
+        ...(retry ? { retry_unknown_call_id: retry.call_id, retry_paid_ack: true } : {}),
       }), '正在重新审核尚未有有效审核的稿件。')
-      if (receipt) await this.waitForJob(receipt.job_id, () => this.releaseRid('review', fp))
+      if (receipt) await this.waitForJob(receipt.job_id, job => this.settleReviewJob(job), 210000,
+        () => this.reviewJobCurrent(receipt.job_id))
     },
 
     async cancelActive() {

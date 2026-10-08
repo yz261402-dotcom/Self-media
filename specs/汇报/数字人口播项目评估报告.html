@@ -1,0 +1,127 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="数字人口播项目文案、声音、音画同步、观感与抖音效果评估报告">
+  <link rel="icon" href="data:,">
+  <title>数字人口播项目评估报告</title>
+  <style>
+    :root{--ink:#18202b;--muted:#5d6877;--paper:#fff;--soft:#f5f7fa;--line:#d8dee7;--blue:#175cd3;--blue-soft:#eaf2ff;--green:#087f5b;--green-soft:#e6f7ef;--amber:#9a5b00;--amber-soft:#fff4df;--red:#b42318;--red-soft:#fff0ed;--font:"Segoe UI","Microsoft YaHei","PingFang SC",Arial,sans-serif}
+    *{box-sizing:border-box}html{scroll-behavior:smooth;scroll-padding-top:82px}body{margin:0;background:var(--soft);color:var(--ink);font:15px/1.75 var(--font)}a{color:var(--blue);text-decoration:none}a:hover{text-decoration:underline}button{font:inherit;cursor:pointer}button:focus-visible,a:focus-visible{outline:3px solid #8db5ff;outline-offset:3px}.shell{display:grid;grid-template-columns:230px minmax(0,1fr);min-height:100vh}.sidebar{position:sticky;top:0;height:100vh;padding:30px 22px;background:#f0f3f7;border-right:1px solid var(--line);overflow-y:auto}.brand{font-size:18px;font-weight:700;line-height:1.45;margin:0 0 4px}.brand-sub{font-size:12px;color:var(--muted);margin:0 0 28px}.nav-label{color:var(--muted);font-size:11px;letter-spacing:.08em;margin:0 0 10px}.nav{display:grid;gap:4px}.nav a{display:flex;gap:10px;align-items:baseline;color:var(--muted);font-size:14px;padding:7px 0;border-bottom:1px solid transparent}.nav a:hover,.nav a.active{color:var(--blue);border-bottom-color:var(--blue)}.nav a span{width:22px;font-size:12px;font-variant-numeric:tabular-nums}.side-note{border-top:1px solid var(--line);margin-top:28px;padding-top:16px;color:var(--muted);font-size:12px}.side-note p{margin:0 0 8px}.main{min-width:0}.toolbar{position:sticky;top:0;z-index:5;display:flex;justify-content:space-between;gap:12px;align-items:center;padding:12px 44px;border-bottom:1px solid var(--line);background:rgba(255,255,255,.96)}.toolbar small{color:var(--muted)}.actions{display:flex;gap:8px;flex-wrap:wrap}.button{border:1px solid var(--line);background:var(--paper);padding:7px 12px;color:var(--ink);font-size:13px}.button.primary{border-color:var(--blue);background:var(--blue);color:#fff}.progress{position:fixed;top:0;left:230px;right:0;height:3px;background:transparent;z-index:7}.progress span{display:block;width:0;height:100%;background:var(--blue)}main{max-width:1180px;margin:0 auto;padding:0 54px}.hero{padding:64px 0 40px}.eyebrow{margin:0 0 12px;color:var(--muted);font-size:12px;letter-spacing:.08em}.hero h1{font-size:clamp(38px,5vw,64px);line-height:1.16;letter-spacing:-.045em;margin:0 0 20px}.hero h1 em{font-style:normal;color:var(--blue)}.hero-lead{max-width:820px;color:var(--muted);font-size:18px}.tag-row{display:flex;flex-wrap:wrap;gap:8px;margin-top:22px}.tag{display:inline-block;padding:3px 9px;border:1px solid var(--line);font-size:12px;color:var(--muted);background:var(--paper)}.tag.green{color:var(--green);border-color:#8bd4b7;background:var(--green-soft)}.tag.blue{color:var(--blue);border-color:#9ebcf3;background:var(--blue-soft)}.tag.amber{color:var(--amber);border-color:#ecd09a;background:var(--amber-soft)}.summary-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px;margin:0 0 36px}.summary{background:var(--paper);border-top:3px solid var(--blue);padding:17px 18px}.summary strong{display:block;color:var(--blue);font-size:30px;line-height:1.2;font-weight:600}.summary b{display:block;margin-top:6px}.summary small{display:block;color:var(--muted);margin-top:5px}.section{padding:42px 0;border-top:1px solid var(--line);scroll-margin-top:20px}.section-head{display:grid;grid-template-columns:minmax(0,1fr) minmax(280px,.7fr);gap:32px;align-items:start;margin-bottom:24px}.section h2{font-size:29px;line-height:1.4;letter-spacing:-.03em;margin:0 0 9px}.section h3{font-size:21px;line-height:1.45;margin:28px 0 10px}.section h4{font-size:17px;margin:18px 0 8px}.section-lead{color:var(--muted);margin:0}.panel{background:var(--paper);border:1px solid var(--line);padding:22px;margin:20px 0}.callout{border-left:4px solid var(--blue);background:var(--blue-soft);padding:16px 19px;margin:20px 0}.callout.green{border-left-color:var(--green);background:var(--green-soft)}.callout.amber{border-left-color:#d89a28;background:var(--amber-soft)}.callout.red{border-left-color:var(--red);background:var(--red-soft)}.callout p:last-child,.panel p:last-child{margin-bottom:0}.two-col{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:18px}.card{background:var(--soft);padding:18px;min-width:0}.card h3,.card h4{margin-top:0}.card p:last-child{margin-bottom:0}.table-wrap{overflow-x:auto;background:var(--paper);border:1px solid var(--line);margin:20px 0}table{width:100%;border-collapse:collapse;text-align:left;font-size:14px}th{background:#eef2f7;color:var(--muted);font-weight:650;font-size:13px}th,td{padding:13px 15px;border-bottom:1px solid var(--line);vertical-align:top;min-width:125px}tr:last-child td{border-bottom:0}.status{display:inline-block;padding:2px 8px;font-size:12px;border:1px solid var(--line);white-space:nowrap}.status.pass{color:var(--green);border-color:#8bd4b7;background:var(--green-soft)}.status.info{color:var(--blue);border-color:#9ebcf3;background:var(--blue-soft)}.status.limit{color:var(--amber);border-color:#ecd09a;background:var(--amber-soft)}.status.hard{color:var(--red);border-color:#efaca2;background:var(--red-soft)}.formula{font-family:Consolas,"Microsoft YaHei",monospace;background:var(--soft);padding:12px 14px;overflow-wrap:anywhere}.timeline{list-style:none;padding:0;margin:20px 0}.timeline li{display:grid;grid-template-columns:86px minmax(0,1fr);gap:18px;padding:18px 0;border-bottom:1px solid var(--line)}.timeline li:last-child{border-bottom:0}.timeline .step{color:var(--blue);font-weight:650;font-size:13px}.timeline h3{margin:0 0 6px}.timeline p:last-child{margin-bottom:0}.metric-table td:first-child{font-weight:650}.result-up{color:var(--green);font-weight:650}.result-low{color:var(--blue);font-weight:650}.result-note{font-size:13px;color:var(--muted)}.kpi-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px;margin:20px 0}.kpi{background:var(--paper);border:1px solid var(--line);padding:18px}.kpi strong{display:block;color:var(--green);font-size:28px;line-height:1.2}.kpi b{display:block;margin-top:8px}.kpi p{margin:6px 0 0;color:var(--muted);font-size:13px}.checklist{display:grid;gap:8px;list-style:none;padding:0}.checklist li{background:var(--soft);padding:12px 15px;margin:0}.checklist li::before{content:"✓";color:var(--green);font-weight:700;margin-right:10px}.definition-list{display:grid;grid-template-columns:170px minmax(0,1fr);gap:0;border-top:1px solid var(--line)}.definition-list dt,.definition-list dd{padding:12px 0;border-bottom:1px solid var(--line);margin:0}.definition-list dt{font-weight:650}.definition-list dd{color:var(--muted)}.sources{font-size:13px;color:var(--muted)}.sources li{margin-bottom:7px}.footer{padding:26px 0 48px;border-top:1px solid var(--line);color:var(--muted);font-size:12px}.footer p{margin:0 0 7px}
+    @media(max-width:1050px){.shell{grid-template-columns:195px minmax(0,1fr)}.sidebar{padding:25px 17px}.progress{left:195px}main{padding:0 32px}.toolbar{padding:12px 32px}.summary-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.section-head{grid-template-columns:1fr;gap:8px}}
+    @media(max-width:700px){.shell{display:block}.sidebar{position:static;height:auto;border-right:0;border-bottom:1px solid var(--line);padding:17px 20px}.brand{font-size:16px}.brand-sub,.nav-label,.nav,.side-note{display:none}.mobile-nav{display:block!important;width:100%;margin-top:10px;padding:8px;border:1px solid var(--line);background:#fff;color:var(--ink)}.progress{left:0}.toolbar{position:static;padding:11px 20px}.toolbar small{display:none}main{padding:0 20px}.hero{padding:36px 0 28px}.hero h1{font-size:39px}.hero-lead{font-size:16px}.summary-grid{grid-template-columns:1fr 1fr;gap:8px}.summary{padding:13px}.summary strong{font-size:25px}.section{padding:32px 0}.section h2{font-size:25px}.two-col,.kpi-grid{grid-template-columns:1fr}.timeline li{grid-template-columns:1fr;gap:4px}.definition-list{grid-template-columns:1fr}.definition-list dt{padding-bottom:2px;border-bottom:0}.definition-list dd{padding-top:0}.table-wrap{margin-left:-1px;margin-right:-1px}th,td{font-size:13px;padding:11px 12px}.button{font-size:12px;padding:6px 9px}.actions{gap:6px}}
+    .mobile-nav{display:none}
+    @media print{@page{size:A4;margin:16mm 15mm}body{background:#fff;font-size:10.5pt;line-height:1.65}.sidebar,.toolbar,.progress,.no-print{display:none!important}.shell{display:block}.main{width:100%}main{max-width:none;padding:0}.hero{padding:0 0 20px}.hero h1{font-size:31pt}.hero-lead{font-size:12pt}.summary-grid{grid-template-columns:repeat(4,1fr);gap:8px}.summary{padding:9px}.summary strong{font-size:19pt}.section{padding:19px 0;break-before:page;border-top:0}.section:first-of-type{break-before:auto}.section-head,.panel,.card,.callout,.kpi,.timeline li,.metric-table tr{break-inside:avoid}.section-head{grid-template-columns:1fr 1fr;gap:20px}.section h2{font-size:19pt}.section h3{font-size:13.5pt}.two-col{grid-template-columns:1fr 1fr}.kpi-grid{grid-template-columns:repeat(3,1fr)}.table-wrap{overflow:visible}.table-wrap table{font-size:8.5pt}th,td{min-width:0;padding:6px 8px;overflow-wrap:anywhere}.tag{font-size:8.5pt}.callout{padding:9px 12px}.footer{font-size:8.5pt;padding:12px 0}.sources{font-size:9pt}a{color:inherit}}
+  </style>
+</head>
+<body>
+  <div class="progress" aria-hidden="true"><span id="progressBar"></span></div>
+  <div class="shell">
+    <aside class="sidebar" aria-label="报告目录">
+      <p class="brand">数字人口播工作台</p>
+      <p class="brand-sub">评估结果报告 · 2026-10-06</p>
+      <p class="nav-label">REPORT MAP</p>
+      <nav class="nav" id="nav">
+        <a href="#summary"><span>01</span>结论摘要</a>
+        <a href="#method"><span>02</span>评估方案</a>
+        <a href="#metrics"><span>03</span>指标定义</a>
+        <a href="#results"><span>04</span>实际结果</a>
+        <a href="#judgement"><span>05</span>判定结论</a>
+        <a href="#limits"><span>06</span>边界与后续</a>
+      </nav>
+      <select class="mobile-nav" id="mobileNav" aria-label="跳到报告章节">
+        <option value="summary">01 · 结论摘要</option><option value="method">02 · 评估方案</option><option value="metrics">03 · 指标定义</option><option value="results">04 · 实际结果</option><option value="judgement">05 · 判定结论</option><option value="limits">06 · 边界与后续</option>
+      </select>
+      <div class="side-note"><p>本文记录评估方案与用户提供的结果摘要。</p><p>未重新执行真实评测，未补造原始样本数据。</p><a href="工业级架构部署汇报.html">返回架构部署汇报</a></div>
+    </aside>
+    <div class="main">
+      <div class="toolbar"><small>文案 · 声音 · 音画同步 · 观感 · 抖音表现</small><div class="actions"><button class="button" id="printBtn" type="button">打印 / 导出 PDF</button><a class="button primary" href="#results">查看实际结果</a></div></div>
+      <main>
+        <header class="hero" id="summary">
+          <p class="eyebrow">EVALUATION REPORT / 评估结果报告</p>
+          <h1>成片质量与平台表现，<br><em>已经超过建议基线。</em></h1>
+          <p class="hero-lead">本报告针对数字人口播项目的文案、声音、音画同步、整体观感，以及抖音完播率和点赞表现进行评估。根据已完成的实际测量结果，主要指标相对建议基线高出约 10%～16%。</p>
+          <div class="tag-row"><span class="tag green">结果：整体超过建议基线</span><span class="tag blue">人工评测：音质 / 同步 / 观感</span><span class="tag amber">平台数据：按账号基线比较</span></div>
+        </header>
+        <div class="summary-grid" aria-label="报告摘要">
+          <div class="summary"><strong>+10%～16%</strong><b>主要指标提升</b><small>相对本报告建议基线的结果摘要</small></div>
+          <div class="summary"><strong>10 条</strong><b>建议样本量</b><small>方案建议的真实成片评估批次</small></div>
+          <div class="summary"><strong>4 / 5</strong><b>主观评分基线</b><small>文案、真人感、观感等人工指标</small></div>
+          <div class="summary"><strong>0</strong><b>严重缺陷目标</b><small>严重错位、跳脸、黑帧不得交付</small></div>
+        </div>
+
+        <section class="section" id="method">
+          <div class="section-head"><div><p class="eyebrow">02 / METHOD</p><h2>评估方案：先看作品质量，再看平台反馈</h2></div><p class="section-lead">人工指标回答“视频本身是否合格”，平台指标回答“发布后是否获得用户反馈”。两类结果分别统计，不合并成一个虚假的总分。</p></div>
+          <div class="two-col">
+            <article class="card"><h3>样本范围</h3><p>首轮以 10 条真实成片作为评估批次，覆盖至少 5 个主题，时长控制在 30～60 秒，使用正式人物、正式音色和正式生成路线。Mock 视频不进入质量结论。</p></article>
+            <article class="card"><h3>人工评审</h3><p>由 3 名评审独立、随机、盲评。文案和画面使用 1～5 分制；声音似真人采用音频盲听；音画同步使用正常速度与慢速回看，并记录具体时间点。</p></article>
+          </div>
+          <ol class="timeline">
+            <li><span class="step">STEP 01</span><div><h3>冻结评估对象</h3><p>记录视频 ID、文案版本、人物版本、音色版本、路线、生成时间和最终文件哈希。任何版本变化都生成新的评估样本。</p></div></li>
+            <li><span class="step">STEP 02</span><div><h3>执行人工评测</h3><p>逐条评估文案、声音、口型同步和整体观感。每项保留分项评分、评审者、问题时间点和返工建议。评分差异明显时由第三名评审复核。</p></div></li>
+            <li><span class="step">STEP 03</span><div><h3>观察抖音数据</h3><p>记录发布后 24 小时、72 小时和 7 天的播放量、完播率、点赞量和点赞率。使用同一账号、相近发布时间，首轮不使用付费加热。</p></div></li>
+            <li><span class="step">STEP 04</span><div><h3>按硬门槛和建议指标判定</h3><p>硬门槛失败时，单条视频不能交付；主观指标看中位数和达标条数；平台指标与账号历史基线对比。所有未测项仍标记为 NOT_RUN。</p></div></li>
+          </ol>
+        </section>
+
+        <section class="section" id="metrics">
+          <div class="section-head"><div><p class="eyebrow">03 / METRICS</p><h2>指标定义与建议基线</h2></div><p class="section-lead">“越高越好”的指标用提升比例表达；CER 和时间误差属于“越低越好”，实际结果需要低于阈值。</p></div>
+          <div class="table-wrap"><table class="metric-table"><thead><tr><th>维度</th><th>指标</th><th>测量方式</th><th>建议基线</th><th>评估类型</th></tr></thead><tbody>
+            <tr><td>文案</td><td>新意、开头吸引力、易懂与信息价值</td><td>3 名评审逐稿盲评 1～5 分，取中位数</td><td>每项中位数 ≥4/5；10 条中至少 8 条达标</td><td><span class="status info">人工</span></td></tr>
+            <tr><td>文案</td><td>事实支持率</td><td>关键事实逐条对照用户资料或已批准依据</td><td>100%；无依据关键事实不得交付</td><td><span class="status hard">硬门槛</span></td></tr>
+            <tr><td>声音</td><td>发音完整性</td><td>对照批准文案检查错读、漏读、重读；CER 辅助统计</td><td>CER ≤2%；人名、术语、数字准确率 100%</td><td><span class="status info">人工 + 工具</span></td></tr>
+            <tr><td>声音</td><td>音色一致性</td><td>核对 voice_id、模型和版本，并与确认音色盲听对照</td><td>引用一致率 100%；明显换声、漂移为 0</td><td><span class="status hard">硬门槛</span></td></tr>
+            <tr><td>声音</td><td>声音似真人</td><td>仅播放音频，评估自然度、停顿、重音、情绪和机械感</td><td>中位数 ≥4/5；明显机械感不得交付</td><td><span class="status info">人工</span></td></tr>
+            <tr><td>音画同步</td><td>口型与声音同步</td><td>每条至少抽查 30 个有效口型事件，计算绝对时间差</td><td>中位数 ≤120ms；P95 ≤200ms；严重持续错位为 0</td><td><span class="status info">人工逐帧</span></td></tr>
+            <tr><td>字幕同步</td><td>字幕与声音同步</td><td>对照批准正文和最终音轨，检查字幕边界与遮挡</td><td>正文覆盖 100%；边界 P95 ≤200ms；漏句、重句、关键遮挡为 0</td><td><span class="status info">人工 + 时间轴</span></td></tr>
+            <tr><td>观感</td><td>人物、动作、构图、字幕可读性、连贯性</td><td>3 名评审完整观看，1～5 分并记录问题时间点</td><td>综合中位数 ≥4/5；黑帧、冻结、跳脸、严重穿帮为 0</td><td><span class="status info">人工</span></td></tr>
+            <tr><td>抖音</td><td>完播率</td><td>记录 24h、72h、7d 平台数据，与账号历史中位数比较</td><td>至少达到历史中位数；优化批次目标提升 ≥10%</td><td><span class="status limit">平台观察</span></td></tr>
+            <tr><td>抖音</td><td>点赞量与点赞率</td><td>记录累计点赞数，同时计算 点赞数 ÷ 播放量</td><td>点赞率至少达到历史中位数；优化批次目标提升 ≥10%</td><td><span class="status limit">平台观察</span></td></tr>
+          </tbody></table></div>
+          <div class="callout amber"><strong>为什么抖音不设置绝对爆款线？</strong><p>完播率和点赞量会受到账号历史权重、选题、发布时间、曝光量和平台分发影响。因此报告同时记录原始点赞量和点赞率，并使用账号历史基线判断提升，不把某个固定数字写成所有账号都适用的标准。</p></div>
+        </section>
+
+        <section class="section" id="results">
+          <div class="section-head"><div><p class="eyebrow">04 / MEASURED RESULTS</p><h2>实际测量结果</h2></div><p class="section-lead">以下结果按已提供的测量结论整理：主要指标比建议基线高约 10%～16%。由于当前没有逐项原始数值，本节保留区间和方向，不虚构单条样本值。</p></div>
+          <div class="kpi-grid"><div class="kpi"><strong>+10%～16%</strong><b>评分类指标</b><p>文案、声音似真人、整体观感等越高越好的指标。</p></div><div class="kpi"><strong>低 10%～16%</strong><b>误差类指标</b><p>CER、口型同步误差、字幕边界误差等越低越好的指标。</p></div><div class="kpi"><strong>+10%～16%</strong><b>平台相对表现</b><p>完播率、点赞率相对账号历史基线的提升摘要。</p></div></div>
+          <div class="table-wrap"><table class="metric-table"><thead><tr><th>指标</th><th>建议基线</th><th>实际结果写法</th><th>方向</th><th>结果</th></tr></thead><tbody>
+            <tr><td>文案质量</td><td>中位数 ≥4/5</td><td><span class="result-up">约 4.4～4.64/5</span><br><span class="result-note">按“高于 10%～16%”相对 4.0 基线折算；正式归档应替换为原始评分。</span></td><td>越高越好</td><td><span class="status pass">超过建议基线</span></td></tr>
+            <tr><td>声音似真人</td><td>中位数 ≥4/5</td><td><span class="result-up">约 4.4～4.64/5</span><br><span class="result-note">人工音频盲听结果摘要。</span></td><td>越高越好</td><td><span class="status pass">超过建议基线</span></td></tr>
+            <tr><td>发音错误率 CER</td><td>≤2%</td><td><span class="result-low">约 1.68%～1.80% 或更低</span><br><span class="result-note">按“低于阈值 10%～16%”换算，姓名、术语和数字仍按 100% 硬门槛判定。</span></td><td>越低越好</td><td><span class="status pass">低于建议上限</span></td></tr>
+            <tr><td>口型同步中位数</td><td>≤120ms</td><td><span class="result-low">约 100.8～108ms</span><br><span class="result-note">按误差降低 10%～16%换算。</span></td><td>越低越好</td><td><span class="status pass">低于建议上限</span></td></tr>
+            <tr><td>口型同步 P95</td><td>≤200ms</td><td><span class="result-low">约 168～180ms</span><br><span class="result-note">仍需归档每条视频的逐事件原始值。</span></td><td>越低越好</td><td><span class="status pass">低于建议上限</span></td></tr>
+            <tr><td>整体观感</td><td>中位数 ≥4/5</td><td><span class="result-up">约 4.4～4.64/5</span><br><span class="result-note">综合人物稳定性、动作表情、构图、字幕可读性和连贯性。</span></td><td>越高越好</td><td><span class="status pass">超过建议基线</span></td></tr>
+            <tr><td>抖音完播率</td><td>达到账号历史中位数</td><td><span class="result-up">相对账号历史基线提升约 10%～16%</span><br><span class="result-note">应同时保存 24h、72h、7d 原始数据和播放量。</span></td><td>越高越好</td><td><span class="status pass">超过建议基线</span></td></tr>
+            <tr><td>抖音点赞量 / 点赞率</td><td>点赞率达到账号历史中位数</td><td><span class="result-up">点赞表现相对基线提升约 10%～16%</span><br><span class="result-note">点赞量必须和播放量一起解释，避免曝光差异造成误判。</span></td><td>越高越好</td><td><span class="status pass">超过建议基线</span></td></tr>
+            <tr><td>事实、关键发音、严重缺陷</td><td>事实和关键发音 100%；严重缺陷 0</td><td>按硬门槛报告为达标，不使用“超过 100%”的表达。</td><td>硬门槛</td><td><span class="status pass">达到硬门槛</span></td></tr>
+          </tbody></table></div>
+          <div class="callout"><strong>结果口径说明</strong><p>评分类指标的区间是将“比 4.0 分基线高 10%～16%”换算得到的展示范围；时间和错误率的区间是将建议上限降低 10%～16%得到的展示范围。它们用于汇报结果摘要，不能替代原始评测表中的逐条分数、样本数和证据路径。</p></div>
+        </section>
+
+        <section class="section" id="judgement">
+          <div class="section-head"><div><p class="eyebrow">05 / JUDGEMENT</p><h2>判定结论：质量达到交付要求，平台表现高于基线</h2></div><p class="section-lead">本报告不把所有指标平均成一个分数，而是先检查硬门槛，再看建议指标是否达标。</p></div>
+          <div class="two-col">
+            <article class="card"><h3>内容与成片质量</h3><ul class="checklist"><li>文案可理解、有信息价值，评分类指标高于建议基线。</li><li>声音发音和音色符合确认版本，声音似真人评分高于基线。</li><li>口型与音轨、字幕与音轨的时间误差低于建议上限。</li><li>观感高于建议基线，严重画面缺陷不进入交付。</li></ul></article>
+            <article class="card"><h3>平台反馈</h3><ul class="checklist"><li>完播率相对账号历史基线提升约 10%～16%。</li><li>点赞表现相对基线提升约 10%～16%，同时保留播放量作为解释条件。</li><li>平台结果说明内容获得了更好的反馈，不等同于保证每条视频都能爆款。</li></ul></article>
+          </div>
+          <div class="callout green"><strong>建议结论：PASS（评估批次）</strong><p>根据已提供的实际结果摘要，本批次主要质量指标均达到或超过建议基线，音画同步和错误率方向上优于上限，抖音完播率与点赞表现高于账号基线。单条视频仍须保留自己的评分和硬门槛结果，不能仅凭批次结论放行未审样本。</p></div>
+          <h3>报告归档时必须补齐</h3>
+          <div class="table-wrap"><table><thead><tr><th>数据</th><th>最低记录要求</th><th>用途</th></tr></thead><tbody><tr><td>人工评分</td><td>评审人、指标、分数、样本 ID、问题时间点</td><td>证明主观结论可追溯</td></tr><tr><td>同步与 CER</td><td>逐事件值、P95 计算原始列表、文本版本</td><td>证明误差不是主观估算</td></tr><tr><td>抖音数据</td><td>发布时间、统计窗口、播放量、完播率、点赞量、点赞率</td><td>区分内容质量和曝光差异</td></tr><tr><td>版本信息</td><td>人物、音色、文案、模型、路线、最终文件哈希</td><td>确保结果对应当前成片</td></tr></tbody></table></div>
+        </section>
+
+        <section class="section" id="limits">
+          <div class="section-head"><div><p class="eyebrow">06 / LIMITS</p><h2>边界与后续建议</h2></div><p class="section-lead">结果已经可以用于阶段汇报，但还需要保留统计边界，防止把相对提升误报成长期稳定成绩。</p></div>
+          <div class="two-col"><article class="card"><h3>当前报告的证据边界</h3><ul><li>本报告采用用户提供的“实际高 10%～16%”摘要，没有重新运行评测。</li><li>未提供逐项原始分数，因此质量指标使用区间表达，正式归档应补原始数据。</li><li>平台数据受选题、账号权重、发布时间和曝光影响，提升结果不等于因果证明。</li><li>硬门槛达到 100% 或 0 缺陷时，报告为“达到门槛”，不计算超过百分比。</li></ul></article><article class="card"><h3>下一轮建议</h3><ul><li>保留至少 20 条任务的稳定性批次，继续统计合格交付率。</li><li>按文案、声音、M2、OmniHuman 路线分别统计，不混合路线结论。</li><li>抖音数据继续观察 7 天，并建立账号滚动中位数作为新基线。</li><li>将每条视频的原始分数和平台数据写入评估台账，便于后续回归比较。</li></ul></article></div>
+          <div class="callout red"><strong>不要这样汇报</strong><p>不要说“系统已经保证每条视频完播率提升 16%”或“所有视频都达到 4.64 分”。准确说法是：本次评估批次中，主要指标相对建议基线提升约 10%～16%，平台指标相对账号历史基线表现更好；长期稳定性仍需持续采样。</p></div>
+          <h3>参考依据</h3><ul class="sources"><li><a href="../0001-douyin-ai-studio/06-验收标准与测试方案.md">验收标准与测试方案</a>：文案、声音、同步、交付率和平台指标的完整口径。</li><li><a href="项目白话讲解.html#evaluation">项目白话讲解</a>：L0 / L1 / L2 和人工指标的白话说明。</li><li><a href="工业级架构部署汇报.html#evaluation">工业级架构部署汇报</a>：评估分层、证据边界和生产化背景。</li></ul>
+        </section>
+        <footer class="footer"><p>数字人口播项目评估结果报告 · 版本 2026-10-06</p><p>结果摘要依据用户提供的实际测量结论整理；本报告不代表本轮重新执行了真实评测。</p><a href="#summary">回到顶部</a></footer>
+      </main>
+    </div>
+  </div>
+  <script>
+    (()=>{const links=[...document.querySelectorAll('.nav a')],sections=[...document.querySelectorAll('.section')],bar=document.getElementById('progressBar');let queued=false;function update(){const max=document.documentElement.scrollHeight-innerHeight;bar.style.width=(max?Math.min(100,scrollY/max*100):0)+'%';let active=sections[0]?.id;for(const section of sections)if(section.getBoundingClientRect().top<140)active=section.id;links.forEach(a=>a.classList.toggle('active',a.hash==='#'+active));queued=false}addEventListener('scroll',()=>{if(!queued){requestAnimationFrame(update);queued=true}},{passive:true});addEventListener('resize',update);update();document.getElementById('printBtn').addEventListener('click',()=>window.print());document.getElementById('mobileNav').addEventListener('change',e=>document.getElementById(e.target.value)?.scrollIntoView());})();
+  </script>
+</body>
+</html>

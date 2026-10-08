@@ -16,6 +16,8 @@ tunnel_pub/
 server.err
 status.txt
 visible.json
+*.db-wal
+*.db-shm
 
 # ===== Python =====
 __pycache__/
@@ -81,3 +83,6 @@ tmp_*
 btn-*.png
 debug-*.png
 restored-*.png
+
+# 用户生成的候选保留在本机，已有受版本控制的定版素材不受影响。
+assets/生成候选/*/

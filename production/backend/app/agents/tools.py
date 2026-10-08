@@ -158,15 +158,24 @@ def t_register_script_candidates(args: Dict[str, Any], ctx: Dict[str, Any]) -> D
     work_id = args["work_id"]
     brief = (st.get("works", work_id) or {}).get("brief") or {}
     materials = brief.get("materials") or args.get("materials") or []
+    execution_context = dict(ctx, work_id=ctx.get("work_id") or work_id)
+    from .framework import require_active_execution
 
     try:
-        for role in ("writer", "repair", "reviewer"):
-            prof = text_providers.profile(role)
-            if not os.environ.get(prof["key_env"]):
-                raise ContentBlocked(f"未配置 {prof['key_env']}，不能生成稿件；不返回伪装成模型输出的内容",
-                                     "PROVIDER_NOT_CONFIGURED", retryable=False)
-        prompt = content_service.ensure_prompt(work_id)
-        job = content_service.run_legacy(work_id, "generation", {"prompt_id": prompt["id"], "topic": args["topic"]})
+        # Reserve the content task under the same lock that protects human takeover.
+        with st.transaction() as connection:
+            require_active_execution(execution_context)
+            for role in ("writer", "repair", "reviewer"):
+                prof = text_providers.profile(role)
+                if not os.environ.get(prof["key_env"]):
+                    raise ContentBlocked(f"未配置 {prof['key_env']}，不能生成稿件；不返回伪装成模型输出的内容",
+                                         "PROVIDER_NOT_CONFIGURED", retryable=False)
+            prompt = content_service.ensure_prompt(work_id, _connection=connection)
+            payload = {"prompt_id": prompt["id"], "topic": args["topic"]}
+            request_id = content_service.legacy_request_id(work_id, "generation", payload)
+            job = content_tasks.submit_job(work_id, "generation", request_id, payload, _connection=connection)
+        if job["state"] not in content_tasks.TERMINAL_STATES:
+            job = content_tasks.run_inline(job["id"], wait_seconds=content_service.LEGACY_WAIT_SECONDS)
     except ContentBlocked as exc:
         if MODE != "mock":
             raise ToolDenied(exc.code, exc.message)
@@ -178,6 +187,7 @@ def t_register_script_candidates(args: Dict[str, Any], ctx: Dict[str, Any]) -> D
                  "shortfall_note": "模拟三稿（未取得写作/审稿模型凭据），不冒充模型产出", "source_kind": "mock",
                  "repair_note": None, "repair_history": [], "materials_count": len(materials)}
         with st.transaction() as c:
+            require_active_execution(execution_context)
             content_selection.on_batch_replaced(c, work_id)
             st.insert_row(c, "script_batches", work_id, batch)
         return {"batch_id": batch["id"], "candidates": [c["id"] for c in cands], "angles": [c["angle"] for c in cands],

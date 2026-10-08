@@ -253,6 +253,7 @@ def test_retry_uses_approved_identity_reference(prepared):
     result = service.regenerate_image(graph["id"], 1, **approval(graph), transport=image_transport(calls))
     assert len(calls) == 1
     assert calls[0]["image_bytes"] == data and calls[0]["reference_sha256"] == hero["file_hash"]
+    assert "服装约束" in calls[0]["prompt"] and "不换装" in calls[0]["prompt"]
     assert result["shots"][0]["image"]["identity_reference"]["asset_hash"] == hero["file_hash"]
 
 

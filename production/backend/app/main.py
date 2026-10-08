@@ -9,7 +9,6 @@ from typing import Any, Dict, List, Optional
 from fastapi import Body, FastAPI, HTTPException, Request
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import FileResponse, JSONResponse
-from pydantic import ValidationError
 
 from . import config, engine, storage as st
 from . import delivery, deletion
@@ -22,6 +21,8 @@ from .voice_clone_api import router as voice_clone_router
 from .wan_api import router as wan_router
 from .publishing.api import router as publishing_router
 from .content_api import router as content_router
+from .content.direct_generation import router as direct_content_router
+from .content.manual_creation import router as manual_content_router
 from .agents.media import router as agent_media_router
 from .avatar import identity_gate, licensing, motion, person_image, registry, variant_factory
 from .avatar.compose import ComposeRejected
@@ -173,6 +174,8 @@ app.include_router(voice_clone_router)
 app.include_router(wan_router)
 app.include_router(publishing_router)
 app.include_router(content_router)
+app.include_router(direct_content_router)
+app.include_router(manual_content_router)
 app.include_router(agent_media_router)
 app.add_middleware(
     CORSMiddleware,
@@ -1302,121 +1305,25 @@ def _content_job_error(job: dict, work_id: str):
 
 
 @app.post("/api/v1/works/{work_id}/scripts", response_model=ScriptBatch)
-async def generate_scripts(work_id: str, payload: Dict[str, Any]):
-    """三稿由 content 角色产出：API 只触发编排，不另造一份候选（避免双写导致 ID 失效）。
+def generate_scripts(work_id: str, payload: Dict[str, Any]):
+    """Legacy synchronous view of the direct content workflow; never invokes DeepAgents."""
+    from .content import direct_generation, service as content_service, tasks as content_tasks
+    from .content_api import _map
 
-    可带 `materials`（参考资料，字符串或 {text, source} 列表）。资料落进 `WorkBrief`，
-    既是模型引用事实的依据，也是断言判定的唯一依据来源——`materials` 曾经**没有任何
-    写入方**，于是"断言有依据"这条路是死的：三稿的断言必然全为 unverified，
-    `FACT_EVIDENCE` 硬门禁必然挡住，用户点不动「采用」只能去改稿。留空也允许，
-    此时生成侧必须走不依赖外部事实的表达方式（见 content/generate._SYSTEM 第 7 条）。
-    """
-    w = _work(work_id)
-    topic = (payload.get("topic") or w["brief"]["topic"]).strip()
-    if not topic:
-        fail("VALIDATION_FAILED", "缺少主题")
-    new_brief = dict(w["brief"], topic=topic)
-    if payload.get("materials") is not None:
-        raw_mats = payload.get("materials") or []
-        if not isinstance(raw_mats, list):
-            fail("VALIDATION_FAILED", "materials 必须是列表（字符串或 {text, source}）")
-        materials = []
-        for item in raw_mats:
-            if isinstance(item, dict):
-                text = str(item.get("text", "")).strip()
-                src = str(item.get("source", "")).strip()
-            else:
-                text, src = str(item).strip(), ""
-            if not text:
-                continue
-            # 哈希与时间由服务端复算：调用方给的值一律忽略，否则"依据哪一版资料"
-            # 可以由客户端随便填，追溯就是假的。
-            materials.append({
-                "text": text, "source": src,
-                "content_hash": hashlib.sha256(text.encode("utf-8")).hexdigest(),
-                "added_at": now_iso(),
-            })
-        new_brief["materials"] = materials
-    # 主题/资料是共享创作输入：真的变了才推进 content_revision（并撤销依赖旧输入的审核与选用）。
-    # 只改"添加时间"的等价重提不算变化，否则重复点击会不断使旧任务和审核失效。
-    from .content import context as content_context
-    from .content import repository as content_repo
-
-    def _fingerprint(brief: dict) -> Any:
-        return (content_context.brief_core(brief),
-                [m.get("content_hash") or m.get("text") for m in (brief.get("materials") or []) if isinstance(m, dict)])
-
-    if _fingerprint(new_brief) != _fingerprint(w["brief"]):
-        with st.transaction() as connection:
-            content_repo.bump_content_revision(connection, work_id, brief=new_brief)
-    elif new_brief != w["brief"]:
-        w["brief"] = new_brief
-        st.put("works", w["id"], w)
-    w = _work(work_id)
-    # 旧采用失效由写入方负责（出稿任务成功替换批次时才清空）。失败不该有副作用。
-
-    from .agents import supervisor
-
-    task = _current_task(work_id)
-    if not task:
-        task = _create_task(work_id, w.get("route", "M2"))
-    # 上一次点击触发的后台推进可能还在把任务推向选择门：先等它落定再重跑，
-    # 否则它会在本次把任务置为 running 之后又写回 waiting_selection，让写稿工具被"任务不活跃"拒绝。
-    import asyncio as _asyncio
-
-    inflight = engine._scheduled.get(task["id"])
-    if inflight is not None and not inflight.done():
-        await _asyncio.wait({inflight}, timeout=30)
-        task = _current_task(work_id) or task
-    task["stage"] = "script"
-    task["state"] = "running"
-    # 已有批次＝用户点的是「重新生成」。编排默认只跑未完成的工作项，于是这里会**空转**：
-    # 返回旧批次、却把 adopted 稿件清空、还留一条"开始写稿"的事件——按钮看起来是假的。
-    # 重跑就把本阶段重新排队（旧尝试的 AgentResult 与 attempt 计数都保留）。
-    rerun = bool(st.get("script_batches", work_id))
-    if rerun:
-        from .agents import supervisor as _sup
-
-        reset = _sup.reset_stage(task["id"], "script")
-        engine.emit(task["id"], "stage.requeued",
-                    f"用户要求重新生成：写稿阶段重新排队（{reset} 个工作项），旧尝试结果保留为证据",
-                    "script", "running")
-    engine.emit(task["id"], "stage.started", "按提示词生成三个角度的口播稿", "script", "running")
-    engine._save_task(task)
-
-    before_batch_id = (st.get("script_batches", work_id) or {}).get("id")
-    summary = await supervisor.run_stage(task, w, "script")
-    batch = st.get("script_batches", work_id)
-    if not batch:
-        for f in summary.get("failures") or []:
-            if (f.get("error") or {}).get("code") == "CONTENT_JOB_PENDING":
-                _content_pending(work_id)
-        fail("AGENT_RESULT_MISSING", "策划角色未产出候选稿，不返回兜底内容")
-    if summary.get("failures") and batch.get("id") == before_batch_id:
-        # 写稿失败时旧批次还在：直接返回它等于把失败冒充成"生成成功"。如实报错。
-        f = summary["failures"][0]
-        err = f.get("error") or {}
-        blocked = f.get("state") == "blocked"
-        if err.get("code") == "CONTENT_JOB_PENDING":
-            _content_pending(work_id)
-        fail(err.get("code") or "AGENT_RESULT_MISSING",
-             f"写稿未产出新稿（{f.get('state')}）：{err.get('message') or '未给出原因'}"
-             "；未改动已有稿件",
-             409 if blocked else 422, retryable=blocked)
-    # 契约不一致不能退化成裸 500：`extra=forbid` 下写入方多写一个字段就会被整条拒绝，
-    # 而前端只看到非 JSON 的 "Internal Server Error"，无从定位（本项曾因此卡住出稿）。
-    # 这里先按契约验一遍再排期，给出具名错误并指向要核查的地方。
+    _work(work_id)
     try:
-        view = ScriptBatch(**batch)
-    except ValidationError as exc:
-        fail("AGENT_RESULT_CONTRACT_MISMATCH",
-             f"候选稿留痕与契约不符，已拒绝返回（{exc.error_count()} 处）；"
-             f"写入方须与 contracts.ScriptBatch 同步：{exc.errors()[0].get('type')} "
-             f"@ {'.'.join(str(p) for p in exc.errors()[0].get('loc', ()))}",
-             500, action="核对 app/agents/tools.py 写入字段与 app/contracts.py 的 ScriptBatch 定义")
-    engine.schedule(task["id"])
+        job = direct_generation.submit(work_id, payload, legacy=True)
+    except Exception as exc:  # noqa: BLE001
+        raise _map(exc)
+    if job["state"] not in content_tasks.TERMINAL_STATES:
+        job = content_tasks.run_inline(job["id"], wait_seconds=content_service.LEGACY_WAIT_SECONDS)
+    if job["state"] not in ("succeeded", "partial"):
+        _content_job_error(job, work_id)
     from .content import selection as content_selection
-
+    batch = st.get("script_batches", work_id)
+    if not batch or batch.get("id") != (job.get("result_refs") or {}).get("batch_id"):
+        fail("CONTENT_RESULT_SUPERSEDED", "原请求的稿件已被新的批次替代，请刷新查看当前稿件", 409,
+             job_id=job["id"], poll_url=f"/api/v1/works/{work_id}/content/jobs/{job['id']}")
     return ScriptBatch(**content_selection.project_batch(work_id))
 
 
@@ -1449,7 +1356,7 @@ async def select_script(work_id: str, payload: Dict[str, Any]):
 
 @app.post("/api/v1/works/{work_id}/script-revisions", response_model=ScriptVersion)
 def revise_script(work_id: str, payload: Dict[str, Any]):
-    """用户手改正文：新版本新 ID，规则重审；不调用模型，也不再暗中多收一次"重抽断言"的费。
+    """用户手改正文或结构化分镜：新版本新 ID，规则重审；不调用模型，也不再暗中多收一次"重抽断言"的费。
 
     旧选用与下游（音频、口型、字幕）随批次替换一并撤销；新稿没有有效独立审核，需复审后才可采用。
     """
@@ -1458,14 +1365,17 @@ def revise_script(work_id: str, payload: Dict[str, Any]):
 
     _work(work_id)
     try:
-        revised = content_service.revise_candidate(work_id, payload.get("script_id") or "", payload.get("text") or "")
+        revised = content_service.revise_candidate(
+            work_id, payload.get("script_id") or "", payload.get("text") or "",
+            storyboard=payload.get("storyboard"), title=payload.get("title"),
+            description=payload.get("description"))
     except ContentError as exc:
         code = getattr(exc, "code", "VALIDATION_FAILED")
         fail(code, exc.message, 409 if code == "STALE_SELECTION" else 422)
     task = _current_task(work_id)
     if task:
         engine.emit(task["id"], "artifact.invalidated",
-                    "稿件修订：已生成新版本并按新正文重新做规则检查；原独立审核对新正文不再有效，需复审；"
+                    "稿件修订：已生成新版本并按当前正文/分镜重新做规则检查；原独立审核对新版本不再有效，需复审；"
                     "下游音频与口型依赖已失效",
                     task["stage"], task["state"])
     return ScriptVersion(**revised)

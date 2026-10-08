@@ -11,11 +11,12 @@ from tests.content.test_text_providers import env, parent  # noqa: F401
 
 
 @pytest.fixture(autouse=True)
-def cli_settings(monkeypatch):
+def cli_settings(monkeypatch, env):
     for role in text.ROLES:
         monkeypatch.delenv(f"AVATAR_STUDIO_CONTENT_{role.upper()}_EXECUTION_MODE", raising=False)
         monkeypatch.delenv(f"AVATAR_STUDIO_CONTENT_{role.upper()}_TIMEOUT_SECONDS", raising=False)
     monkeypatch.setenv("AVATAR_STUDIO_CONTENT_WRITER_EXECUTION_MODE", "claude_code")
+    monkeypatch.setenv("AVATAR_STUDIO_CONTENT_WRITER_PROVIDER", "anthropic")
     monkeypatch.setattr(text, "_default_transport", lambda *a: pytest.fail("HTTP调用不得离开测试"))
 
 

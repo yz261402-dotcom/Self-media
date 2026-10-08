@@ -1,0 +1,305 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>分镜剧本人工审查表</title>
+  <style>
+    :root { color-scheme: light; --paper: #fff; --bg: #f7f7f8; --text: #222; --muted: #626268; --line: #dcdce0; --accent: #002fa7; }
+    * { box-sizing: border-box; }
+    body { margin: 0; color: var(--text); background: var(--bg); font: 15px/1.65 "Helvetica Neue", Arial, "Microsoft YaHei", sans-serif; letter-spacing: 0; }
+    main { max-width: 1200px; margin: 0 auto; padding: 32px 28px 64px; background: var(--paper); }
+    h1 { margin: 0; font-size: 26px; line-height: 1.35; }
+    h2 { font-size: 19px; margin: 0; }
+    h3 { font-size: 17px; margin: 0; }
+    p { margin: 8px 0; }
+    header { display: flex; align-items: center; justify-content: space-between; gap: 20px; padding-bottom: 20px; border-bottom: 2px solid var(--text); }
+    .subtle { color: var(--muted); font-size: 13px; }
+    .metadata { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 14px 20px; padding: 22px 0; }
+    .field { display: grid; gap: 5px; font-size: 13px; min-width: 0; }
+    input[type="text"], input[type="date"], input[type="number"], textarea, select { width: 100%; min-width: 0; border: 1px solid var(--line); border-radius: 4px; padding: 9px 10px; background: var(--paper); color: var(--text); font: inherit; }
+    textarea { min-height: 66px; resize: vertical; }
+    input:focus-visible, textarea:focus-visible, select:focus-visible, button:focus-visible, summary:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
+    button { padding: 8px 14px; border: 1px solid var(--line); border-radius: 4px; background: var(--paper); color: var(--text); font: inherit; cursor: pointer; white-space: nowrap; }
+    button:hover { border-color: var(--accent); color: var(--accent); }
+    .policy { padding: 18px 0; border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); }
+    .modes { display: flex; flex-wrap: wrap; gap: 12px 24px; margin: 12px 0; }
+    .modes label { display: flex; gap: 7px; align-items: center; }
+    input[type="radio"] { accent-color: var(--accent); width: 17px; height: 17px; margin: 0; flex-shrink: 0; }
+    .summary { display: grid; grid-template-columns: 1fr 1fr 1fr 2fr; gap: 18px; padding: 18px 0; margin-bottom: 18px; border-bottom: 1px solid var(--line); }
+    .metric strong { display: block; font-size: 23px; line-height: 1.45; font-variant-numeric: tabular-nums; }
+    .metric span { color: var(--muted); font-size: 13px; }
+    #verdict[data-state="pass"] { color: var(--accent); }
+    #verdict[data-state="fail"] { color: #b02135; }
+    .anchor { padding: 0 0 20px; }
+    .anchor-list { display: flex; flex-wrap: wrap; gap: 8px 22px; font-size: 13px; color: var(--muted); }
+    .criterion { padding: 24px 0; border-top: 1px solid var(--line); }
+    .criterion-head { display: flex; justify-content: space-between; align-items: flex-start; gap: 16px; }
+    .criterion-number { color: var(--accent); margin-right: 8px; font-variant-numeric: tabular-nums; }
+    .kind { font-size: 12px; font-weight: normal; color: var(--muted); margin-left: 10px; white-space: nowrap; }
+    fieldset.score { display: flex; gap: 6px; border: 0; padding: 0; margin: 0; flex-shrink: 0; }
+    fieldset.score legend { font-size: 12px; color: var(--muted); margin-bottom: 6px; }
+    .score label { display: flex; align-items: center; gap: 6px; padding: 7px 9px; border: 1px solid var(--line); border-radius: 4px; min-height: 40px; cursor: pointer; }
+    .score label:has(input:checked) { border-color: var(--accent); color: var(--accent); background: #f0f3fb; }
+    .score:disabled label { cursor: default; background: var(--bg); color: var(--muted); }
+    .focus { color: var(--muted); margin: 8px 0 12px; font-size: 14px; }
+    details { margin-bottom: 14px; }
+    summary { cursor: pointer; font-size: 13px; color: var(--accent); margin-bottom: 8px; }
+    .rubric { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); border: 1px solid var(--line); border-radius: 4px; overflow: hidden; }
+    .level { padding: 12px; min-width: 0; border-right: 1px solid var(--line); }
+    .level:last-child { border-right: 0; }
+    .level strong { font-size: 14px; }
+    .level p { margin-bottom: 0; font-size: 13px; }
+    .observations { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+    .checks, .closing { padding: 24px 0; border-top: 2px solid var(--text); }
+    .check-list { display: grid; gap: 14px; margin: 18px 0; }
+    .check { display: grid; grid-template-columns: minmax(0, 1fr) 180px; gap: 18px; align-items: center; }
+    footer { margin-top: 24px; border-top: 1px solid var(--line); padding-top: 12px; font-size: 12px; color: var(--muted); }
+    .print-value { display: none; white-space: pre-wrap; overflow-wrap: anywhere; }
+    @media (max-width: 760px) {
+      main { padding: 22px 16px 40px; }
+      h1 { font-size: 22px; }
+      header { align-items: flex-start; gap: 12px; }
+      .metadata, .observations { grid-template-columns: 1fr; }
+      .summary { grid-template-columns: 1fr 1fr; gap: 14px; }
+      .criterion-head { flex-direction: column; }
+      .rubric { grid-template-columns: 1fr; }
+      .level { border-right: 0; border-bottom: 1px solid var(--line); }
+      .level:last-child { border-bottom: 0; }
+      .check { grid-template-columns: 1fr; gap: 6px; }
+      .kind { display: block; margin: 3px 0 0 30px; }
+    }
+    @media print {
+      @page { size: A4; margin: 14mm; }
+      body, main { background: white; }
+      body { font-size: 11px; }
+      main { padding: 0; max-width: none; }
+      h1 { font-size: 22px; }
+      h3 { font-size: 14px; }
+      .no-print, summary, .metadata input, .metadata select, textarea, .check select { display: none; }
+      .print-value { display: block; border-bottom: 1px solid var(--line); min-height: 18px; }
+      .metadata { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 9px 14px; padding: 14px 0; }
+      .summary { grid-template-columns: 1fr 1fr 1fr 2fr; gap: 12px; margin-bottom: 10px; }
+      .metric strong { font-size: 18px; }
+      .criterion { break-inside: avoid; padding: 14px 0; }
+      .criterion-head { flex-direction: column; gap: 6px; }
+      .kind { display: inline; margin-left: 8px; }
+      .rubric { grid-template-columns: repeat(5, minmax(0, 1fr)); }
+      .level { padding: 7px; border-right: 1px solid var(--line); border-bottom: 0; }
+      .level p, .level strong, .focus, .field { font-size: 10px; }
+      .score label { min-height: 24px; padding: 3px 7px; }
+      .observations { grid-template-columns: 1fr 1fr; gap: 10px; }
+      .check { grid-template-columns: 1fr 140px; gap: 10px; }
+    }
+  </style>
+</head>
+<body>
+<main>
+  <header>
+    <div><h1>分镜剧本人工审查表</h1><p class="subtle">数字人口播与短视频 · 评分标准 v1.0 · 2026-10-08</p></div>
+    <button class="no-print" type="button" id="print">打印审查表</button>
+  </header>
+
+  <section class="metadata" aria-label="审查信息">
+    <label class="field">作品名称<input type="text" id="work-title" autocomplete="off"></label>
+    <label class="field">稿件编号 / 版本<input type="text" id="script-version" autocomplete="off"></label>
+    <label class="field">审查人<input type="text" id="reviewer" autocomplete="off"></label>
+    <label class="field">审查日期<input type="date" id="review-date"></label>
+    <label class="field">目标受众<input type="text" id="audience" autocomplete="off"></label>
+    <label class="field">内容类型<select id="content-kind"><option>知识 / 科普口播</option><option>教程 / 工具演示</option><option>剧情 / 故事</option><option>观点 / 经验分享</option><option>产品 / 营销</option></select></label>
+  </section>
+
+  <section class="policy" aria-label="评分规则">
+    <h2>评分规则</h2>
+    <div class="modes" role="radiogroup" aria-label="评分方案">
+      <label><input type="radio" name="mode" value="5" checked>原有 5 项</label>
+      <label><input type="radio" name="mode" value="8">建议 8 项（含 3 项补充）</label>
+    </div>
+    <p><strong>全部启用项均打 1–5 整数分，等权平均分严格大于 4 分才合格。</strong>恰好 4 分不合格；有漏评时不出合格结论。</p>
+    <p id="threshold" class="subtle">5 项方案：总分至少 21 / 25 分。未启用的补充项不计入平均分。</p>
+  </section>
+
+  <section class="summary" aria-label="评分结果" aria-live="polite">
+    <div class="metric"><strong id="progress">0 / 5</strong><span>已完成评分</span></div>
+    <div class="metric"><strong id="total">未完成</strong><span>总分</span></div>
+    <div class="metric"><strong id="average">未完成</strong><span>全部评分项的平均分</span></div>
+    <div class="metric"><strong id="verdict" data-state="pending">待完成评分</strong><span id="result-note">五项全部评分后计算结果。</span></div>
+  </section>
+
+  <section class="anchor" aria-label="统一尺度">
+    <h2>统一评分尺度</h2>
+    <div class="anchor-list"><span>1 分：核心要求不成立</span><span>2 分：有所体现，缺陷明显</span><span>3 分：基本成立，仍需实质修改</span><span>4 分：明确成立，仅需小修</span><span>5 分：表现突出，无需实质修改</span></div>
+    <p class="subtle">按目标受众和稿件版本评审。评分依据引用具体台词或镜头编号；两档之间取较低分。前三秒按台词朗读与画面计划估读，吸引力及完播意愿属于人工判断，不等于上线后的实际指标。</p>
+  </section>
+
+  <div id="criteria"></div>
+
+  <section class="checks" aria-label="事实与合规核对">
+    <h2>事实与合规核对（单列，不参与平均分）</h2>
+    <p class="subtle">建议保留这三项记录。质量分合格与事实 / 权属核对完成分别记录，有待核对内容时不能据此宣称可发布。</p>
+    <div class="check-list">
+      <label class="check"><span><strong>事实与依据</strong><br>数据、案例、产品能力、时效性信息有可核对来源；观点与事实区分；虚构情节可识别。</span><select id="facts"><option value="pending">待核对</option><option value="pass">已核对，无发现问题</option><option value="issue">发现问题，需修改</option><option value="na">不涉及，已说明原因</option></select></label>
+      <label class="check"><span><strong>标题与承诺</strong><br>开头或标题提出的收益、悬念在正文和结尾兑现，没有误导性夸大或编造结果。</span><select id="promise"><option value="pending">待核对</option><option value="pass">已核对，无发现问题</option><option value="issue">发现问题，需修改</option><option value="na">不涉及，已说明原因</option></select></label>
+      <label class="check"><span><strong>版权、肖像与发布规范</strong><br>人物、音乐、图片和引用的使用权可确认；检查隐私、广告表述及适用平台的内容标识要求。</span><select id="rights"><option value="pending">待核对</option><option value="pass">已核对，无发现问题</option><option value="issue">发现问题，需修改</option><option value="na">不涉及，已说明原因</option></select></label>
+    </div>
+    <label class="field">来源、问题位置或“不涉及”的原因<textarea id="check-notes"></textarea></label>
+  </section>
+
+  <section class="closing">
+    <h2>修改与复审记录</h2>
+    <div class="observations" style="margin-top: 14px">
+      <label class="field">优先修改项<textarea id="priority-notes"></textarea></label>
+      <label class="field">复审版本 / 结论<textarea id="followup-notes"></textarea></label>
+    </div>
+    <p class="subtle">修改稿件后按新版本重新评分，旧评分仅代表旧版本。出现低分项会提示修改，但不额外设置单项最低分。</p>
+  </section>
+  <footer>此表为人工审查标准建议稿，独立于工作台现有审核流程。当前评分仅保留在本次打开的页面中；审查记录以打印或浏览器打印为 PDF 的结果为准。</footer>
+</main>
+
+<script>
+  const rubric = [
+    {
+      id: "hook", title: "前三秒吸引力", focus: "只评开头：目标受众能否迅速识别与自己有关的问题、收益或悬念。", levels: [
+        "以问候、自我介绍或空泛铺垫开场，前三秒看不出主题，也没有继续看的理由。",
+        "提到了主题，但只说‘很重要’‘很有用’，问题或收益含糊，进入正文太慢。",
+        "能识别具体问题或收益，但引子偏长、常见，吸引点需要前三秒之后才明确。",
+        "前三秒用简洁台词或明确画面提出具体问题、收益或悬念，与目标受众直接相关。",
+        "满足 4 分，并用准确具体的反差、场景或可兑现的细节形成鲜明记忆点，台词与画面配合紧凑。"
+      ]
+    },
+    {
+      id: "momentum", title: "剧情张力 / 内容推进力", focus: "评中段的持续期待。故事看目标、障碍、后果；科普与教程看问题、认知反差、证据或方法的递进，不强求戏剧冲突。", levels: [
+        "中段只是零散陈述或重复观点，缺乏问题推进，看不出下一段为什么值得看。",
+        "有问题或矛盾，但过早给完答案或长时间不推进，主要靠夸张措辞制造刺激。",
+        "有基本推进和一个值得追问的节点，但部分段落重复、转折生硬或后果说明不足。",
+        "各关键段落带来新信息；问题、障碍或认知反差自然递进，让人期待下一步。",
+        "满足 4 分，并有合理、非生硬的转折或逐层揭示；推进建立在内容本身，删去夸张措辞仍成立。"
+      ]
+    },
+    {
+      id: "interaction", title: "互动潜力", focus: "评观众有没有与主题相关、具体且容易回应的表达空间，不以‘点赞关注评论’的口号计分。", levels: [
+        "没有可回应的讨论点，或仅有与内容无关的点赞、关注口号。",
+        "只有‘你怎么看’之类空泛提问，回应门槛高，或用无依据争议强行引导评论。",
+        "有相关问题，但范围过宽、答案过于单一，观众不容易提供自己的经历或理由。",
+        "有具体、低门槛的选择、经历或观点问题，观众能自然说出自己的答案与理由。",
+        "满足 4 分，并能自然容纳不同经验与合理观点，回应内容对其他观众也有参考价值。"
+      ]
+    },
+    {
+      id: "empathy", title: "代入感", focus: "评目标受众的真实处境、感受与选择是否被准确写出，而非单看情绪强弱。", levels: [
+        "对象不明确，场景和诉求与目标受众无关，或呈现明显失真的刻板印象。",
+        "只用‘大家都很焦虑’等笼统标签，没有具体处境、行为或困难。",
+        "有相关场景，观众能理解，但细节泛化，角色选择或感受缺少依据。",
+        "以具体、可信的场景和行为呈现受众困扰，表达贴近其经验，容易产生‘我也遇到过’的感受。",
+        "满足 4 分，并写出受众容易忽略但真实的顾虑或两难选择，以准确细节形成共鸣而不强行煽情。"
+      ]
+    },
+    {
+      id: "structure", title: "文案结构 / 完播意愿", focus: "评整篇的信息顺序、段落承接与结尾兑现。开头是否有钩子归第 1 项，中段的新信息推进归第 2 项。", levels: [
+        "缺少完整主线，信息顺序混乱，结尾缺失或与开头承诺无关。",
+        "有开头、中段、结尾，但篇幅失衡、跳跃明显，关键答案或结论缺失。",
+        "主线完整、基本能兑现承诺，但有可整段删除的重复或旁枝，需要调整段落顺序或压缩。",
+        "开头设定的问题、中段展开和结尾回收连贯；信息量与时长匹配，只有局部冗余或小修。",
+        "满足 4 分，各段都有明确作用，结尾清晰回收开头承诺并留下有价值的总结或行动，没有明显可删的空转段落。"
+      ]
+    },
+    {
+      id: "value", title: "内容价值", optional: true, focus: "补充建议：评观众看完获得的新理解、判断依据或可执行方法；事实是否成立另列核对。", levels: [
+        "主要是口号或常识堆叠，看完没有明确获得。",
+        "提出观点或建议，但缺少原因、适用场景或具体做法，难以利用。",
+        "有一个明确收获，但例子、步骤或边界不够具体，还需补充才能用于实际判断。",
+        "提供清楚的新解释、判断依据或具体方法，说明适用场景，目标受众能够复述或尝试。",
+        "满足 4 分，并用有针对性的例子、对照或限制条件帮助观众迁移应用，避免只记住一个口号。"
+      ]
+    },
+    {
+      id: "delivery", title: "口播表达", optional: true, focus: "补充建议：评台词是否自然、易懂、好念，句长、术语、停顿和估读时长是否适合数字人口播。", levels: [
+        "长句、歧义或错误表达大量存在，朗读难以听懂，台词无法直接用于口播。",
+        "有明显书面腔、术语堆积或绕口句，需要重写多处才能自然表达。",
+        "大体能顺畅朗读，但仍有多处长句、未解释术语或节奏问题，需要逐句调整。",
+        "用词口语化、句子清晰、停顿自然；必要术语有解释，估读时长与目标时长大致匹配。",
+        "满足 4 分，重点与语气有清楚落点，朗读顺畅且表达有辨识度，无需实质改写。"
+      ]
+    },
+    {
+      id: "execution", title: "分镜可执行性 / 声画配合", optional: true, focus: "补充建议：评画面、台词与镜头时长是否可实现。人物、服装、道具和场景的连续性要在剧本中明确；本项不保证模型实际生成一致。", levels: [
+        "关键镜头没有可呈现的画面，或台词与画面严重矛盾，现有制作能力无法实现。",
+        "多处镜头描述含糊、声画脱节或时长不可行；人物、服装、道具连续性频繁冲突。",
+        "整体可制作，但部分镜头需要补充画面、拆分动作或明确连续性约束后才能执行。",
+        "各镜头画面与台词相互支持；镜头时长合理，人物、服装、道具、场景约束清楚，仅需局部调整。",
+        "满足 4 分，并用适当的示例画面、演示或对照降低理解负担，镜头安排精简，关键生成限制已有可行替代方案。"
+      ]
+    }
+  ];
+
+  const root = document.querySelector("#criteria");
+  for (const [index, item] of rubric.entries()) {
+    const article = document.createElement("article");
+    article.className = "criterion";
+    article.dataset.id = item.id;
+    article.innerHTML = `
+      <div class="criterion-head">
+        <h3><span class="criterion-number">${String(index + 1).padStart(2, "0")}</span>${item.title}<span class="kind">${item.optional ? "补充建议 · 当前不计分" : "必评项"}</span></h3>
+        <fieldset class="score" ${item.optional ? "disabled" : ""}>
+          <legend>${item.title}评分</legend>
+          ${[1, 2, 3, 4, 5].map(score => `<label title="${item.levels[score - 1]}"><input type="radio" name="${item.id}" value="${score}" aria-label="${score} 分">${score}</label>`).join("")}
+        </fieldset>
+      </div>
+      <p class="focus">${item.focus}</p>
+      <details open><summary>1–5 分评分标准</summary><div class="rubric">
+        ${item.levels.map((text, position) => `<div class="level"><strong>${position + 1} 分</strong><p>${text}</p></div>`).join("")}
+      </div></details>
+      <div class="observations">
+        <label class="field">评分依据（台词 / 镜头编号）<textarea id="${item.id}-evidence"></textarea></label>
+        <label class="field">修改建议<textarea id="${item.id}-revision"></textarea></label>
+      </div>`;
+    root.append(article);
+  }
+
+  function updateScore() {
+    const count = Number(document.querySelector('input[name="mode"]:checked').value);
+    const active = rubric.filter(item => !item.optional || count === 8);
+    for (const item of rubric) {
+      const article = root.querySelector(`[data-id="${item.id}"]`);
+      article.querySelector("fieldset").disabled = Boolean(item.optional && count === 5);
+      if (item.optional) article.querySelector(".kind").textContent = count === 8 ? "补充项 · 计入均分" : "补充建议 · 当前不计分";
+    }
+    const scores = active.map(item => Number(document.querySelector(`input[name="${item.id}"]:checked`)?.value || 0));
+    const filled = scores.filter(score => score >= 1 && score <= 5).length;
+    const complete = filled === active.length;
+    const total = scores.reduce((sum, score) => sum + score, 0);
+    const average = total / active.length;
+    const qualified = complete && total > 4 * active.length;
+    document.querySelector("#threshold").textContent = `${count} 项方案：总分至少 ${count * 4 + 1} / ${count * 5} 分。未启用的补充项不计入平均分。`;
+    document.querySelector("#progress").textContent = `${filled} / ${active.length}`;
+    document.querySelector("#total").textContent = complete ? `${total} / ${active.length * 5}` : "未完成";
+    document.querySelector("#average").textContent = complete ? average.toFixed(3).replace(/\.?0+$/, "") : "未完成";
+    const verdict = document.querySelector("#verdict");
+    verdict.textContent = !complete ? "待完成评分" : qualified ? "质量评分合格" : "质量评分不合格";
+    verdict.dataset.state = !complete ? "pending" : qualified ? "pass" : "fail";
+    const low = active.filter((item, index) => scores[index] > 0 && scores[index] <= 2);
+    document.querySelector("#result-note").textContent = !complete ? `${active.length} 项全部评分后计算结果。` : low.length ? `建议优先修改：${low.map(item => item.title).join("、")}。该提示不改变均分结论。` : "事实与合规核对单列，不计入质量均分。";
+  }
+
+  document.addEventListener("change", updateScore);
+  document.querySelector("#print").addEventListener("click", () => window.print());
+  function preparePrint() {
+    updateScore();
+    document.querySelectorAll("details").forEach(detail => { detail.dataset.wasOpen = String(detail.open); detail.open = true; });
+    document.querySelectorAll(".print-value").forEach(element => element.remove());
+    document.querySelectorAll('.metadata input, .metadata select, textarea, .check select').forEach(input => {
+      const value = document.createElement("div");
+      value.className = "print-value";
+      value.textContent = input instanceof HTMLSelectElement ? input.selectedOptions[0].textContent : input.value || "________________";
+      input.after(value);
+    });
+  }
+  window.addEventListener("beforeprint", preparePrint);
+  window.addEventListener("afterprint", () => {
+    document.querySelectorAll("details").forEach(detail => { detail.open = detail.dataset.wasOpen === "true"; });
+    document.querySelectorAll(".print-value").forEach(element => element.remove());
+  });
+  updateScore();
+</script>
+</body>
+</html>

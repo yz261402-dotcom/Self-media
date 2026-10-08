@@ -5,6 +5,8 @@ API、旧入口和 Agent 工具都调用这里；不在别处再造一份生成�
 """
 from __future__ import annotations
 
+from contextlib import nullcontext
+
 import difflib
 import json
 import math
@@ -20,7 +22,7 @@ from . import repository as repo
 from .dedup import dedup_report, text_similarity
 from .errors import ContentBlocked, ContentError, ContentRejected
 from .providers import text as tp
-from .review import review_candidate
+from .review import review_candidate, storyboard_review_texts
 
 EST_CHARS_PER_SEC = 4.0
 TARGET_COUNT = 3
@@ -234,9 +236,10 @@ def _build_version(raw: Dict[str, Any], *, ctx: Dict[str, Any], job: dict, slot:
     claims, evidence, problems = _verify_claims(raw.get("claims"), text, ctx["materials"])
     brief = ctx["brief_core"]
     dedup = dedup_report(job["work_id"], text, title, brief["topic"])
+    structured_review = storyboard_review_texts(storyboard) if route == "short_video_storyboard" else {}
     report = review_candidate(text=text, title=title, claims=claims, dedup=dedup, materials=ctx["materials"],
                               target_duration_ms=brief["target_duration_ms"], duration_estimate_ms=dur,
-                              require_hook=False)
+                              require_hook=False, **structured_review)
     checks = list(report.checks)
     reuse = _reuse_findings(text, ctx)
     checks.append(QualityCheck(code="REFERENCE_REUSE", outcome="fail" if reuse else "pass", hard_gate=True,
@@ -379,11 +382,33 @@ def _problem_map(versions: Sequence[Dict[str, Any]], parsed: Dict[str, Any]) -> 
     return out
 
 
-def _bind_batch(job: dict, ctx: Dict[str, Any], versions: Sequence[Dict[str, Any]], *, shortfall: Optional[str],
-                repair_history: List[Dict[str, Any]], passed_hint: Optional[int] = None) -> str:
+def _assert_displayed_batch(c, work_id: str, expected_batch_id: Optional[str]) -> Optional[dict]:
+    row = c.execute("SELECT data FROM script_batches WHERE work_id=?", [work_id]).fetchone()
+    current = json.loads(row["data"]) if row else None
+    if expected_batch_id is not None and (current or {}).get("id") != expected_batch_id:
+        raise tasks.JobSuperseded("已展示的稿件被用户修改或替换，本任务只保留为历史记录")
+    return current
+
+
+def _bind_batch_record(c, job: dict, rec: dict, expected_batch_id: Optional[str]) -> None:
+    """同一内容集合的状态刷新保留选用；稿件改动才撤销原选用与下游。"""
     from . import selection
-    batch_id = "cbatch_" + job["id"]
+    current = _assert_displayed_batch(c, job["work_id"], expected_batch_id)
+    if not tasks.is_current(c, job):
+        raise tasks.JobSuperseded("创作输入或当前任务已变化，初稿不能覆盖当前稿件")
+    old_members = sorted((v.get("slot"), v["id"]) for v in (current or {}).get("candidates", []))
+    new_members = sorted((v["slot"], v["candidate_id"]) for v in rec["members"])
+    repo.save_batch(c, rec)
+    if old_members != new_members:
+        selection.on_batch_replaced(c, job["work_id"])
+    repo.bind_current_batch(c, job["work_id"], rec["id"], job["content_revision"], job["id"])
+
+
+def _bind_batch(job: dict, ctx: Dict[str, Any], versions: Sequence[Dict[str, Any]], *, shortfall: Optional[str],
+                repair_history: List[Dict[str, Any]], expected_batch_id: Optional[str] = None) -> str:
     members = [{"slot": v["slot"], "candidate_id": v["id"]} for v in versions]
+    snapshot = cc.digest({"members": members, "shortfall": shortfall, "repair_history": repair_history})
+    batch_id = "cbatch_" + job["id"] + "_draft_" + snapshot.split(":", 1)[-1][:16]
     rec = {"id": batch_id, "work_id": job["work_id"], "prompt_id": (ctx["prompt"] or {}).get("id", ""),
            "content_revision": job["content_revision"], "job_id": job["id"], "source_kind": "llm",
            "content_route": ctx["brief_core"]["content_route"],
@@ -391,9 +416,11 @@ def _bind_batch(job: dict, ctx: Dict[str, Any], versions: Sequence[Dict[str, Any
            "repair_note": _repair_note(repair_history), "repair_history": repair_history,
            "materials_count": len(ctx["materials"])}
     with st.transaction() as c:
-        repo.save_batch(c, rec)
-        selection.on_batch_replaced(c, job["work_id"])
-        repo.bind_current_batch(c, job["work_id"], batch_id, job["content_revision"], job["id"])
+        row = c.execute("SELECT data FROM content_batches WHERE id=?", [batch_id]).fetchone()
+        # 重启续跑同一个快照时保留首次 created_at，避免不可变记录冲突。
+        if row:
+            rec["created_at"] = json.loads(row["data"])["created_at"]
+        _bind_batch_record(c, job, rec, expected_batch_id)
     return batch_id
 
 
@@ -401,16 +428,22 @@ def _repair_note(history: List[Dict[str, Any]]) -> Optional[str]:
     if not history:
         return None
     rounds = sorted({h["round"] for h in history})
-    return f"自动返工 {len(rounds)} 轮（上限 {costs.content_limits().max_repair_rounds} 轮），共重写 {len(history)} 稿次"
+    limit = costs.content_limits().max_repair_rounds
+    if limit == 0:
+        return f"定向返工 {len(rounds)} 轮，共处理 {len(history)} 稿次；自动返工已关闭"
+    return f"自动返工 {len(rounds)} 轮（上限 {limit} 轮），共重写 {len(history)} 稿次"
 
 
 def _run_rounds(job: dict, ctx: Dict[str, Any], versions: List[Dict[str, Any]], *, review_ids: List[str],
                 notes: List[str], repair_history: List[Dict[str, Any]], transport, first_round: int = 0,
                 instruction: str = "", max_rounds: Optional[int] = None) -> str:
     """审核 → 对未过的 slot 定向返工 → 重审，最多 max_rounds 轮；统一在此计数，不再有别的返工循环。
-    返回最终 job 状态（succeeded/partial）。审核服务故障时先绑定已有候选（未审=不可选）再抛出。"""
+    返回最终 job 状态（succeeded/partial）。每轮审核前先绑定当前稿件，未审稿可读但不可选。"""
     limits = costs.content_limits()
     rounds = limits.max_repair_rounds if max_rounds is None else max_rounds
+    current_batch_id = _bind_batch(job, ctx, versions, shortfall="；".join(notes) or None,
+                                   repair_history=repair_history,
+                                   expected_batch_id=job["payload"].get("batch_id") if job["kind"] == "repair" else None)
     try:
         round_no = first_round
         parsed = sr.review_batch(parent=job, ctx=ctx, versions=versions, review_ids=review_ids, round_no=round_no,
@@ -420,6 +453,8 @@ def _run_rounds(job: dict, ctx: Dict[str, Any], versions: List[Dict[str, Any]], 
             if not problems:
                 break
             tasks.checkpoint(job)
+            with st.transaction() as c:
+                _assert_displayed_batch(c, job["work_id"], current_batch_id)
             tasks.set_progress(job["id"], stage="repair")
             targets = [{"slot": v["slot"], "angle": v["angle"], "title": v["title"], "text": v["text"],
                         "storyboard": v.get("storyboard") or [],
@@ -467,12 +502,14 @@ def _run_rounds(job: dict, ctx: Dict[str, Any], versions: List[Dict[str, Any]], 
             _save_versions(changed)
             for nv in changed:
                 versions[[v["slot"] for v in versions].index(nv["slot"])] = nv
+            current_batch_id = _bind_batch(job, ctx, versions, shortfall="；".join(notes) or None,
+                                           repair_history=repair_history, expected_batch_id=current_batch_id)
             review_ids = [nv["id"] for nv in changed]
             parsed = sr.review_batch(parent=job, ctx=ctx, versions=versions, review_ids=review_ids,
                                      round_no=round_no, transport=transport)
-        return _final_state(job, ctx, versions, parsed, notes, repair_history)
+        return _final_state(job, ctx, versions, parsed, notes, repair_history, expected_batch_id=current_batch_id)
     except (tasks.CallPending, ContentError):
-        _bind_batch(job, ctx, versions, shortfall="; ".join(notes) or None, repair_history=repair_history)
+        # 初稿和每轮新版本都已绑定，不再用异常路径重绑，避免覆盖用户编辑或新审核。
         raise
 
 
@@ -483,7 +520,7 @@ def _passed_slots(versions, parsed) -> List[int]:
     return [v["slot"] for v in versions if v["slot"] not in problems and _hard_ok(v)]
 
 
-def _final_state(job, ctx, versions, parsed, notes, repair_history) -> str:
+def _final_state(job, ctx, versions, parsed, notes, repair_history, *, expected_batch_id=None) -> str:
     passed = _passed_slots(versions, parsed)
     shortfall = None
     if len(versions) < TARGET_COUNT:
@@ -493,7 +530,6 @@ def _final_state(job, ctx, versions, parsed, notes, repair_history) -> str:
     created = now_iso()
 
     def apply(c):
-        from . import selection
         batch_id = "cbatch_" + job["id"]
         rec = {"id": batch_id, "work_id": job["work_id"], "prompt_id": (ctx["prompt"] or {}).get("id", ""),
                "content_revision": job["content_revision"], "job_id": job["id"], "source_kind": "llm",
@@ -502,9 +538,7 @@ def _final_state(job, ctx, versions, parsed, notes, repair_history) -> str:
                "shortfall_note": shortfall, "repair_note": _repair_note(repair_history),
                "repair_history": repair_history, "materials_count": len(ctx["materials"]),
                "created_at": created}
-        repo.save_batch(c, rec)
-        selection.on_batch_replaced(c, job["work_id"])
-        repo.bind_current_batch(c, job["work_id"], batch_id, job["content_revision"], job["id"])
+        _bind_batch_record(c, job, rec, expected_batch_id)
 
     tasks.finish_job(job["id"], state, result_refs={"batch_id": "cbatch_" + job["id"], "produced": len(versions),
                                                     "passed": len(passed), "passed_slots": passed}, apply=apply)
@@ -524,6 +558,7 @@ def handle_generation(job: dict, *, transport=None) -> None:
             or (prompt.get("model_profile") or {}).get("evidence_digest") not in (None, ctx["digests"]["evidence"]) \
             or cc.digest(prompt.get("identity_snapshot") or {}) != ctx["digests"]["identity"]:
         raise ContentRejected("主题/资料/风格在生成提示之后已修改，旧提示不能生成新稿；请重新准备或保存提示", "PROMPT_STALE")
+    prompts.require_content_skills(ctx["brief_core"])
     tasks.checkpoint(job)
     tasks.set_progress(job["id"], stage="write")
     versions, notes = _initial_versions(job, ctx, transport)
@@ -559,6 +594,7 @@ def handle_repair(job: dict, *, transport=None) -> None:
         if p.get("instruction"):
             probs.append(f"[用户要求] {p['instruction']}")
         problems[v["slot"]] = probs or ["用户要求改写这一稿"]
+    prompts.require_content_skills(ctx["brief_core"])
     tasks.checkpoint(job)
     tasks.set_progress(job["id"], stage="repair")
     hist: List[Dict[str, Any]] = []
@@ -606,7 +642,7 @@ def handle_repair(job: dict, *, transport=None) -> None:
 
 
 def handle_review(job: dict, *, transport=None) -> None:
-    """重新审核当前批次：只审缺少有效单稿审核的稿；批次差异审核始终读取全部当前稿件。
+    """重新审核当前批次：审缺少有效单稿审核或明确审核失败的稿；差异审核读取全部当前稿件。
     用于审核服务故障后的重试和用户改稿之后的复审。"""
     from . import selection
     ctx = cx.load_context(job["work_id"])
@@ -617,15 +653,22 @@ def handle_review(job: dict, *, transport=None) -> None:
     if ctx["prompt"] is None and ctx["reference"] is None and not ctx["materials"]:
         pass
     versions = repo.batch_candidates(batch)
-    needs = [v["id"] for v in versions if sr.current_single(job["work_id"], v, ctx) is None]
+    needs = []
+    for version in versions:
+        single = sr.current_single(job["work_id"], version, ctx)
+        if single is None or single["recommendation"] != "pass":
+            needs.append(version["id"])
     tasks.checkpoint(job)
     tasks.set_progress(job["id"], stage="review")
     sr.review_batch(parent=job, ctx=ctx, versions=versions, review_ids=needs, round_no=0, transport=transport)
-    view = selection.project_batch(job["work_id"])
+    with st.transaction() as c:
+        _assert_displayed_batch(c, job["work_id"], batch["id"])
+        view = selection.project_batch(job["work_id"])
     passed = view["passed"]
     state = "succeeded" if view["ready_to_present"] else "partial"
     tasks.finish_job(job["id"], state, result_refs={"batch_id": batch["id"], "produced": view["produced"],
-                                                    "passed": passed})
+                                                    "passed": passed},
+                     apply=lambda c: _assert_displayed_batch(c, job["work_id"], batch["id"]))
 
 
 def _carry_claims(parent: Dict[str, Any], new_text: str) -> Tuple[List[Dict[str, Any]], List[Dict[str, Any]]]:
@@ -637,41 +680,66 @@ def _carry_claims(parent: Dict[str, Any], new_text: str) -> Tuple[List[Dict[str,
     return claims, ev
 
 
-def revise_candidate(work_id: str, script_id: str, text: str) -> Dict[str, Any]:
-    """用户手改正文：新版本新 ID（parent_id 指向原稿），规则重审，替换当前批次并撤销旧选用与下游。
-    不调用模型；新稿没有有效的独立审核，需要走复审才可采用。"""
-    text = (text or "").strip()
-    if not text:
-        raise ContentRejected("修订正文不能为空", "VALIDATION_FAILED")
+def revise_candidate(work_id: str, script_id: str, text: str = "", *,
+                     storyboard: Optional[List[Dict[str, Any]]] = None,
+                     title: Optional[str] = None, description: Optional[str] = None,
+                     _connection=None) -> Dict[str, Any]:
+    """用户手改候选：正文或结构化分镜都生成新版本，规则重审，且不调用模型。
+
+    分镜必须完整提交结构化镜头；后端重新派生正文和时长，避免客户端只改展示文本而
+    任务图仍使用旧镜头。新稿没有有效的独立审核，需要走复审才可采用。
+    """
     current = st.get("script_batches", work_id)
     if not current:
         raise ContentRejected("尚未生成候选稿件", "VALIDATION_FAILED")
     cur = next((c for c in current["candidates"] if c["id"] == script_id), None)
     if cur is None:
         raise ContentRejected("稿件不存在或已被新版本取代", "STALE_SELECTION")
-    if cur.get("content_route") == "short_video_storyboard":
-        raise ContentRejected("分镜剧本不能用纯正文修订接口修改；请定向返工镜头", "STORYBOARD_EDIT_UNSUPPORTED")
     ctx = cx.load_context(work_id)
-    brief = ctx["brief_core"]
-    dur = estimate_duration_ms(text)
-    claims, ev = _carry_claims(cur, text)
-    dedup = dedup_report(work_id, text, cur["title"], brief["topic"])
-    report = review_candidate(text=text, title=cur["title"], claims=[Claim(**c) for c in claims], dedup=dedup,
-                              materials=ctx["materials"], target_duration_ms=brief["target_duration_ms"],
-                              duration_estimate_ms=dur, require_hook=False)
-    checks = list(report.checks)
-    reuse = _reuse_findings(text, ctx)
-    checks.append(QualityCheck(code="REFERENCE_REUSE", outcome="fail" if reuse else "pass", hard_gate=True,
-                               message="；".join(reuse) if reuse else "未复用参考转写的连续表达"))
-    hard_fail = any(c.hard_gate and c.outcome == "fail" for c in checks)
-    review_required = any(c.outcome in ("review", "fail") for c in checks)
     slot = cur.get("slot")
-    new = {"id": st.new_id("script"), "work_id": work_id, "slot": slot, "parent_id": cur["id"], "angle": cur["angle"],
-           "title": cur["title"], "description": cur["description"], "tags": cur.get("tags", []), "text": text,
-           "duration_estimate_ms": dur, "claims": claims,
-           "quality_report": QualityReport(checks=checks, overall="fail" if hard_fail else ("review" if review_required else "pass"),
-                                           review_required=review_required).model_dump(),
-           "origin": {"kind": "user_edit", "from": cur["id"], "evidence": ev, "created_at": now_iso()}}
+    if cur.get("content_route") == "short_video_storyboard":
+        if storyboard is None:
+            raise ContentRejected("分镜修订必须提交结构化镜头", "STORYBOARD_REQUIRED")
+        new_title = cur["title"] if title is None else str(title).strip()
+        new_description = cur.get("description", "") if description is None else str(description).strip()
+        if not new_title:
+            raise ContentRejected("分镜标题不能为空", "CANDIDATE_INCOMPLETE")
+        _, revised_text, _ = _storyboard(storyboard, ctx["brief_core"]["target_duration_ms"])
+        retained_claims = [{"text": evidence["claim"], "evidence_id": evidence.get("evidence_id"),
+                            "source_quote": evidence.get("source_quote"), "position": evidence.get("position")}
+                           for evidence in (cur.get("origin") or {}).get("evidence", [])
+                           if evidence.get("verified") and (evidence.get("position") or evidence.get("claim"))
+                           and _norm(evidence.get("position") or evidence["claim"]) in _norm(revised_text)]
+        raw = {"angle": cur["angle"], "title": new_title, "description": new_description,
+               "tags": cur.get("tags", []), "storyboard": storyboard, "claims": retained_claims}
+        new = _build_version(raw, ctx=ctx, job={"id": st.new_id("edit"), "work_id": work_id}, slot=slot,
+                             parent_id=cur["id"], round_no=0, writer={"kind": "user_edit"}, angle=cur["angle"],
+                             title=new_title, description=new_description, tags=cur.get("tags", []))
+        new["origin"] = {**new["origin"], "kind": "user_edit", "from": cur["id"],
+                          "created_at": now_iso()}
+    else:
+        text = (text or "").strip()
+        if not text:
+            raise ContentRejected("修订正文不能为空", "VALIDATION_FAILED")
+        brief = ctx["brief_core"]
+        dur = estimate_duration_ms(text)
+        claims, ev = _carry_claims(cur, text)
+        dedup = dedup_report(work_id, text, cur["title"], brief["topic"])
+        report = review_candidate(text=text, title=cur["title"], claims=[Claim(**c) for c in claims], dedup=dedup,
+                                  materials=ctx["materials"], target_duration_ms=brief["target_duration_ms"],
+                                  duration_estimate_ms=dur, require_hook=False)
+        checks = list(report.checks)
+        reuse = _reuse_findings(text, ctx)
+        checks.append(QualityCheck(code="REFERENCE_REUSE", outcome="fail" if reuse else "pass", hard_gate=True,
+                                   message="；".join(reuse) if reuse else "未复用参考转写的连续表达"))
+        hard_fail = any(c.hard_gate and c.outcome == "fail" for c in checks)
+        review_required = any(c.outcome in ("review", "fail") for c in checks)
+        new = {"id": st.new_id("script"), "work_id": work_id, "slot": slot, "parent_id": cur["id"], "angle": cur["angle"],
+               "title": cur["title"], "description": cur["description"], "tags": cur.get("tags", []), "text": text,
+               "duration_estimate_ms": dur, "claims": claims,
+               "quality_report": QualityReport(checks=checks, overall="fail" if hard_fail else ("review" if review_required else "pass"),
+                                               review_required=review_required).model_dump(),
+               "origin": {"kind": "user_edit", "from": cur["id"], "evidence": ev, "created_at": now_iso()}}
     old_batch = repo.get_batch(current["id"]) if repo.get_batch(current["id"]) else None
     members = [{"slot": c.get("slot") if c.get("slot") is not None else i + 1,
                 "candidate_id": new["id"] if c["id"] == script_id else c["id"]}
@@ -681,6 +749,7 @@ def revise_candidate(work_id: str, script_id: str, text: str) -> Dict[str, Any]:
     rec = {"id": batch_id, "work_id": work_id, "prompt_id": (old_batch or {}).get("prompt_id", ""),
            "content_revision": int((st.get("works", work_id) or {}).get("content_revision") or 0),
            "job_id": (old_batch or {}).get("job_id", ""), "source_kind": current.get("source_kind") or "llm",
+           "content_route": current.get("content_route") or cur.get("content_route") or "talking_script",
            "members": members, "requested": (old_batch or {}).get("requested") or TARGET_COUNT,
            "shortfall_note": current.get("shortfall_note"), "repair_note": current.get("repair_note"),
            "repair_history": current.get("repair_history") or [], "materials_count": current.get("materials_count"),
@@ -689,12 +758,19 @@ def revise_candidate(work_id: str, script_id: str, text: str) -> Dict[str, Any]:
         # 历史/模拟批次没有不可变快照：直接就地替换该稿，仍新建版本 ID
         cands = [dict({k: v for k, v in new.items() if k != "work_id"}) if c["id"] == script_id else c
                  for c in current["candidates"]]
-        with st.transaction() as c:
+        with nullcontext(_connection) if _connection is not None else st.transaction() as c:
             work = json.loads(c.execute("SELECT data FROM works WHERE id=?", [work_id]).fetchone()["data"])
             selection.on_batch_replaced(c, work_id)
-            st.insert_row(c, "script_batches", work_id, dict(current, candidates=cands))
+            if _connection is not None:
+                for candidate in cands:
+                    if repo.get_script_version(candidate["id"]) is None:
+                        repo.save_script_version(c, dict(candidate, work_id=work_id))
+                repo.save_batch(c, rec)
+                repo.bind_current_batch(c, work_id, batch_id, rec["content_revision"], None)
+            else:
+                st.insert_row(c, "script_batches", work_id, dict(current, candidates=cands))
         return {k: v for k, v in new.items() if k != "work_id"}
-    with st.transaction() as c:
+    with nullcontext(_connection) if _connection is not None else st.transaction() as c:
         repo.save_script_version(c, new)
         repo.save_batch(c, rec)
         selection.on_batch_replaced(c, work_id)
@@ -702,13 +778,17 @@ def revise_candidate(work_id: str, script_id: str, text: str) -> Dict[str, Any]:
     return {k: v for k, v in new.items() if k != "work_id"}
 
 
-def ensure_prompt(work_id: str) -> Dict[str, Any]:
+def ensure_prompt(work_id: str, *, _connection=None) -> Dict[str, Any]:
     """当前作品的可用提示；没有（或已过期）就建一个“直接提示”：无参考，凭主题写作，不调用模型。"""
+    if _connection is None:
+        with st.transaction() as c:
+            return ensure_prompt(work_id, _connection=c)
     ctx = cx.load_context(work_id)
     prompt = ctx["prompt"]
     ref = ctx["reference"]
     if prompt is not None:
         fresh = (prompt["reference_snapshot_id"] == (ref["id"] if ref else "")
+                 and prompt.get("reference_digest", "") == ctx["digests"]["reference"]
                  and prompt["brief_digest"] == ctx["digests"]["brief"]
                  and prompt["style_digest"] == ctx["digests"]["style"]
                  and cc.digest(prompt.get("identity_snapshot") or {}) == ctx["digests"]["identity"]
@@ -730,9 +810,8 @@ def ensure_prompt(work_id: str) -> Dict[str, Any]:
            "template_version": prompts.TEMPLATE_VERSION, "content_revision": ctx["content_revision"],
            "model_profile": {"direct": True, "evidence_digest": ctx["digests"]["evidence"],
                              "identity_digest": ctx["digests"]["identity"]}, "created_at": now_iso()}
-    with st.transaction() as c:
-        saved = repo.save_prompt(c, doc)
-        repo.bump_content_revision(c, work_id, writing_prompt_id=saved["id"])
+    saved = repo.save_prompt(_connection, doc)
+    repo.bump_content_revision(_connection, work_id, writing_prompt_id=saved["id"])
     return saved
 
 

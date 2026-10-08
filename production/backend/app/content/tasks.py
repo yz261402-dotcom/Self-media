@@ -11,6 +11,8 @@ from __future__ import annotations
 import json
 import threading
 import time
+from contextlib import nullcontext
+from http.client import RemoteDisconnected
 from urllib.error import URLError
 from typing import Any, Callable, Dict, List, Optional
 
@@ -45,6 +47,12 @@ def response_timeout_error(call_id: str) -> CallPending:
     return CallPending("外部服务响应超时，原请求的结果和费用尚未确认。系统不会自动重发；"
                        "再次提交前须重新确认可能产生的费用。",
                        code="PROVIDER_RESPONSE_TIMEOUT", detail=call_id)
+
+
+def connection_closed_error(call_id: str) -> CallPending:
+    return CallPending("外部服务连接在返回结果前断开，原请求的结果和费用尚未确认。系统不会自动重发；"
+                       "请先核对中转服务调用记录，再确认是否重新生成。",
+                       code="PROVIDER_CONNECTION_CLOSED", detail=call_id)
 
 
 class JobCancelled(ContentError):
@@ -133,14 +141,14 @@ def _work(c, work_id: str) -> dict:
 
 
 def submit_job(work_id: str, kind: str, request_id: str, payload: Dict[str, Any], *,
-               expected_revision: Optional[int] = None) -> Dict[str, Any]:
+               expected_revision: Optional[int] = None, _connection=None) -> Dict[str, Any]:
     """创建（或重放）父任务，返回带 replayed 标记的任务。"""
     if kind not in ALL_KINDS:
         raise ContentRejected(f"未知内容任务类型：{kind}", "VALIDATION_FAILED")
     if not request_id:
         raise ContentRejected("写操作必须带 request_id", "VALIDATION_FAILED")
     digest = payload_digest({"kind": kind, "payload": payload})
-    with st.transaction() as c:
+    with nullcontext(_connection) if _connection is not None else st.transaction() as c:
         work = _work(c, work_id)
         row = c.execute("SELECT data FROM content_jobs WHERE work_id=? AND kind=? AND request_id=?",
                         [work_id, kind, request_id]).fetchone()
@@ -240,7 +248,32 @@ def finish_job(job_id: str, state: str, *, result_refs: Optional[Dict[str, Any]]
                 job["result_refs"] = result_refs
             job["stage"] = state if state != "succeeded" else "done"
         _write(c, job)
+        _finish_direct_main_task(c, job)
         return job
+
+
+def _finish_direct_main_task(c, job: dict) -> None:
+    if (job.get("payload") or {}).get("orchestration") != "direct" or not is_current(c, job):
+        return
+    work = _work(c, job["work_id"])
+    row = c.execute("SELECT data FROM tasks WHERE id=?", [work.get("current_task_id") or ""]).fetchone()
+    if row is None:
+        return
+    task = json.loads(row["data"])
+    if job["state"] in ("succeeded", "partial"):
+        task.update(stage="content_review", state="waiting_selection", last_error=None, block_reason=None)
+        message = "候选稿件与独立审核已保存，等待人工审查或重新审核"
+    else:
+        err = job.get("error") or {}
+        task.update(stage="script", state="blocked" if job["state"] in ("unknown", "blocked") else "failed",
+                    last_error={"code": err.get("code") or "CONTENT_JOB_FAILED",
+                                "message": err.get("message") or f"内容任务未成功（{job['state']}）", "retryable": False})
+        message = task["last_error"]["message"]
+    task["stage_rows"] = st.stage_rows(task["stage"], task["state"])
+    st.insert_row(c, "tasks", task["id"], task, {"work_id": work["id"]})
+    st.add_event_tx(c, task["id"], {"type": "stage.completed" if job["state"] in ("succeeded", "partial") else "stage.failed",
+                                    "occurred_at": now_iso(), "stage": task["stage"], "state": task["state"],
+                                    "message": message})
 
 
 def cancel_job(job_id: str) -> dict:
@@ -326,6 +359,9 @@ def run_call(*, parent: dict, provider: str, model: str, capability: str, step: 
         jobs.mark_content_unknown(call["id"], f"{type(exc).__name__}: 发送后未收到确定响应")
         if isinstance(exc, TimeoutError) or (isinstance(exc, URLError) and isinstance(exc.reason, TimeoutError)):
             raise response_timeout_error(call["id"]) from exc
+        cause = exc.reason if isinstance(exc, URLError) else exc
+        if isinstance(cause, (RemoteDisconnected, ConnectionResetError, BrokenPipeError)):
+            raise connection_closed_error(call["id"]) from exc
         raise CallPending("请求已发出但未收到确定响应，结果未知，需核对，不会自动重发",
                           detail=call["id"]) from exc
     try:

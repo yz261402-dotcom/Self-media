@@ -116,6 +116,11 @@ class ScriptVersion(StrictModel):
     review_state: Optional[ReviewState] = None
     pickable: Optional[bool] = None
     unpickable_reasons: List[str] = Field(default_factory=list)
+    human_review_state: Optional[Literal["pending", "scored_pass", "human_edit", "manual_takeover"]] = None
+    human_review: Optional[Dict[str, Any]] = None
+    creation_source: Optional[Literal["manual", "llm"]] = None
+    ai_review_status: Optional[Literal["not_performed", "passed", "required"]] = None
+    takeover_reason: Optional[str] = None
 
 
 class ScriptRepairReceipt(StrictModel):
@@ -147,6 +152,7 @@ class ScriptBatch(StrictModel):
     content_route: Literal["talking_script", "short_video_storyboard"] = "talking_script"
     ready_to_present: bool = False
     retry_targets: List[Dict[str, Any]] = Field(default_factory=list)
+    review_targets: List[Dict[str, Any]] = Field(default_factory=list)
     shortfall_note: Optional[str] = None
     # 候选稿来源，写入方为 content 角色（`agents/tools.py::t_register_script_candidates`）：
     # `llm`＝真实模型产出，`mock`＝模拟三稿。缺失表示改动前写入的历史批次（未标注来源），

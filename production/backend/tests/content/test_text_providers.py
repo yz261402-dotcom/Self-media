@@ -18,11 +18,16 @@ def env(monkeypatch):
     monkeypatch.setenv("AVATAR_STUDIO_BUDGET_DAILY_FEN", "10000000")
     monkeypatch.setenv("AVATAR_STUDIO_BUDGET_MAX_SUBMISSIONS", "100000")
     monkeypatch.setenv("AVATAR_STUDIO_ANTHROPIC_API_KEY", "sk-test-anthropic")
+    monkeypatch.setenv("AVATAR_STUDIO_CLAUDE_COMPAT_API_KEY", "sk-test-claude-compat")
     monkeypatch.setenv("AVATAR_STUDIO_QWEN_API_KEY", "sk-test-qwen")
+    monkeypatch.setenv("AVATAR_STUDIO_OPENAI_API_KEY", "sk-test-openai")
     monkeypatch.setenv("AVATAR_STUDIO_FX_USD_CNY", "7.2")
     for k in ("PLANNER", "WRITER", "REPAIR", "REVIEWER"):
         monkeypatch.delenv(f"AVATAR_STUDIO_CONTENT_{k}_PROVIDER", raising=False)
         monkeypatch.delenv(f"AVATAR_STUDIO_CONTENT_{k}_MODEL", raising=False)
+    monkeypatch.setenv("AVATAR_STUDIO_CONTENT_WRITER_PROVIDER", "claude_compat")
+    monkeypatch.setenv("AVATAR_STUDIO_CONTENT_WRITER_MODEL", "claude-sonnet-5-5")
+    monkeypatch.delenv("AVATAR_STUDIO_CONTENT_MAX_INPUT_TOKENS", raising=False)
 
 
 def parent():
@@ -49,6 +54,14 @@ def claude_ok(text_='{"a": 1}', model="claude-sonnet-5-5", stop="end_turn", usag
     return d
 
 
+def claude_compat_ok(text_='{"a": 1}', model="claude-sonnet-5-5", finish="stop", usage=True):
+    d = {"id": "chat_claude_compat", "model": model,
+         "choices": [{"message": {"content": text_}, "finish_reason": finish}]}
+    if usage:
+        d["usage"] = {"prompt_tokens": 8000, "completion_tokens": 2500}
+    return d
+
+
 def qwen_ok(text_='{"a": 1}', model="qwen-plus", finish="stop", usage=True):
     d = {"id": "chat_1", "model": model, "choices": [{"message": {"content": text_}, "finish_reason": finish}]}
     if usage:
@@ -56,11 +69,14 @@ def qwen_ok(text_='{"a": 1}', model="qwen-plus", finish="stop", usage=True):
     return d
 
 
-def test_default_role_routing():
-    assert (text.profile("planner")["provider"], text.profile("planner")["model"]) == ("qwen", "qwen-plus")
-    assert (text.profile("reviewer")["provider"], text.profile("reviewer")["model"]) == ("qwen", "qwen-plus")
-    assert text.profile("writer")["model"] == "claude-sonnet-5-5"
-    assert text.profile("repair")["model"] == "claude-sonnet-5-5"
+def test_default_role_routing(monkeypatch):
+    for role in ("PLANNER", "WRITER", "REPAIR", "REVIEWER"):
+        monkeypatch.delenv(f"AVATAR_STUDIO_CONTENT_{role}_PROVIDER", raising=False)
+        monkeypatch.delenv(f"AVATAR_STUDIO_CONTENT_{role}_MODEL", raising=False)
+    assert (text.profile("planner")["provider"], text.profile("planner")["model"]) == ("openai", "gpt-6-astra")
+    assert (text.profile("reviewer")["provider"], text.profile("reviewer")["model"]) == ("openai", "gpt-6-astra")
+    assert (text.profile("writer")["provider"], text.profile("writer")["model"]) == ("openai", "gpt-6.1-sol")
+    assert text.profile("repair")["model"] == "gpt-6.1-sol"
 
 
 def test_repair_follows_writer_override(monkeypatch):
@@ -69,7 +85,9 @@ def test_repair_follows_writer_override(monkeypatch):
     assert text.profile("repair")["provider"] == "qwen"
 
 
-def test_sonnet_messages_protocol_and_ledger():
+def test_sonnet_messages_protocol_and_ledger(monkeypatch):
+    # 显式选择 Anthropic，保留 Messages 协议的覆盖。
+    monkeypatch.setenv("AVATAR_STUDIO_CONTENT_WRITER_PROVIDER", "anthropic")
     stub, p = Stub(body=claude_ok()), parent()
     r = text.call_text("writer", parent=p, step="write", system="sys", user="usr", transport=stub)
     url, headers, body = stub.calls[0]
@@ -82,7 +100,21 @@ def test_sonnet_messages_protocol_and_ledger():
     assert len(tasks.jobs_calls(p["id"])) == len(stub.calls) == 1
 
 
-def test_qwen_protocol():
+def test_explicit_sonnet_uses_openai_compatible_relay(monkeypatch):
+    stub, p = Stub(body=claude_compat_ok()), parent()
+    r = text.call_text("writer", parent=p, step="write", system="只输出 JSON", user="usr", transport=stub)
+    url, headers, body = stub.calls[0]
+    assert url == "https://api.openai.com/v1/chat/completions"
+    assert headers["authorization"] == "Bearer sk-test-claude-compat"
+    assert body["model"] == "claude-sonnet-5-5" and body["max_tokens"] == 6144
+    assert body["messages"][0]["role"] == "system"
+    assert "response_format" not in body and "reasoning_effort" not in body
+    assert r["json"] == {"a": 1}
+
+
+def test_qwen_protocol_when_explicitly_selected(monkeypatch):
+    monkeypatch.setenv("AVATAR_STUDIO_CONTENT_PLANNER_PROVIDER", "qwen")
+    monkeypatch.setenv("AVATAR_STUDIO_CONTENT_PLANNER_MODEL", "qwen-plus")
     stub = Stub(body=qwen_ok())
     r = text.call_text("planner", parent=parent(), step="plan", system="sys", user="usr", transport=stub)
     url, headers, body = stub.calls[0]
@@ -92,7 +124,7 @@ def test_qwen_protocol():
 
 
 def test_unsupported_param_rejected_before_any_call():
-    stub = Stub(body=claude_ok())
+    stub = Stub(body=claude_compat_ok())
     with pytest.raises(ContentRejected) as e:
         text.call_text("writer", parent=parent(), step="w", system="s", user="u", transport=stub,
                        extra={"temperature": 0.9})
@@ -100,8 +132,8 @@ def test_unsupported_param_rejected_before_any_call():
 
 
 def test_missing_credential_blocks_without_call(monkeypatch):
-    monkeypatch.delenv("AVATAR_STUDIO_ANTHROPIC_API_KEY")
-    stub = Stub(body=claude_ok())
+    monkeypatch.delenv("AVATAR_STUDIO_CLAUDE_COMPAT_API_KEY")
+    stub = Stub(body=claude_compat_ok())
     with pytest.raises(ContentBlocked) as e:
         text.call_text("writer", parent=parent(), step="w", system="s", user="u", transport=stub)
     assert e.value.code == "PROVIDER_NOT_CONFIGURED" and not stub.calls
@@ -129,7 +161,7 @@ def test_timeout_is_unknown_and_not_resent():
 
 
 def test_truncated_output_fails_without_repair_call():
-    stub, p = Stub(body=claude_ok('{"a": ', stop="max_tokens")), parent()
+    stub, p = Stub(body=claude_compat_ok('{"a": ', finish="length")), parent()
     with pytest.raises(ContentRejected) as e:
         text.call_text("writer", parent=p, step="w", system="s", user="u", transport=stub)
     assert e.value.code == "OUTPUT_TRUNCATED" and len(stub.calls) == 1
@@ -139,13 +171,14 @@ def test_invalid_json_and_non_object_rejected():
     for body in ("not json", "[1,2]"):
         with pytest.raises(ContentRejected) as e:
             text.call_text("writer", parent=parent(), step="w", system="s", user="u",
-                           transport=Stub(body=claude_ok(body)))
+                           transport=Stub(body=claude_compat_ok(body)))
         assert e.value.code == "MODEL_OUTPUT_INVALID"
 
 
 def test_missing_usage_keeps_reservation_held():
     p = parent()
-    r = text.call_text("planner", parent=p, step="plan", system="s", user="u", transport=Stub(body=qwen_ok(usage=False)))
+    r = text.call_text("planner", parent=p, step="plan", system="s", user="u",
+                       transport=Stub(body=qwen_ok(model="gpt-6-astra", usage=False)))
     assert r["usage"] is None and r["cost_fen"] is None
     assert tasks.jobs_calls(p["id"])[0]["settlement_state"] == "held"
 
@@ -153,34 +186,54 @@ def test_missing_usage_keeps_reservation_held():
 def test_model_mismatch_not_accepted_as_same_name():
     with pytest.raises(ContentRejected) as e:
         text.call_text("writer", parent=parent(), step="w", system="s", user="u",
-                       transport=Stub(body=claude_ok(model="claude-haiku-4-5")))
+                       transport=Stub(body=claude_compat_ok(model="claude-haiku-4-5")))
     assert e.value.code == "MODEL_MISMATCH"
 
 
 def test_fenced_json_is_accepted():
     r = text.call_text("planner", parent=parent(), step="plan", system="s", user="u",
-                       transport=Stub(body=qwen_ok('```json\n{"a": 2}\n```')))
+                       transport=Stub(body=qwen_ok('```json\n{"a": 2}\n```', model="gpt-6-astra")))
     assert r["json"] == {"a": 2}
 
 
 def test_usd_without_fx_blocks_before_call(monkeypatch):
     monkeypatch.delenv("AVATAR_STUDIO_FX_USD_CNY")
-    stub = Stub(body=claude_ok())
+    stub = Stub(body=claude_compat_ok())
     with pytest.raises(ContentBlocked):
         text.call_text("writer", parent=parent(), step="w", system="s", user="u", transport=stub)
     assert not stub.calls
 
 
-def test_oversized_input_rejected_not_truncated():
-    stub = Stub(body=claude_ok())
+def test_oversized_input_rejected_not_truncated(monkeypatch):
+    # The guard is opt-in.  It can still be used by deployments that need a
+    # predictable local budget, but the application no longer imposes 24k.
+    monkeypatch.setenv("AVATAR_STUDIO_CONTENT_MAX_INPUT_TOKENS", "24000")
+    stub = Stub(body=claude_compat_ok())
     with pytest.raises(ContentRejected) as e:
         text.call_text("writer", parent=parent(), step="w", system="s", user="字" * 30000, transport=stub)
     assert e.value.code == "INPUT_TOO_LARGE" and not stub.calls
 
 
-def test_capabilities_page_has_no_secret():
+def test_large_input_is_sent_when_no_local_cap_is_configured():
+    stub = Stub(body=claude_compat_ok())
+    result = text.call_text("writer", parent=parent(), step="w", system="s", user="字" * 30000,
+                            transport=stub)
+    assert result["json"] == {"a": 1} and len(stub.calls) == 1
+
+
+def test_invalid_local_input_cap_blocks_before_call(monkeypatch):
+    monkeypatch.setenv("AVATAR_STUDIO_CONTENT_MAX_INPUT_TOKENS", "many")
+    stub = Stub(body=claude_compat_ok())
+    with pytest.raises(ContentBlocked) as e:
+        text.call_text("writer", parent=parent(), step="w", system="s", user="u", transport=stub)
+    assert e.value.code == "TEXT_INPUT_LIMIT_INVALID" and not stub.calls
+
+
+def test_capabilities_page_has_no_secret(monkeypatch):
+    monkeypatch.delenv("AVATAR_STUDIO_CONTENT_WRITER_PROVIDER")
+    monkeypatch.delenv("AVATAR_STUDIO_CONTENT_WRITER_MODEL")
     dump = json.dumps(text.capabilities(), ensure_ascii=False)
-    assert "sk-test" not in dump and "claude-sonnet-5" in dump
+    assert "sk-test" not in dump and "gpt-6.1-sol" in dump and "gpt-6-astra" in dump
 
 
 def test_relay_upstream_access_denied_is_distinct_and_keeps_unknown_fees():

@@ -139,11 +139,18 @@ async function createWork() {
   await router.push('/avatar')
 }
 
-onMounted(() => store.bootstrap())
+onMounted(async () => {
+  await router.isReady()
+  if (!route.meta.standalone) await store.bootstrap()
+})
+watch(() => route.meta.standalone, (standalone, previous) => {
+  if (!standalone && previous && !store.apiReady) void store.bootstrap()
+})
 </script>
 
 <template>
-  <div class="shell">
+  <router-view v-if="route.meta.standalone" />
+  <div v-else class="shell">
     <!-- 侧栏 -->
     <aside class="sidebar" aria-label="功能导航">
       <div class="sidebar-head">
