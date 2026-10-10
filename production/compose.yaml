@@ -1,0 +1,26 @@
+name: avatar-studio
+
+# 只容器化业务数据库；Windows 工作台、FFmpeg 和可见 Chrome 在宿主机运行。
+# 从项目根目录执行 README 中带 --env-file 的命令。
+services:
+  postgres:
+    image: postgres:17-alpine
+    container_name: avatar-studio-pg
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-avatar}
+      POSTGRES_DB: ${POSTGRES_DB:-avatar_studio}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?请先复制并填写 production/backend/.env}
+    ports:
+      - "127.0.0.1:15432:5432"
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U $$POSTGRES_USER -d $$POSTGRES_DB"]
+      interval: 5s
+      timeout: 3s
+      retries: 12
+      start_period: 10s
+
+volumes:
+  postgres-data:

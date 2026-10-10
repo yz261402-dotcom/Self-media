@@ -8,115 +8,30 @@
 
 2026-09-26 前端已重做：紧凑进度导航、单一人物库、三稿全文比较、播放器优先、分步视频制作；审核与诊断明细按需展开。桌面及手机已复验，前端 29 项回归、类型检查和构建通过。[重做验收与截图](../experiments/MVP重构/20260926-前端重做/重做结果与验收.md)。
 
-## 启动
+## 首次部署与启动
 
-项目分为本机工作台、本地分镜拼接 Worker、云端 GPU Worker 和连接云端的 SSH 隧道。`start.ps1` 启动本机前后端及分镜拼接 Worker；若已配置云端 Worker 服务和隧道，也会检查并尝试恢复连接。它不会替你开机算力云。
+从 GitHub ZIP 解压或首次克隆的接收者，请先按 [根 README 的首次部署步骤](../README.md#一首次部署windows-本机工作台) 安装 Python 3.13、Node 24、Docker Desktop，创建自己的 `.env` 并启动 PostgreSQL。`start.ps1` 不负责安装依赖和创建数据库，Mock 模式同样需要业务库。
 
-- **只关闭了网页**：服务仍在运行时，直接打开 <http://127.0.0.1:5173>。
-- **电脑重启了**：执行下面第 1、3 步；云端 Worker 仍运行时无需重复启动。
-- **算力云也重启了**：先在控制台开机，按第 2 步恢复 Worker，再执行第 3 步连接。
-- **只写稿、生成图片或 TTS**：本机工作台与对应模型 API 可用即可。M2 动作底片、对口型和云端字幕需要 Worker；OmniHuman 原片由供应商生成，但后续字幕仍使用云端 Worker。
-- **只发布已有成片**：本机前后端、发布依赖和 Chrome 可用即可，无需启动 GPU Worker。抖音登录与投稿使用单独的专用浏览器。
-
-### 1. 启动本机工作台
-
-打开本机 PowerShell，执行：
+在包含 `production` 与 `assets` 的项目根目录执行：
 
 ```powershell
-cd "C:\Users\22346\Desktop\自媒体视频生成"
-powershell -ExecutionPolicy Bypass -File ".\production\start.ps1"
+# 先启动数据库；首次安装完整步骤见根 README。
+docker compose --env-file production/backend/.env -f production/compose.yaml up -d --wait
+powershell -NoProfile -ExecutionPolicy Bypass -File .\production\start.ps1 -SkipGpuTunnel
 ```
 
-默认自动打开 <http://127.0.0.1:5173>，后端监听 `127.0.0.1:8000`。脚本检查环境、端口与健康状态，已运行的服务会被复用；本地分镜拼接 Worker 使用 `backend/.venv` 中的 Python，核对 PID 和命令行后复用或启动。作品和素材保留，无需重新安装依赖。首次部署缺少依赖时，按 [使用说明](使用说明.md) 安装。
+工作台为 <http://127.0.0.1:5173>，后端为 <http://127.0.0.1:8000>。首次模板使用空密钥 Mock，仅验证本机软件和数据库。真实功能按自己的账户配置，以显式授权的 integration 接入；新的空数据库不继承原作者的供应商实测证据、人物审核或项目记录。
 
-前后端在后台运行，启动完成后可以关闭这个 PowerShell 窗口。后端代码或 `backend/.env` 更新后需重启对应后端进程；刷新网页或重新执行启动脚本不会替换已运行的健康后端。结束进程前先核对命令行属于本项目，不要直接使用旧 PID 文件中的进程号。
+脚本启动前后端、本机拼接和字幕 Worker。`-SkipGpuTunnel` 跳过 SSH 隧道与远端恢复；有历史字幕队列时，本机 Worker 仍按既有配置执行。关闭网页不会停止后台服务；修改后端代码或 `.env` 后需停止并重启后端与本机 Worker。PID 文件可能过期，结束进程前必须核对命令行和实际监听者。停止、备份、端口替换和故障排查见 [根 README](../README.md)。
 
-首次使用抖音发布时，确认本机已安装 Google Chrome，再在项目根目录安装可选发布依赖：
+## 可选 GPU 与发布
 
-```powershell
-.\production\backend\.venv\Scripts\python.exe -m pip install -r production/backend/requirements-publish.txt
-```
-
-发布 Adapter 默认使用本机 Chrome，不需要导入日常浏览器的 Cookie。打开“发布”页，点击“打开专用浏览器登录”，由用户扫码并完成可能出现的验证。专用登录状态保存在 `production/backend/runtime/publish/douyin-profile/`，不应上传或分享该目录。即使尚未有成片，也可以先登录；首次安装依赖或更新后端发布代码后，需要重启本项目后端。
-
-### 2. 算力云重启后恢复 Worker
-
-目前云端 Worker 尚未配置开机自启。先在算力云控制台开机，再从本机 PowerShell 登录：
-
-```powershell
-ssh -p 20064 root@connect.westd.seetacloud.com
-```
-
-上述地址和端口为 2026-09-26 使用的实例连接信息；如果控制台显示已变化，此处和第 3 步都要使用新地址、端口。SSH 密码按终端提示输入。
-
-登录后，在**云端终端**先检查服务：
-
-```bash
-curl -fsS --max-time 5 http://127.0.0.1:8080/v1/healthz
-```
-
-返回 `state: ok`，且 `runner_stages` 包含 `align、asr、lipsync、motion` 四项时，直接进入第 3 步。只有两项代表字幕服务未启用。健康检查失败不代表 Worker 已退出，先检查进程与端口：
-
-```bash
-pgrep -f '[w]orker_server.py'
-ss -ltnp 'sport = :8080'
-```
-
-仅在确认没有 Worker 进程、8080 也没有监听时执行以下启动命令。已有进程但健康检查失败时先查看日志，不要重复启动或在生成任务进行中重启。
-
-```bash
-read -rsp '输入已有 Worker 令牌: ' M2_WORKER_TOKEN
-export M2_WORKER_TOKEN
-nohup bash /root/autodl-tmp/avatar-m2worker/start-all-stages.sh \
-  >> /root/autodl-tmp/avatar-m2worker/worker-all-stages.log 2>&1 < /dev/null &
-```
-
-这里输入的是本机 `production/backend/.env` 中 `AVATAR_STUDIO_M2_WORKER_TOKEN` 的现有值，**不是 SSH 密码**。只输入等号后的值，不含变量名或外围引号，不要重新生成令牌，也不要把令牌写入文档。
-
-启动后再次执行上面的 `curl`，确认四个阶段可用。`nohup` 让服务在退出 SSH 后继续运行，但不能让它在实例重启后自动恢复。启动失败时在云端查看：
-
-```bash
-tail -n 60 /root/autodl-tmp/avatar-m2worker/worker-all-stages.log
-```
-
-### 3. 建立本机到算力云的连接
-
-另开一个**本机 PowerShell**，执行：
-
-```powershell
-cd "C:\Users\22346\Desktop\自媒体视频生成"
-D:\anaconda3\python.exe production/scripts/m2_worker_tunnel.py --ssh-host connect.westd.seetacloud.com --ssh-port 20064 --remote-port 8080 --local-port 18080
-```
-
-按提示输入 SSH 密码；出现“隧道已就绪”后，**保持这个窗口打开**。它将本机 `127.0.0.1:18080` 转发到云端 `127.0.0.1:8080`。当前电脑的 Anaconda Python 已安装隧道依赖 `paramiko`，不要直接换成后端虚拟环境的 Python。
-
-在另一个本机 PowerShell 中检查连接：
-
-```powershell
-Invoke-RestMethod http://127.0.0.1:18080/v1/healthz
-```
-
-返回 `state: ok` 和四个阶段后，再在页面生成 M2 视频或字幕。隧道已正常运行时不用再启动；端口占用先检查已有隧道。关掉隧道窗口、电脑重启或网络断开后，需要重新建立连接，当前没有自动重连。
-
-后端现有配置中，M2 和 ASR Worker 地址均为 `http://127.0.0.1:18080`，字幕 Provider 为 `qwen3_cloud`；保留已有配置即可。修改配置后必须重启后端。
-
-### 检查状态和定位问题
-
-- 工作台：<http://127.0.0.1:5173>。
-- 后端健康检查：<http://127.0.0.1:8000/api/v1/health>，应返回 `ok: true`。
-- 云端连接检查：<http://127.0.0.1:18080/v1/healthz>，应包含四个阶段。页面能打开不代表云端已连接。
-- 本机启动日志与 PID：`production/runtime/`；重点查看 `backend-8000.err.log`、`frontend-5173.err.log` 和 `storyboard-worker.err.log`。本地分镜 Worker 的 PID 保存在 `storyboard-worker.pid`；结束进程前仍须核对实际命令行。
-- 云端 Worker 启动细节：[Worker 说明](workers/m2_gpu/README.md)。
-
-### 开发时使用独立端口
-
-在项目根目录执行：
-
-```powershell
-.\production\start.ps1 -BackendPort 8001 -FrontendPort 5174 -NoBrowser
-```
-
-更换端口不会自动隔离数据库。验收与正式使用不得仅靠端口区分数据。
+- **GPU 是可选执行节点**：M2 动作／口型及云端字幕需要真正部署模型的 Linux Worker。文本、图片、TTS 与 Wan 原片使用外部 API，不占该 GPU。
+- **新 GPU 与既有实例恢复不同**：[Worker 代码说明](workers/m2_gpu/README.md)、[隧道使用说明](隧道使用说明.md) 与 [Worker 运维说明](Worker运维说明.md) 提供协议和恢复流程；恢复安装器不会下载模型或创建 CUDA／推理环境。新实例先安装模型，地址、环境路径和令牌使用接收者自己的配置。
+- **首次隧道安装必须传自己的参数**：`setup_tunnel.py --ssh-host <自己的主机> --ssh-port <自己的端口> --ssh-user <自己的用户> --install-key`。默认值及历史实例信息不属于接收者的可用资源。
+- **发布需要可见 Chrome**：安装 Google Chrome 和 `requirements-publish.txt`，设置 `AVATAR_STUDIO_PUBLISH_ADAPTER=playwright` 后重启后端；由本人扫码和确认投稿。不能复制原作者的登录资料。
+- **检查位置**：本机日志和 PID 在 `production/runtime/`；GPU 健康接口为自己的 Worker URL 加 `/v1/healthz`。完整服务需含 `motion/lipsync/asr/align`，健康不替代真实推理验收。
+- **模型 Key、数据库和媒体均由接收者准备**：示例素材不等于已通过本人的生产准入。详细配置见 [.env.example](backend/.env.example) 和 [根 README 的真实功能说明](../README.md#二接入真实功能)。
 
 ## 当前制作链路
 
@@ -180,14 +95,14 @@ DeepAgents 不可用时，“直接按主题生成三稿”走独立持久化内
 - `AVATAR_STUDIO_MODE`：`mock` / `integration` / `production`；真实模式还要求对应授权和预算配置。
 - `AVATAR_STUDIO_ORCHESTRATOR=agents`、`AVATAR_STUDIO_AGENT_RUNTIME=deepagents`：默认编排路径。
 - `AVATAR_STUDIO_MODEL_BACKEND`：`deterministic` 为受控确定性调度，`deepseek` 为真实聊天模型调度。
-- `AVATAR_STUDIO_DEEPSEEK_*`、`AVATAR_STUDIO_GPTIMAGE_*`、`AVATAR_STUDIO_MINIMAX_*`：供应商配置；具体受支持字段见实现，不以配置文本齐全判断模型可用。
+- `AVATAR_STUDIO_OPENAI_*`、`AVATAR_STUDIO_GPTIMAGE_*`、`AVATAR_STUDIO_MINIMAX_*`、`AVATAR_STUDIO_QWEN_*`、`AVATAR_STUDIO_REDFOX_*`：主要供应商配置；`DEEPSEEK_*` 是可选路径；具体受支持字段见实现，不以配置文本齐全判断模型可用。
 - `AVATAR_STUDIO_M2_WORKER_URL` / `AVATAR_STUDIO_M2_WORKER_TOKEN`：算力云口播 Worker。
 - `AVATAR_STUDIO_ASR_PROVIDER=qwen3_cloud`、`AVATAR_STUDIO_ASR_WORKER_URL` / `AVATAR_STUDIO_ASR_WORKER_TOKEN`：字幕识别和对齐 Worker。
 - `AVATAR_STUDIO_VOLC_ACCESS_KEY` / `AVATAR_STUDIO_VOLC_SECRET_KEY`：火山视觉签名；素材传输还需相应 TOS 配置。
 - `AVATAR_STUDIO_FFMPEG_BIN`：包含 `ffmpeg` 和 `ffprobe` 的目录，也可从 PATH 查找。
 - `AVATAR_STUDIO_PUBLISH_ADAPTER=playwright`：真实抖音浏览器发布；`mock` 仅供隔离测试。`AVATAR_STUDIO_DOUYIN_BROWSER_CHANNEL` 默认 `chrome`。
 
-未配置预算时默认不允许可计费提交。界面确认调用清单与服务端预算授权是两件事。超时后若供应商可能已受理，任务进入待对账状态，不用重复提交猜测结果。
+通用媒体预算默认未授权；内容创作当前不设金额／次数配额，这组预算和 Mock 标记不能封住所有已配置凭据的 API。空密钥演示、供应商限额与界面费用确认分别管理。超时后若供应商可能已受理，任务进入待对账状态，不用重复提交猜测结果。
 
 ## 代码位置
 
@@ -224,13 +139,13 @@ production/
 
 ## 开发验证
 
-在项目根目录运行：
+在项目根目录运行；先按[根 README 的验证步骤](../README.md#八开发验证)设置自己的测试 DSN，pytest 不读取后端 `.env`：
 
 ```powershell
 .\production\backend\.venv\Scripts\python.exe -m pytest production/backend/tests -q
-npm --prefix production/frontend test
-npm --prefix production/frontend run typecheck
-npm --prefix production/frontend run build
+npm.cmd --prefix production/frontend test
+npm.cmd --prefix production/frontend run typecheck
+npm.cmd --prefix production/frontend run build
 ```
 
-后端测试默认使用独立数据库。大规模测试可将 `AVATAR_STUDIO_TEST_ROOT` 和 pytest `--basetemp` 指向空间充足的磁盘，避免将媒体测试文件写满系统盘。Mock/契约测试与真实 Provider、云端 GPU、人工画面审核分别验收。
+后端测试默认使用独立 PostgreSQL schema。大规模测试可将 `AVATAR_STUDIO_TEST_ROOT` 和 pytest `--basetemp` 指向空间充足的磁盘，避免将媒体测试文件写满系统盘。Mock/契约测试与真实 Provider、云端 GPU、人工画面审核分别验收。

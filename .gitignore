@@ -18,6 +18,9 @@ status.txt
 visible.json
 *.db-wal
 *.db-shm
+# 本机数据库备份，不随源码交付。
+backup/
+*.dump
 
 # ===== Python =====
 __pycache__/
